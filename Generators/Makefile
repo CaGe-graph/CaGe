@@ -14,20 +14,21 @@ all: generators embedders others clean
 
 generators: fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
-	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX)
+	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
+	    kekule_all
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
 others: mkfoldnet
 
-clean:
+clean: kekule_clean
 	rm -f *.o
 
 clear:
-	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in
+	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen
 
 reset: clean
-	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX) vul_in$(SUFFIX)
+	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) fusgen$(SUFFIX)
 
 
 fullgen$(SUFFIX) : fullgen.c
@@ -74,3 +75,13 @@ mkfoldnet$(SUFFIX) : mkfoldnet.c
 
 vul_in$(SUFFIX) : vul_in.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
+
+catacondensed$(SUFFIX) : catacondensed.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
+
+kekule_all:
+	SUFFIX=$(SUFFIX) $(MAKE) -C kekule
+	cp kekule/fusgen$(SUFFIX) .
+
+kekule_clean:
+	SUFFIX=$(SUFFIX) $(MAKE) -C kekule clean

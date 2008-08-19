@@ -1,0 +1,15 @@
+The program should compile without problems on POSIX conformant
+systems.
+
+To build the program, just run make. If you don't have make,
+try:
+  cc -o fusgen *.c
+
+You may have to change the definition of LONGTYPE in fusgen.h
+if your compiler doesn't support the data type 'long long'.
+
+You also may want to change
+    CFLAGS = -O
+in the Makefile to something like
+    CFLAGS = -O3
+or similar.

@@ -24,11 +24,15 @@ public class HCgenPanel extends GeneratorPanel
 
     private DegreeListHCgenPanel degreeListHCgenPanel;
 
+    private HexagonsHCgenPanel hexagonsHCgenPanel;
+
     public HCgenPanel() {
 	formulaHCgenPanel = new FormulaHCgenPanel();
 	degreeListHCgenPanel = new DegreeListHCgenPanel();
+	hexagonsHCgenPanel = new HexagonsHCgenPanel();
 	pane.addTab("by formula", formulaHCgenPanel);
 	pane.addTab("by degree list", degreeListHCgenPanel);
+	pane.addTab("by number of hexagons", hexagonsHCgenPanel);
 	for (int i = 0; i < pane.getTabCount(); i++) {
 	    ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
 	        BorderFactory.createEmptyBorder(20, 20, 20, 20));
