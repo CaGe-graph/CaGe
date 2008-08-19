@@ -22,14 +22,14 @@ sysinfo.jar: clear_distribution
 	./j jar c0f sysinfo.jar org/SysInfo.class
 
 CaGe-C.zip: clear_distribution
-	find Native Generators -print | sed -e 's:\./::' | \
+	find Native Generators PreCompute -print | sed -e 's:\./::' | \
 	egrep "(\.(c|h)$$)|((Makefile|Sysdir)$$)" | \
 	egrep -v "SysInfo|test|embed\.tar|Viewers|(^hall/)|HelloWorld|\.xvpics" | \
 	zip -oqX9@ CaGe-C.zip
 
 source_distribution:
 	( \
-	 find cage lisken Images org Native Generators Makefile -print | \
+	 find cage lisken Images org Native Generators PreCompute Makefile -print | \
 	 egrep "(\.(java|gif|ps|c|h)$$)|((Makefile|Sysdir)$$)" | \
 	 egrep -v "test|embed\.tar|Viewers|(^hall/)|HelloWorld|\.xvpics"; \
 	 find INSTALL.sh cage.sh CaGe.ini java j .rasmolrc \

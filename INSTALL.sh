@@ -250,6 +250,18 @@ unzip -q CaGe-C.zip || error_exit "-  'unzip' failure, aborting."
 #echo ""
 
 echo ""
+echo "*  Precomputing data in the background ..."
+echo ""
+(
+cd PreCompute &&
+make
+make compute &
+) || error_exit "-  'make' failure, aborting."
+echo ""
+echo "   Ok."
+echo ""
+
+echo ""
 echo "*  Making generators and embedders ..."
 echo ""
 (
