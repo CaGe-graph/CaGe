@@ -22,16 +22,16 @@ public class HCgenPanel extends GeneratorPanel
 
     private FormulaHCgenPanel formulaHCgenPanel;
 
-    private DegreeListHCgenPanel degreeListHCgenPanel;
+    private BoundaryHCgenPanel boundaryHCgenPanel;
 
     private HexagonsHCgenPanel hexagonsHCgenPanel;
 
     public HCgenPanel() {
 	formulaHCgenPanel = new FormulaHCgenPanel();
-	degreeListHCgenPanel = new DegreeListHCgenPanel();
+	boundaryHCgenPanel = new BoundaryHCgenPanel();
 	hexagonsHCgenPanel = new HexagonsHCgenPanel();
 	pane.addTab("by formula", formulaHCgenPanel);
-	pane.addTab("by degree list", degreeListHCgenPanel);
+	pane.addTab("by boundary structure", boundaryHCgenPanel);
 	pane.addTab("by number of hexagons", hexagonsHCgenPanel);
 	for (int i = 0; i < pane.getTabCount(); i++) {
 	    ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
@@ -51,7 +51,7 @@ public class HCgenPanel extends GeneratorPanel
 	((GeneratorPanel)pane.getSelectedComponent()).showing();
 	//formulaHCgenPanel.setDefaultButton(SwingUtilities.getRootPane(this).getDefaultButton());
 	//formulaHCgenPanel.showing();
-	//degreeListHCgenPanel.showing();
+	//boundaryHCgenPanel.showing();
     }
 
     public GeneratorInfo getGeneratorInfo() {

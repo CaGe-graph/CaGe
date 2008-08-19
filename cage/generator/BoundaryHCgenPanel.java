@@ -14,7 +14,7 @@ import lisken.systoolbox.*;
 import lisken.uitoolbox.*;
 
 
-public class DegreeListHCgenPanel extends GeneratorPanel
+public class BoundaryHCgenPanel extends GeneratorPanel
  implements ActionListener
 {
 
@@ -27,7 +27,7 @@ public class DegreeListHCgenPanel extends GeneratorPanel
     JButton defaultButton;
 
 
-    public DegreeListHCgenPanel() {
+    public BoundaryHCgenPanel() {
 	setLayout(new GridBagLayout());
 
 	degreeList = new JTextField(30);
