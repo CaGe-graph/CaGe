@@ -1,9 +1,11 @@
 
 what?:
 
-rebuild:
-	rm -f ` find cage lisken org -name "*.class" -print `
+rebuild: clean
 	javac -cp .:swing.jar:collections.jar:JmolApplet.jar -deprecation ` find cage lisken org -name "*.java" -print `
+
+clean:
+	rm -f ` find cage lisken org -name "*.class" -print `
 
 backup:
 	find . -type f -print | cut -c3- | tar -hT- -cf CaGe-backup.tar
