@@ -14,7 +14,7 @@ all: generators embedders others clean
 
 generators: fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
-	    cat$(SUFFIX) tee$(SUFFIX)
+	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX)
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
@@ -24,10 +24,10 @@ clean:
 	rm -f *.o
 
 clear:
-	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6
+	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in
 
 reset: clean
-	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX)
+	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX) vul_in$(SUFFIX)
 
 
 fullgen$(SUFFIX) : fullgen.c
@@ -72,3 +72,5 @@ tee$(SUFFIX) : tee.c
 mkfoldnet$(SUFFIX) : mkfoldnet.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -lm
 
+vul_in$(SUFFIX) : vul_in.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^

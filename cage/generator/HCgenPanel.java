@@ -22,13 +22,13 @@ public class HCgenPanel extends GeneratorPanel
 
     private FormulaHCgenPanel formulaHCgenPanel;
 
-    //private VulInPanel vulInPanel;
+    private DegreeListHCgenPanel degreeListHCgenPanel;
 
     public HCgenPanel() {
 	formulaHCgenPanel = new FormulaHCgenPanel();
-	//vulInPanel = new VulInPanel();
+	degreeListHCgenPanel = new DegreeListHCgenPanel();
 	pane.addTab("by formula", formulaHCgenPanel);
-	//pane.addTab("by degree list", vulInPanel);
+	pane.addTab("by degree list", degreeListHCgenPanel);
 	for (int i = 0; i < pane.getTabCount(); i++) {
 	    ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
 	        BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -47,7 +47,7 @@ public class HCgenPanel extends GeneratorPanel
 	((GeneratorPanel)pane.getSelectedComponent()).showing();
 	//formulaHCgenPanel.setDefaultButton(SwingUtilities.getRootPane(this).getDefaultButton());
 	//formulaHCgenPanel.showing();
-	//vulInPanel.showing();
+	//degreeListHCgenPanel.showing();
     }
 
     public GeneratorInfo getGeneratorInfo() {
