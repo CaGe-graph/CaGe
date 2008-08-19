@@ -18,7 +18,7 @@ public class BoundaryHCgenPanel extends GeneratorPanel
  implements ActionListener
 {
 
-    JTextField degreeList;
+    JTextField boundaryList;
     JLabel numberOfPentagonsLabel;
 
     JCheckBox iprBox;
@@ -30,27 +30,27 @@ public class BoundaryHCgenPanel extends GeneratorPanel
     public BoundaryHCgenPanel() {
 	setLayout(new GridBagLayout());
 
-	degreeList = new JTextField(30);
-	degreeList.setActionCommand("d");
-	degreeList.getDocument().addDocumentListener(new MyListener());
-	((AbstractDocument)(degreeList.getDocument())).setDocumentFilter(new DegreeListDocumentFilter());
+	boundaryList = new JTextField(30);
+	boundaryList.setActionCommand("d");
+	boundaryList.getDocument().addDocumentListener(new MyListener());
+	((AbstractDocument)(boundaryList.getDocument())).setDocumentFilter(new BoundaryListDocumentFilter());
 	numberOfPentagonsLabel = new JLabel("................................");
-	JLabel degreeListLabel = new JLabel("List of degrees (consecutive 2's and 3's)");
+	JLabel boundaryListLabel = new JLabel("List of degrees (consecutive 2's and 3's)");
 
 	iprBox = new JCheckBox("isolated pentagons (ipr)");
 	iprBox.setMnemonic(KeyEvent.VK_I);
 	showHBox = new JCheckBox("include H atoms");
 	showHBox.setMnemonic(KeyEvent.VK_A);
-	//add(degreeList);
+	//add(boundaryList);
 
 	//add(numberOfPentagonsLabel);
-	//add(degreeListLabel);
+	//add(boundaryListLabel);
 
-    add(degreeListLabel,
+    add(boundaryListLabel,
      new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 10, 5, 10), 0, 0));
-    add(degreeList,
+    add(boundaryList,
      new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
@@ -75,7 +75,7 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 	String preComputedPath = " p" + CaGe.getSystemProperty("CaGe.InstallDir") + "/PreCompute";
 
 	return new StaticGeneratorInfo(
-            Systoolbox.parseCmdLine("vul_in " + degreeList.getText() + " o" + preComputedPath + ipr + showH),
+            Systoolbox.parseCmdLine("vul_in " + boundaryList.getText() + " o" + preComputedPath + ipr + showH),
 	    EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
 	    "test",
 	    6);
@@ -99,7 +99,7 @@ public class BoundaryHCgenPanel extends GeneratorPanel
     }
 
     private void checkList() {
-	String list = degreeList.getText();
+	String list = boundaryList.getText();
 	int pentagons = 6 - countCharOccurence('2', list) + countCharOccurence('3', list);
 	numberOfPentagonsLabel.setText("Number of pentagons: " + pentagons);
 	if (pentagons > 5 || pentagons < 0) {
@@ -136,7 +136,7 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 
     }
 
-    private class DegreeListDocumentFilter extends DocumentFilter {
+    private class BoundaryListDocumentFilter extends DocumentFilter {
 
 	@Override
 	public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
