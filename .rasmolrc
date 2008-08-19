@@ -1,0 +1,9 @@
+set background [20,45,140]
+set ambient 0
+wireframe 10
+spacefill 50
+dots false
+set axis false
+set boundbox false
+slab false
+label false
