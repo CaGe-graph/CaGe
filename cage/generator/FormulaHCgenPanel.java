@@ -13,7 +13,7 @@ import lisken.systoolbox.*;
 import lisken.uitoolbox.*;
 
 
-public class HCgenPanel extends GeneratorPanel
+public class FormulaHCgenPanel extends GeneratorPanel
  implements ActionListener
 {
   static final int MAX_ATOMS = 450; /* keep this even */
@@ -56,7 +56,7 @@ public class HCgenPanel extends GeneratorPanel
 
   JButton defaultButton;
 
-  public HCgenPanel()
+  public FormulaHCgenPanel()
   {
     setLayout(new GridBagLayout());
     CSlider.setMinimum(MIN_C);
@@ -400,7 +400,7 @@ public class HCgenPanel extends GeneratorPanel
 
   public static void main(String[] args)
   {
-    final HCgenPanel p = new HCgenPanel();
+    final FormulaHCgenPanel p = new FormulaHCgenPanel();
     p.setBorder(BorderFactory.createTitledBorder(
      BorderFactory.createCompoundBorder(
       BorderFactory.createCompoundBorder(
