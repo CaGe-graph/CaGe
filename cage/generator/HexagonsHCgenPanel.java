@@ -84,7 +84,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel
 
 	String catacondensed = cataCondensedBox.isSelected() ? " C" : "";
 	String bezenoid = benzenoidBox.isSelected() ? " b" : "";
-	String kekule = kekuleBox.isSelected()  ? " k" : "";
+	String kekule = (kekuleBox.isSelected() && !cataCondensedBox.isSelected())  ? " k" : "";
 
 	//String ipr = iprBox.isSelected() ? " ipr" : "";
 	//String showH = showHBox.isSelected() ? " H" : "";
