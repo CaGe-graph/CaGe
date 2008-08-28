@@ -34,6 +34,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel
 
         hexagonsSlider.setMinimum(MIN_HEXAGONS);
         hexagonsSlider.setMaximum(MAX_HEXAGONS);
+        hexagonsSlider.setValue(MIN_HEXAGONS);
 	hexagonsSlider.setMinorTickSpacing(1);
 	hexagonsSlider.setMajorTickSpacing(hexagonsSlider.getMaximum() - hexagonsSlider.getMinimum());
 	hexagonsSlider.setPaintTicks(true);
