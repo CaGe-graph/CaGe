@@ -12,10 +12,13 @@
 #include<stdio.h>
 #include<ctype.h>
 #include<limits.h>
-#include<time.h>
-#include<sys/times.h>
 #include<sys/stat.h>
 #include<string.h>
+
+#ifndef NOTIMES
+#include<time.h>
+#include<sys/times.h>
+#endif //NOTIMES
 
 #define S        120           /* Maximale Anzahl der 6-Ecke */
 #define N        ((4*S)+20)    /* Maximal moegliche Anzahl der Knoten */
@@ -35,7 +38,7 @@
 #define reg      3
 #define filenamenlaenge 200 /* sollte vorerst reichen */
 
-#include <sys/times.h>
+#ifndef NOTIMES
 #if !defined(CLK_TCK) && !defined(_SC_CLK_TCK)
 #include <time.h>
 #endif
@@ -53,6 +56,7 @@
 #endif
 
 #define time_factor CLK_TCK
+#endif //NOTIMES
 
 /*
    the macro 'my_endianness' is a char value of 'b' for big-endian
@@ -6114,11 +6118,14 @@ int main(argc,argv)
 int argc; char *argv[];
 
 { int sechsecke, i, puffer, do_case;
-  clock_t savetime=0, buffertime;
-  struct tms TMS;
   char strpuf[filenamenlaenge], strpuf2[filenamenlaenge], strdummy[filenamenlaenge];
   struct stat buf;
   char name[4];     /* TH - fuer die Option "symm" */
+
+#ifndef NOTIMES
+  clock_t savetime=0, buffertime;
+  struct tms TMS;
+#endif //NOTIMES
 
   int separate_logfile = 1;
 
@@ -6372,6 +6379,7 @@ if (!quiet)
 initialize_list();
 
 baue_patches(sechsecke); 
+#ifndef NOTIMES
 times(&TMS);
 savetime= TMS.tms_utime;
 if (!quiet) 
@@ -6382,11 +6390,12 @@ if (!quiet)
       fclose(logfile);
     }
   }
-
+#endif //NOTIMES
 
 if (do_bauchbinde)
 {
 bauchbinde(min_sechsecke,max_sechsecke);
+#ifndef NOTIMES
 times(&TMS);
 buffertime= TMS.tms_utime;
 if (!quiet) 
@@ -6398,11 +6407,13 @@ if (!quiet)
     }
   }
 savetime=buffertime;
+#endif //NOTIMES
 }
 
 if (do_brille)
 {
 brille(min_sechsecke,max_sechsecke);
+#ifndef NOTIMES
 times(&TMS);
 buffertime= TMS.tms_utime;
 if (!quiet) 
@@ -6414,11 +6425,13 @@ if (!quiet)
     }
     savetime=buffertime;
   }
+#endif //NOTIMES
 }
 
 if (do_sandwich)
 {
 sandwich(min_sechsecke,max_sechsecke);
+#ifndef NOTIMES
 times(&TMS);
 buffertime= TMS.tms_utime;
 if (!quiet) 
@@ -6429,6 +6442,7 @@ if (!quiet)
       fclose(logfile);
     }
   }
+#endif //NOTIMES
 }
 
 if (codenumber==3) 
@@ -6446,8 +6460,9 @@ if (!quiet)
    if (spiralcheck) fprintf(stderr,"Graphs without a spiral starting at a pentagon: %d \n",no_penta_spiral);
    if (hexspi) fprintf(stderr,"Graphs without a spiral starting at a hexagon: %d \n",no_hexa_spiral);
    if (symstat) schreibe_symmetriestatistik();
-   fprintf(stderr,"\nTotal generation time: %.1f seconds \n",(double)buffertime/time_factor);
-   
+#ifndef NOTIMES 
+  fprintf(stderr,"\nTotal generation time: %.1f seconds \n",(double)buffertime/time_factor);
+#endif //NOTIMES   
    fprintf(stderr,"end of program\n");
    
    if (separate_logfile) {
@@ -6472,8 +6487,9 @@ if (!quiet)
        }
        if (j%4) {fprintf(logfile,"\n");}
      }        
+#ifndef NOTIMES
      fprintf(logfile,"\nTotal generation time: %.1f seconds \n",(double)buffertime/time_factor);
-     
+#endif //NOTIMES     
      fprintf(logfile,"end of program\n");
    }
  }

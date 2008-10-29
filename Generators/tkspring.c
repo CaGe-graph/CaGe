@@ -179,7 +179,11 @@ main(int argc, char *argv[])
 
   extern char *optarg;
 
+#ifndef NOTIMES
   srand48((long)time(NULL));
+#else
+  srand48(0);
+#endif //NOTIMES
 
   if (readgraph())
     exit(1);

@@ -156,7 +156,9 @@ extern int errno;
 
 #include <string.h>
 
+#ifndef NOTIMES
 #define CPUTIME 1          /* Whether to measure the cpu time or not */
+#endif //NOTIMES
 
 #if CPUTIME
 #include <sys/times.h>

@@ -11,10 +11,12 @@ Wasserstoff angeklebt. */
 #include<ctype.h>
 #include<string.h>
 #include<limits.h>
-#include<time.h>
-#include<sys/times.h>
 #include<sys/stat.h>
 
+#ifndef NOTIMES
+#include<time.h>
+#include<sys/times.h>
+#endif //NOTIMES
 
 #define N        (450)    /* Maximal moegliche Anzahl der Knoten */
 
@@ -31,6 +33,7 @@ Wasserstoff angeklebt. */
 #define reg      3
 #define filenamenlaenge 30 /* sollte vorerst reichen */
 
+#ifndef NOTIMES
 #include <sys/times.h>
 #if !defined(CLK_TCK) && !defined(_SC_CLK_TCK)
 #include <time.h>
@@ -49,7 +52,7 @@ Wasserstoff angeklebt. */
 #endif
 
 #define time_factor CLK_TCK
-
+#endif //NOTIMES
 
 
 /* Typ-Deklarationen: */
@@ -2443,7 +2446,9 @@ int main(argc,argv)
 int argc; char *argv[];
 
 { int i;
+#ifndef NOTIMES
   struct tms TMS;
+#endif //NOTIMES
   char outfilename[filenamenlaenge], logfilename[filenamenlaenge];
   FILE *logfile = NULL;
 
@@ -2568,15 +2573,14 @@ if (maxgap == 1) gap1(pentagons,hexagons);
   else berechne_aufgaben(0);
 
 
-times(&TMS);
-
 fprintf(stderr,"%d structures\n",strukturzaehler);
-fprintf(stderr,"\nTotal generation time: %.1f seconds\n",(double)TMS.tms_utime/time_factor);
-
-
 fprintf(logfile,"%d structures\n",strukturzaehler);
-fprintf(logfile,"\nTotal generation time: %.1f seconds\n",(double)TMS.tms_utime/time_factor);
 
+#ifndef NOTIMES
+times(&TMS);
+fprintf(stderr,"\nTotal generation time: %.1f seconds\n",(double)TMS.tms_utime/time_factor);
+fprintf(logfile,"\nTotal generation time: %.1f seconds\n",(double)TMS.tms_utime/time_factor);
+#endif //NOTIMES
 
 return(0);
 }

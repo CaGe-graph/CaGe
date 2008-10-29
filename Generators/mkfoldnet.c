@@ -1,9 +1,19 @@
+
+/* Aenderung von Gunnar Brinkmann eingebaut: Wenn es mit -DNOTIMES kompiliert wird, werden die
+auf Laufzeit basierenden Funktionen (randomisierte Wahl eines anderen Teilbaumes fuer das Ausschneiden)
+auf Basis der Schrittzahlen gewaehlt. Die Schrittzahlen sind nicht optimiert -- einfach geraten und
+das sollte nicht verwendet werden -- die Absicht ist einzig und allein, es auch auf Windows zum
+Laufen zu bekommen */
+
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>
 #include<ctype.h>
-#include<time.h>
 #include<string.h>
+
+#ifndef NOTIMES
+#include<time.h>
+#endif //NOTIMES
 
 #define FlaechenGroesse 50
 /* FlaechenGroesse-1 ist die maximal erlaubte Anzahl der Knoten in einer 
@@ -24,8 +34,8 @@
    einbettung_aufschnitt(...) ueberschritten, so wird der Zufallsgenerator 
    aktiv und damit wird ein Teil der Aufschnitte verworfen */
 #define Wkeit 25
-/* mit der Wahrscheinlichkeit "Wkeit" (in %) wird das aktuelle Teilbaum 
-   verworfen, wenn die Funktion einbettung_aufschnitt(...) ihren Zeitlimit 
+/* mit der Wahrscheinlichkeit "Wkeit" (in %) wird der aktuelle Teilbaum 
+   verworfen, wenn die Funktion einbettung_aufschnitt(...) ihr Zeitlimit 
    ueberschritten hat*/
 
 #define LISTENLAENGE 300
@@ -3389,12 +3399,16 @@ int einbettung_aufschnitt(koordinaten_3d koord3, koordinaten_2d *koord2,
   
   int knotenzahl_neu;
 
+#ifndef NOTIMES
   time_t st_zeit, akt_zeit;
+#endif //NOTIMES
 
   int zeit_test=0;
 
+#ifndef NOTIMES
   time(&st_zeit);
-  srand(time(NULL));
+  //  srand(time(NULL));
+#endif //NOTIMES
 
   if((marks=(int*)malloc((flaechenzahl+1)*sizeof(int)))==NULL || (eingebettet=(int*)malloc((flaechenzahl+1)*sizeof(int)))==NULL || (*flaechen_neu=(SURFACE*)malloc((flaechenzahl+1)*sizeof(SURFACE)))==NULL){
     fprintf(stderr," Speicher reicht nicht aus(einb. aufschn.)(1) \n");
@@ -3495,10 +3509,11 @@ int einbettung_aufschnitt(koordinaten_3d koord3, koordinaten_2d *koord2,
 
 	/*fprintf(stderr, " ende aufruf %d \t flaechenzahl=%d\n", aufruf, flaechenzahl);*/
 	
-	if(!(aufruf%200)){
-	  srand(time(NULL));
-	}
+	//if(!(aufruf%200)){ entfernt von Gunnar Brinkmann -- warum benutzt er staendig srand()?
+	//  srand(time(NULL)); Ich habe es einmal in main eingefuegt.
+	//}
 
+#ifndef NOTIMES
 	if((st_zeit!=-1) && (!zeit_test) && (aufruf>100)){
 	  time(&akt_zeit);
 	  if(akt_zeit!=-1){
@@ -3509,10 +3524,13 @@ int einbettung_aufschnitt(koordinaten_3d koord3, koordinaten_2d *koord2,
 	    }
 	  }
 	}
+#else
+	if (aufruf> 2000) zeit_test=1; // das ist nur geraten...
+#endif //NOTIMES
 
 	if(zeit_test){
 	  while((angeklebt[j][0]!=min_flaeche) && ((rand()%100)<Wkeit)){
-	    /* mit Wahrscheinlichkeit von 10% wird das Teilbaum mit Wurzel
+	    /* mit Wahrscheinlichkeit von 10% wird der Teilbaum mit Wurzel
 	       in angeklebt[i][0] verworfen*/
 	    /*fprintf(stderr, " \t bin hier2\n");*/
 	    i=angeklebt[j][1];
@@ -3573,6 +3591,9 @@ int main(int argc, char *argv[]){
   int test, knotenzahl, flaechenzahl;
   FILE *fil2;           /* Zeiger auf den Ausgabe-File (im Vega-Format)*/
   FILE *fil;            /* Zeiger auf Input-File (im Vega-Format)*/
+
+
+  srand(0);
 
   koordinaten_3d koord3;
    

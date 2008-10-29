@@ -2073,8 +2073,6 @@ int intersect_v(EDGE *mark, int dist_to_convex)
 }
 
 /* === iso.c == end =================================================== */
-#include <time.h>
-#include <sys/times.h>
 #define NEXT_ENTRY(i) (((i+1)>number_of_rows) ? 1:(i+1))
 #define ENTRY_SUM(i,k) ((x=((i+k)%number_of_rows)) ? x : (i+k))
 #define XMOD2(x) ((x%2)?((x+1)/2) : (x/2))
@@ -2091,7 +2089,10 @@ int intersect_v(EDGE *mark, int dist_to_convex)
 #define C5v 9
 #define C6v 10
 
+#ifndef NOTIMES
+#include <time.h>
 #include <sys/times.h>
+
 #if !defined(CLK_TCK) && !defined(_SC_CLK_TCK)
 #include <time.h>
 #endif
@@ -2109,7 +2110,7 @@ int intersect_v(EDGE *mark, int dist_to_convex)
 #endif
 
 #define time_factor CLK_TCK
-
+#endif //NOTIMES
 
 int cap_counter=0;
 int outputtube_length=0;
@@ -3108,7 +3109,9 @@ if ((number_cgr=(VERTEX *)malloc(maxlabel*sizeof(VERTEX)))==NULL)
 int main(int argc, char *argv[])
 {
   EDGE *merke=NULL;
+#ifndef NOTIMES
   struct tms TMS;
+#endif //NOTIMES
   int i,j,max_tubelength,savetime,log=0,verbose=0;
   int sequence[7];
   EDGE *starts[7];
@@ -3226,8 +3229,11 @@ int main(int argc, char *argv[])
     init(); /* Needs the correct value of maxnv_cap */
     cap(merke, sequence, starts);
 
+#ifndef NOTIMES
     times(&TMS);
     savetime=(unsigned int) TMS.tms_utime;
+#endif //NOTIMES
+
 if (verbose) fprintf(fil,"Number of generated structures: %d\n",graph_counter);
 if (split)fprintf(fil,"Part %d mod %d\n",rest,mod);
 fprintf(fil,"Number of accepted caps: %d\n",cap_counter);
@@ -3258,9 +3264,11 @@ if (gruppe[C6v])
   if (auts_statistic_mirror[6]) 
     fprintf(fil,"With group C6v: %d \n",auts_statistic_mirror[6]);
 }
+#ifndef NOTIMES
 #ifdef time_factor
 fprintf(fil,"User CPU-time for cap generation: %.1f sec. \n",(double)savetime/time_factor);
 #endif
+#endif //NOTIMES
 
 #ifdef DEBUG
 for (i=0; i< maxlevel+2; i++)fprintf(stderr,"knoten[%2d] = %d\n", i, knoten[i]);

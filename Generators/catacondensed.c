@@ -3,7 +3,10 @@
 #include <string.h>
 #include <unistd.h>
 /* #include <malloc.h> */
+
+#ifndef NOTIMES
 #include <sys/times.h>
+#endif //NOTIMES
 
 #if __STDC__
 #include <stdlib.h>
@@ -210,7 +213,7 @@ static int marks__v[MAXNV+1];
 #define ISMARKED_V(x) (marks__v[x] == markvalue_v)
 #define MARK_V(x) (marks__v[x] = markvalue_v)
 
-
+#ifndef NOTIMES
 /**************************** HORLOGE.H   *******************************/
 
 /* Sorry to use the french word horloge, but the aim is to avoid 
@@ -392,6 +395,7 @@ int PrintCPU(FILE *out,Horloge *clock)
     
 return(0);
 }
+#endif //NOTIMES
 
 /*****************************WRITEVERTEX*******************************/
 
@@ -3338,8 +3342,11 @@ exit(1);
 
 
 /*****************************WRITE_RESULTS*******************************/
-
+#ifndef NOTIMES
 void write_results(FILE *outfile, Horloge *watch)
+#else
+void write_results(FILE *outfile)
+#endif //NOTIMES
 {
   int i,j,k;
   LONGTYPE dummy;
@@ -3553,6 +3560,7 @@ fprintf(outfile,"%llu catacondensed %llu pericondensed,\n",catas,counter-catas);
 			 }/* end detailed */
 
 #endif
+#ifndef NOTIMES
 EvalHorloge(watch);
 PrintHorloge(outfile,watch);
  if(watch->ucpu > 1e-6)
@@ -3561,7 +3569,8 @@ PrintHorloge(outfile,watch);
      if (!just_skeletons)
        { if (benzenoids) fprintf(outfile,"%f benzenoids/sec\n",(double)counter / watch->ucpu);
          else fprintf(outfile,"%f fusenes/sec\n",(double)counter / watch->ucpu);}
-   } 
+   }
+#endif //NOTIMES 
 }
 
 
@@ -3677,12 +3686,14 @@ int main(int argc, char *argv[])
 
 {
 int i;
-Horloge *watch;  /* watch not clock since this last one may already be used */
 char dummy[30];
 FILE *logfile;
 
+#ifndef NOTIMES
+Horloge *watch;  /* watch not clock since this last one may already be used */
 watch = AllocHorloge();
 InitHorloge(watch);
+#endif //NOTIMES
 
 if (argc<2) usage(argv[0]);
 
@@ -3772,14 +3783,20 @@ init();
 
 if (maxnv==2) { number_of_skeletons=1; number_of_labellings=1; catacondensed=1; group=D2h; C=10; H=8; write_up(); }
 else construct();
-
+#ifndef NOTIMES
 write_results(stderr, watch);
+#else
+write_results(stderr);
+#endif //NOTIMES
 
 logfile=fopen(logfilename,"a");
 if (logfile==NULL) { fprintf(stderr,"Cannot open logfile %s\n",logfilename);
 		     exit(1); }
-
+#ifndef NOTIMES
 write_results(logfile, watch);
+#else
+write_results(logfile);
+#endif //NOTIMES
 
 if (outfile != stdout) fclose(outfile);
 fclose(logfile);

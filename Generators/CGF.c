@@ -3,6 +3,11 @@
 /* Thomas Harmuth */
 /* 20.Juni 1997 */
 
+/* 23.10.2008: alle mit NOTIMES modifizierte Teile von Gunnar Brinkmann zugefuegt. 
+               Die Absicht ist, dass es mit -DNOTIMES auch auf Windows compiliert 
+	       werden kann. 
+*/
+
 /* Dieses Programm generiert 3-regulaere Karten mit vorgegebenem
    Geschlecht und vorgegebenen Flaechen. Bedienung siehe Anleitung. */
 
@@ -79,15 +84,20 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+
+#ifndef NOTIMES
 #include <time.h>
+#include <sys/times.h>
+#include <signal.h>
+#include <sys/time.h>
+#endif //NOTIMES
+
 #include <string.h>
 #include <memory.h>
-#include <sys/times.h>
+
 #include <sys/stat.h>
 //#include <malloc.h>
 #include <unistd.h>
-#include <signal.h>
-#include <sys/time.h>
 
 
 /******************************************/
@@ -194,7 +204,7 @@
 #define R_ARRAY ((G_MAX>>3)+1)  /* Groesse eines Arrays, das fuer jeden Rand
                                    ein Flag speichern soll */
 
-
+#ifndef NOTIMES
 #if !defined(CLK_TCK) && !defined(_SC_CLK_TCK)
 #include <time.h>
 #endif
@@ -211,7 +221,7 @@
                       60 is the wrong guess.  Another common value is 100. */
 #endif
 #define time_factor CLK_TCK
-
+#endif //NOTIMES
 
 
 
@@ -718,11 +728,11 @@ BOOL memory_overflow = False;   /* True => Speicher verbraucht */
 /* ---------- */
 /* Zeitnahme: */
 /* ---------- */
-
+#ifndef NOTIMES
 clock_t savetime=0;    /* verbrauchte Zeit seit Programmbeginn */
 clock_t prevtime=0;    /* verbrauchte Zeit vorm Recovern       */ 
 struct tms TMS;
-
+#endif //NOTIMES
 
 /* --------------------------------- */
 /* History (Rekursion oder Topdown): */
@@ -1725,6 +1735,7 @@ void initialisiere_arrays2(void) {
 
 /*******************SIGNALHANDLER****************************/
 
+#ifndef NOTIMES
 /* SA_OLDSTYLE */
 
 #ifndef	SA_RESTART
@@ -1749,6 +1760,7 @@ void sigcatch (int sig)
 {
 	save_flag = 1;
 }
+
 
 int		setup()
 #endif
@@ -1781,7 +1793,9 @@ int		setup()
 
 	return( 0 );
 }
-
+#else
+int	save_flag = 0;
+#endif //NOTIMES
 /*******************SORTIERE_STATISTIK_IN_BAUM2***************************/
 /*  Wie "sortiere_statistik_in_baum", aber fuer den Recover-Modus. Es
     werden gleich die kompletten Zahlen geschrieben.                     */
@@ -1939,7 +1953,9 @@ void schreibe_dumpfile(BOOL finished,POSTYP hislen,unsigned char *data,
   static FLAECHENTYP f,faces[MAXFTYPEN];
   static size_t pos,j,jj,written;
   static int dummy;
+#ifndef NOTIMES
   static clock_t dummy_ct,medtime;
+#endif //NOTIMES
 
   pos = 0L;                             /* Position im Array "data" */
   data[pos++] = finished;                    /* Finished   */
@@ -2315,13 +2331,14 @@ void schreibe_dumpfile(BOOL finished,POSTYP hislen,unsigned char *data,
     data[pos++] = (unsigned char)(krit3>>8);
     data[pos++] = (unsigned char)(krit3&255);
     data[pos++] = (unsigned char)(gefunden1 + (gefunden2<<1) + (gefunden3<<2));
-
+#ifndef NOTIMES
     dummy_ct = times(&TMS);
     medtime = TMS.tms_utime + prevtime;
     data[pos++] = (unsigned char)(medtime>>24);              /* Zeit */
     data[pos++] = (unsigned char)((medtime>>16)&255);
     data[pos++] = (unsigned char)((medtime>>8)&255);
     data[pos++] = (unsigned char)(medtime&255);
+#endif //NOTIMES
   }
 
   /* dump-File oeffnen: */
@@ -3138,11 +3155,12 @@ void lies_dumpfile(void) {
   gefunden1 = (BOOL)(data[51]&1);
   gefunden2 = (BOOL)((data[51]&2)!=0);
   gefunden3 = (BOOL)((data[51]&4)!=0);
+#ifndef NOTIMES
   prevtime = (clock_t)(data[52])<<24 |
              (clock_t)(data[53])<<16 |
              (clock_t)(data[54])<<8  |
              (clock_t)(data[55]);
-
+#endif //NOTIMES
   if (facestat) {lies_facestat_aus_dumpfile(recoverfile);}
   if (ferror(recoverfile)) {
     fprintf(stderr,"Error while reading dump file %s!\n",recoverreadfilename);
@@ -17082,7 +17100,9 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
   static POSTYP ii,start;
   static KNOTENTYP connfl;
   static KANTE *k;
+#ifndef NOTIMES
   static clock_t dummy_ct,buffertime;
+#endif //NOTIMES
   static unsigned char fall,perm1,perm2,perm3;
   static char iso;    /* kennzeichnet isomorphe Raender (-1 = unbestimmt) */
   static BOOL dummy,vertauscht;     /* Randcodes im Bordercode vertauscht */
@@ -17546,6 +17566,7 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
       }
     }    /* if g>0 */
     if (graphstat) {
+#ifndef NOTIMES
       dummy_ct = times(&TMS);
       buffertime = TMS.tms_utime;
       sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
@@ -17558,6 +17579,16 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
                      non_iso_graphenzahl[ARRAYPOS_LN(g,n,1)]);
       logfile_entry(strpuf,True,True,False);
       savetime = buffertime;
+#else
+      sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+                     " %d vertices along type-1 Petrie paths,"
+                     "accepted %d.",
+                     graphenzahl[ARRAYPOS_LN(g,n,1)],
+                     graphenzahl[ARRAYPOS_LN(g,n,1)]==1 ? (char *)"" :
+                     (char *)"s",g,n,
+                     non_iso_graphenzahl[ARRAYPOS_LN(g,n,1)]);
+      logfile_entry(strpuf,True,True,False);
+#endif //NOTIMES
     }
   }   /* if do_bauchbinde */
 
@@ -18838,6 +18869,7 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
       }                   /* for l1 */
     }                     /* if g>0 */
     if (graphstat) {
+#ifndef NOTIMES
       dummy_ct = times(&TMS);
       buffertime = TMS.tms_utime;
       sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
@@ -18850,6 +18882,16 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
                      non_iso_graphenzahl[ARRAYPOS_LN(g,n,2)]);
       logfile_entry(strpuf,True,True,False);
       savetime = buffertime;
+#else
+      sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+                     " %d vertices along type-2 Petrie paths, "
+                     "accepted %d.",
+                     graphenzahl[ARRAYPOS_LN(g,n,2)],
+                     graphenzahl[ARRAYPOS_LN(g,n,2)]==1 ? (char *)"" :
+                     (char *)"s",g,n,
+                     non_iso_graphenzahl[ARRAYPOS_LN(g,n,2)]);
+      logfile_entry(strpuf,True,True,False);
+#endif //NOTIMES
     }
   }                       /* if do_sandwich */
   
@@ -19939,6 +19981,7 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
       }          /* for l3 */
     }            /* for l1 */
     if (graphstat) {
+#ifndef NOTIMES
       dummy_ct = times(&TMS);
       buffertime = TMS.tms_utime;
       sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
@@ -19951,6 +19994,16 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
                      non_iso_graphenzahl[ARRAYPOS_LN(g,n,3)]);
       logfile_entry(strpuf,True,True,False);
       savetime = buffertime;
+#else
+      sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+                     " %d vertices along type-3 Petrie paths, "
+                     " accepted %d.",
+                     graphenzahl[ARRAYPOS_LN(g,n,3)],
+                     graphenzahl[ARRAYPOS_LN(g,n,3)]==1 ? (char *)"" : 
+                     (char *)"s",g,n,
+                     non_iso_graphenzahl[ARRAYPOS_LN(g,n,3)]);
+      logfile_entry(strpuf,True,True,False);
+#endif //NOTIMES
     }
   }                       /* if do_brille */
 }
@@ -20560,7 +20613,9 @@ void gehe_facestatbaum_durch(STATTREENODE *root,FLAECHENTYP *code,
 
 int main(int argc,char *argv[]) {
   int i,j,k;
+#ifndef NOTIMES
   clock_t dummy, buffertime;
+#endif //NOTIMES
   int prio;
   int l=0;                  /* >0 => l-ter Parameter ist expliziter Filename */
   KNOTENTYP f_max_bb;   /* Groesstmoegliche Flaechenzahl eines Patches, in dem
@@ -21314,6 +21369,10 @@ int main(int argc,char *argv[]) {
                          argv[i]);  exit(54);}   /* Abbruch, um den Benutzer
                      auf einen moeglichen Eingabefehler aufmerksam zu machen */
   }       /* for */
+
+#ifdef NOTIMES
+  save = False;
+#endif //NOTIMES
 
   /* Argumente ueberpruefen */
   if (!gs_used) {genus_anf = genus_anf_usr = genus_end;}
@@ -22347,7 +22406,7 @@ int main(int argc,char *argv[]) {
         }
       }
       sprintf(strpuf,"\n%sConstructed %d non-isomorphic map%s with %d "
-          "vertices.",graphstat ? (char *)"=> " : (char *)"",
+          "vertices.\n",graphstat ? (char *)"=> " : (char *)"",
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,1)] + 
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,2)] +
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,3)],
@@ -22384,22 +22443,31 @@ int main(int argc,char *argv[]) {
         connzahl[ARRAYPOS_LN(i,j,3)]=0L;
       }       /* if do_conn */
     }         /* if is_moeglich */
+#ifndef NOTIMES
     sprintf(strpuf,"\nGeneration time: %.1f seconds.\n\n",
            (double)prevtime/time_factor);
     logfile_entry(strpuf,False,True,False);
+#endif //NOTIMES
   }
 
   /* Signal setzen, falls dump-Files erzeugt werden sollen: */
+#ifndef NOTIMES
   if (save) setup();
+#endif //NOTIMES
 
   /* Jetzt geht's los: */
   /* Patches erzeugen */
   generiere_patches();
+#ifndef NOTIMES
   dummy = times(&TMS);
   savetime = TMS.tms_utime;
   sprintf(strpuf,"Time for generating the patches: %.1f seconds\n"
                  "Number of stored patches: %ld\n",
                  (double)savetime/time_factor,patches);
+#else
+  sprintf(strpuf,"Number of stored patches: %ld\n",patches);
+#endif //NOTIMES
+
   logfile_entry(strpuf,True,True,False);
 #ifdef __FreeBsd__
   space_info = mallinfo();   /* auch wenn "memory" nicht benutzt wird */
@@ -22488,6 +22556,7 @@ int main(int argc,char *argv[]) {
           if (do_bauchbinde && (bauchbindenkennung<3 || i>0 || j%4==0) &&
               (!recover || pfadtyp_rec==1)) { 
             bilde_graphen_aus_bauchbindenpatches((KNOTENTYP)i,(KNOTENTYP)j);
+#ifndef NOTIMES
             dummy = times(&TMS);
             buffertime = TMS.tms_utime;
             if (graphstat) {
@@ -22501,11 +22570,23 @@ int main(int argc,char *argv[]) {
                       non_iso_graphenzahl[ARRAYPOS_LN(i,j,1)]);
               logfile_entry(strpuf,True,True,False);
               savetime = buffertime;
+#else
+            if (graphstat) {
+              sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+                             " %d vertices along type-1 Petrie paths,"
+                             " accepted %d.",
+                      graphenzahl[ARRAYPOS_LN(i,j,1)],
+                      graphenzahl[ARRAYPOS_LN(i,j,1)]==1 ? (char *)"": 
+                      (char *)"s",i,j,
+                      non_iso_graphenzahl[ARRAYPOS_LN(i,j,1)]);
+              logfile_entry(strpuf,True,True,False);
+#endif //NOTIMES
             }
           }
           /* Teil 2: */
           if ((do_sandwich || do_brille) && (!recover || pfadtyp_rec>1)) {
             bilde_graphen_aus_bruchkantenpatches((KNOTENTYP)i,(KNOTENTYP)j);
+#ifndef NOTIMES
             dummy = times(&TMS);
             buffertime = TMS.tms_utime; 
             if (graphstat) {
@@ -22525,13 +22606,30 @@ int main(int argc,char *argv[]) {
                       non_iso_graphenzahl[ARRAYPOS_LN(i,j,3)]);
               logfile_entry(strpuf,True,True,False);
               savetime = buffertime;
+#else
+            if (graphstat) {
+              sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+                  " %d vertices along type-2 Petrie paths,"
+                  " accepted %d.\nConstructed %d" 
+                  " map%s with genus %d and %d vertices along type-3 Petrie"
+                  " paths, accepted %d.",
+                      graphenzahl[ARRAYPOS_LN(i,j,2)],
+                      graphenzahl[ARRAYPOS_LN(i,j,2)]==1 ? (char *)"": 
+                      (char *)"s",i,j,
+                      non_iso_graphenzahl[ARRAYPOS_LN(i,j,2)],
+                      graphenzahl[ARRAYPOS_LN(i,j,3)],
+                      graphenzahl[ARRAYPOS_LN(i,j,3)]==1 ? (char *)"": 
+                      (char *)"s",i,j,
+                      non_iso_graphenzahl[ARRAYPOS_LN(i,j,3)]);
+              logfile_entry(strpuf,True,True,False);
+#endif //NOTIMES
             }
           }
         }
 
         /* Statistik: */
         sprintf(strpuf,"\n%sConstructed %d non-isomorphic map%s with %d "
-          "vertices.",graphstat ? (char *)"=> " : (char *)"",
+          "vertices.\n",graphstat ? (char *)"=> " : (char *)"",
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,1)] + 
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,2)] +
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,3)],
@@ -22566,11 +22664,13 @@ int main(int argc,char *argv[]) {
   }           /* for i */
 
   /* Restliche Ausgabe: */
+#ifndef NOTIMES
   dummy = times(&TMS);
   buffertime = TMS.tms_utime;
   sprintf(strpuf,"\nTotal generation time: %.1f seconds.\n",
           (double)(buffertime+prevtime)/time_factor);
   logfile_entry(strpuf,True,True,False);
+#endif //NOTIMES
 
   if (facestat) {       /* Flaechenstatistik */
     FLAECHENTYP faces[MAXFTYPEN];
