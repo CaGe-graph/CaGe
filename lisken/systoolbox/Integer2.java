@@ -3,7 +3,6 @@ package lisken.systoolbox;
 
 
 import java.lang.*;
-import com.sun.java.util.collections.Comparable;
 import lisken.systoolbox.*;
 
 

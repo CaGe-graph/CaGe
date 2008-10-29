@@ -2,7 +2,6 @@
 package cage;
 
 
-import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 import java.awt.*;
@@ -10,7 +9,6 @@ import java.awt.event.*;
 import java.beans.*;
 import javax.swing.event.*;
 import javax.swing.*;
-import com.sun.java.util.collections.TreeMap;
 import cage.viewer.*;
 import cage.writer.*;
 import lisken.systoolbox.*;
@@ -385,7 +383,7 @@ public class ResultPanel extends JPanel implements
     try {
       currentLevel = statusMap.firstKey();
       status.setText((String) statusMap.get(currentLevel));
-    } catch (com.sun.java.util.collections.NoSuchElementException ex) {
+    } catch (NoSuchElementException ex) {
       status.setText("\u00a0");
     }
   }

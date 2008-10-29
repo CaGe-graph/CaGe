@@ -4,10 +4,10 @@ package cage.generator;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.TreeMap;
 import javax.swing.*;
 import javax.swing.event.*;
 import lisken.systoolbox.*;
-import com.sun.java.util.collections.TreeMap;
 
 
 class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener

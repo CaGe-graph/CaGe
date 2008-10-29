@@ -4,13 +4,11 @@ package cage.generator;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.event.*;
 import java.util.*;
 import cage.*;
 import lisken.uitoolbox.*;
 import lisken.systoolbox.*;
-import com.sun.java.util.collections.Iterator;
 
 
 public class CPFPanel extends GeneratorPanel

@@ -1,9 +1,8 @@
 
 package cage;
 
-
-import com.sun.java.util.collections.*;
-
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public abstract class EdgeIterator implements Iterator
 {

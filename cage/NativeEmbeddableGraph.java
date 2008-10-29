@@ -2,9 +2,8 @@
 package cage;
 
 
-import lisken.systoolbox.*;
-import com.sun.java.util.collections.*;
-
+import java.util.NoSuchElementException;
+import lisken.systoolbox.Integer2;
 
 public class NativeEmbeddableGraph extends EmbeddableGraph
 {
@@ -167,9 +166,9 @@ class NativeEdgeIterator extends EdgeIterator
   }
 
   public void remove()
-   throws com.sun.java.util.collections.UnsupportedOperationException
+   throws UnsupportedOperationException
   {
-    throw new com.sun.java.util.collections.UnsupportedOperationException("Graph edges can't be removed");
+    throw new UnsupportedOperationException("Graph edges can't be removed");
   }
 
   protected void finalize() throws Throwable

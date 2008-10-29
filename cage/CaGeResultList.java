@@ -1,10 +1,8 @@
 
 package cage;
 
-
-import javax.swing.event.*;
-import com.sun.java.util.collections.*;
-
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
 /**
     A result "collection" of CaGe's production process, with

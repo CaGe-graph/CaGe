@@ -2,8 +2,8 @@
 package cage.writer;
 
 
-import java.io.*;
 import cage.*;
+import java.util.NoSuchElementException;
 
 
 class CMLWriter extends AbstractChemicalWriter
@@ -76,7 +76,7 @@ class CMLWriter extends AbstractChemicalWriter
 	  to.append(sep + "a" + j);
 	  sep = " ";
 	}
-      } catch (com.sun.java.util.collections.NoSuchElementException e) {
+      } catch (NoSuchElementException e) {
       }
     }
     buffer.append("    <stringArray builtin=\"atomRef\">" + from + "</stringArray>\n");
