@@ -1234,13 +1234,13 @@ signed char bo_memcmp(BORDERPOS *p1,BORDERPOS *p2,KNOTENTYP anz) {
 /***************************REPEATED_FOPEN***********************************/
 
 FILE *repeated_fopen(char *filename,char *mode,int tries) {
-  int i=0;
+//  int i=0;
   FILE *file = nil;
-  do {
+//  do {
     file = fopen(filename,mode);
-    i++;
-    if (file==nil && i<tries) {sleep(5);}
-  } while(file==nil && i<tries);
+//    i++;
+//    if (file==nil && i<tries) {sleep(5);}
+//  } while(file==nil && i<tries);
   return(file);     /* es kann "nil" zurueckgegeben werden */
 }
 
