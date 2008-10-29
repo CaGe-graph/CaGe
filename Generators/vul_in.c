@@ -57,14 +57,12 @@
 #include <stdlib.h>
 #endif
 
-#define CPUTIME 1          /* Whether to measure the cpu time or not */
-
-#if CPUTIME
+#ifndef NOTIMES
 #include <sys/times.h>
 #ifndef CLK_TCK
 #include <time.h>
 #endif
-#endif
+#endif // NOTIMES
 
 #ifndef MAXN
 #define MAXN 5000            /* the maximum number of vertices; see above */
