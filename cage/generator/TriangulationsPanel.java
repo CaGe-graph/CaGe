@@ -1,14 +1,31 @@
 
 package cage.generator;
 
-
-import cage.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import lisken.uitoolbox.*;
-import lisken.systoolbox.*;
+import cage.CaGe;
+import cage.EmbedFactory;
+import cage.GeneratorInfo;
+import cage.GeneratorPanel;
+import cage.StaticGeneratorInfo;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Vector;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import lisken.uitoolbox.EnhancedSlider;
+import lisken.uitoolbox.GridBagConstraints2;
+import lisken.uitoolbox.MinMaxEqListener;
 
 
 public class TriangulationsPanel extends GeneratorPanel

@@ -1,9 +1,7 @@
 
 package cage;
 
-
-import java.io.*;
-import lisken.systoolbox.*;
+import lisken.systoolbox.Systoolbox;
 
 
 public class NativeCaGePipe extends CaGePipe

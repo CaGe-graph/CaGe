@@ -1,11 +1,12 @@
 
 package cage;
 
-
-import java.util.*;
-import java.beans.*;
-import cage.writer.*;
-import lisken.systoolbox.*;
+import cage.writer.CaGeWriter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Vector;
+import lisken.systoolbox.MessageQueue;
+import lisken.systoolbox.Systoolbox;
 
 
 public class BackgroundRunner extends Thread

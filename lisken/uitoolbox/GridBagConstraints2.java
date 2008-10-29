@@ -1,7 +1,8 @@
 
 package lisken.uitoolbox;
 
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 
 public class GridBagConstraints2 extends GridBagConstraints implements java.io.Serializable

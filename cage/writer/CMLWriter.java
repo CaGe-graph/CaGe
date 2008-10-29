@@ -1,8 +1,9 @@
 
 package cage.writer;
 
-
-import cage.*;
+import cage.CaGeResult;
+import cage.EdgeIterator;
+import cage.EmbeddableGraph;
 import java.util.NoSuchElementException;
 
 

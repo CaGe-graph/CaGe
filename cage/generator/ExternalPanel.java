@@ -1,16 +1,36 @@
 
 package cage.generator;
 
+import cage.CaGe;
+import cage.Embedder;
+import cage.GeneratorInfo;
+import cage.GeneratorPanel;
+import cage.StaticGeneratorInfo;
+import cage.ValencyElementRule;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import javax.swing.AbstractButton;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import lisken.systoolbox.Systoolbox;
+import lisken.uitoolbox.EnhancedSlider;
+import lisken.uitoolbox.JTextComponentFocusSelector;
 
-import cage.*;
-import java.io.*;
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import java.awt.event.*;
-import javax.swing.event.*;
-import lisken.uitoolbox.*;
-import lisken.systoolbox.*;
+
 
 
 public class ExternalPanel extends GeneratorPanel

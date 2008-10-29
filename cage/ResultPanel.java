@@ -1,18 +1,56 @@
 
 package cage;
 
+import cage.viewer.CaGeViewer;
+import cage.writer.CaGeWriter;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.lang.reflect.Array;
+import java.util.NoSuchElementException;
+import java.util.TreeMap;
+import java.util.Vector;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoundedRangeModel;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import lisken.systoolbox.Integer2;
+import lisken.systoolbox.Systoolbox;
+import lisken.uitoolbox.GridBagConstraints2;
+import lisken.uitoolbox.JTextComponentFocusSelector;
+import lisken.uitoolbox.NumberDocument;
+import lisken.uitoolbox.PushButtonDecoration;
+import lisken.uitoolbox.SpinButton;
+import lisken.uitoolbox.UItoolbox;
 
-import java.util.*;
-import java.lang.reflect.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import javax.swing.event.*;
-import javax.swing.*;
-import cage.viewer.*;
-import cage.writer.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
 
 
 public class ResultPanel extends JPanel implements

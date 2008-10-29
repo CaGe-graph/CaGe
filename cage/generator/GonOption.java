@@ -1,13 +1,22 @@
 
 package cage.generator;
 
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.DefaultButtonModel;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import lisken.systoolbox.Integer2;
+import lisken.uitoolbox.MinMaxEqListener;
+import lisken.uitoolbox.SpinButton;
+import lisken.uitoolbox.UItoolbox;
 
 
 class GonOption implements ChangeListener, ActionListener

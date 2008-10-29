@@ -2,15 +2,12 @@
 
 package cage.generator;
 
-
-import cage.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
+import cage.GeneratorInfo;
+import cage.GeneratorPanel;
+import javax.swing.BorderFactory;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class HCgenPanel extends GeneratorPanel

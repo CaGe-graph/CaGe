@@ -1,18 +1,35 @@
 
 package cage.viewer;
 
-
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.applet.*;
-import java.net.*;
-import java.io.*;
-
-import cage.*;
-import cage.writer.*;
-import org.openscience.miniJmol.JmolApplet;
+import cage.CaGe;
+import cage.CaGeResult;
+import cage.EmbeddableGraph;
+import cage.GeneratorInfo;
+import cage.ResultPanel;
+import cage.writer.AbstractChemicalWriter;
+import cage.writer.WriterFactory;
+import java.applet.Applet;
+import java.applet.AppletContext;
+import java.applet.AppletStub;
+import java.applet.AudioClip;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Label;
+import java.awt.SystemColor;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.Iterator;
 import org.openscience.jmol.DisplaySettings;
+import org.openscience.miniJmol.JmolApplet;
 
 
 public class MiniJmolViewer

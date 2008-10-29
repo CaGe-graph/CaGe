@@ -1,15 +1,31 @@
 
 package cage.generator;
 
+import cage.EmbedFactory;
+import cage.GeneratorInfo;
+import cage.GeneratorPanel;
+import cage.StaticGeneratorInfo;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Vector;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import lisken.systoolbox.Systoolbox;
+import lisken.uitoolbox.EnhancedSlider;
+import lisken.uitoolbox.GridBagConstraints2;
+import lisken.uitoolbox.SpinButton;
 
-import cage.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import lisken.uitoolbox.*;
-import lisken.systoolbox.*;
 
 
 public class PolytopesPanel extends GeneratorPanel

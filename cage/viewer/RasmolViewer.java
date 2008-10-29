@@ -1,15 +1,34 @@
 
 package cage.viewer;
 
-
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
-import cage.*;
-import cage.writer.*;
+import cage.CaGe;
+import cage.CaGeResult;
+import cage.GeneratorInfo;
+import cage.ResultPanel;
+import cage.writer.AbstractChemicalWriter;
+import cage.writer.WriterFactory;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+import lisken.systoolbox.BufferedFDInputStream;
+import lisken.systoolbox.BufferedFDOutputStream;
+import lisken.systoolbox.Pipe;
+import lisken.uitoolbox.UItoolbox;
 
 
 public class RasmolViewer implements CaGeViewer

@@ -1,8 +1,7 @@
 
 package cage;
 
-
-import lisken.systoolbox.*;
+import lisken.systoolbox.Systoolbox;
 
 
 public class NativeEmbedEmbedder extends Embedder

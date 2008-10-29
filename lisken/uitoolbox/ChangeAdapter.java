@@ -2,8 +2,8 @@
 
 package lisken.uitoolbox;
 
-
-import javax.swing.event.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class ChangeAdapter implements ChangeListener

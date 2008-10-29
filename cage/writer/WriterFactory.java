@@ -1,9 +1,8 @@
 
 package cage.writer;
 
-
-import java.util.*;
-import cage.*;
+import cage.CaGe;
+import java.util.Hashtable;
 
 
 public class WriterFactory

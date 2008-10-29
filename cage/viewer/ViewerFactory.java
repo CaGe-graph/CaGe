@@ -1,10 +1,10 @@
 
 package cage.viewer;
 
-
-import java.util.*;
-import java.lang.reflect.*;
-import cage.*;
+import cage.CaGe;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Hashtable;
 
 
 public class ViewerFactory

@@ -1,15 +1,19 @@
 package cage.generator;
 
-
-import cage.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
+import cage.EmbedFactory;
+import cage.GeneratorInfo;
+import cage.GeneratorPanel;
+import cage.StaticGeneratorInfo;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.SwingUtilities;
+import lisken.systoolbox.Systoolbox;
+import lisken.uitoolbox.EnhancedSlider;
+import lisken.uitoolbox.GridBagConstraints2;
 
 
 public class HexagonsHCgenPanel extends GeneratorPanel

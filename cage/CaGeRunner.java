@@ -1,9 +1,7 @@
 
 package cage;
 
-
-import java.beans.*;
-
+import java.beans.PropertyChangeListener;
 
 public interface CaGeRunner
 {

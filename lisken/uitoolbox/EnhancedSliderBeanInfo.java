@@ -3,12 +3,16 @@
 //Version:
 //Copyright:Copyright (c) 1998
 //Autor:Sebastian Lisken
-//Organisation:FSP Mathematisierung, Universität Bielefeld
+//Organisation:FSP Mathematisierung, Universitï¿½t Bielefeld
 //Beschreibung:
 
 package lisken.uitoolbox;
 
-import java.beans.*;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
+
 
 public class EnhancedSliderBeanInfo extends SimpleBeanInfo
 {

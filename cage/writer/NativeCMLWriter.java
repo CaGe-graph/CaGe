@@ -1,9 +1,9 @@
 
 package cage.writer;
 
-
-import java.io.*;
-import cage.*;
+import cage.CaGeResult;
+import cage.ElementRule;
+import cage.NativeEmbeddableGraph;
 
 
 public class NativeCMLWriter extends AbstractChemicalWriter

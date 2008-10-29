@@ -1,9 +1,10 @@
 
 package cage.writer;
 
-
-import java.io.*;
-import cage.*;
+import cage.CaGeResult;
+import cage.ElementRule;
+import cage.NativeEmbeddableGraph;
+import java.io.IOException;
 
 
 public class NativePDBWriter extends AbstractChemicalWriter

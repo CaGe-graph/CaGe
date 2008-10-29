@@ -1,9 +1,8 @@
 
 package cage.viewer;
 
-
-import cage.*;
-
+import cage.CaGeOutlet;
+import cage.ResultPanel;
 
 public interface CaGeViewer extends CaGeOutlet
 {

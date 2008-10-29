@@ -2,16 +2,34 @@
 
 package cage.generator;
 
+import cage.CaGe;
+import cage.EmbedFactory;
+import cage.GeneratorInfo;
+import cage.GeneratorPanel;
+import cage.StaticGeneratorInfo;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.DocumentFilter.FilterBypass;
+import lisken.systoolbox.Systoolbox;
+import lisken.uitoolbox.GridBagConstraints2;
 
-import cage.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
+
 
 
 public class BoundaryHCgenPanel extends GeneratorPanel

@@ -2,10 +2,6 @@
 package lisken.systoolbox;
 
 
-import java.lang.*;
-import lisken.systoolbox.*;
-
-
 public class Integer2 implements Comparable
 {
   public int value;

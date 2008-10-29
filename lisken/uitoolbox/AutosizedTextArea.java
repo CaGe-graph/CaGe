@@ -1,10 +1,12 @@
 
 package lisken.uitoolbox;
 
-
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Insets;
+import javax.swing.JTextArea;
+import javax.swing.border.Border;
 
 
 public class AutosizedTextArea extends JTextArea

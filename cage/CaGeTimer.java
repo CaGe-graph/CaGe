@@ -1,11 +1,13 @@
 
 package cage;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.Timer;
+import javax.swing.event.EventListenerList;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.beans.*;
-import java.awt.event.*;
 
 
 public class CaGeTimer extends Timer

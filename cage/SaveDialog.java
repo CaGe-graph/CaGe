@@ -1,12 +1,28 @@
 
 package cage;
 
+import cage.writer.CaGeWriter;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import lisken.uitoolbox.EnhancedJLabel;
+import lisken.uitoolbox.FlaggedJDialog;
+import lisken.uitoolbox.GridBagConstraints2;
+import lisken.uitoolbox.JTextComponentFocusSelector;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import cage.writer.*;
-import lisken.uitoolbox.*;
+
 
 
 public class SaveDialog extends FlaggedJDialog

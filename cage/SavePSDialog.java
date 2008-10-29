@@ -2,9 +2,7 @@
 
 package cage;
 
-
-import java.awt.*;
-import lisken.uitoolbox.*;
+import java.awt.Frame;
 
 
 public class SavePSDialog extends SaveDialog

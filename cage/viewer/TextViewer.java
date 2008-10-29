@@ -1,14 +1,31 @@
 
 package cage.viewer;
 
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import cage.*;
-import lisken.uitoolbox.*;
+import cage.CaGeResult;
+import cage.EmbeddableGraph;
+import cage.GeneratorInfo;
+import cage.ResultPanel;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
+import lisken.uitoolbox.AutosizedTextArea;
+import lisken.uitoolbox.GridBagConstraints2;
+import lisken.uitoolbox.UItoolbox;
 
 
 public class TextViewer implements CaGeViewer

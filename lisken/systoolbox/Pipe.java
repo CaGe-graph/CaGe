@@ -1,9 +1,10 @@
 
 package lisken.systoolbox;
 
-
-import java.io.*;
-import lisken.systoolbox.*;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class Pipe

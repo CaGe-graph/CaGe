@@ -1,10 +1,13 @@
 
 package lisken.uitoolbox;
 
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JRootPane;
+import javax.swing.SwingConstants;
 
 
 public class WizardStage

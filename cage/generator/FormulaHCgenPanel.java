@@ -2,15 +2,43 @@
 
 package cage.generator;
 
+import cage.CaGe;
+import cage.ElementRule;
+import cage.EmbedFactory;
+import cage.GeneratorInfo;
+import cage.GeneratorPanel;
+import cage.StaticGeneratorInfo;
+import cage.ValencyElementRule;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Vector;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import lisken.systoolbox.Systoolbox;
+import lisken.uitoolbox.ChangeAdapter;
+import lisken.uitoolbox.EnhancedSlider;
+import lisken.uitoolbox.GridBagConstraints2;
+import lisken.uitoolbox.UItoolbox;
 
-import cage.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
 
 
 public class FormulaHCgenPanel extends GeneratorPanel

@@ -1,9 +1,9 @@
 
 package cage;
 
-
-import java.util.*;
-import lisken.systoolbox.*;
+import java.util.Hashtable;
+import lisken.systoolbox.Integer2;
+import lisken.systoolbox.Systoolbox;
 
 
 public class ValencyElementRule implements ElementRule

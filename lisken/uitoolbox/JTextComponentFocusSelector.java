@@ -1,8 +1,13 @@
 
 package lisken.uitoolbox;
 
-import java.awt.event.*;
-import javax.swing.text.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.text.JTextComponent;
+
 
 public class JTextComponentFocusSelector extends MouseAdapter implements FocusListener
 {

@@ -10,16 +10,32 @@ package cage;
  * @version
  */
 
-import java.io.*;
-import java.util.*;
-import java.beans.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import cage.viewer.*;
-import cage.writer.*;
-import lisken.uitoolbox.*;
-import lisken.systoolbox.*;
+import cage.writer.CaGeWriter;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Vector;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import lisken.systoolbox.ExceptionGroup;
+import lisken.systoolbox.Systoolbox;
+import lisken.uitoolbox.PushButtonDecoration;
+import lisken.uitoolbox.UItoolbox;
+import lisken.uitoolbox.Wizard;
+import lisken.uitoolbox.WizardStage;
 import org.SysInfo;
 
 

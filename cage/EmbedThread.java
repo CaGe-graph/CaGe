@@ -2,11 +2,11 @@
 
 package cage;
 
-
-import java.io.*;
-import java.beans.*;
-import javax.swing.*;
-import lisken.systoolbox.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import lisken.systoolbox.MessageQueue;
+import lisken.systoolbox.Systoolbox;
 
 
 public class EmbedThread extends Thread

@@ -1,13 +1,17 @@
 
 package cage.generator;
 
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.TreeMap;
-import javax.swing.*;
-import javax.swing.event.*;
-import lisken.systoolbox.*;
+import javax.swing.AbstractButton;
+import javax.swing.BoundedRangeModel;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import lisken.systoolbox.Integer2;
+
 
 
 class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener

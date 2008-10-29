@@ -1,10 +1,8 @@
 
 package lisken.uitoolbox;
 
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JLabel;
 
 
 public class EnhancedJLabel extends JLabel implements java.io.Serializable // , FocusListener

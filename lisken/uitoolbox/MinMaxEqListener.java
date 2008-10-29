@@ -1,10 +1,12 @@
 
 package lisken.uitoolbox;
 
-
-import java.awt.event.*;
-import javax.swing.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.BoundedRangeModel;
+import javax.swing.ButtonModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class MinMaxEqListener implements ChangeListener, ActionListener

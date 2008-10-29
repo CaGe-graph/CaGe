@@ -1,14 +1,20 @@
 
 package cage;
 
-
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import cage.writer.*;
-import lisken.systoolbox.*;
+import cage.writer.CaGeWriter;
+import cage.writer.WriterFactory;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.Vector;
+import javax.swing.AbstractButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import javax.swing.text.JTextComponent;
+import lisken.systoolbox.Systoolbox;
 
 
 public class FileFormatBox extends JComboBox

@@ -1,9 +1,9 @@
 
 package cage.writer;
 
-
-import java.io.*;
-import cage.*;
+import cage.CaGeResult;
+import cage.NativeEmbeddableGraph;
+import java.io.OutputStream;
 
 
 public class NativeWritegraphWriter extends CaGeWriter

@@ -1,12 +1,10 @@
 
 package cage;
 
-
-import java.util.*;
-import java.beans.*;
-import javax.swing.*;
-import lisken.systoolbox.*;
-import lisken.uitoolbox.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Vector;
+import lisken.systoolbox.Pipe;
 
 
 public abstract class CaGePipe extends Pipe

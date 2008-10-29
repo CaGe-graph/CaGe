@@ -1,11 +1,19 @@
 
 package cage;
 
-
-import java.io.*;
-import java.util.*;
-import java.beans.*;
-import lisken.systoolbox.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+import lisken.systoolbox.BufferedFDOutputStream;
+import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MessageQueue;
+import lisken.systoolbox.Pipe;
+import lisken.systoolbox.Systoolbox;
 
 
 public class FoldnetThread extends Thread

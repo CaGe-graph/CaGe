@@ -1,8 +1,7 @@
 
 package cage;
 
-
-import javax.swing.*;
+import javax.swing.JPanel;
 
 
 public abstract class GeneratorPanel extends JPanel

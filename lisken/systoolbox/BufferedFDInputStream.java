@@ -1,8 +1,8 @@
 
 package lisken.systoolbox;
 
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class BufferedFDInputStream extends InputStream

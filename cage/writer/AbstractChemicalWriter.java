@@ -1,8 +1,9 @@
 
 package cage.writer;
 
-
-import cage.*;
+import cage.CaGeResult;
+import cage.ElementRule;
+import cage.GeneratorInfo;
 
 
 public abstract class AbstractChemicalWriter extends CaGeWriter

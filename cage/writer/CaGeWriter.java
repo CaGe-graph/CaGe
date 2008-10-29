@@ -1,9 +1,10 @@
 
 package cage.writer;
 
-
-import java.io.*;
-import cage.*;
+import cage.CaGeOutlet;
+import cage.GeneratorInfo;
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 public abstract class CaGeWriter implements CaGeOutlet
