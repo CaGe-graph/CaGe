@@ -371,10 +371,9 @@ public class SpinButton extends JPanel
     });
     p.add(v);
     f.setContentPane(p);
-    f.show();
     f.pack();
     s.requestFocus();
-    f.show();
+    f.setVisible(true);
   }
 }
 

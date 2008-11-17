@@ -471,9 +471,8 @@ public class CGFPanel extends GeneratorPanel
     });
     UItoolbox.addExitOnEscape(f);
     f.setContentPane(p);
-    f.show();
     f.pack();
-    f.show();
+    f.setVisible(true);
 //    f.setResizable(false);
   }
 

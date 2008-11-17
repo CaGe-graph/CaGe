@@ -785,9 +785,8 @@ public class OutputPanel extends JPanel
     });
     UItoolbox.addExitOnEscape(f);
     f.setContentPane(new OutputPanel());
-    f.show();
     f.pack();
-    f.show();
+    f.setVisible(true);
 //    f.setResizable(false);
   }
 

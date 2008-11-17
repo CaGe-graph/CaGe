@@ -1067,7 +1067,7 @@ public class ResultPanel extends JPanel implements
     });
     UItoolbox.addExitOnEscape(f);
     f.pack();
-    f.show();
+    f.setVisible(true);
   }
 }
 

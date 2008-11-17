@@ -465,7 +465,7 @@ public class FormulaHCgenPanel extends GeneratorPanel
     Dimension d = f.getSize();
     d.height += 2;
     f.setSize(d);
-    f.show();
+    f.setVisible(true);
     p.showing();
   }
 

@@ -424,6 +424,6 @@ public class TubetypePanel extends GeneratorPanel
     Dimension d = f.getSize();
     d.height += 2;
     f.setSize(d);
-    f.show();
+    f.setVisible(true);
   }
 }

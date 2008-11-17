@@ -354,7 +354,7 @@ public class FullgenPanel extends GeneratorPanel
     symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
     symmetriesDialog.setSuccess(false);
     symmetriesAllButton.requestFocus();
-    symmetriesDialog.show();
+    symmetriesDialog.setVisible(true);
     if (symmetriesDialog.getSuccess()) {
       for (int i = 0; i < symmetries; ++i)
       {
@@ -476,6 +476,6 @@ public class FullgenPanel extends GeneratorPanel
     UItoolbox.addExitOnEscape(f);
     f.setContentPane(p);
     f.pack();
-    f.show();
+    f.setVisible(true);
   }
 }
