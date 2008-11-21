@@ -36,7 +36,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import lisken.systoolbox.Systoolbox;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.UItoolbox;
 
 
@@ -123,7 +122,7 @@ public class BackgroundWindow extends JFrame
     JLabel runnersLabel = new JLabel("generators in background");
     runnersLabel.setFont(font);
     runnersPanel.add(runnersLabel,
-     new GridBagConstraints2(0, 0, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 3, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     JLabel foldnetsLabel = new JLabel("folding nets");
@@ -131,7 +130,7 @@ public class BackgroundWindow extends JFrame
     foldnetsPanel = new JPanel();
     foldnetsPanel.setLayout(new GridBagLayout());
     foldnetsPanel.add(foldnetsLabel,
-     new GridBagConstraints2(0, 0, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 3, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     foldnetsLeft = addFoldnetsView("left", foldnetsPanel, 1, font);
@@ -144,30 +143,30 @@ public class BackgroundWindow extends JFrame
     foldnetNext.addActionListener(this);
     foldnetNext.setVisible(false);
     foldnetsPanel.add(foldnetNext,
-     new GridBagConstraints2(2, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(buttonDist, 5, buttonDist, 2), 0, 0));
     foldnetsPanel.add(
      Box.createHorizontalStrut(Math.max(
       metrics.stringWidth("made"), metrics.stringWidth("failed"))),
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 2, 0, 5), 0, 0));
     foldnetsPanel.add(
      Box.createHorizontalStrut(foldnetNext.getPreferredSize().width),
-     new GridBagConstraints2(2, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 0, 2), 0, 0));
     this.foldnetThread = foldnetThread;
     foldnetThread.addPropertyChangeListener(this);
     runnersPanel.setVisible(false);
     content.add(runnersPanel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(10, 10, 10, 10), 0, 0));
     foldnetsPanel.setVisible(false);
     content.add(foldnetsPanel,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(10, 10, 10, 10), 0, 0));
     runnerControls = new Vector(0);
@@ -201,7 +200,7 @@ public class BackgroundWindow extends JFrame
     exitPanel.add(buttonPanel);
     exitPanel.setVisible(false);
     content.add(exitPanel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
       new Insets(10, 10, 10, 10), 0, 0));
     getRootPane().registerKeyboardAction(this, "cancel",
@@ -280,11 +279,11 @@ public class BackgroundWindow extends JFrame
     JLabel label = new JLabel(name);
     label.setFont(font);
     panel.add(label,
-     new GridBagConstraints2(0, y, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, y, 1, 1, 0.001, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(labelDist, 2, labelDist, 5), 0, 0));
     panel.add(foldnetsField,
-     new GridBagConstraints2(1, y, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(1, y, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(fieldDist, 5, fieldDist, 2), 0, 0));
     return foldnetsField;
@@ -480,15 +479,15 @@ class RunnerControl
     stopButton.setBorder(border);
     stopButtonUsed = false;
     panel.add(infoButton, 
-     new GridBagConstraints2(0, index, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, index, 1, 1, 0.001, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
       new Insets(window.buttonDist, 2, window.buttonDist, 2), 0, 0));
     panel.add(graphNoField, 
-     new GridBagConstraints2(1, index, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(1, index, 1, 1, 0.001, 1.0,
       GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
       new Insets(window.fieldDist, 2, window.fieldDist, 2), 0, 0));
     panel.add(stopButton, 
-     new GridBagConstraints2(2, index, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, index, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(window.buttonDist, 2, window.buttonDist, 2), 0, 0));
     runner.addPropertyChangeListener(this);

@@ -36,7 +36,6 @@ import javax.swing.event.ChangeEvent;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.ChangeAdapter;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.UItoolbox;
 
 
@@ -220,71 +219,71 @@ public class FormulaHCgenPanel extends GeneratorPanel
     rangePentPanel.add(minPentButton);
     rangePentPanel.add(maxPentButton);
     add(CLabel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 10, 5, 10), 0, 0));
     add(CSlider,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(Box.createHorizontalStrut(rangeCPanel.getPreferredSize().width),
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(0, 30, 0, 30), 0, 0));
     add(rangeCPanel,
-     new GridBagConstraints2(0, 3, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 0.001, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(0, 0, 25, 0), 0, 0));
     add(HLabel,
-     new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 10, 5, 10), 0, 0));
     add(HSlider,
-     new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(Box.createHorizontalStrut(rangeHPanel.getPreferredSize().width),
-     new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(0, 30, 0, 30), 0, 0));
     add(rangeHPanel,
-     new GridBagConstraints2(1, 3, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 0.001, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(0, 0, 25, 0), 0, 0));
     add(pentLabel,
-     new GridBagConstraints2(2, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 5, 5, 10), 0, 0));
     add(pentSlider,
-     new GridBagConstraints2(2, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
      new Insets(0, 5, 0, 10), 0, 0));
     add(Box.createHorizontalStrut(rangePentPanel.getPreferredSize().width),
-     new GridBagConstraints2(2, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(0, 30, 0, 30), 0, 0));
     add(rangePentPanel,
-     new GridBagConstraints2(2, 3, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(2, 3, 1, 1, 0.001, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(0, 0, 25, 0), 0, 0));
     add(ipr,
-     new GridBagConstraints2(0, 4, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 4, 3, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(5, 10, 5, 0), 0, 0));
     add(includeH,
-     new GridBagConstraints2(0, 5, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 5, 3, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(5, 10, 5, 0), 0, 0));
     add(peri,
-     new GridBagConstraints2(0, 6, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 6, 3, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(5, 10, 5, 0), 0, 0));
     add(HGapLabel,
-     new GridBagConstraints2(0, 7, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 7, 3, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(30, 10, 5, 0), 0, 0));
     add(HGapSlider,
-     new GridBagConstraints2(0, 8, 2, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 8, 2, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
      new Insets(0, 0, 0, 0), 0, 0));
   }

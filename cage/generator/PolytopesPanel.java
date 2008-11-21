@@ -23,7 +23,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.SpinButton;
 
 
@@ -43,7 +42,7 @@ public class PolytopesPanel extends GeneratorPanel
     dual = new JCheckBox("dual graphs");
     dual.setMnemonic(KeyEvent.VK_D);
     add(dual,
-     new GridBagConstraints2(1, 0, 2, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 20, 0), 0, 0));
     verticesSlider = new EnhancedSlider();
@@ -59,18 +58,18 @@ public class PolytopesPanel extends GeneratorPanel
     verticesSlider.setSizeFactor(4);
     verticesSlider.addChangeListener(this);
     add(verticesSlider,
-     new GridBagConstraints2(1, 1, 2, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 15, 0), 0, 0));
     JLabel verticesLabel = new JLabel("number of vertices");
     verticesLabel.setLabelFor(verticesSlider.slider());
     verticesLabel.setDisplayedMnemonic(KeyEvent.VK_V);
     add(verticesLabel,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 10), 0, 0));
     add(new JLabel("minimum degree"),
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 10), 0, 0));
     minDegGroup = new ButtonGroup();
@@ -85,11 +84,11 @@ public class PolytopesPanel extends GeneratorPanel
       minDegPanel.add(degButton);
     }
     add(minDegPanel,
-     new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 0), 0, 0));
     add(new JLabel("number of edges"),
-     new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 10), 0, 0));
     defaultEdges = new JCheckBox("default", true);
@@ -113,11 +112,11 @@ public class PolytopesPanel extends GeneratorPanel
     edgesPanel.add(maxEdgesLabel);
     edgesPanel.add(maxEdges);
     add(edgesPanel,
-     new GridBagConstraints2(1, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     add(defaultEdges,
-     new GridBagConstraints2(2, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 20, 10, 0), 0, 0));
     maxFacesize = new SpinButton(DEFAULT_VERTICES - 1, 3, MAX_VERTICES - 1);
@@ -129,11 +128,11 @@ public class PolytopesPanel extends GeneratorPanel
     maxFacesizePanel.add(maxFacesizeLabel);
     maxFacesizePanel.add(maxFacesize);
     add(new JLabel("face size"),
-     new GridBagConstraints2(0, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 0, 10), 0, 0));
     add(maxFacesizePanel,
-     new GridBagConstraints2(1, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 0, 0, 0), 0, 0));
     defaultMaxFacesize = new JCheckBox("default", true);
@@ -141,11 +140,11 @@ public class PolytopesPanel extends GeneratorPanel
     defaultMaxFacesize.setActionCommand("d");
     defaultMaxFacesize.addActionListener(this);
     add(defaultMaxFacesize,
-     new GridBagConstraints2(2, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 4, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 20, 0, 0), 0, 0));
     add(Box.createVerticalStrut(80),
-     new GridBagConstraints2(3, 3, 1, 2, 1.0, 1.0,
+     new GridBagConstraints(3, 3, 1, 2, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 0, 0), 0, 0));
     setValues();

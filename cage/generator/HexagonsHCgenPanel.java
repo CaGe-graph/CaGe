@@ -13,7 +13,6 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingUtilities;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 
 
 public class HexagonsHCgenPanel extends GeneratorPanel
@@ -56,19 +55,19 @@ public class HexagonsHCgenPanel extends GeneratorPanel
 	kekuleBox = new JCheckBox("Kekule");
 
     add(hexagonsSlider,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(cataCondensedBox,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(benzenoidBox,
-     new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(kekuleBox,
-     new GridBagConstraints2(0, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     }

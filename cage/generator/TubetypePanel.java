@@ -31,7 +31,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.UItoolbox;
 
@@ -167,15 +166,15 @@ public class TubetypePanel extends GeneratorPanel
     fullButton.setFont(font);
 */
     add(tubelengthLabel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.EAST, GridBagConstraints.NONE,
      new Insets(0, 0, 20, 10), 0, 0));
     add(tubelengthSlider,
-     new GridBagConstraints2(1, 0, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 0, 3, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 0, 20, 5), 0, 0));
     add(defaultTubelengthButton,
-     new GridBagConstraints2(4, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 10, 20, 0), 0, 0));
 /*
@@ -183,85 +182,85 @@ public class TubetypePanel extends GeneratorPanel
     perimeterLabel.setDisplayedMnemonic(KeyEvent.VK_P);
     perimeterLabel.setLabelFor(perimeterControl);
     add(perimeterLabel,
-     new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     add(perimeterControl,
-     new GridBagConstraints2(1, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 5, 0, 0), 0, 0));
     JLabel shiftLabel = new JLabel("Shift");
     shiftLabel.setDisplayedMnemonic(KeyEvent.VK_S);
     shiftLabel.setLabelFor(shiftControl);
     add(shiftLabel,
-     new GridBagConstraints2(1, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     add(shiftControl,
-     new GridBagConstraints2(1, 5, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 5, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 5, 0, 0), 0, 0));
     add(new JLabel(""),
-     new GridBagConstraints2(2, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(0, 0, 0, 0), 0, 0));
     JLabel offset1Label = new JLabel("Offset 1");
     offset1Label.setDisplayedMnemonic(KeyEvent.VK_1);
     offset1Label.setLabelFor(offset1Control);
     add(offset1Label,
-     new GridBagConstraints2(3, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(3, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     add(offset1Control,
-     new GridBagConstraints2(3, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(3, 3, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 5, 0, 0), 0, 0));
     JLabel offset2Label = new JLabel("Offset 2");
     offset2Label.setDisplayedMnemonic(KeyEvent.VK_2);
     offset2Label.setLabelFor(offset2Control);
     add(offset2Label,
-     new GridBagConstraints2(3, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(3, 4, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     add(offset2Control,
-     new GridBagConstraints2(3, 5, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(3, 5, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 5, 0, 0), 0, 0));
 */
     JLabel offsetsLabel = new JLabel("Boundary parameters:");
     add(offsetsLabel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.EAST, GridBagConstraints.NONE,
      new Insets(5, 0, 5, 10), 0, 0));
     JLabel offset1Label = new JLabel("l");
     offset1Label.setDisplayedMnemonic(KeyEvent.VK_L);
     offset1Label.setLabelFor(offset1Control.slider());
     add(offset1Label,
-     new GridBagConstraints2(1, 2, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(1, 2, 1, 1, 0.001, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     add(offset1Control,
-     new GridBagConstraints2(2, 2, 1, 1, 0.1, 1.0,
+     new GridBagConstraints(2, 2, 1, 1, 0.1, 1.0,
      GridBagConstraints.EAST, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     JLabel offset2Label = new JLabel("m");
     offset2Label.setDisplayedMnemonic(KeyEvent.VK_M);
     offset2Label.setLabelFor(offset2Control.slider());
     add(offset2Label,
-     new GridBagConstraints2(1, 3, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 0.001, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     add(offset2Control,
-     new GridBagConstraints2(2, 3, 1, 1, 0.1, 1.0,
+     new GridBagConstraints(2, 3, 1, 1, 0.1, 1.0,
      GridBagConstraints.EAST, GridBagConstraints.NONE,
      new Insets(5, 5, 5, 0), 0, 0));
     add(Box.createHorizontalGlue(),
-     new GridBagConstraints2(3, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(3, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.EAST, GridBagConstraints.NONE,
      new Insets(0, 0, 0, 0), 0, 0));
 /*
     add(new JLabel("Caps on:"),
-     new GridBagConstraints2(0, 6, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0,
      GridBagConstraints.EAST, GridBagConstraints.NONE,
      new Insets(20, 0, 0, 10), 0, 0));
     JPanel capsPanel = new JPanel();
@@ -269,12 +268,12 @@ public class TubetypePanel extends GeneratorPanel
     capsPanel.add(Box.createHorizontalStrut(5));
     capsPanel.add(fullButton);
     add(capsPanel,
-     new GridBagConstraints2(1, 6, 4, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 6, 4, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(20, 0, 0, 0), 0, 0));
 */
     add(ipr,
-     new GridBagConstraints2(1, 7, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 7, 3, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(30, 5, 0, 0), 0, 0));
   }

@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 
 public class NanoConesPanel extends GeneratorPanel {
     
@@ -41,23 +40,23 @@ public class NanoConesPanel extends GeneratorPanel {
         JLabel lengthOfSideLabel = new JLabel("Length of Side");
 
     add(numberOfPentagonsLabel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 10, 5, 10), 0, 0));
     add(numberOfPentagonsSlider,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(lengthOfSideLabel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 10, 5, 10), 0, 0));
     add(lengthOfSide,
-     new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(symmetricBox,
-     new GridBagConstraints2(0, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     }

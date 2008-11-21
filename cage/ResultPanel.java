@@ -44,7 +44,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import lisken.systoolbox.Integer2;
 import lisken.systoolbox.Systoolbox;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 import lisken.uitoolbox.NumberDocument;
 import lisken.uitoolbox.PushButtonDecoration;
@@ -113,15 +112,15 @@ public class ResultPanel extends JPanel implements
     pipeGraphNo.setEnabled(false);
     pipeGraphNo.setToolTipText("number of graphs generated so far");
     add(new JLabel("generated:"),
-     new GridBagConstraints2(0, 0, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(5, 5, 5, 20), 0, 0));
     add(pipeGraphNo,
-     new GridBagConstraints2(2, 0, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(2, 0, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
       new Insets(5, 2, 5, 2), 0, 0));
     add(Box.createHorizontalGlue(),
-     new GridBagConstraints2(3, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
       new Insets(5, 0, 5, 0), 0, 0));
 
@@ -133,18 +132,18 @@ public class ResultPanel extends JPanel implements
     viewGraphNo.setToolTipText("number of the graph currently showing -- can be edited");
     JLabel viewGraphNoLabel = new JLabel("view/goto:");
     add(viewGraphNoLabel,
-     new GridBagConstraints2(0, 1, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(5, 5, 5, 20), 0, 0));
     new JTextComponentFocusSelector(viewGraphNo);
     add(viewGraphNo,
-     new GridBagConstraints2(2, 1, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
       new Insets(5, 2, 5, 2), 0, 0));
 
     JLabel saveLabel = new JLabel("save:");
     add(saveLabel,
-     new GridBagConstraints2(0, 2, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(5, 5, 5, 20), 0, 0));
     foldnetButton = new JButton("folding net");
@@ -171,13 +170,13 @@ public class ResultPanel extends JPanel implements
     savePanel.add(foldnetButton);
     int big_flag = (doEmbed2D && doEmbed3D) ? 1 : 0;
     add(savePanel,
-     new GridBagConstraints2(2 - big_flag, 2, 2 + big_flag, 1, 100.0, 1.0,
+     new GridBagConstraints(2 - big_flag, 2, 2 + big_flag, 1, 100.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(5, 0, 5, 0), 0, 0));
 
     JLabel advanceLabel = new JLabel("advance:");
     add(advanceLabel,
-     new GridBagConstraints2(0, 3, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(20, 5, 15, 20), 0, 0));
     advance1Button = new JButton("+1");
@@ -196,11 +195,11 @@ public class ResultPanel extends JPanel implements
     flowButton.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
     new PushButtonDecoration(flowButton, true);
     add(advance1Button,
-     new GridBagConstraints2(1, 3, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(20, 2, 15, 2), 0, 0));
     add(advanceDist,
-     new GridBagConstraints2(2, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
       new Insets(20, 2, 15, 2), 0, 0));
     JPanel advanceFlowPanel = new JPanel();
@@ -209,7 +208,7 @@ public class ResultPanel extends JPanel implements
     advanceFlowPanel.add(Box.createHorizontalStrut(4));
     advanceFlowPanel.add(flowButton);
     add(advanceFlowPanel,
-     new GridBagConstraints2(3, 3, 1, 1, 100.0, 1.0,
+     new GridBagConstraints(3, 3, 1, 1, 100.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(20, 2, 15, 2), 0, 0));
 
@@ -230,16 +229,16 @@ public class ResultPanel extends JPanel implements
     reviewPanel.add(reviewNextLabel);
     JLabel reviewLabel = new JLabel("review:");
     add(reviewLabel,
-     new GridBagConstraints2(0, 4, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(0, 4, 1, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(15, 5, 15, 20), 0, 0));
     add(reviewPanel,
-     new GridBagConstraints2(1, 4, 3, 1, 0.001, 1.0,
+     new GridBagConstraints(1, 4, 3, 1, 0.001, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(5, 5, 5, 5), 0, 0));
 
     add(Box.createHorizontalStrut(400),
-     new GridBagConstraints2(0, 5, 5, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 5, 5, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 0, 0), 0, 0));
 
@@ -260,7 +259,7 @@ public class ResultPanel extends JPanel implements
     statusPanel.add(Box.createVerticalStrut(
      getFontMetrics(statusFont).getHeight() + 8));
     add(statusPanel,
-     new GridBagConstraints2(0, 6, 5, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 6, 5, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
       new Insets(5, 5, 5, 5), 0, 0));
     statusMap = new TreeMap();

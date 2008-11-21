@@ -24,7 +24,6 @@ import javax.swing.JTextArea;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import lisken.uitoolbox.AutosizedTextArea;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.UItoolbox;
 
 
@@ -115,11 +114,11 @@ public class TextViewer implements CaGeViewer
     scrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
     content.setLayout(new GridBagLayout());
     content.add(title,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 0.001,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 0.001,
       GridBagConstraints.CENTER, GridBagConstraints.NONE,
       new Insets(5, 2, 5, 2), 0, 0));
     content.add(scrollPane,
-     new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.BOTH,
       new Insets(2, 2, 2, 2), 0, 0));
     createFrame();

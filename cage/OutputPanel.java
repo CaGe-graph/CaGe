@@ -53,7 +53,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedJLabel;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 import lisken.uitoolbox.UItoolbox;
 
@@ -210,23 +209,23 @@ public class OutputPanel extends JPanel
     new JTextComponentFocusSelector(embed3DCmdLine);
     expertPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
     expertPanel.setLayout(expertLayout);
-    expertPanel.add(generatorLabel, new GridBagConstraints2(0, 0, 1, 1, 0.01, 1.0
+    expertPanel.add(generatorLabel, new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0
 	    ,GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
-    expertPanel.add(generatorCmdLine, new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0
+    expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0
 	    ,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
-    expertPanel.add(embed2DLabel, new GridBagConstraints2(0, 1, 1, 1, 0.01, 1.0
+    expertPanel.add(embed2DLabel, new GridBagConstraints(0, 1, 1, 1, 0.01, 1.0
 	    ,GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
-    expertPanel.add(embed2DCmdLine, new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0
+    expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0
 	    ,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
-    expertPanel.add(embed3DLabel, new GridBagConstraints2(0, 2, 1, 1, 0.01, 1.0
+    expertPanel.add(embed3DLabel, new GridBagConstraints(0, 2, 1, 1, 0.01, 1.0
 	    ,GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
-    expertPanel.add(embed3DCmdLine, new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0
+    expertPanel.add(embed3DCmdLine, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0
 	    ,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
-    this.add(expertLabel, new GridBagConstraints2(0, 0, 1, 1, 0.1, 1.0
+    this.add(expertLabel, new GridBagConstraints(0, 0, 1, 1, 0.1, 1.0
 	    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 17, 0, 10), 0, 0));
-    this.add(expertPanel, new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0
+    this.add(expertPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0
 	    ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    this.add(sep1, new GridBagConstraints2(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
+    this.add(sep1, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
 	    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
     onActionClickerLayoutSwitcher outPreFilterListener =
@@ -267,12 +266,12 @@ public class OutputPanel extends JPanel
     outPreFilterGroup.add(outPreFilter);
     outPreFilterGroup.add(outPreFilterNone);
     new onActionClicker(outPreFilter, outPreFilterNone, outPreFilterCheckBox);
-    this.add(outPreFilterCheckBox, new GridBagConstraints2(0, 2, 1, 1, 0.1, 1.0
+    this.add(outPreFilterCheckBox, new GridBagConstraints(0, 2, 1, 1, 0.1, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
-    this.add(outPreFilterPanel, new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0
+    this.add(outPreFilterPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 
-    this.add(sep2, new GridBagConstraints2(0, 3, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
+    this.add(sep2, new GridBagConstraints(0, 3, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
     onActionClickerLayoutSwitcher out3DDestListener =
@@ -343,14 +342,14 @@ public class OutputPanel extends JPanel
     out3DDestPanel.add(out3DFile, null);
     out3DDestPanel.add(out3DNoDest, null);
     new JTextComponentFocusSelector(out3DFileName);
-    this.add(out3DCheckBox, new GridBagConstraints2(0, 4, 1, 1, 0.1, 1.0
+    this.add(out3DCheckBox, new GridBagConstraints(0, 4, 1, 1, 0.1, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
-    this.add(out3DDestPanel, new GridBagConstraints2(1, 4, 1, 1, 1.0, 1.0
+    this.add(out3DDestPanel, new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    this.add(out3DDestOptionsPanel, new GridBagConstraints2(1, 5, 1, 1, 1.0, 1.0
+    this.add(out3DDestOptionsPanel, new GridBagConstraints(1, 5, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-    this.add(sep3, new GridBagConstraints2(0, 6, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
+    this.add(sep3, new GridBagConstraints(0, 6, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
     onActionClickerLayoutSwitcher out2DDestListener =
@@ -421,14 +420,14 @@ public class OutputPanel extends JPanel
     out2DDestOptionsPanel.add(out2DViewerPanel, "out2DViewer");
     out2DDestOptionsPanel.add(out2DFilePanel, "out2DFile");
     new JTextComponentFocusSelector(out2DFileName);
-    this.add(out2DCheckBox, new GridBagConstraints2(0, 7, 1, 1, 0.1, 1.0
+    this.add(out2DCheckBox, new GridBagConstraints(0, 7, 1, 1, 0.1, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
-    this.add(out2DDestPanel, new GridBagConstraints2(1, 7, 1, 1, 1.0, 1.0
+    this.add(out2DDestPanel, new GridBagConstraints(1, 7, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    this.add(out2DDestOptionsPanel, new GridBagConstraints2(1, 8, 1, 1, 1.0, 1.0
+    this.add(out2DDestOptionsPanel, new GridBagConstraints(1, 8, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-    this.add(sep4, new GridBagConstraints2(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
+    this.add(sep4, new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
     onActionClickerLayoutSwitcher outAdjDestListener =
@@ -475,9 +474,9 @@ public class OutputPanel extends JPanel
     outAdjFilePanel.add(outAdjFileFormat, null);
     new onActionClicker(outAdjFile, outAdjNoDest, outAdjCheckBox);
     new JTextComponentFocusSelector(outAdjFileName);
-    this.add(outAdjCheckBox, new GridBagConstraints2(0, 10, 1, 1, 0.1, 1.0
+    this.add(outAdjCheckBox, new GridBagConstraints(0, 10, 1, 1, 0.1, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
-    this.add(outAdjDestOptionsPanel, new GridBagConstraints2(1, 10, 1, 1, 1.0, 1.0
+    this.add(outAdjDestOptionsPanel, new GridBagConstraints(1, 10, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
   }

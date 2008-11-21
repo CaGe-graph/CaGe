@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.MinMaxEqListener;
 
 class DiskTriangulationsPanel extends GeneratorPanel
@@ -56,14 +55,14 @@ class DiskTriangulationsPanel extends GeneratorPanel
     verticesSlider.setClickScrollByBlock(false);
     verticesSlider.setSizeFactor(6);
     add(verticesSlider,
-     new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 5, 15, 0), 0, 0));
     JLabel verticesLabel = new JLabel("number of vertices");
     verticesLabel.setLabelFor(verticesSlider.slider());
     verticesLabel.setDisplayedMnemonic(KeyEvent.VK_V);
     add(verticesLabel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 10), 0, 0));
     boundarySegmentsSlider = new EnhancedSlider();
@@ -82,14 +81,14 @@ class DiskTriangulationsPanel extends GeneratorPanel
     new MinMaxEqListener
      (boundarySegmentsSlider.getModel(), verticesSlider.getModel(), false);
     add(boundarySegmentsSlider,
-     new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 5, 15, 0), 0, 0));
     JLabel boundarySegmentsLabel = new JLabel("boundary segments");
     boundarySegmentsLabel.setLabelFor(boundarySegmentsSlider.slider());
     boundarySegmentsLabel.setDisplayedMnemonic(KeyEvent.VK_S);
     add(boundarySegmentsLabel,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 10), 0, 0));
     boundarySegmentsAll = new JCheckBox("any number", true);
@@ -97,12 +96,12 @@ class DiskTriangulationsPanel extends GeneratorPanel
     boundarySegmentsAll.setActionCommand("a");
     boundarySegmentsAll.addActionListener(this);
     add(boundarySegmentsAll,
-     new GridBagConstraints2(2, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 10, 15, 0), 0, 0));
     JLabel chordsLabel = new JLabel("chords");
     add(chordsLabel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 10), 0, 0));
     chordsGroup = new ButtonGroup();
@@ -117,12 +116,12 @@ class DiskTriangulationsPanel extends GeneratorPanel
       chordsPanel.add(chordsButton[i]);
     }
     add(chordsPanel,
-     new GridBagConstraints2(1, 2, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 3, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     JLabel vertices2Label = new JLabel("2-valent vertices on boundary");
     add(vertices2Label,
-     new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 10), 0, 0));
     vertices2Group = new ButtonGroup();
@@ -137,7 +136,7 @@ class DiskTriangulationsPanel extends GeneratorPanel
       vertices2Panel.add(vertices2Button[i]);
     }
     add(vertices2Panel,
-     new GridBagConstraints2(1, 3, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 3, 3, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
   }

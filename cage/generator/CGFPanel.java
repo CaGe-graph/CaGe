@@ -33,7 +33,6 @@ import javax.swing.UIManager;
 import lisken.systoolbox.Integer2;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.UItoolbox;
 
@@ -257,58 +256,58 @@ public class CGFPanel extends GeneratorPanel
     cases = "123";
 */
     CGFFacesPanel.setLayout(CGFFacesLayout);
-    CGFFacesPanel.add(faceTypeLabel, new GridBagConstraints2(0, 0, 2, 1, 1.0, 1.0
+    CGFFacesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
-    CGFFacesPanel.add(facesSlider, new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0
+    CGFFacesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    CGFFacesPanel.add(facesButton, new GridBagConstraints2(1, 1, 1, 1, 0.0010, 1.0
+    CGFFacesPanel.add(facesButton, new GridBagConstraints(1, 1, 1, 1, 0.0010, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 30, 0, 5), 0, 5));
 //    CGFFacesPanel.setBorder(BorderFactory.createEtchedBorder());
 //    CGFFaceOptionsPanel.setBorder(BorderFactory.createEtchedBorder());
 //    CGFExtrasPanel.setBorder(BorderFactory.createEtchedBorder());
-    CGFAtomsPanel.add(minAtomsLabel, new GridBagConstraints2(0, 0, 1, 1, 0.0, 0.0
+    CGFAtomsPanel.add(minAtomsLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 5, 5, 0), 0, 0));
-    CGFAtomsPanel.add(maxAtomsLabel, new GridBagConstraints2(1, 0, 1, 1, 0.0, 0.0
+    CGFAtomsPanel.add(maxAtomsLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 5, 5, 0), 0, 0));
-    CGFAtomsPanel.add(minAtomsSlider, new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0
+    CGFAtomsPanel.add(minAtomsSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
-    CGFAtomsPanel.add(maxAtomsSlider, new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0
+    CGFAtomsPanel.add(maxAtomsSlider, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
-    CGFAtomsPanel.add(minEqMax, new GridBagConstraints2(2, 1, 1, 1, 0.001, 1.0
+    CGFAtomsPanel.add(minEqMax, new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(dummyLabel, new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(dummyLabel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(dual, new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(dual, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(faceStats, new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(faceStats, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(patchStats, new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(patchStats, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(altECC, new GridBagConstraints2(1, 3, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(altECC, new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(conn1, new GridBagConstraints2(3, 0, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(conn1, new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(conn2, new GridBagConstraints2(3, 1, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(conn2, new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CGFExtrasPanel.add(conn3, new GridBagConstraints2(3, 2, 1, 1, 1.0, 1.0
+    CGFExtrasPanel.add(conn3, new GridBagConstraints(3, 2, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 /* --- "Cases and Priorities" disabled ---
-    CGFExtrasPanel.add(selectCasesPrios, new GridBagConstraints2(3, 3, 1, 3, 1.0, 1.0
+    CGFExtrasPanel.add(selectCasesPrios, new GridBagConstraints(3, 3, 1, 3, 1.0, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 */
-    this.add(CGFAtomsPanel, new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0
+    this.add(CGFAtomsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    this.add(sep1, new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0
+    this.add(sep1, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
-    this.add(CGFFacesPanel, new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0
+    this.add(CGFFacesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    this.add(includedFacesLabel, new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0
+    this.add(includedFacesLabel, new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 5, 0, 0), 0, 0));
-    this.add(CGFFaceOptionsPanel, new GridBagConstraints2(0, 4, 1, 1, 1.0, 1.0
+    this.add(CGFFaceOptionsPanel, new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
-    this.add(sep2, new GridBagConstraints2(0, 5, 1, 1, 1.0, 1.0
+    this.add(sep2, new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
-    this.add(CGFExtrasPanel, new GridBagConstraints2(0, 6, 1, 1, 1.0, 1.0
+    this.add(CGFExtrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
   }
 

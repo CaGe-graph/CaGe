@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 
 class EulerianTriangulationsPanel extends GeneratorPanel
 {
@@ -31,7 +30,7 @@ class EulerianTriangulationsPanel extends GeneratorPanel
     dual = new JCheckBox("dual (bipartite 3-connected cubic planar) graphs");
     dual.setMnemonic(KeyEvent.VK_D);
     add(dual,
-     new GridBagConstraints2(1, 0, 2, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 10, 0), 0, 0));
     verticesSlider = new EnhancedSlider();
@@ -46,19 +45,19 @@ class EulerianTriangulationsPanel extends GeneratorPanel
     verticesSlider.setClickScrollByBlock(false);
     verticesSlider.setSizeFactor(4);
     add(verticesSlider,
-     new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 15, 0), 0, 0));
     JLabel verticesLabel = new JLabel("number of vertices");
     verticesLabel.setLabelFor(verticesSlider.slider());
     verticesLabel.setDisplayedMnemonic(KeyEvent.VK_V);
     add(verticesLabel,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 10), 0, 0));
     JLabel minConnLabel = new JLabel("minimum connectivity");
     add(minConnLabel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 15, 10), 0, 0));
     minConnGroup = new ButtonGroup();
@@ -72,13 +71,13 @@ class EulerianTriangulationsPanel extends GeneratorPanel
       minConnPanel.add(connButton);
     }
     add(minConnPanel,
-     new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     exactConn = new JCheckBox("restrict connectivity to minimum");
     exactConn.setMnemonic(KeyEvent.VK_R);
     add(exactConn,
-     new GridBagConstraints2(1, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 0, 0), 0, 0));
   }

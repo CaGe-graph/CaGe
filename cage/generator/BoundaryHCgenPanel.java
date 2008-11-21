@@ -27,7 +27,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.DocumentFilter.FilterBypass;
 import lisken.systoolbox.Systoolbox;
-import lisken.uitoolbox.GridBagConstraints2;
 
 
 
@@ -65,23 +64,23 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 	//add(boundaryListLabel);
 
     add(boundaryListLabel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 10, 5, 10), 0, 0));
     add(boundaryList,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(numberOfPentagonsLabel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(iprBox,
-     new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     add(showHBox,
-     new GridBagConstraints2(0, 4, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 10, 0, 10), 0, 0));
     }

@@ -36,7 +36,6 @@ import javax.swing.SwingConstants;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.FlaggedJDialog;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.UItoolbox;
@@ -153,67 +152,67 @@ public class FullgenPanel extends GeneratorPanel
     selectCasesButton.setPreferredSize(symmetryFilterButton.getPreferredSize());
 */
     FullgenAtomsPanel.add(minAtomsLabel,
-     new GridBagConstraints2(0, 0, 1, 1, 0.0, 0.0,
+     new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
      GridBagConstraints.WEST, GridBagConstraints.BOTH,
      new Insets(0, 5, 5, 0), 0, 0));
     FullgenAtomsPanel.add(maxAtomsLabel,
-     new GridBagConstraints2(1, 0, 1, 1, 0.0, 0.0,
+     new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
      GridBagConstraints.WEST, GridBagConstraints.BOTH,
      new Insets(0, 5, 5, 0), 0, 0));
     FullgenAtomsPanel.add(minAtomsSlider,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 0, 0, 20), 0, 0));
     FullgenAtomsPanel.add(maxAtomsSlider,
-     new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
      new Insets(0, 0, 0, 20), 0, 0));
     FullgenAtomsPanel.add(minEqMax,
-     new GridBagConstraints2(2, 1, 1, 1, 0.001, 1.0,
+     new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0,
      GridBagConstraints.WEST, GridBagConstraints.NONE,
      new Insets(0, 0, 0, 0), 0, 0));
     FullgenExtrasPanel.setLayout(new GridBagLayout());
     FullgenExtrasPanel.add(Box.createRigidArea(new Dimension(0, 0)),
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(0, 0, 0, 0), 0, 0));
     FullgenExtrasPanel.add(ipr,
-     new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(0, 0, 0, 0), 0, 0));
     FullgenExtrasPanel.add(dual,
-     new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(0, 0, 0, 0), 0, 0));
     FullgenExtrasPanel.add(spiralStats,
-     new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(0, 0, 0, 0), 0, 0));
     FullgenExtrasPanel.add(symmStats,
-     new GridBagConstraints2(1, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(0, 0, 0, 0), 0, 0));
     FullgenExtrasPanel.add(symmetryFilterButton,
-     new GridBagConstraints2(3, 0, 1, 2, 1.0, 1.0,
+     new GridBagConstraints(3, 0, 1, 2, 1.0, 1.0,
      GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
      new Insets(0, 0, 0, 0), 0, 0));
 /* --- "select cases" disabled ---
     FullgenExtrasPanel.add(selectCasesButton,
-     new GridBagConstraints2(3, 2, 1, 2, 1.0, 1.0,
+     new GridBagConstraints(3, 2, 1, 2, 1.0, 1.0,
      GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
      new Insets(0, 0, 0, 0), 0, 0));
 */
     this.setLayout(new GridBagLayout());
     this.add(FullgenAtomsPanel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(0, 0, 0, 0), 0, 0));
     this.add(sep1,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(25, 0, 25, 0), 0, 0));
     this.add(FullgenExtrasPanel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
      GridBagConstraints.CENTER, GridBagConstraints.BOTH,
      new Insets(0, 0, 0, 0), 0, 0));
 

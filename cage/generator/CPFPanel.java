@@ -34,7 +34,6 @@ import javax.swing.UIManager;
 import lisken.systoolbox.Integer2;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.UItoolbox;
 
@@ -259,60 +258,60 @@ public class CPFPanel extends GeneratorPanel
     cases = "123";
 */
     CPFFacesPanel.setLayout(CPFFacesLayout);
-    CPFFacesPanel.add(faceTypeLabel, new GridBagConstraints2(0, 0, 2, 1, 1.0, 1.0
+    CPFFacesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
-    CPFFacesPanel.add(facesSlider, new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0
+    CPFFacesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    CPFFacesPanel.add(facesButton, new GridBagConstraints2(1, 1, 1, 1, 0.0010, 1.0
+    CPFFacesPanel.add(facesButton, new GridBagConstraints(1, 1, 1, 1, 0.0010, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 30, 0, 5), 0, 0));
 //    CPFFacesPanel.setBorder(BorderFactory.createEtchedBorder());
 //    CPFFaceOptionsPanel.setBorder(BorderFactory.createEtchedBorder());
 //    CPFExtrasPanel.setBorder(BorderFactory.createEtchedBorder());
-    CPFAtomsPanel.add(minAtomsLabel, new GridBagConstraints2(0, 0, 1, 1, 0.0, 0.0
+    CPFAtomsPanel.add(minAtomsLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 5, 5, 0), 0, 0));
-    CPFAtomsPanel.add(maxAtomsLabel, new GridBagConstraints2(1, 0, 1, 1, 0.0, 0.0
+    CPFAtomsPanel.add(maxAtomsLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 5, 5, 0), 0, 0));
-    CPFAtomsPanel.add(minAtomsSlider, new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0
+    CPFAtomsPanel.add(minAtomsSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
-    CPFAtomsPanel.add(maxAtomsSlider, new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0
+    CPFAtomsPanel.add(maxAtomsSlider, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
-    CPFAtomsPanel.add(minEqMax, new GridBagConstraints2(2, 1, 1, 1, 0.001, 1.0
+    CPFAtomsPanel.add(minEqMax, new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(dummyLabel, new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(dummyLabel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(dual, new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(dual, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(altECC, new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(altECC, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(maxPathFace, new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(maxPathFace, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(faceStats, new GridBagConstraints2(1, 3, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(faceStats, new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(patchStats, new GridBagConstraints2(1, 4, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(patchStats, new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(conn1, new GridBagConstraints2(3, 0, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(conn1, new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(conn2, new GridBagConstraints2(3, 1, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(conn2, new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    CPFExtrasPanel.add(conn3, new GridBagConstraints2(3, 2, 1, 1, 1.0, 1.0
+    CPFExtrasPanel.add(conn3, new GridBagConstraints(3, 2, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 /* --- "Cases and Priorities" disabled ---
-    CPFExtrasPanel.add(selectCasesPrios, new GridBagConstraints2(3, 3, 1, 3, 1.0, 1.0
+    CPFExtrasPanel.add(selectCasesPrios, new GridBagConstraints(3, 3, 1, 3, 1.0, 1.0
             ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 */
-    this.add(CPFAtomsPanel, new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0
+    this.add(CPFAtomsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    this.add(sep1, new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0
+    this.add(sep1, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
-    this.add(CPFFacesPanel, new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0
+    this.add(CPFFacesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    this.add(includedFacesLabel, new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0
+    this.add(includedFacesLabel, new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 5, 0, 0), 0, 0));
-    this.add(CPFFaceOptionsPanel, new GridBagConstraints2(0, 4, 1, 1, 1.0, 1.0
+    this.add(CPFFaceOptionsPanel, new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
-    this.add(sep2, new GridBagConstraints2(0, 5, 1, 1, 1.0, 1.0
+    this.add(sep2, new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
-    this.add(CPFExtrasPanel, new GridBagConstraints2(0, 6, 1, 1, 1.0, 1.0
+    this.add(CPFExtrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0
             ,GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
   }
 

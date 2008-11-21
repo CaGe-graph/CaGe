@@ -116,21 +116,21 @@ public class OrderedChoice extends JPanel implements ListSelectionListener
     choicePane.setPreferredSize(paneSize);
     selectionPane.setPreferredSize(paneSize);
     setLayout(new GridBagLayout());
-    add(new JLabel("available:"), new GridBagConstraints2(0, 0, 2, 1, 0.0, 0.0
+    add(new JLabel("available:"), new GridBagConstraints(0, 0, 2, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
-    add(new JLabel("selected:"), new GridBagConstraints2(2, 0, 2, 1, 0.0, 0.0
+    add(new JLabel("selected:"), new GridBagConstraints(2, 0, 2, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
-    add(choicePane, new GridBagConstraints2(0, 1, 1, 3, 0.0, 0.0
+    add(choicePane, new GridBagConstraints(0, 1, 1, 3, 0.0, 0.0
             ,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    add(addButton, new GridBagConstraints2(1, 1, 1, 1, 0.0, 0.0
+    add(addButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
-    add(removeButton, new GridBagConstraints2(1, 2, 1, 1, 0.0, 0.0
+    add(removeButton, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
-    add(selectionPane, new GridBagConstraints2(2, 1, 1, 3, 0.0, 0.0
+    add(selectionPane, new GridBagConstraints(2, 1, 1, 3, 0.0, 0.0
             ,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
-    add(upButton, new GridBagConstraints2(3, 1, 1, 1, 0.0, 0.0
+    add(upButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
-    add(downButton, new GridBagConstraints2(3, 2, 1, 1, 0.0, 0.0
+    add(downButton, new GridBagConstraints(3, 2, 1, 1, 0.0, 0.0
             ,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
   }
 

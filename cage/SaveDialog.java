@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import lisken.uitoolbox.EnhancedJLabel;
 import lisken.uitoolbox.FlaggedJDialog;
-import lisken.uitoolbox.GridBagConstraints2;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 
 
@@ -87,23 +86,23 @@ public class SaveDialog extends FlaggedJDialog
     includeInfoBox.setFont(font);
     includeInfoBox.setMnemonic(KeyEvent.VK_I);
     content.add(saveFilenameLabel,
-     new GridBagConstraints2(0, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 10), 0, 0));
     content.add(saveFilenameField,
-     new GridBagConstraints2(1, 0, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     content.add(infoLabel,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 10), 0, 0));
     content.add(saveInfoField,
-     new GridBagConstraints2(1, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     content.add(includeInfoBox,
-     new GridBagConstraints2(2, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 10, 10, 0), 0, 0));
     JButton okButton = new JButton("Ok");
@@ -116,7 +115,7 @@ public class SaveDialog extends FlaggedJDialog
     buttonPanel.add(Box.createHorizontalStrut(5));
     buttonPanel.add(cancelButton);
     content.add(buttonPanel,
-     new GridBagConstraints2(1, 2, 3, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 3, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(20, 0, 0, 0), 0, 0));
     content.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -140,11 +139,11 @@ public class SaveDialog extends FlaggedJDialog
       formatLabel.setLabelFor(fileFormatBox);
       formatLabel.setDisplayedMnemonic(KeyEvent.VK_F);
       content.add(formatLabel,
-       new GridBagConstraints2(2, 0, 1, 1, 1.0, 1.0,
+       new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0,
 	GridBagConstraints.WEST, GridBagConstraints.NONE,
 	new Insets(0, 10, 10, 0), 0, 0));
       content.add(fileFormatBox,
-       new GridBagConstraints2(3, 0, 1, 1, 1.0, 1.0,
+       new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0,
 	GridBagConstraints.WEST, GridBagConstraints.NONE,
 	new Insets(0, 5, 10, 0), 0, 0));
     }

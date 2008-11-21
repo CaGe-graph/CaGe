@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.GridBagConstraints2;
 
 class GeneralTriangulationsPanel extends GeneratorPanel
  implements ActionListener
@@ -45,19 +44,19 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     verticesSlider.setClickScrollByBlock(false);
     verticesSlider.setSizeFactor(4);
     add(verticesSlider,
-     new GridBagConstraints2(1, 1, 2, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 15, 0), 0, 0));
     JLabel verticesLabel = new JLabel("number of vertices");
     verticesLabel.setLabelFor(verticesSlider.slider());
     verticesLabel.setDisplayedMnemonic(KeyEvent.VK_V);
     add(verticesLabel,
-     new GridBagConstraints2(0, 1, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 10), 0, 0));
     JLabel minDegLabel = new JLabel("minimum degree");
     add(minDegLabel,
-     new GridBagConstraints2(0, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 10), 0, 0));
     minDegGroup = new ButtonGroup();
@@ -72,16 +71,16 @@ class GeneralTriangulationsPanel extends GeneratorPanel
       minDegPanel.add(degButton[i]);
     }
     add(minDegPanel,
-     new GridBagConstraints2(1, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     add(Box.createHorizontalGlue(),
-     new GridBagConstraints2(2, 2, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     JLabel minConnLabel = new JLabel("minimum connectivity");
     add(minConnLabel,
-     new GridBagConstraints2(0, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 10), 0, 0));
     minConnGroup = new ButtonGroup();
@@ -98,17 +97,17 @@ class GeneralTriangulationsPanel extends GeneratorPanel
       minConnPanel.add(connButton[i]);
     }
     add(minConnPanel,
-     new GridBagConstraints2(1, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.EAST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     add(Box.createHorizontalGlue(),
-     new GridBagConstraints2(2, 3, 1, 1, 1.0, 1.0,
+     new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
     exactConn = new JCheckBox("restrict connectivity to minimum");
     exactConn.setMnemonic(KeyEvent.VK_R);
     add(exactConn,
-     new GridBagConstraints2(1, 4, 2, 1, 1.0, 1.0,
+     new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 5, 0, 0), 0, 0));
   }
