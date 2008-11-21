@@ -1,24 +1,20 @@
-
 package cage.generator;
 
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
-
 import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 
-public class TriangulationsPanel extends GeneratorPanel
+public class PlaneTriangulationsPanel extends GeneratorPanel
 {
-  private static final boolean debug = false;
 
   private GeneratorPanel lastChosenPanel = null;
 
-  public TriangulationsPanel()
+  public PlaneTriangulationsPanel()
   {
-    pane.addTab("of the plane", new PlaneTriangulationsPanel());
-    pane.addTab("of the disk", new DiskTriangulationsPanel());
-    // start from 1 here, no need to add a border for the plane panel
-    for (int i = 1; i < pane.getTabCount(); ++i)
+    pane.addTab("general", new GeneralTriangulationsPanel());
+    pane.addTab("eulerian", new EulerianTriangulationsPanel());
+    for (int i = 0; i < pane.getTabCount(); ++i)
     {
       ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
        BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -44,10 +40,5 @@ public class TriangulationsPanel extends GeneratorPanel
   }
 
   JTabbedPane pane = new JTabbedPane();
+  
 }
-
-
-
-
-
-
