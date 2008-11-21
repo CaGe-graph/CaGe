@@ -15,13 +15,13 @@ all: generators embedders others clean
 generators: fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
-	    kekule_all
+	    kekule_all cone_all
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
 others: mkfoldnet
 
-clean: kekule_clean
+clean: kekule_clean cone_clean
 	rm -f *.o
 
 clear:
@@ -85,3 +85,10 @@ kekule_all:
 
 kekule_clean:
 	SUFFIX=$(SUFFIX) $(MAKE) -C kekule clean
+
+cone_all:
+	SUFFIX=$(SUFFIX) $(MAKE) -C cones
+	cp cones/cone$(SUFFIX) .
+
+cone_clean:
+	SUFFIX=$(SUFFIX) $(MAKE) -C cones clean
