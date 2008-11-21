@@ -14,9 +14,12 @@ public class ThreeRegularPlaneGraphsPanel extends GeneratorPanel
 
   public ThreeRegularPlaneGraphsPanel()
   {
+      GeneralTriangulationsPanel generalTriangulationsPanel = new GeneralTriangulationsPanel();
+      generalTriangulationsPanel.setDual(true);
+      
     pane.addTab("fullerenes", new FullgenPanel());
     pane.addTab("with given faces", new CGFPanel());
-    pane.addTab("general", new GeneralTriangulationsPanel());
+    pane.addTab("general", generalTriangulationsPanel);
     for (int i = 0; i < pane.getTabCount(); ++i)
     {
       ((GeneratorPanel) pane.getComponentAt(i)).setBorder(

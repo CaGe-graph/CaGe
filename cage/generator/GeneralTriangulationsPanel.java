@@ -33,14 +33,6 @@ class GeneralTriangulationsPanel extends GeneratorPanel
   public GeneralTriangulationsPanel()
   {
     setLayout(new GridBagLayout());
-    dual = new JCheckBox("dual (cubic planar) graphs");
-    dual.setMnemonic(KeyEvent.VK_D);
-    dual.setActionCommand("d");
-    dual.addActionListener(this);
-    add(dual,
-     new GridBagConstraints2(1, 0, 2, 1, 1.0, 1.0,
-      GridBagConstraints.WEST, GridBagConstraints.NONE,
-      new Insets(0, 5, 10, 0), 0, 0));
     verticesSlider = new EnhancedSlider();
     verticesSlider.setMinimum(MIN_VERTICES);
     verticesSlider.setMaximum(MAX_VERTICES);
@@ -134,7 +126,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     filename += "tri";
     String v = Integer.toString(verticesSlider.getValue());
     filename += "_" + v;
-    if (dual.isSelected()) {
+    if (dual) {
       genCmd.addElement("-d");
       filename += "_d";
     }
@@ -153,11 +145,10 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     String[][] embed2D = { { "embed" } };
     String[][] embed3D = { { "embed", "-d3", "-it" } };
 
-    boolean dualGraphs = dual.isSelected();
     return new StaticGeneratorInfo(
      generator,
      EmbedFactory.createEmbedder(true, embed2D, embed3D),
-     filename, dualGraphs ? 0 : 3, true);
+     filename, dual ? 0 : 3, true);
   }
 
   public void actionPerformed(ActionEvent e)
@@ -167,7 +158,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     switch (cmd.charAt(0))
     {
       case 'd':
-	if (dual.isSelected()) {
+	if (dual) {
 	  for (int i = 0; i < 2; ++i)
 	  {
 	    connButton[i].setEnabled(true);
@@ -198,8 +189,12 @@ class GeneralTriangulationsPanel extends GeneratorPanel
         break;
     }
   }
+  
+  public void setDual(boolean dual) {
+      this.dual = dual;
+  }
 
-  JCheckBox dual;
+  boolean dual;
   EnhancedSlider verticesSlider;
   ButtonGroup minDegGroup;
   AbstractButton[] degButton = new AbstractButton[3];
