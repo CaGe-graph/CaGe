@@ -8,3 +8,6 @@ conetest : conetest.c
 
 non_iso_pl : non_iso_pl.c hashfunction.c splay.c
 	cc non_iso_pl.c -o non_iso_pl -Wall
+
+clean:
+	rm cone
