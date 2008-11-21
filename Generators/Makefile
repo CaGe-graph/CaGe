@@ -84,6 +84,7 @@ kekule_all:
 	cp kekule/fusgen$(SUFFIX) .
 
 kekule_clean:
+	rm fusgen$(SUFFIX)
 	SUFFIX=$(SUFFIX) $(MAKE) -C kekule clean
 
 cone_all:
@@ -91,4 +92,5 @@ cone_all:
 	cp cones/cone$(SUFFIX) .
 
 cone_clean:
+	rm cone$(SUFFIX)
 	SUFFIX=$(SUFFIX) $(MAKE) -C cones clean
