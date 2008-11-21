@@ -1,7 +1,13 @@
-all : cone
+CFLAGS = -Wall -g
 
-cone : cone.c util.c twopentagons.c
-	cc cone.c util.c twopentagons.c -o cone -Wall -g
+TARG = cone$(SUFFIX)
+OBJS = cone.o util.o twopentagons.o
+
+all: $(TARG)
+
+$(TARG): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARG) $(OBJS)
 
 clean:
-	rm cone
+	rm -f *.o $(TARG)
+
