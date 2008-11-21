@@ -16,7 +16,7 @@ public class TubesConesPanel extends GeneratorPanel
   public TubesConesPanel()
   {
     pane.addTab("nanotubes", new TubetypePanel());
-    //pane.addTab("nanocones", null); //nico
+    pane.addTab("nanocones", new NanoConesPanel());
     for (int i = 0; i < pane.getTabCount(); ++i)
     {
       ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
