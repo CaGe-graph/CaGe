@@ -35,7 +35,7 @@ public class NanoConesPanel extends GeneratorPanel {
         numberOfPentagonsSlider.setSnapToTicks(true);
     
 	JLabel numberOfPentagonsLabel = new JLabel("Number of pentagons");
-        symmetricBox = new JCheckBox("symmetric / semi-symmetric");
+        symmetricBox = new JCheckBox("symmetric / nearsymmetric");
         
         JLabel lengthOfSideLabel = new JLabel("Length of Side");
 
