@@ -17,11 +17,11 @@
  * compile with gcc cone.c util.c twopentagons.c -o cone -Wall
  */
 /*
-   -1 --> too few parameters
-   -3 --> illegal option
-   -4 --> too few or too many pentagons
-   -5 --> a negative side length
-   -6 --> 1 or 5 + nearsymetric
+   1 --> too few parameters
+   3 --> illegal option
+   4 --> too few or too many pentagons
+   5 --> a negative side length
+   6 --> 1 or 5 + nearsymetric
 */
 
 #include "cone.h"
@@ -29,6 +29,17 @@
 #include "twopentagons.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+
+/*
+Some utility macros
+*/
+int markValue = 0;
+#define MARKED(e) (e->mark == markValue)
+#define MARK(e) (e->mark = markValue)
+#define RESET_MARK(e, i) {if(markValue == INT_MAX){setAllMarksTo(0,e,i);markValue=1;}else{markValue++;}}
+
+int onlyCount = 0;
 
 /*
 The minimum length of the (shortest) side for which there exists a
@@ -39,6 +50,65 @@ int symmetricMinimaIPR[5] = {0,1,2,4,9};
 int nearsymmetricMinima[3] = {0,1,2};
 int nearsymmetricMinimaIPR[3] = {1,2,4};
 
+/* void setAllMarksTo(int value, EDGE *start, int maxVertex) */
+/*
+	traverses the complete structure starting from start and sets all the
+	marks to value. maxVertex must contain the number of vertices (or more)
+	so that a stack of the correct size can be made.
+*/
+void setAllMarksTo(int value, EDGE *start, int maxVertex){
+	int marker[maxVertex+1], i, j;
+	
+	for(i=0;i<maxVertex+1;i++) marker[i]=0;
+	
+	EDGE *stack[maxVertex*3];
+	int stacksize;
+	
+	j=0;
+	stack[0] = start;
+	stacksize = 1;
+	marker[start->from]=1;
+	start->mark = value;
+	if(start->inverse->left!=NULL){
+		start->inverse->left->mark = value;
+		stack[stacksize++] = start->inverse->left;
+	}
+	if(start->inverse->right!=NULL){
+		start->inverse->right->mark = value;
+		stack[stacksize++] = start->inverse->left;
+	}
+	
+	while(stacksize>0){
+		EDGE *current = stack[--stacksize];
+		if(!marker[current->to]){
+			j=0;
+			marker[current->to]=1;
+			current->mark = value;
+			if(current->left!=NULL){
+				current->left->mark = value;
+				if(!marker[current->left->to]){
+					stack[stacksize++] = current->left;
+				}
+			}
+			if(current->right!=NULL){
+				current->right->mark = value;
+				if(!marker[current->right->to]){
+					stack[stacksize++] = current->right;
+				}
+			}
+		}
+	}
+
+}
+
+/* int *EDGEsToPlanarGraph(EDGE *start, int maxVertex) */
+/*
+	translates the structure to which start belongs to the adjacency
+	matrix of the graph. The result is a pointer to an array, containing
+	4 entries for each vertex. At position 4*x will be the degree of the
+	vertex x. And the neighbours of x will be at 4*x + i where i goes from
+	1 to degree(x).
+*/
 int *EDGEsToPlanarGraph(EDGE *start, int maxVertex){
 	int* graph = malloc(sizeof(int)*4*(maxVertex+1));
 	int marker[maxVertex+1], i, j;
@@ -93,6 +163,12 @@ int *EDGEsToPlanarGraph(EDGE *start, int maxVertex){
 	return graph;
 }
 
+/* void computePlanarCode(unsigned char code[], int *length, EDGE *start, int maxVertex) */
+/*
+	fills the array code with the planar code of the structure to which start belongs.
+	length will contain the length of the code. The maximum number of vertices is limited
+	to 255.
+*/
 void computePlanarCode(unsigned char code[], int *length, EDGE *start, int maxVertex){
 	int *graph = EDGEsToPlanarGraph(start, maxVertex);
 	int i, j;
@@ -113,6 +189,12 @@ void computePlanarCode(unsigned char code[], int *length, EDGE *start, int maxVe
 	return;
 }
 
+/* void computePlanarCodeShort(unsigned short code[], int *length, EDGE *start, int maxVertex) */
+/*
+	fills the array code with the planar code of the structure to which start belongs.
+	length will contain the length of the code. The maximum number of vertices is limited
+	to 65535.
+*/
 void computePlanarCodeShort(unsigned short code[], int *length, EDGE *start, int maxVertex){
 	int *graph = EDGEsToPlanarGraph(start, maxVertex);
 	int i, j;
@@ -133,15 +215,19 @@ void computePlanarCodeShort(unsigned short code[], int *length, EDGE *start, int
 	return;
 }
 
+/* void exportPlanarGraphCode(EDGE *start, int maxVertex) */
+/*
+	exports the given structure as planarcode on stdout.
+*/
 void exportPlanarGraphCode(EDGE *start, int maxVertex){
+	if(onlyCount)
+		return;
 	int length;
 	//TODO: better size for arrays?
 	unsigned char code[maxVertex*4 + 1];
 	unsigned short codeShort[maxVertex*4 + 1];
     static int first=1;
 	
-	fprintf(stderr, "Order is %d\n", (unsigned short)(maxVertex));
-
     if (first) { fprintf(stdout,">>planar_code<<"); first=0; }
 		
 	if(maxVertex+1 <= 255){
@@ -160,6 +246,11 @@ void exportPlanarGraphCode(EDGE *start, int maxVertex){
 	}
 }
 
+#ifdef _DEBUG
+/* void exportPlanarGraphTable(EDGE *start, int maxVertex) */
+/*
+	exports the given structure as a human-readable table on stderr.
+*/
 void exportPlanarGraphTable(EDGE *start, int maxVertex){
 	int *graph = EDGEsToPlanarGraph(start, maxVertex);
 	int i, j;
@@ -174,10 +265,11 @@ void exportPlanarGraphTable(EDGE *start, int maxVertex){
 		fprintf(stderr, "\n");
 	}
 }
+#endif
 
 /* EDGE *getNewEdge() */
 /*
-	returns a pointer to a new edge. Allocates them in blocks of 100.
+	returns a pointer to a new edge. Allocates them in blocks of 1.
 */
 EDGE *getNewEdge(){
 	static EDGE *edge;
@@ -193,9 +285,22 @@ EDGE *getNewEdge(){
 	edge->left = NULL;
 	edge->right = NULL;
 	edge->face_to_right = UNSET;
-	fprintf(stderr, "returning new pointer %p\n", edge);
+	edge->mark = 0;
+	//fprintf(stderr, "returning new pointer %p\n", edge);
 	return edge++;
 }
+
+/* EDGE *getNextBreakEdge(EDGE *breakEdge) */
+/*
+	returns the next break-edge in this boundary. No checks are made whether this is actually a closed boundary
+*/
+EDGE *getNextBreakEdge(EDGE *breakEdge){
+	EDGE *temp = breakEdge->right;
+	while(temp->left!=NULL)
+		temp = temp->left->right;
+	return temp;
+}
+
 
 /* EDGE *createBoundary(int sside, int symmetric, int pentagons, int *vertexCounter) */
 /*
@@ -205,17 +310,17 @@ EDGE *getNewEdge(){
 EDGE *createBoundary(int sside, int symmetric, int pentagons, int *vertexCounter){
 	int i;
 
-	fprintf(stderr, "in boundary\n");
+	//fprintf(stderr, "in boundary\n");
 
 	EDGE *boundaryStart;
 	EDGE *toConnect = getStraightPath(&boundaryStart, sside, vertexCounter, UNSET, OUTSIDE);
 	int j = 0;
 	if(!symmetric) j = 1;
 
-	fprintf(stderr, "after first path\n");
+	//fprintf(stderr, "after first path\n");
 	
 	for(i=0; i<6-pentagons-1; i++){
-		fprintf(stderr, "start of %d\n", i);
+		//fprintf(stderr, "start of %d\n", i);
 		EDGE *tempStart;
 		(*vertexCounter)--; //the first vertex of this path is the last of the previous
 		//fprintf(stderr, "before path\n");
@@ -226,7 +331,7 @@ EDGE *createBoundary(int sside, int symmetric, int pentagons, int *vertexCounter
 		toConnect->right = tempStart;
 		tempStart->inverse->left = toConnect->inverse;
 		toConnect = tempConnect;
-		fprintf(stderr, "end of %d\n", i);
+		//fprintf(stderr, "end of %d\n", i);
 	}
 
 	toConnect->right = boundaryStart;
@@ -242,11 +347,12 @@ EDGE *createBoundary(int sside, int symmetric, int pentagons, int *vertexCounter
 /*
 	creates a straight path, starting with a right turn.
 	start will contain the first edge of the path.
-	length is the number of right or left turns in the path
+	length is the number of right turns or the number
+	of left turns in the path. (These two are equal.)
 */
 EDGE *getStraightPath(EDGE **start, int length, int *vertexCounter, int rightFace, int leftFace){
 	int i;
-	fprintf(stderr, "start straight path\n");
+	//fprintf(stderr, "start straight path\n");
 	*start = getNewEdge();
 	(*start)->face_to_right = rightFace;
 	(*start)->inverse = getNewEdge();
@@ -321,7 +427,7 @@ int constructFaceToRight(int size, EDGE *start, int *vertexCounter, EDGE **lastA
 		fprintf(stderr, "Error while constructing face\n");
 		return 0;
 	} else if (i==size+1) {
-		fprintf(stderr, "==========================================================STOP=================================");
+		fprintf(stderr, "Succes");
 		return 1;
 	}
 
@@ -343,16 +449,17 @@ int constructFaceToRight(int size, EDGE *start, int *vertexCounter, EDGE **lastA
 			return 1;
 		} else {
 			//there is a smaller face here already
+#ifdef _DEBUG
 			fprintf(stderr, "Error: there is already a face here of wrong size.\n");
+#endif
 			return 0;
 		}
-	} else if(i==size+1) {
-		//Only a larger face can be placed here
-		fprintf(stderr, "Error while constructing face\n");
-		return 0;
-	} else if (i==size) {
+	} else if(i>=size) {
+		//i == size + 1 -> Only a larger face can be placed here
+		//i == size -> there is a NULL, but we already have enough edges.
+#ifdef _DEBUG
 		fprintf(stderr, "Error while constructing face: face of size %d not possible here.\n", size);
-		//there is a NULL, but we already have enough edges.
+#endif
 		return 0;
 	} else if (temp->left == newStart) {
 		//There is a NULL but we have a face with a bridge to the inside
@@ -363,7 +470,9 @@ int constructFaceToRight(int size, EDGE *start, int *vertexCounter, EDGE **lastA
 		      \/______/
 		              \ 
 		*/
+#ifdef _DEBUG
 		fprintf(stderr, "Error while constructing face: face with innerbridge.\n");
+#endif
 		return 0;
 	}
 	
@@ -437,7 +546,7 @@ int constructFaceToRightNeighbourRestricted(int size, EDGE *start, int *vertexCo
 		fprintf(stderr, "Error while constructing face\n");
 		return 0;
 	} else if (i==size+1) {
-		fprintf(stderr, "==========================================================STOP=================================");
+		fprintf(stderr, "Succes");
 		return 1;
 	}
 
@@ -463,16 +572,17 @@ int constructFaceToRightNeighbourRestricted(int size, EDGE *start, int *vertexCo
 			return 1;
 		} else {
 			//there is a smaller face here already
+#ifdef _DEBUG
 			fprintf(stderr, "Error: there is already a face here of wrong size.\n");
+#endif
 			return 0;
 		}
-	} else if(i==size+1) {
-		//Only a larger face can be placed here
-		fprintf(stderr, "Error while constructing face\n");
-		return 0;
-	} else if (i==size) {
+	} else if(i>=size) {
+		//i == size + 1 -> Only a larger face can be placed here
+		//i == size -> there is a NULL, but we already have enough edges.
+#ifdef _DEBUG
 		fprintf(stderr, "Error while constructing face: face of size %d not possible here.\n", size);
-		//there is a NULL, but we already have enough edges.
+#endif
 		return 0;
 	}
 	
@@ -521,22 +631,29 @@ int constructFaceToRightNeighbourRestricted(int size, EDGE *start, int *vertexCo
 	return 1;
 }
 
-/* sets the size of the face to the right of this edge
- * doesn't check whether there actually is such a face
- * this should be done before calling this method.
- * If there is no face to the right this method (may)
- * fail.
+/* void setFaceSizeToRight(int size, EDGE *start) */
+/*
+	sets the size of the face to the right of this edge
+	doesn't check whether there actually is such a face
+	this should be done before calling this method.
+	If there is no face to the right this method may/will
+	fail.
  */
 void setFaceSizeToRight(int size, EDGE *start){
     start->face_to_right = size;
     EDGE *temp = start->right;
 	while(temp!=start){
-		temp = temp->right;
 		temp->face_to_right = size;
+		temp = temp->right;
 	}
 }
 
 
+/* int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vertexCounter) */
+/*
+	fills the given boundary according to the spiral code. At the end the remainder is filled with
+	hexagons. If there occurs an error, 0 is returned. Otherwise 1 is returned.
+*/
 int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vertexCounter){
 	int i, j;
 	EDGE *temp = boundaryStart; //temp needs to contain a valid pointer in case there are no hexagons added.
@@ -545,7 +662,9 @@ int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vert
 	for(i=0; i<pentagons; i++){
 		for(j=0; j<*(code+i) - previousPentagon - 1; j++){
 			if(!constructFaceToRight(6,localStart, vertexCounter, &temp)){
+#ifdef _DEBUG
 				fprintf(stderr, "Error: hexagon could not be added\n");
+#endif
 				return 0;
 			}
 			temp = temp->inverse;
@@ -556,7 +675,9 @@ int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vert
 		}
 		//-----------Add pentagon
 		if(!constructFaceToRight(5,localStart, vertexCounter, &temp)){
+#ifdef _DEBUG
 			fprintf(stderr, "Error: pentagon could not be added\n");
+#endif
 			return 0;
 		}
 		//temp is last added edge
@@ -574,8 +695,10 @@ int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vert
 	//------------Fill remainder with hexagons
 	while(temp!=NULL){
 		if(!constructFaceToRight(6,localStart, vertexCounter, &temp)){
+#ifdef _DEBUG
 			fprintf(stderr, "Error: hexagon could not be added\n");
-			//return 0;
+#endif
+			return 0;
 		}
 		//temp is last added edge
 		//return to an edge that contains a left neighbour
@@ -590,8 +713,16 @@ int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vert
 	return 1;
 }
 
+/* void removeLastFace(EDGE *currentStart, int *vertexCounter) */
+/*
+	Removes the last face. currentStart is the first edge of the next face.
+*/
 void removeLastFace(EDGE *currentStart, int *vertexCounter){
 	EDGE *temp;
+
+	//first set size to UNSET
+	setFaceSizeToRight(UNSET, currentStart->inverse);
+
 	EDGE *toRemove = currentStart->inverse;
 	currentStart->left->inverse->right = NULL;
 	currentStart->right->inverse->left=NULL;
@@ -611,31 +742,55 @@ void removeLastFace(EDGE *currentStart, int *vertexCounter){
 	free(toRemove);
 }
 
-int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter, boolean IPR, boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode, int numberOfStructures){
+/* int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter, boolean IPR,
+                    boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode,
+                    int numberOfStructures, EDGE **startPoints, int numberOfStartPoints, EDGE **mirrorStartPoints,
+					int numberOfMirrorStartPoints){
+*/
+/*
+	tries to fill the boundary by adding a pentagon or a hexagon and then calling itself.
+*/
+int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter,
+                 boolean IPR, boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode,
+                 int numberOfStructures, EDGE **startPoints, int numberOfStartPoints, EDGE **mirrorStartPoints,
+				 int numberOfMirrorStartPoints){
 	//check some bound criteria
+
+	//first pentagon is checked seperately because this cuts larg parts early
 	if(pentagonsLeft == pentagons){
-		if(symmetric && !mirror && spiralCode[0]>halfFloor(sside)){
+		if(symmetric){
+			if(!mirror && spiralCode[0]>halfFloor(sside)){
+				return numberOfStructures;
+			} else if(mirror && spiralCode[0] >= sside){
+				return numberOfStructures;
+			}
+		} else if(!symmetric){
+			if(!mirror && spiralCode[0]>halfCeil(sside + (sside+1)*(6-pentagons-1)) + halfFloor(sside)){
+				return numberOfStructures;
+			} else if(mirror && spiralCode[0] >= sside + (sside+1)*(6-pentagons-1)){
+				//stop when first pentagon doesn't belong to boundary
+				return numberOfStructures;
+			}
+		}
+	} else if(pentagonsLeft == pentagons - 1 && !symmetric && !mirror){
+		//this case can only be checked after the first pentagon in placed
+		if(spiralCode[0] > halfFloor(sside) && spiralCode[0]<=sside)
 			return numberOfStructures;
+	}
+	
+	//as soon as one pentagon is placed we start to check whether the spiral code is canonical
+	if(pentagonsLeft!=pentagons){
+		int i;
+		for(i = 0; i < numberOfStartPoints; i++){
+			if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, startPoints[i], *vertexCounter))
+				return numberOfStructures;
+		}
+		for(i = 0; i < numberOfMirrorStartPoints; i++){
+			if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, mirrorStartPoints[i], *vertexCounter))
+				return numberOfStructures;
 		}
 	}
 	
-	if(symmetric){
-		int i;
-		for(i = 0; i < 6 - pentagons - 1; i++){
-		//for each other breakedge
-		///check if is smaller
-		///if !mirror
-		////check mirrors 
-		}
-		if(!mirror){
-			//check mirror
-		}
-	} else {
-		if(!mirror){
-			//check to see if other is smaller
-		}
-	}
-
 	/*
 	if(pentagonsLeft == pentagons - 1){
 		if(!symmetric){
@@ -653,7 +808,8 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 					return numberOfStructures;
 				}
 			} else {
-				if(!(spiralCode[1]<sside-spiralCode[0] || spiralCode[1]>=sside*(6-pentagons) || (spiralCode[1]>=sside+spiralCode[0] && spiralCode[1]<2*sside)))
+				if(!(spiralCode[1]<sside-spiralCode[0] || spiralCode[1]>=sside*(6-pentagons) ||
+				     (spiralCode[1]>=sside+spiralCode[0] && spiralCode[1]<2*sside)))
 					return numberOfStructures;
 			}
 		}
@@ -665,16 +821,15 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 	if(pentagonsLeft>0){
 		if(IPR){
 			if(constructFaceToRightNeighbourRestricted(5, currentStart, vertexCounter, &temp, 5)){
+#ifdef _DEBUG
 				fprintf(stderr, "Try pentagon\n");
+#endif
 				if(temp==NULL){
-					//output, because done
-					exportPlanarGraphCode(boundaryStart, *vertexCounter);
-					printArray(spiralCode, pentagons);
-					int mirrorCode[pentagons];
-					mirroredSpiralCode(spiralCode, mirrorCode, sside, pentagons, symmetric);
-					printArray(mirrorCode, pentagons);				
-					shiftedSpiralCode(spiralCode, mirrorCode, sside, pentagons, symmetric);
-					printArray(mirrorCode, pentagons);				
+					//output, because this was the last face
+					exportPlanarGraphCode(boundaryStart, *vertexCounter);			
+#ifdef _DEBUG
+					fflush(stdout);
+#endif
 					return numberOfStructures + 1;
 				}
 				temp = temp->inverse;
@@ -686,22 +841,26 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 				if(pentagonsLeft > 1)
 					spiralCode[pentagons-pentagonsLeft + 1] = spiralCode[pentagons-pentagonsLeft] + 1;
 
-				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft - 1, vertexCounter, IPR, mirror, pentagons, sside, symmetric, spiralCode, numberOfStructures);
+				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft - 1, vertexCounter,
+													IPR, mirror, pentagons, sside, symmetric, spiralCode,
+													numberOfStructures, startPoints, numberOfStartPoints,
+													mirrorStartPoints, numberOfMirrorStartPoints);
 				removeLastFace(temp, vertexCounter);
 			}
 		} else {
+#ifdef _DEBUG
 			fprintf(stderr, "Try to add pentagon (%d pentagons left)\n", pentagonsLeft);
+#endif
 			if(constructFaceToRight(5, currentStart, vertexCounter, &temp)){
+#ifdef _DEBUG
 				fprintf(stderr, "Succeeded to add pentagon (%d pentagons left)\n", pentagonsLeft-1);
+#endif
 				if(temp==NULL){
-					//output, because done
+					//output, because this was the last face
 					exportPlanarGraphCode(boundaryStart, *vertexCounter);
-					printArray(spiralCode, pentagons);
-					int mirrorCode[pentagons];
-					mirroredSpiralCode(spiralCode, mirrorCode, sside, pentagons, symmetric);
-					printArray(mirrorCode, pentagons);				
-					shiftedSpiralCode(spiralCode, mirrorCode, sside, pentagons, symmetric);
-					printArray(mirrorCode, pentagons);				
+#ifdef _DEBUG
+					fflush(stdout);
+#endif
 					return numberOfStructures + 1;
 				}
 				temp = temp->inverse;
@@ -713,13 +872,20 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 				if(pentagonsLeft > 1)
 					spiralCode[pentagons-pentagonsLeft + 1] = spiralCode[pentagons-pentagonsLeft] + 1;
 
-				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft - 1, vertexCounter, IPR, mirror, pentagons, sside, symmetric, spiralCode, numberOfStructures);
+				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft - 1, vertexCounter,
+													IPR, mirror, pentagons, sside, symmetric, spiralCode,
+													numberOfStructures, startPoints, numberOfStartPoints,
+													mirrorStartPoints, numberOfMirrorStartPoints);
 				removeLastFace(temp, vertexCounter);
 			}
 		}
+#ifdef _DEBUG
 		fprintf(stderr, "Try to add hexagon (%d pentagons left)\n", pentagonsLeft);
+#endif
 		if(constructFaceToRight(6, currentStart, vertexCounter, &temp)){
+#ifdef _DEBUG
 			fprintf(stderr, "Succeeded to add hexagon (%d pentagons left)\n", pentagonsLeft);
+#endif
 			if(temp==NULL){
 				//error: there are still pentagons left
 				return numberOfStructures;
@@ -732,37 +898,167 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 			//increase current position of spiral code
 			spiralCode[pentagons-pentagonsLeft]++;
 			
-			numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter, IPR, mirror, pentagons, sside, symmetric, spiralCode, numberOfStructures);
+			numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter, 
+												IPR, mirror, pentagons, sside, symmetric, spiralCode,
+												numberOfStructures, startPoints, numberOfStartPoints,
+												mirrorStartPoints, numberOfMirrorStartPoints);
 			removeLastFace(temp, vertexCounter);
 		}
 		return numberOfStructures;
 	} else {
-		fprintf(stderr, "No pentagons left\n");
+#ifdef _DEBUG
+		fprintf(stderr, "There are no pentagons left: try to add hexagon\n");
+#endif
 		//no branching left: fill with hexagons
 		if(constructFaceToRight(6, currentStart, vertexCounter, &temp)){
-			fprintf(stderr, "Try hexagon\n");
+#ifdef _DEBUG
+			fprintf(stderr, "Succeeded to add hexagon\n");
+#endif
 			if(temp==NULL){
-				exportPlanarGraphCode(boundaryStart, *vertexCounter);
-				printArray(spiralCode, pentagons);
-				int mirrorCode[pentagons];
-				mirroredSpiralCode(spiralCode, mirrorCode, sside, pentagons, symmetric);
-				printArray(mirrorCode, pentagons);				
-				shiftedSpiralCode(spiralCode, mirrorCode, sside, pentagons, symmetric);
-				printArray(mirrorCode, pentagons);				
+				exportPlanarGraphCode(boundaryStart, *vertexCounter);			
+#ifdef _DEBUG
 				fflush(stdout);
+#endif
 				return numberOfStructures + 1;
 			}
 			temp = temp->inverse;
 			while(temp->right==NULL){
 				temp = temp->left;
 			}
-			numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter, IPR, mirror, pentagons, sside, symmetric, spiralCode, numberOfStructures);
+			numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter,
+												IPR, mirror, pentagons, sside, symmetric, spiralCode,
+												numberOfStructures, startPoints, numberOfStartPoints,
+												mirrorStartPoints, numberOfMirrorStartPoints);
 			removeLastFace(temp, vertexCounter);
 		}
 		return numberOfStructures;
 	}
 }
 
+/* boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices) */
+/*
+	Returns 1 if the spiralcode obtained by starting at alternateStart is smaller then the given spiralcode.
+*/
+boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices){
+	RESET_MARK(alternateStart, numberOfVertices)
+	int currentPosition = 0, currentValue=0;
+	EDGE *edge = alternateStart;
+	
+	while(edge->face_to_right!=UNSET){
+		//mark face
+		EDGE *temp = edge;
+		MARK(temp);
+		temp = temp->right;
+		while(temp!=edge && temp!=NULL){
+			MARK(temp);
+			temp = temp->right;
+		}
+
+		if(temp==NULL)
+			return 0;
+
+		//check to see if we found a pentagon
+		if(edge->face_to_right==5){
+			//does this mean we have found a smaller spiral code?
+			if(spiralCode[currentPosition]>currentValue)
+				return 1;
+			//we found a pentagon so advance one position
+			currentPosition++;
+			//check to see if there are still pentagons left
+			if(currentPosition >= currentLength)
+				return 0;
+		}
+		//we advanced a face so the current value must increase by one
+		currentValue++;
+
+		if(spiralCode[currentPosition]<currentValue)
+			//it is no longer possible to find a smaller spiral code in this case
+			return 0;
+		
+		
+		//progress to next edge
+		//temp is equal to edge at this point
+		temp = temp->right;
+		while((temp->inverse->face_to_right==OUTSIDE || MARKED(temp->inverse)) && temp!=edge) temp = temp->right;
+		
+		// we should never have that temp is equal to edge,
+		// because then we reached the last face and thus 
+		// also the last pentagon and so we would have stopped
+		// earlier. UNSET is possible because the last layer
+		// need not be complete at this point.
+		if(temp==edge || temp->inverse->face_to_right == UNSET)
+			return 0;
+		else
+			edge = temp->inverse;
+	}
+	
+	return 0;
+}
+
+/* boolean isMirrorSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices) */
+/*
+	Returns 1 if the spiralcode obtained by starting at alternateStart and going in counterclockwise direction
+	is smaller then the given spiralcode.
+*/
+boolean isMirrorSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices){
+	RESET_MARK(alternateStart, numberOfVertices)
+	int currentPosition = 0, currentValue=0;
+	EDGE *edge = alternateStart;
+	
+	while(edge->inverse->face_to_right!=UNSET){
+		//mark face
+		EDGE *temp = edge;
+		MARK(temp);
+		temp = temp->left;
+		while(temp!=edge && temp!=NULL){
+			MARK(temp);
+			temp = temp->left;
+		}
+
+		if(temp==NULL)
+			return 0;
+
+		//check to see if we found a pentagon
+		
+		if(edge->inverse->face_to_right==5){
+			//does this mean we have found a smaller spiral code?
+			if(spiralCode[currentPosition]>currentValue)
+				return 1;
+			//we found a pentagon so advance one position
+			currentPosition++;
+			//check to see if there are still pentagons left
+			if(currentPosition >= currentLength)
+				// if length is x, then we must stop whencurrentPosition == x,
+				// because the indices of the array run from 0
+				return 0;
+		}
+		//we advanced a face so the current value must increase by one
+		currentValue++;
+		
+		if(spiralCode[currentPosition]<currentValue)
+			//it is no longer possible to find a smaller spiral code in this case
+			return 0;
+		
+		//progress to next edge
+		//temp is equal to edge at this point
+		temp = temp->left;
+		while((temp->face_to_right==OUTSIDE || MARKED(temp->inverse)) && temp!=edge) temp = temp->left;
+		
+		// we should never have that temp is equal to edge,
+		// because then we reached the last face and thus 
+		// also the last pentagon and so we would have stopped
+		// earlier. UNSET is possible because the last layer
+		// need not be complete at this point.
+		if(temp==edge || temp->face_to_right == UNSET)
+			return 0;
+		else
+			edge = temp->inverse;
+	}
+	
+	return 0;
+}
+
+/*
 //TODO: remove because incorrect
 void mirroredSpiralCode(int *oldSpiralCode, int *newSpiralCode, int sside, int pentagons, boolean symmetric){
 	int currentLayerSize, previousLayersSize = 0;
@@ -831,6 +1127,7 @@ void shiftedSpiralCode(int *oldSpiralCode, int *newSpiralCode, int sside, int pe
 		//But, the result should be correct: check this
 	}
 }
+*/
 
 /* int main(int argc, char *argv[]) */
 /*
@@ -847,10 +1144,9 @@ int main(int argc, char *argv[])
 	if(argc < 4) {
 		fprintf(stderr,"Usage: %s (# pentagons) (shortest 'side') (n/s) [options] \n",name);
 		fprintf(stderr,"For more information type: %s 0 0 s -h \n",name);
-		exit(-1);
+		exit(1);
 	}
 
-	//TODO: check return value of numberparsing
 	pentagons = parseNumber(++argv);
 	sside = parseNumber(++argv);
 	switch (*((++argv)[0])) {
@@ -863,7 +1159,7 @@ int main(int argc, char *argv[])
 		default:
 			fprintf(stderr,"Usage: %s (# pentagons) (shortest 'side') (n/s) [options] \n",name);
 			fprintf(stderr,"For more information type: %s 0 0 s -h \n",name);
-			exit(-2);
+			exit(2);
 	}
 	
 	while (--argc > 3 && (*++argv)[0] == '-'){
@@ -875,6 +1171,9 @@ int main(int argc, char *argv[])
 			case 'i':
 				ipr = 1;
 				break;
+			case 'c':
+				onlyCount = 1;
+				break;
 			case 'h':
 				//print help
 				fprintf(stderr, "The program %s calculates canonical conepatches.\n", name);
@@ -883,6 +1182,7 @@ int main(int argc, char *argv[])
 				fprintf(stderr, "  -h          : Print this help and return.\n");
 				fprintf(stderr, "  -m          : Mirror-images are considered nonisomorphic.\n");
 				fprintf(stderr, "  -i          : Use IPR-rule.\n");
+				fprintf(stderr, "  -c          : Only count structures don't export them.\n");
 				return 0;
 			default:
 				fprintf(stderr, "%s: illegal option %c\n", name, c);
@@ -895,45 +1195,110 @@ int main(int argc, char *argv[])
 	if(error || argc != 3){
 		fprintf(stderr,"Usage: %s (# pentagons) (shortest 'side') (n/s) [options] \n",name);
 		fprintf(stderr,"For more information type: %s 0 0 s -h\n",name);
-		return -3;
+		return 3;
 	}
 
 	if(pentagons < 1 || pentagons > 5){
 		fprintf(stderr, "A cone needs to have between 1 and 5 pentagons.\n");
-		return -4;
+		return 4;
 	}
 
 	if(sside < 0){
 		fprintf(stderr, "The shortest side needs to have a positive length.\n");
-		return -5;
+		return 5;
 	}
 
 	if(!symmetric && (pentagons ==1 || pentagons == 5)){
 		fprintf(stderr, "A cone with 1 or 5 pentagons cannot be nearsymmetric.\n");
-		return -6;
+		return 6;
 	}
 
+	//check the fixed minima lengths for sside
+	if(symmetric){
+		if(ipr){
+			if(symmetricMinimaIPR[pentagons-1]>sside)
+				return 0;
+		} else {
+			if(symmetricMinima[pentagons-1]>sside)
+				return 0;
+		}
+	} else {
+		if(ipr){
+			if(nearsymmetricMinimaIPR[pentagons-2]>sside)
+				return 0;
+		} else {
+			if(nearsymmetricMinima[pentagons-2]>sside)
+				return 0;
+		}
+	}
+
+	//in case of 1 pentagon there is also an upperbound
 	if(pentagons == 1 && sside > 0){
 		fprintf(stderr, "There are no canonical patches.\n");
 		return 0;
 	} else if (pentagons == 1) {
+		//There is only one canonical cone patch with 1 pentagon and that is the pentagon itself
 		fprintf(stderr, "There is one canonical patch.\n");
 		int vertexCounter = 0;
 		EDGE *boundaryStart = createBoundary(sside, symmetric, pentagons, &vertexCounter);
 		fprintf(stderr, "vertices: %d\n", vertexCounter);
 		exportPlanarGraphCode(boundaryStart, vertexCounter);
-		return 1;
+		fprintf(stderr, "Generated a total of 1 canonical cone patch.\n");
+		return 0;
 	}
 
+	//in case of two pentagons we don't need the branch and bound
 	if(pentagons == 2){
-		return getTwoPentagonsPatch(sside,symmetric, mirror);
+		int numberOfStructures = getTwoPentagonsPatch(sside,symmetric, mirror);
+		fprintf(stderr, "Generated a total of %d canonical cone patches.\n", numberOfStructures);
+		return 0;
 	}
 
+	//in all other cases we start the recursion
 	int vertexCounter = 0;
 	int spiralCode[pentagons];
 	spiralCode[0] = 0;
 	EDGE *boundaryStart = createBoundary(sside, symmetric, pentagons, &vertexCounter);
-	return fillBoundary(boundaryStart, boundaryStart, pentagons, &vertexCounter, ipr, mirror, pentagons, sside, symmetric, spiralCode, 0);
+	
+	//search all possible begin positions
+	int variations;
+	EDGE **startPoints;
+	if(symmetric){
+		variations = 6-pentagons-1;
+		if(variations > 0){
+			startPoints = (EDGE **)malloc(sizeof(EDGE *)*variations);
+			int i;
+			startPoints[0] = getNextBreakEdge(boundaryStart);
+			for(i = 1; i<variations; i++){
+				startPoints[i] = getNextBreakEdge(startPoints[i-1]);
+			}
+		}
+	} else {
+		variations = 0;
+	}
 
-	//return 0;
+	int mirrorVariations;
+	EDGE **mirrorStartPoints;
+	
+	if(mirror){
+		mirrorVariations = 0;
+	} else {
+		if(symmetric){
+			mirrorVariations = 6-pentagons;
+			mirrorStartPoints = (EDGE **)malloc(sizeof(EDGE *)*mirrorVariations);
+			mirrorStartPoints[0] = boundaryStart->inverse;
+			int i;
+			for(i=0;i<mirrorVariations-1; i++)
+				mirrorStartPoints[i+1] = startPoints[i]->inverse;
+		} else {
+			mirrorVariations = 1;
+			mirrorStartPoints = (EDGE **)malloc(sizeof(EDGE *)*mirrorVariations);
+			mirrorStartPoints[0] = getNextBreakEdge(boundaryStart)->inverse;
+		}
+	}
+	int numberOfStructures = fillBoundary(boundaryStart, boundaryStart, pentagons, &vertexCounter, ipr,
+											mirror, pentagons, sside, symmetric, spiralCode, 0, startPoints,
+											variations, mirrorStartPoints, mirrorVariations);
+	fprintf(stderr, "Generated a total of %d canonical cone patches.\n", numberOfStructures);
+	return 0;
 }

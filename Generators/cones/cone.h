@@ -19,6 +19,7 @@ struct _edge {
 	int face_to_right;     /* the size of the face to the right of this edge*/
 	                       /* special values are used for OUTSIDE and UNSET*/
 	
+	int mark;			   /* mark */
 	int temp;			   /* free field */
 };
 
@@ -31,6 +32,7 @@ typedef int boolean;
 
 EDGE *getNewEdge();
 
+EDGE *getNextBreakEdge(EDGE *breakEdge);
 EDGE *createBoundary(int sside, int symmetric, int pentagons, int *vertexCounter);
 EDGE *getStraightPath(EDGE **start, int length, int *vertexCounter, int rightFace, int leftFace);
 int constructFaceToRight(int size, EDGE *start, int *vertexCounter, EDGE **lastAdded);
@@ -38,7 +40,9 @@ int constructFaceToRightNeighbourRestricted(int size, EDGE *start, int *vertexCo
 void setFaceSizeToRight(int size, EDGE *start);
 int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vertexCounter);
 
-int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter, boolean IPR, boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode, int numberOfStructures);
+int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter, boolean IPR, boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode, int numberOfStructures, EDGE **startPoints, int numberOfStartPoints, EDGE **mirrorStartPoints, int numberOfMirrorStartPoints);
+boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices);
+boolean isMirrorSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices);
 
 void mirroredSpiralCode(int *oldSpiralCode, int *newSpiralCode, int sside, int pentagons, boolean symmetric);
 void shiftedSpiralCode(int *oldSpiralCode, int *newSpiralCode, int sside, int pentagons, boolean symmetric);
