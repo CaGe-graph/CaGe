@@ -602,7 +602,7 @@ class GeneratorParamsListener implements ActionListener
     if (cmd.equals(Wizard.SHOWING)) {
       generatorPanel.showing();
     } else if (cmd.equals(Wizard.CANCEL)) {
-      CaGe.getWizardStage().previousButton.doClick();
+      CaGe.getWizardStage().getPreviousButton().doClick();
     } else if (cmd.equals(Wizard.NEXT)) {
       CaGe.getWizardWindow().setVisible(false);
       GeneratorInfo generatorInfo = generatorPanel.getGeneratorInfo();
@@ -709,7 +709,7 @@ class CaGeStarter implements ActionListener
 "The following exceptions have occurred:\n\n" +
 ex.toString() + "\n" +
 "\nPlease change your choices in the output options window.",
-       CaGe.getWizardStage().nextButton);
+       CaGe.getWizardStage().getNextButton());
       return true;
     }
     nViewers = viewers == null ? 0 : viewers.size();
@@ -721,7 +721,7 @@ ex.toString() + "\n" +
 "Please change your choices in the output options window.\n" +
 (viewerErrors == null ?  "" :
  "\nErrors during attempted instantiation:\n\n" + viewerErrors),
-       CaGe.getWizardStage().nextButton);
+       CaGe.getWizardStage().getNextButton());
       return true;
     }
     return false;
@@ -757,7 +757,7 @@ ex.toString() + "\n" +
 
   public void actionPerformed(ActionEvent e)
   {
-    AbstractButton stopButton = CaGe.getWizardStage().finishButton;
+    AbstractButton stopButton = CaGe.getWizardStage().getFinishButton();
     String cmd = e.getActionCommand();
     if (e.getSource() == resultPanel) {
       stopped = true;

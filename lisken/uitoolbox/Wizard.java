@@ -45,8 +45,8 @@ public class Wizard implements ActionListener
     this.title = title;
     windowListener = new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
-	if (stage.exitButton != null) {
-	  stage.exitButton.doClick();
+	if (stage.getExitButton() != null) {
+	  stage.getExitButton().doClick();
 	} else if (stage.listener != null) {
 	  stage.listener.actionPerformed
 	   (new ActionEvent(e, WindowEvent.WINDOW_CLOSING, EXIT));
@@ -57,8 +57,8 @@ public class Wizard implements ActionListener
     };
     escapeListener = new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-	if (stage.cancelButton != null) {
-	  stage.cancelButton.doClick();
+	if (stage.getCancelButton() != null) {
+	  stage.getCancelButton().doClick();
 	} else if (stage.listener != null) {
 	  stage.listener.actionPerformed(e);
 	} else {
@@ -162,7 +162,7 @@ public class Wizard implements ActionListener
     if (stage.content != null) {
       pane.add(stage.content, BorderLayout.CENTER);
     }
-    if (stage.hasAnyButtons) {
+    if (stage.hasAnyButtons()) {
       JPanel buttonPanel = new JPanel();
       buttonPanel.setLayout(new GridBagLayout());
       GridBagConstraints lc = new GridBagConstraints();
@@ -178,13 +178,13 @@ public class Wizard implements ActionListener
       lc.gridwidth = 1;
       lc.fill = lc.VERTICAL;
       lc.insets = new Insets(5, 10, 10, 10);
-      addButton(buttonPanel, lc, stage.previousButton, KeyEvent.VK_LEFT);
-      addButton(buttonPanel, lc, stage.nextButton,     KeyEvent.VK_RIGHT);
-      addButton(buttonPanel, lc, stage.finishButton,   KeyEvent.VK_UNDEFINED);
-      addButton(buttonPanel, lc, stage.cancelButton,   KeyEvent.VK_UNDEFINED);
-      addButton(buttonPanel, lc, stage.exitButton,     KeyEvent.VK_UNDEFINED);
+      addButton(buttonPanel, lc, stage.getPreviousButton(), KeyEvent.VK_LEFT);
+      addButton(buttonPanel, lc, stage.getNextButton(),     KeyEvent.VK_RIGHT);
+      addButton(buttonPanel, lc, stage.getFinishButton(),   KeyEvent.VK_UNDEFINED);
+      addButton(buttonPanel, lc, stage.getCancelButton(),   KeyEvent.VK_UNDEFINED);
+      addButton(buttonPanel, lc, stage.getExitButton(),     KeyEvent.VK_UNDEFINED);
       pane.add(buttonPanel, BorderLayout.SOUTH);
-      if (stage.setDefaultButton) {
+      if (stage.mustSetDefaultButton()) {
         stage.setDefaultButton(currentWindow.getRootPane());
       }
     }

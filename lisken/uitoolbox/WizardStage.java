@@ -15,13 +15,13 @@ public class WizardStage
   JComponent content;
   ActionListener listener;
 
-  public JButton previousButton;
-  public JButton nextButton;
-  public JButton finishButton;
-  public JButton cancelButton;
-  public JButton exitButton;
-  public boolean setDefaultButton;
-  public boolean hasAnyButtons;
+  private JButton previousButton;
+  private JButton nextButton;
+  private JButton finishButton;
+  private JButton cancelButton;
+  private JButton exitButton;
+  private boolean setDefaultButton;
+  private boolean hasAnyButtons;
 
   public WizardStage(String title, JComponent content,
    WindowListener windowListener, ActionListener escapeListener,
@@ -74,5 +74,34 @@ public class WizardStage
       // rootPane.setDefaultButton(null);
     }
   }
+
+    public JButton getPreviousButton() {
+        return previousButton;
+    }
+
+    public JButton getNextButton() {
+        return nextButton;
+    }
+
+    public JButton getFinishButton() {
+        return finishButton;
+    }
+
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
+
+    public JButton getExitButton() {
+        return exitButton;
+    }
+
+    public boolean mustSetDefaultButton() {
+        return setDefaultButton;
+    }
+
+    public boolean hasAnyButtons() {
+        return hasAnyButtons;
+    }
+
 }
 
