@@ -88,7 +88,6 @@ public class NanoConesPanel extends GeneratorPanel {
 	    6);
     }
 
-    @Override
     public void showing() {
         //
     }

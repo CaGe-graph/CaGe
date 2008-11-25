@@ -155,7 +155,6 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 
     private class BoundaryListDocumentFilter extends DocumentFilter {
 
-	@Override
 	public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
 	    int i = 0;
 	    while (i < string.length() && (string.charAt(i) == '2' || string.charAt(i) == '3'))
@@ -165,7 +164,6 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 
 	}
 
-	@Override
 	public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
 	    int i = 0;
 	    while (i < string.length() && (string.charAt(i) == '2' || string.charAt(i) == '3'))
