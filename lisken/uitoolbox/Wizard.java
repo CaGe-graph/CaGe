@@ -20,213 +20,203 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 
-public class Wizard implements ActionListener
-{
-  public static final String PREVIOUS  = "Previous";
-  public static final String NEXT      = "Next";
-  public static final String FINISH    = "Finish";
-  public static final String CANCEL    = "Cancel";
-  public static final String EXIT      = "Exit";
+public class Wizard implements ActionListener {
+    
+    public static final String PREVIOUS  = "Previous";
+    public static final String NEXT      = "Next";
+    public static final String FINISH    = "Finish";
+    public static final String CANCEL    = "Cancel";
+    public static final String EXIT      = "Exit";
+    
+    public static final String SHOWING   = "Showing";
 
-  public static final String SHOWING   = "Showing";
+    WizardStage stage;
+    int stageNo;
 
-  WizardStage stage;
-  int stageNo;
+    String title;
+    WindowListener windowListener;
+    ActionListener escapeListener;
+    Vector stageVector;
 
-  String title;
-  WindowListener windowListener;
-  ActionListener escapeListener;
-  Vector stageVector;
+    JFrame currentWindow;
 
-  JFrame currentWindow;
+    public Wizard(String title) {
+        this.title = title;
+        windowListener = new WindowAdapter() {
 
-  public Wizard(String title)
-  {
-    this.title = title;
-    windowListener = new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {
-	if (stage.getExitButton() != null) {
-	  stage.getExitButton().doClick();
-	} else if (stage.listener != null) {
-	  stage.listener.actionPerformed
-	   (new ActionEvent(e, WindowEvent.WINDOW_CLOSING, EXIT));
-	} else {
-	  System.exit(0);
-	}
-      }
-    };
-    escapeListener = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-	if (stage.getCancelButton() != null) {
-	  stage.getCancelButton().doClick();
-	} else if (stage.listener != null) {
-	  stage.listener.actionPerformed(e);
-	} else {
-	  Wizard.this.actionPerformed(e);
-	}
-      }
-    };
-    stageVector = new Vector();
-    stageNo = 0;
-  }
+            public void windowClosing(WindowEvent e) {
+                if (stage.getExitButton() != null) {
+                    stage.getExitButton().doClick();
+                } else if (stage.listener != null) {
+                    stage.listener.actionPerformed(new ActionEvent(e, WindowEvent.WINDOW_CLOSING, EXIT));
+                } else {
+                    System.exit(0);
+                }
+            }
+        };
+        escapeListener = new ActionListener() {
 
-  public void nextStage(JComponent wizardContent,
-   ActionListener wizardListener, String previousText, String nextText,
-   String finishText, String cancelText, String exitText)
-  {
-    nextStage(wizardContent, wizardListener,
-     previousText, nextText, finishText, cancelText, exitText,
-     true);
-  }
-
-  public void nextStage(JComponent wizardContent,
-   ActionListener wizardListener, String previousText, String nextText,
-   String finishText, String cancelText, String exitText,
-   boolean setDefaultButton)
-  {
-    if (stageNo > stageVector.size()) {
-      throw new RuntimeException("Wizard has fallen behind stage " + (stageNo + 1));
-    } else if (stageNo == stageVector.size()) {
-      stageVector.addElement(null);
+            public void actionPerformed(ActionEvent e) {
+                if (stage.getCancelButton() != null) {
+                    stage.getCancelButton().doClick();
+                } else if (stage.listener != null) {
+                    stage.listener.actionPerformed(e);
+                } else {
+                    Wizard.this.actionPerformed(e);
+                }
+            }
+        };
+        stageVector = new Vector();
+        stageNo = 0;
     }
-    ActionListener listener = wizardListener != null ? wizardListener : this;
-    stageVector.setElementAt(
-     new WizardStage(title, wizardContent,
-      windowListener, escapeListener, listener,
-      previousText, nextText, finishText, cancelText, exitText,
-      setDefaultButton),
-     stageNo);
-    ++stageNo;
-    activate();
-  }
 
-  public void previousStage()
-  {
-    if (stageNo <= 1) {
-      throw new RuntimeException("previousStage called with no previous stage to go to");
+    public void nextStage(JComponent wizardContent,
+            ActionListener wizardListener, String previousText, String nextText,
+            String finishText, String cancelText, String exitText) {
+        nextStage(wizardContent, wizardListener,
+                previousText, nextText, finishText, cancelText, exitText,
+                true);
     }
-    --stageNo;
-    activate();
-  }
 
-  public void toStage(int n)
-  {
-    toStage(n, false);
-  }
-
-  public void toStage(int n, boolean forgetLaterStages)
-  {
-    if (n <= 0) {
-      throw new RuntimeException("Illegal stage number (minimum 1): " + n);
-    } else if (stageVector.size() < n) {
-      throw new RuntimeException("Wizard hasn't yet reached stage " + n);
+    public void nextStage(JComponent wizardContent,
+            ActionListener wizardListener, String previousText, String nextText,
+            String finishText, String cancelText, String exitText,
+            boolean setDefaultButton) {
+        if (stageNo > stageVector.size()) {
+            throw new RuntimeException("Wizard has fallen behind stage " + (stageNo + 1));
+        } else if (stageNo == stageVector.size()) {
+            stageVector.addElement(null);
+        }
+        ActionListener listener = wizardListener != null ? wizardListener : this;
+        stageVector.setElementAt(
+                new WizardStage(title, wizardContent,
+                windowListener, escapeListener, listener,
+                previousText, nextText, finishText, cancelText, exitText,
+                setDefaultButton),
+                stageNo);
+        ++stageNo;
+        activate();
     }
-    stageNo = n;
-    if (forgetLaterStages) {
-      stageVector.setSize(stageNo);
+
+    public void previousStage() {
+        if (stageNo <= 1) {
+            throw new RuntimeException("previousStage called with no previous stage to go to");
+        }
+        --stageNo;
+        activate();
     }
-    activate();
-  }
 
-  public WizardStage getStage()
-  {
-    return stage;
-  }
-
-  public int getStageNo()
-  {
-    return stageNo;
-  }
-
-  public Window getWindow()
-  {
-    return currentWindow;
-  }
-
-  void activate()
-  {
-    if (currentWindow != null) {
-      currentWindow.dispose();
+    public void toStage(int n) {
+        toStage(n, false);
     }
-    stage = (WizardStage) stageVector.elementAt(stageNo - 1);
 
-    currentWindow = new JFrame(title);
-    currentWindow.addWindowListener(windowListener);
-    currentWindow.getRootPane().registerKeyboardAction(escapeListener,
-     Wizard.CANCEL,
-     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-     JComponent.WHEN_IN_FOCUSED_WINDOW);
+    public void toStage(int n, boolean forgetLaterStages) {
+        if (n <= 0) {
+            throw new RuntimeException("Illegal stage number (minimum 1): " + n);
+        } else if (stageVector.size() < n) {
+            throw new RuntimeException("Wizard hasn't yet reached stage " + n);
+        }
+        stageNo = n;
+        if (forgetLaterStages) {
+            stageVector.setSize(stageNo);
+        }
+        activate();
+    }
 
-    JPanel pane = new JPanel();
-    pane.setLayout(new BorderLayout());
-    if (stage.content != null) {
-      pane.add(stage.content, BorderLayout.CENTER);
+    public WizardStage getStage() {
+        return stage;
     }
-    if (stage.hasAnyButtons()) {
-      JPanel buttonPanel = new JPanel();
-      buttonPanel.setLayout(new GridBagLayout());
-      GridBagConstraints lc = new GridBagConstraints();
-      lc.gridx = 0;
-      lc.gridheight = 1;
-/*
-      lc.gridy = 0;
-      lc.gridwidth = GridBagConstraints.REMAINDER;
-      lc.insets = new Insets(5, 5, 10, 5);
-      buttonPanel.add(new JSeparator(SwingConstants.HORIZONTAL), lc);
-*/
-      lc.gridy = 1;
-      lc.gridwidth = 1;
-      lc.fill = lc.VERTICAL;
-      lc.insets = new Insets(5, 10, 10, 10);
-      addButton(buttonPanel, lc, stage.getPreviousButton(), KeyEvent.VK_LEFT);
-      addButton(buttonPanel, lc, stage.getNextButton(),     KeyEvent.VK_RIGHT);
-      addButton(buttonPanel, lc, stage.getFinishButton(),   KeyEvent.VK_UNDEFINED);
-      addButton(buttonPanel, lc, stage.getCancelButton(),   KeyEvent.VK_UNDEFINED);
-      addButton(buttonPanel, lc, stage.getExitButton(),     KeyEvent.VK_UNDEFINED);
-      pane.add(buttonPanel, BorderLayout.SOUTH);
-      if (stage.mustSetDefaultButton()) {
-        stage.setDefaultButton(currentWindow.getRootPane());
-      }
-    }
-    currentWindow.getContentPane().add(pane);
-/*
-    int expectedWidth =
-     currentWindow.getMinimumSize().width;
-     // + currentWindow.getInsets().left + currentWindow.getInsets().right
-    currentWindow.setSize(0, 0);
-    while (currentWindow.getSize().width < expectedWidth)
-    {
-      currentWindow.invalidate();
-      currentWindow.pack();
-    }
-*/
-    currentWindow.pack();
 
-    UItoolbox.centerOnScreen(currentWindow);
-    currentWindow.setVisible(true);
-    stage.listener.actionPerformed
-     (new ActionEvent(this, WindowEvent.WINDOW_ACTIVATED, SHOWING));
-  }
-
-  void addButton(JPanel panel, GridBagConstraints lc,
-   JButton button, int mnemonic)
-  {
-    if (button == null) return;
-    if (mnemonic != KeyEvent.VK_UNDEFINED) {
-      button.setMnemonic(mnemonic);
+    public int getStageNo() {
+        return stageNo;
     }
-    ++lc.gridx;
-    panel.add(button, lc);
-  }
 
-  public void actionPerformed(ActionEvent e)
-  {
-    String cmd = e.getActionCommand();
-    if (cmd.equals(Wizard.PREVIOUS)) {
-      previousStage();
-    } else if (cmd.equals(Wizard.CANCEL) || cmd.equals(Wizard.EXIT)) {
-      System.exit(0);
+    public Window getWindow() {
+        return currentWindow;
     }
-  }
+
+    void activate() {
+        if (currentWindow != null) {
+            currentWindow.dispose();
+        }
+        stage = (WizardStage) stageVector.elementAt(stageNo - 1);
+
+        currentWindow = new JFrame(title);
+        currentWindow.addWindowListener(windowListener);
+        currentWindow.getRootPane().registerKeyboardAction(escapeListener,
+                Wizard.CANCEL,
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        JPanel pane = new JPanel();
+        pane.setLayout(new BorderLayout());
+        if (stage.content != null) {
+            pane.add(stage.content, BorderLayout.CENTER);
+        }
+        if (stage.hasAnyButtons()) {
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setLayout(new GridBagLayout());
+            GridBagConstraints lc = new GridBagConstraints();
+            lc.gridx = 0;
+            lc.gridheight = 1;
+            /*
+            lc.gridy = 0;
+            lc.gridwidth = GridBagConstraints.REMAINDER;
+            lc.insets = new Insets(5, 5, 10, 5);
+            buttonPanel.add(new JSeparator(SwingConstants.HORIZONTAL), lc);
+             */
+            lc.gridy = 1;
+            lc.gridwidth = 1;
+            lc.fill = lc.VERTICAL;
+            lc.insets = new Insets(5, 10, 10, 10);
+            addButton(buttonPanel, lc, stage.getPreviousButton(), KeyEvent.VK_LEFT);
+            addButton(buttonPanel, lc, stage.getNextButton(),     KeyEvent.VK_RIGHT);
+            addButton(buttonPanel, lc, stage.getFinishButton(),   KeyEvent.VK_UNDEFINED);
+            addButton(buttonPanel, lc, stage.getCancelButton(),   KeyEvent.VK_UNDEFINED);
+            addButton(buttonPanel, lc, stage.getExitButton(),     KeyEvent.VK_UNDEFINED);
+            pane.add(buttonPanel, BorderLayout.SOUTH);
+            if (stage.mustSetDefaultButton()) {
+                stage.setDefaultButton(currentWindow.getRootPane());
+            }
+        }
+        currentWindow.getContentPane().add(pane);
+        /*
+        int expectedWidth =
+        currentWindow.getMinimumSize().width;
+        // + currentWindow.getInsets().left + currentWindow.getInsets().right
+        currentWindow.setSize(0, 0);
+        while (currentWindow.getSize().width < expectedWidth)
+        {
+        currentWindow.invalidate();
+        currentWindow.pack();
+        }
+         */
+        currentWindow.pack();
+
+        UItoolbox.centerOnScreen(currentWindow);
+        currentWindow.setVisible(true);
+        stage.listener.actionPerformed(new ActionEvent(this, WindowEvent.WINDOW_ACTIVATED, SHOWING));
+    }
+
+    void addButton(JPanel panel, GridBagConstraints lc,
+            JButton button, int mnemonic) {
+        if (button == null) {
+            return;
+        }
+        if (mnemonic != KeyEvent.VK_UNDEFINED) {
+            button.setMnemonic(mnemonic);
+        }
+        ++lc.gridx;
+        panel.add(button, lc);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String cmd = e.getActionCommand();
+        if (cmd.equals(Wizard.PREVIOUS)) {
+            previousStage();
+        } else if (cmd.equals(Wizard.CANCEL) || cmd.equals(Wizard.EXIT)) {
+            System.exit(0);
+        }
+    }
 }
 
