@@ -295,7 +295,7 @@ public class MiniJmolViewer
     return null;
   }
 
-  public Iterator<String> getStreamKeys()
+  public Iterator getStreamKeys()
   {
 	return null;
   }
