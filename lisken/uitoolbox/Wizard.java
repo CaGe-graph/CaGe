@@ -30,15 +30,15 @@ public class Wizard implements ActionListener {
     
     public static final String SHOWING   = "Showing";
 
-    WizardStage stage;
-    int stageNo;
+    private WizardStage stage;
+    private int stageNo;
 
-    String title;
-    WindowListener windowListener;
-    ActionListener escapeListener;
-    Vector stageVector;
+    private String title;
+    private WindowListener windowListener;
+    private ActionListener escapeListener;
+    private Vector stageVector;
 
-    JFrame currentWindow;
+    private JFrame currentWindow;
 
     public Wizard(String title) {
         this.title = title;
