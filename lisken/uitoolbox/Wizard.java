@@ -47,8 +47,8 @@ public class Wizard implements ActionListener {
             public void windowClosing(WindowEvent e) {
                 if (stage.getExitButton() != null) {
                     stage.getExitButton().doClick();
-                } else if (stage.listener != null) {
-                    stage.listener.actionPerformed(new ActionEvent(e, WindowEvent.WINDOW_CLOSING, EXIT));
+                } else if (stage.getListener() != null) {
+                    stage.getListener().actionPerformed(new ActionEvent(e, WindowEvent.WINDOW_CLOSING, EXIT));
                 } else {
                     System.exit(0);
                 }
@@ -59,8 +59,8 @@ public class Wizard implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (stage.getCancelButton() != null) {
                     stage.getCancelButton().doClick();
-                } else if (stage.listener != null) {
-                    stage.listener.actionPerformed(e);
+                } else if (stage.getListener() != null) {
+                    stage.getListener().actionPerformed(e);
                 } else {
                     Wizard.this.actionPerformed(e);
                 }
@@ -150,8 +150,8 @@ public class Wizard implements ActionListener {
 
         JPanel pane = new JPanel();
         pane.setLayout(new BorderLayout());
-        if (stage.content != null) {
-            pane.add(stage.content, BorderLayout.CENTER);
+        if (stage.getContent() != null) {
+            pane.add(stage.getContent(), BorderLayout.CENTER);
         }
         if (stage.hasAnyButtons()) {
             JPanel buttonPanel = new JPanel();
@@ -195,7 +195,7 @@ public class Wizard implements ActionListener {
 
         UItoolbox.centerOnScreen(currentWindow);
         currentWindow.setVisible(true);
-        stage.listener.actionPerformed(new ActionEvent(this, WindowEvent.WINDOW_ACTIVATED, SHOWING));
+        stage.getListener().actionPerformed(new ActionEvent(this, WindowEvent.WINDOW_ACTIVATED, SHOWING));
     }
 
     void addButton(JPanel panel, GridBagConstraints lc,

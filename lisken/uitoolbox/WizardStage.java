@@ -12,8 +12,8 @@ import javax.swing.SwingConstants;
 
 public class WizardStage {
     
-    JComponent content;
-    ActionListener listener;
+    private JComponent content;
+    private ActionListener listener;
 
     private JButton previousButton;
     private JButton nextButton;
@@ -51,7 +51,7 @@ public class WizardStage {
             button.setHorizontalTextPosition(textPosition);
         }
         button.setActionCommand(actionCmd);
-        button.addActionListener(listener);
+        button.addActionListener(getListener());
         return button;
     }
 
@@ -72,6 +72,14 @@ public class WizardStage {
         } else {
             // rootPane.setDefaultButton(null);
         }
+    }
+
+    public JComponent getContent() {
+        return content;
+    }
+
+    public ActionListener getListener() {
+        return listener;
     }
 
     public JButton getPreviousButton() {
