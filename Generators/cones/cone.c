@@ -39,6 +39,7 @@ int markValue = 0;
 #define MARK(e) (e->mark = markValue)
 #define RESET_MARK(e, i) {if(markValue == INT_MAX){setAllMarksTo(0,e,i);markValue=1;}else{markValue++;}}
 
+//set to 1 when only the number of structures needs to be counted
 int onlyCount = 0;
 
 /*
@@ -434,7 +435,6 @@ int constructFaceToRight(int size, EDGE *start, int *vertexCounter, EDGE **lastA
 	*/
 
 	//start by progressing along the connection that are already made
-	//TODO: set face size and remove when face cannot be constructed
 	i = 0;
 	temp = temp->inverse;
 	EDGE *newStart = temp;
@@ -553,7 +553,6 @@ int constructFaceToRightNeighbourRestricted(int size, EDGE *start, int *vertexCo
 	*/
 
 	//start by progressing along the connection that are already made
-	//TODO: set face size and remove when face cannot be constructed
 	i = 0;
 	temp = temp->inverse;
 	if(temp->inverse->face_to_right==illegalNeighbour)
@@ -825,11 +824,28 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 				fprintf(stderr, "Try pentagon\n");
 #endif
 				if(temp==NULL){
-					//output, because this was the last face
+					//check whether this is a canonical patch
+					int i;
+					for(i = 0; i < numberOfStartPoints; i++){
+						if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft+1, startPoints[i], *vertexCounter)){
+							setFaceSizeToRight(UNSET, currentStart);
+							return numberOfStructures;
+						}
+					}
+					for(i = 0; i < numberOfMirrorStartPoints; i++){
+						if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft+1, mirrorStartPoints[i], *vertexCounter)){
+							setFaceSizeToRight(UNSET, currentStart);
+							return numberOfStructures;
+						}
+					}
+					//output, because this was the last face			
+					printArray(spiralCode, pentagons);
 					exportPlanarGraphCode(boundaryStart, *vertexCounter);			
 #ifdef _DEBUG
 					fflush(stdout);
 #endif
+					//remove the face
+					setFaceSizeToRight(UNSET, currentStart);
 					return numberOfStructures + 1;
 				}
 				temp = temp->inverse;
@@ -856,11 +872,27 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 				fprintf(stderr, "Succeeded to add pentagon (%d pentagons left)\n", pentagonsLeft-1);
 #endif
 				if(temp==NULL){
+					//check whether this is a canonical patch
+					int i;
+					for(i = 0; i < numberOfStartPoints; i++){
+						if(isSpiralCodeSmaller(spiralCode, pentagons, startPoints[i], *vertexCounter)){
+							setFaceSizeToRight(UNSET, currentStart);
+							return numberOfStructures;
+						}
+					}
+					for(i = 0; i < numberOfMirrorStartPoints; i++){
+						if(isMirrorSpiralCodeSmaller(spiralCode, pentagons, mirrorStartPoints[i], *vertexCounter)){
+							setFaceSizeToRight(UNSET, currentStart);
+							return numberOfStructures;
+						}
+					}
 					//output, because this was the last face
 					exportPlanarGraphCode(boundaryStart, *vertexCounter);
 #ifdef _DEBUG
 					fflush(stdout);
 #endif
+					//remove the face
+					setFaceSizeToRight(UNSET, currentStart);
 					return numberOfStructures + 1;
 				}
 				temp = temp->inverse;
@@ -888,6 +920,8 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 #endif
 			if(temp==NULL){
 				//error: there are still pentagons left
+				//remove the face
+				setFaceSizeToRight(UNSET, currentStart);
 				return numberOfStructures;
 			}
 			temp = temp->inverse;
@@ -915,10 +949,26 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 			fprintf(stderr, "Succeeded to add hexagon\n");
 #endif
 			if(temp==NULL){
+				//check whether this is a canonical patch
+				int i;
+				for(i = 0; i < numberOfStartPoints; i++){
+					if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, startPoints[i], *vertexCounter)){
+						setFaceSizeToRight(UNSET, currentStart);
+						return numberOfStructures;
+					}
+				}
+				for(i = 0; i < numberOfMirrorStartPoints; i++){
+					if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, mirrorStartPoints[i], *vertexCounter)){
+						setFaceSizeToRight(UNSET, currentStart);
+						return numberOfStructures;
+					}
+				}
 				exportPlanarGraphCode(boundaryStart, *vertexCounter);			
 #ifdef _DEBUG
 				fflush(stdout);
 #endif
+				//remove the face
+				setFaceSizeToRight(UNSET, currentStart);
 				return numberOfStructures + 1;
 			}
 			temp = temp->inverse;
@@ -949,7 +999,8 @@ boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateS
 		EDGE *temp = edge;
 		MARK(temp);
 		temp = temp->right;
-		while(temp!=edge && temp!=NULL){
+		//while(temp!=edge && temp!=NULL){
+		while(temp!=edge){
 			MARK(temp);
 			temp = temp->right;
 		}
@@ -1010,7 +1061,8 @@ boolean isMirrorSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alte
 		EDGE *temp = edge;
 		MARK(temp);
 		temp = temp->left;
-		while(temp!=edge && temp!=NULL){
+		//while(temp!=edge && temp!=NULL){
+		while(temp!=edge){
 			MARK(temp);
 			temp = temp->left;
 		}
