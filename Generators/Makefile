@@ -24,7 +24,7 @@ others: mkfoldnet
 clean: kekule_clean cone_clean
 	rm -f *.o
 
-clear:
+clear: clean kekule_clear cone_clear
 	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen
 
 reset: clean
@@ -84,13 +84,17 @@ kekule_all:
 	cp kekule/fusgen$(SUFFIX) .
 
 kekule_clean:
-	rm -f fusgen$(SUFFIX)
 	SUFFIX=$(SUFFIX) $(MAKE) -C kekule clean
+
+kekule_clear:
+	rm -f fusgen$(SUFFIX)
 
 cone_all:
 	SUFFIX=$(SUFFIX) $(MAKE) -C cones
 	cp cones/cone$(SUFFIX) .
 
 cone_clean:
-	rm -f cone$(SUFFIX)
 	SUFFIX=$(SUFFIX) $(MAKE) -C cones clean
+
+cone_clear:
+	rm -f cone$(SUFFIX)
