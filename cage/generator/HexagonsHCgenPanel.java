@@ -52,7 +52,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel
 
 	cataCondensedBox = new JCheckBox("Cata condensed");
 	benzenoidBox = new JCheckBox("Benzenoid");
-	kekuleBox = new JCheckBox("Kekule");
+	kekuleBox = new JCheckBox("Kekulean");
 
     add(hexagonsSlider,
      new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
