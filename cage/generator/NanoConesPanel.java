@@ -22,14 +22,14 @@ import lisken.uitoolbox.EnhancedSlider;
 
 public class NanoConesPanel extends GeneratorPanel implements ActionListener {
     
-    EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
+    private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
     
-    JTextField lengthOfSide = new JTextField();
-    JRadioButton symmetricButton;
-    JRadioButton nearSymmetricButton;
-    ButtonGroup symmetricGroup;
-    JCheckBox iprBox;
-    JCheckBox mirrorBox;
+    private JTextField lengthOfSide = new JTextField();
+    private JRadioButton symmetricButton;
+    private JRadioButton nearSymmetricButton;
+    private ButtonGroup symmetricGroup;
+    private JCheckBox iprBox;
+    private JCheckBox mirrorBox;
 
     public NanoConesPanel() {
 	setLayout(new GridBagLayout());
