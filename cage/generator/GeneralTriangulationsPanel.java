@@ -36,7 +36,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     verticesSlider.setMinimum(MIN_VERTICES);
     verticesSlider.setMaximum(MAX_VERTICES);
     verticesSlider.setValue(DEFAULT_VERTICES);
-    verticesSlider.setMinorTickSpacing(1);
+    verticesSlider.setMinorTickSpacing(2); //vertices has to be even
     verticesSlider.setMajorTickSpacing(MAX_VERTICES - MIN_VERTICES);
     verticesSlider.setPaintTicks(true);
     verticesSlider.setPaintLabels(true);
@@ -54,7 +54,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
      new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 20, 10), 0, 0));
-    JLabel minDegLabel = new JLabel("minimum degree");
+    JLabel minDegLabel = new JLabel("minimum face size");
     add(minDegLabel,
      new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -78,7 +78,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
      new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
-    JLabel minConnLabel = new JLabel("minimum connectivity");
+    JLabel minConnLabel = new JLabel("minimum connectivity of the dual");
     add(minConnLabel,
      new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -104,7 +104,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
      new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
       GridBagConstraints.WEST, GridBagConstraints.NONE,
       new Insets(0, 0, 10, 0), 0, 0));
-    exactConn = new JCheckBox("restrict connectivity to minimum");
+    exactConn = new JCheckBox("only graphs with connectivity exactly the given minimum");
     exactConn.setMnemonic(KeyEvent.VK_R);
     add(exactConn,
      new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
@@ -123,8 +123,9 @@ class GeneralTriangulationsPanel extends GeneratorPanel
 
     genCmd.addElement("plantri");
     filename += "tri";
-    String v = Integer.toString(verticesSlider.getValue());
-    filename += "_" + v;
+	//plantri takes the number of faces as argument, so we use the euler formula to derive it from the number of vertices
+    String faces = Integer.toString(verticesSlider.getValue()/2 + 2);
+    filename += "_" + faces;
     if (dual) {
       genCmd.addElement("-d");
       filename += "_d";
@@ -136,7 +137,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     String minDeg = minDegGroup.getSelection().getActionCommand().substring(1);
     genCmd.addElement("-m" + minDeg);
     filename += "_m" + minDeg;
-    genCmd.addElement(v);
+    genCmd.addElement(faces);
 
     String[][] generator = new String[1][genCmd.size()];
     genCmd.copyInto(generator[0]);
