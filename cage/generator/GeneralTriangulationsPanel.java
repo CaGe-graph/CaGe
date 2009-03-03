@@ -40,8 +40,9 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     verticesSlider.setMajorTickSpacing(MAX_VERTICES - MIN_VERTICES);
     verticesSlider.setPaintTicks(true);
     verticesSlider.setPaintLabels(true);
-    verticesSlider.setSnapWhileDragging(1);
+    verticesSlider.setSnapWhileDragging(2);
     verticesSlider.setClickScrollByBlock(false);
+    verticesSlider.setSnapToTicks(true); //vertices has to be even
     verticesSlider.setSizeFactor(4);
     add(verticesSlider,
      new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
