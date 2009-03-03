@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -19,11 +20,14 @@ import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.SpinButton;
 
+/**
+ * Panel used for the configuration of the generator cone.
+ */
 public class NanoConesPanel extends GeneratorPanel implements ActionListener {
 
     private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
-    private SpinButton lengthOfSide = new SpinButton( 0, 0, Integer.MAX_VALUE);
-    private SpinButton hexagonLayers = new SpinButton(1, 1, Integer.MAX_VALUE);
+    private SpinButton lengthOfSide = new SpinButton(new DefaultBoundedRangeModel(0, 0, 0, Integer.MAX_VALUE));
+    private SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
     private JRadioButton symmetricButton;
     private JRadioButton nearSymmetricButton;
     private ButtonGroup symmetricGroup;
@@ -114,7 +118,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         String layers = hexagonLayersBox.isSelected() ? Integer.toString(hexagonLayers.getValue()) : "" ;
 
         return new StaticGeneratorInfo(
-                Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + mirror),
+                Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + mirror + " " + layers),
                 EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
                 "test",
                 6);
@@ -138,6 +142,9 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         }
     }
 
+    /**
+     * Listener responsible for disabling the hexagon layers SpinButton
+     */
     private class HexagonLayersBoxListener implements ActionListener{
 
         public void actionPerformed(ActionEvent e) {
