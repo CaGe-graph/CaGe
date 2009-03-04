@@ -170,6 +170,11 @@ class DiskTriangulationsPanel extends GeneratorPanel
     String[][] generator = new String[1][genCmd.size()];
     genCmd.copyInto(generator[0]);
 
+    /*
+     * In plantri the outer face is defined as the edge left of the directed edge 1-2.
+     * For embed the outer face must be given as -bx,y with the outerface equal to the face
+     * clockwise of the directed edge x-y. Therefore the argument -b2,1 is added for embed.
+     */
     String[][] embed2D = { { "embed", "-b2,1", "-a-" } };
     String[][] embed3D = { { "embed", "-d3", "-it" } };
 
