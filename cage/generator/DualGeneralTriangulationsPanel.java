@@ -38,7 +38,7 @@ public class DualGeneralTriangulationsPanel extends GeneratorPanel
 
     //slider to select number of vertices
     private EnhancedSlider verticesSlider;
-    //buttons to select the minimum degree
+    //buttons to select the minimum face size
     private ButtonGroup minDegGroup;
     private AbstractButton[] degButton = new AbstractButton[3];
     //buttons to select the minimum connectivity
