@@ -12,9 +12,7 @@ public class PlaneTriangulationsPanel extends GeneratorPanel
 
   public PlaneTriangulationsPanel()
   {
-      GeneralTriangulationsPanel generalTriangulationsPanel = new GeneralTriangulationsPanel();
-      generalTriangulationsPanel.setDual(false);
-    pane.addTab("general", generalTriangulationsPanel);
+    pane.addTab("general", new GeneralTriangulationsPanel());
     pane.addTab("eulerian", new EulerianTriangulationsPanel());
     for (int i = 0; i < pane.getTabCount(); ++i)
     {

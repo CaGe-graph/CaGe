@@ -22,7 +22,11 @@ import javax.swing.JRadioButton;
 
 import lisken.uitoolbox.EnhancedSlider;
 
-class GeneralTriangulationsPanel extends GeneratorPanel
+/**
+ * Panel for the configuration of plantri to generate 3-regular plane graphs.
+ * This is done by taking the duals of triangulations.
+ */
+public class DualGeneralTriangulationsPanel extends GeneratorPanel
         implements ActionListener {
 
     //The minimum number of vertices allowed for this generator
@@ -39,11 +43,11 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     private AbstractButton[] degButton = new AbstractButton[3];
     //buttons to select the minimum connectivity
     private ButtonGroup minConnGroup;
-    private AbstractButton[] connButton = new AbstractButton[3];
+    private AbstractButton[] connButton = new AbstractButton[5];
     //checkbox to generate only graphs with exactly the minimum connectivity
     private JCheckBox exactConn;
-    
-    public GeneralTriangulationsPanel() {
+
+    public DualGeneralTriangulationsPanel() {
         setLayout(new GridBagLayout());
         verticesSlider = new EnhancedSlider();
         verticesSlider.setMinimum(MIN_VERTICES);
@@ -68,7 +72,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 20, 10), 0, 0));
-        JLabel minDegLabel = new JLabel("minimum degree");
+        JLabel minDegLabel = new JLabel("minimum face size");
         add(minDegLabel,
                 new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -91,7 +95,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
                 new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 0), 0, 0));
-        JLabel minConnLabel = new JLabel("minimum connectivity");
+        JLabel minConnLabel = new JLabel("minimum connectivity of the dual");
         add(minConnLabel,
                 new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -99,8 +103,8 @@ class GeneralTriangulationsPanel extends GeneratorPanel
         minConnGroup = new ButtonGroup();
         JPanel minConnPanel = new JPanel();
         for (int i = 0; i < connButton.length; ++i) {
-            String is = Integer.toString(i + 3);
-            connButton[i] = new JRadioButton(is, i == 0);
+            String is = Integer.toString(i + 1);
+            connButton[i] = new JRadioButton(is, i == 2);
             connButton[i].setActionCommand(is);
             connButton[i].setActionCommand("c" + is);
             connButton[i].addActionListener(this);
@@ -132,8 +136,12 @@ class GeneralTriangulationsPanel extends GeneratorPanel
 
         genCmd.addElement("plantri");
         filename += "tri";
-        String vertices = Integer.toString(verticesSlider.getValue());
-        filename += "_" + vertices;
+        //plantri takes the number of vertices in the dual as argument, i.e. number of faces in this graph
+        //so we use the euler formula to derive it from the number of vertices
+        String faces = Integer.toString(verticesSlider.getValue() / 2 + 2);
+        filename += "_" + faces;
+        genCmd.addElement("-d");
+        filename += "_d";
         String minConn = minConnGroup.getSelection().getActionCommand().substring(1);
         minConn += exactConn.isSelected() ? "x" : "";
         genCmd.addElement("-c" + minConn);
@@ -141,7 +149,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
         String minDeg = minDegGroup.getSelection().getActionCommand().substring(1);
         genCmd.addElement("-m" + minDeg);
         filename += "_m" + minDeg;
-        genCmd.addElement(vertices);
+        genCmd.addElement(faces);
 
         String[][] generator = new String[1][genCmd.size()];
         genCmd.copyInto(generator[0]);
@@ -152,25 +160,29 @@ class GeneralTriangulationsPanel extends GeneratorPanel
         return new StaticGeneratorInfo(
                 generator,
                 EmbedFactory.createEmbedder(true, embed2D, embed3D),
-                filename, 3, true);
+                filename, 0, true);
     }
 
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         char deg, conn;
         switch (cmd.charAt(0)) {
+            //one of the connectivity radiobuttons was pressed
             case 'c':
                 deg = minDegGroup.getSelection().getActionCommand().charAt(1);
                 conn = cmd.charAt(1);
                 if (deg < conn) {
+                    //the minimum degree is always at least the minimum connectivity
                     degButton[conn - '0' - 3].setSelected(true);
                 }
                 break;
+            //one of the degree radiobuttons was pressed
             case 'v':
                 conn = minConnGroup.getSelection().getActionCommand().charAt(1);
                 deg = cmd.charAt(1);
                 if (deg < conn) {
-                    connButton[deg - '0' - 3].setSelected(true);
+                    //the minimum connectivity is always at most the minimum degree
+                    connButton[deg - '0' - 1].setSelected(true);
                 }
                 break;
         }
