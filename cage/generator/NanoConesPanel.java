@@ -32,7 +32,6 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
     private JRadioButton nearSymmetricButton;
     private ButtonGroup symmetricGroup;
     private JCheckBox iprBox;
-    private JCheckBox mirrorBox;
     private JCheckBox hexagonLayersBox;
 
     public NanoConesPanel() {
@@ -49,7 +48,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         JLabel numberOfPentagonsLabel = new JLabel("Number of pentagons");
 
         symmetricButton = new JRadioButton("symmetric");
-        nearSymmetricButton = new JRadioButton("nearsymmetric");
+        nearSymmetricButton = new JRadioButton("nonsymmetric");
         symmetricButton.addActionListener(this);
         nearSymmetricButton.addActionListener(this);
         symmetricGroup = new ButtonGroup();
@@ -58,7 +57,6 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         symmetricButton.setSelected(true);
 
         iprBox = new JCheckBox("isolated pentagons (ipr)");
-        mirrorBox = new JCheckBox("Mirror-images to be considered nonisomorphic");
         hexagonLayersBox = new JCheckBox("Add a number of hexagon layers");
         hexagonLayers.setEnabled(hexagonLayersBox.isSelected());
         hexagonLayersBox.addActionListener(new HexagonLayersBoxListener());
@@ -93,16 +91,12 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
                 new GridBagConstraints(0, 3, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 10, 0, 10), 0, 0));
-        add(mirrorBox,
-                new GridBagConstraints(0, 4, 2, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 10, 0, 10), 0, 0));
         add(hexagonLayersBox,
-                new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 10, 0, 10), 0, 0));
         add(hexagonLayers,
-                new GridBagConstraints(1, 5, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 10, 0, 10), 0, 0));
     }
@@ -113,12 +107,11 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         String length = Integer.toString(lengthOfSide.getValue() - (symmetricButton.isSelected() ? 0 : 1));
 
         String ipr = iprBox.isSelected() ? " -i" : "";
-        String mirror = mirrorBox.isSelected() ? " -m" : "";
 
         String layers = hexagonLayersBox.isSelected() ? Integer.toString(hexagonLayers.getValue()) : "" ;
 
         return new StaticGeneratorInfo(
-                Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + mirror + " " + layers),
+                Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
                 EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
                 "test",
                 6);
