@@ -205,8 +205,8 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         this.add(expertPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(sep1, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
-        onActionClickerLayoutSwitcher outPreFilterListener =
-                new onActionClickerLayoutSwitcher(outPreFilterCheckBox, outPreFilterPanel);
+        OnActionClickerLayoutSwitcher outPreFilterListener =
+                new OnActionClickerLayoutSwitcher(outPreFilterCheckBox, outPreFilterPanel);
         outPreFilterCheckBox.setText("Pre-filter graphs");
         outPreFilterCheckBox.setMnemonic(KeyEvent.VK_P);
         outPreFilterCheckBox.setToolTipText(FilterHint);
@@ -243,14 +243,14 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outPreFilterNone.setText("None");
         outPreFilterGroup.add(outPreFilter);
         outPreFilterGroup.add(outPreFilterNone);
-        new onActionClicker(outPreFilter, outPreFilterNone, outPreFilterCheckBox);
+        new OnActionClicker(outPreFilter, outPreFilterNone, outPreFilterCheckBox);
         this.add(outPreFilterCheckBox, new GridBagConstraints(0, 2, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
         this.add(outPreFilterPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 
         this.add(sep2, new GridBagConstraints(0, 3, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
-        onActionClickerLayoutSwitcher out3DDestListener =
-                new onActionClickerLayoutSwitcher(out3DCheckBox, out3DDestOptionsPanel);
+        OnActionClickerLayoutSwitcher out3DDestListener =
+                new OnActionClickerLayoutSwitcher(out3DCheckBox, out3DDestOptionsPanel);
         out3DDestLayout.setAlignment(0);
         out3DDestLayout.setHgap(10);
         out3DDestPanel.setLayout(out3DDestLayout);
@@ -304,9 +304,9 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         if (addViewers("3D", viewers3D, out3DViewerGroup, out3DViewerPanel) > 0) {
             out3DDestGroup.add(out3DViewer);
             out3DDestPanel.add(out3DViewer, null);
-            new onActionClicker(out3DViewer, out3DNoDest, out3DCheckBox);
+            new OnActionClicker(out3DViewer, out3DNoDest, out3DCheckBox);
         } else {
-            new onActionClicker(out3DFile, out3DNoDest, out3DCheckBox);
+            new OnActionClicker(out3DFile, out3DNoDest, out3DCheckBox);
         }
         out3DDestGroup.add(out3DFile);
         out3DDestGroup.add(out3DNoDest);
@@ -323,8 +323,8 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(sep3, new GridBagConstraints(0, 6, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
-        onActionClickerLayoutSwitcher out2DDestListener =
-                new onActionClickerLayoutSwitcher(out2DCheckBox, out2DDestOptionsPanel);
+        OnActionClickerLayoutSwitcher out2DDestListener =
+                new OnActionClickerLayoutSwitcher(out2DCheckBox, out2DDestOptionsPanel);
         out2DFile.addActionListener(out2DDestListener);
         out2DFile.addActionListener(this);
         out2DFile.setText("File/Pipe");
@@ -378,9 +378,9 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         if (addViewers("2D", viewers2D, out2DViewerGroup, out2DViewerPanel) > 0) {
             out2DDestGroup.add(out2DViewer);
             out2DDestPanel.add(out2DViewer, null);
-            new onActionClicker(out2DViewer, out2DNoDest, out2DCheckBox);
+            new OnActionClicker(out2DViewer, out2DNoDest, out2DCheckBox);
         } else {
-            new onActionClicker(out2DFile, out2DNoDest, out2DCheckBox);
+            new OnActionClicker(out2DFile, out2DNoDest, out2DCheckBox);
         }
         out2DDestGroup.add(out2DFile);
         out2DDestGroup.add(out2DNoDest);
@@ -397,8 +397,8 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(sep4, new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
-        onActionClickerLayoutSwitcher outAdjDestListener =
-                new onActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
+        OnActionClickerLayoutSwitcher outAdjDestListener =
+                new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
         outAdjCheckBox.setText("Adjacency information");
         outAdjCheckBox.setMnemonic(KeyEvent.VK_A);
         outAdjCheckBox.setToolTipText("send connection table into a file or pipe");
@@ -439,7 +439,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outAdjFilePanel.add(Box.createHorizontalGlue());
         outAdjFilePanel.add(outAdjFileFormatLabel, null);
         outAdjFilePanel.add(outAdjFileFormat, null);
-        new onActionClicker(outAdjFile, outAdjNoDest, outAdjCheckBox);
+        new OnActionClicker(outAdjFile, outAdjNoDest, outAdjCheckBox);
         new JTextComponentFocusSelector(outAdjFileName);
         this.add(outAdjCheckBox, new GridBagConstraints(0, 10, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
         this.add(outAdjDestOptionsPanel, new GridBagConstraints(1, 10, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -728,17 +728,17 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     }
 }
 
-class onActionClickerLayoutSwitcher implements ActionListener {
+class OnActionClickerLayoutSwitcher implements ActionListener {
 
     AbstractButton button;
     Container container;
 
-    public onActionClickerLayoutSwitcher(AbstractButton b, Container c) {
+    public OnActionClickerLayoutSwitcher(AbstractButton b, Container c) {
         button = b;
         container = c;
     }
 
-    public onActionClickerLayoutSwitcher(AbstractButton b, Container c, AbstractButton target) {
+    public OnActionClickerLayoutSwitcher(AbstractButton b, Container c, AbstractButton target) {
         this(b, c);
         target.addActionListener(this);
     }
@@ -753,17 +753,17 @@ class onActionClickerLayoutSwitcher implements ActionListener {
     }
 }
 
-class onActionClicker implements ActionListener {
+class OnActionClicker implements ActionListener {
 
     AbstractButton buttonTrue, buttonFalse;
 
-    public onActionClicker(AbstractButton bt, AbstractButton bf, AbstractButton target) {
+    public OnActionClicker(AbstractButton bt, AbstractButton bf, AbstractButton target) {
         buttonTrue = bt;
         buttonFalse = bf;
         target.addActionListener(this);
     }
 
-    public onActionClicker(AbstractButton bf, AbstractButton target) {
+    public OnActionClicker(AbstractButton bf, AbstractButton target) {
         buttonTrue = null;
         buttonFalse = bf;
         target.addActionListener(this);
@@ -785,7 +785,6 @@ class onActionClicker implements ActionListener {
         }
     }
 }
-
 interface GenericButtonGroup {
 
     void add(AbstractButton button);
