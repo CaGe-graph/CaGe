@@ -1,13 +1,16 @@
 package cage;
 
+import cage.utility.GenericButtonGroup;
+import cage.utility.Min1ButtonGroup;
+import cage.utility.OnActionClicker;
+import cage.utility.OnActionClickerLayoutSwitcher;
+import cage.utility.SyncButtonGroup;
 import cage.viewer.CaGeViewer;
 import cage.viewer.ViewerFactory;
 import cage.writer.CaGeWriter;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -17,17 +20,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -47,8 +43,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -727,260 +721,3 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 //    f.setResizable(false);
     }
 }
-
-class OnActionClickerLayoutSwitcher implements ActionListener {
-
-    AbstractButton button;
-    Container container;
-
-    public OnActionClickerLayoutSwitcher(AbstractButton b, Container c) {
-        button = b;
-        container = c;
-    }
-
-    public OnActionClickerLayoutSwitcher(AbstractButton b, Container c, AbstractButton target) {
-        this(b, c);
-        target.addActionListener(this);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        Component c = (Component) e.getSource();
-        ((CardLayout) container.getLayout()).show(container, e.getActionCommand());
-        if (c.isVisible()) {
-            button.setSelected(true);
-            c.getParent().transferFocus();
-        }
-    }
-}
-
-class OnActionClicker implements ActionListener {
-
-    AbstractButton buttonTrue, buttonFalse;
-
-    public OnActionClicker(AbstractButton bt, AbstractButton bf, AbstractButton target) {
-        buttonTrue = bt;
-        buttonFalse = bf;
-        target.addActionListener(this);
-    }
-
-    public OnActionClicker(AbstractButton bf, AbstractButton target) {
-        buttonTrue = null;
-        buttonFalse = bf;
-        target.addActionListener(this);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        AbstractButton source = (AbstractButton) e.getSource();
-        if (source.isSelected()) {
-            if (buttonTrue != null) {
-                buttonTrue.doClick();
-                if (!buttonTrue.isVisible()) {
-                    source.transferFocus();
-                }
-            }
-        } else {
-            if (buttonFalse != null) {
-                buttonFalse.doClick();
-            }
-        }
-    }
-}
-interface GenericButtonGroup {
-
-    void add(AbstractButton button);
-
-    void remove(AbstractButton button);
-
-    Enumeration getElements();
-}
-
-abstract class AbstractButtonGroup implements GenericButtonGroup, ItemListener {
-
-    Vector buttons = new Vector();
-
-    public void add(AbstractButton button) {
-        buttons.addElement(button);
-        button.addItemListener(this);
-    }
-
-    public void remove(AbstractButton button) {
-        button.getModel().removeItemListener(this);
-        buttons.removeElement(button);
-    }
-
-    public Enumeration getElements() {
-        return buttons.elements();
-    }
-
-    public AbstractButton getSelection() {
-        return null;
-    }
-}
-
-class Min1ButtonGroup extends AbstractButtonGroup
-        implements ChangeListener, KeyListener, MouseListener {
-
-    String id;
-    boolean active;
-    AbstractButton deactivateButton;
-    Hashtable selections;
-    int lastModifiers;
-
-    public Min1ButtonGroup() {
-        this("", true, null);
-    }
-
-    public Min1ButtonGroup(String id) {
-        this(id, true, null);
-    }
-
-    public Min1ButtonGroup(String id, boolean active) {
-        this(id, active, null);
-    }
-
-    public Min1ButtonGroup(String id, boolean active, AbstractButton deactivateButton) {
-        this.id = id;
-        this.active = active;
-        this.deactivateButton = deactivateButton;
-        deactivateButton.addChangeListener(this);
-        selections = new Hashtable();
-    }
-
-    public void add(AbstractButton button) {
-        super.add(button);
-        button.addKeyListener(this);
-        button.addMouseListener(this);
-        if (button.isSelected()) {
-            selections.put(button, this);
-        }
-    }
-
-    public void remove(AbstractButton button) {
-        super.remove(button);
-        button.removeKeyListener(this);
-        button.removeMouseListener(this);
-        if (button.isSelected()) {
-            selections.remove(button);
-        }
-    }
-
-    public void itemStateChanged(ItemEvent e) {
-        AbstractButton button = (AbstractButton) e.getSource();
-        if (button.isSelected()) {
-            selections.put(button, this);
-        } else {
-            selections.remove(button);
-        }
-        int lastLowLevelModifiers = lastModifiers;
-        lastModifiers = 0;
-        if (active && selections.size() == 0) {
-            if (deactivateButton != null && !button.hasFocus()) {
-                deactivateButton.doClick();
-                if (!active) {
-                    return;
-                }
-            }
-            button.setSelected(true);
-        }
-        if (lastLowLevelModifiers == InputEvent.SHIFT_MASK) {
-            button.setSelected(true);
-            Enumeration elements = getElements();
-            while (elements.hasMoreElements()) {
-                AbstractButton otherButton = (AbstractButton) elements.nextElement();
-                if (otherButton != button && otherButton.isSelected()) {
-                    otherButton.setSelected(false);
-                }
-            }
-        }
-    }
-
-    public void setActive(boolean active) {
-        if (this.active == active) {
-            return;
-        }
-        this.active = active;
-        if (active && selections.size() == 0 && buttons.size() > 0) {
-            ((AbstractButton) buttons.elementAt(0)).setSelected(true);
-        }
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void stateChanged(ChangeEvent e) {
-        AbstractButton source = (AbstractButton) e.getSource();
-        if (source == deactivateButton) {
-            setActive(source.isSelected());
-        }
-    }
-
-    public void keyTyped(KeyEvent e) {
-        if (e.getKeyChar() == ' ' && lastModifiers == InputEvent.SHIFT_MASK) {
-            ((AbstractButton) e.getSource()).doClick();
-        }
-    }
-
-    public void keyPressed(KeyEvent e) {
-        lastModifiers = e.getModifiers();
-    }
-
-    public void keyReleased(KeyEvent e) {
-    }
-
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    public void mousePressed(MouseEvent e) {
-        lastModifiers = e.getModifiers() &
-                ~(InputEvent.BUTTON1_MASK |
-                InputEvent.BUTTON2_MASK |
-                InputEvent.BUTTON3_MASK);
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
-}
-
-class SyncButtonGroup extends AbstractButtonGroup {
-
-    public void add(AbstractButton button) {
-        if (buttons.size() > 0) {
-            boolean selected = button.isSelected();
-            AbstractButton otherButton = (AbstractButton) buttons.elementAt(0);
-            if (otherButton.isSelected() != selected) {
-                otherButton.setSelected(selected);
-                button.setSelected(otherButton.isSelected());
-            }
-        }
-        super.add(button);
-    }
-
-    public void itemStateChanged(ItemEvent e) {
-        int change = e.getStateChange();
-        if (change != ItemEvent.SELECTED && change != ItemEvent.DESELECTED) {
-            return;
-        }
-        AbstractButton button = (AbstractButton) e.getSource();
-        boolean selected = button.isSelected();
-        Enumeration btns = buttons.elements();
-        while (btns.hasMoreElements()) {
-            AbstractButton otherButton = (AbstractButton) btns.nextElement();
-            if (otherButton.isSelected() == selected) {
-                continue;
-            }
-            otherButton.setSelected(selected);
-            // Change the selection of just one button (that needs to be changed).
-            // That button will create its own item event,
-            // eventually triggering all necessary changes.
-            break;
-        }
-    }
-}
-
