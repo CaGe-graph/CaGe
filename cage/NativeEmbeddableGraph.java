@@ -1,10 +1,6 @@
 
 package cage;
 
-
-import java.util.NoSuchElementException;
-import lisken.systoolbox.Integer2;
-
 public class NativeEmbeddableGraph extends EmbeddableGraph
 {
   protected long nGraph;
@@ -138,43 +134,3 @@ public class NativeEmbeddableGraph extends EmbeddableGraph
     super.finalize();
   }
 }
-
-
-class NativeEdgeIterator extends EdgeIterator
-{
-  private long nIter;
-
-  private native boolean nHasNextEdge(long nIter);
-  private native int nGetNextEdge(long nIter);
-  private native void nFinalize(long nIter);
-
-  public boolean hasNext()
-  {
-    return nHasNextEdge(nIter);
-  }
-
-  public Object next()
-   throws NoSuchElementException
-  {
-    return new Integer2(nGetNextEdge(nIter));
-  }
-
-  public int nextEdge()
-   throws NoSuchElementException
-  {
-    return nGetNextEdge(nIter);
-  }
-
-  public void remove()
-   throws UnsupportedOperationException
-  {
-    throw new UnsupportedOperationException("Graph edges can't be removed");
-  }
-
-  protected void finalize() throws Throwable
-  {
-    nFinalize(nIter);
-    super.finalize();
-  }
-}
-
