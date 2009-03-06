@@ -61,10 +61,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     StringBuffer viewerErrors;
     JButton defaultButton;
     GridBagLayout outputLayout = new GridBagLayout();
-    JSeparator sep1 = new JSeparator(SwingConstants.HORIZONTAL);
-    JSeparator sep2 = new JSeparator(SwingConstants.HORIZONTAL);
-    JSeparator sep3 = new JSeparator(SwingConstants.HORIZONTAL);
-    JSeparator sep4 = new JSeparator(SwingConstants.HORIZONTAL);
+    JSeparator expertControlsSeparator = new JSeparator(SwingConstants.HORIZONTAL);
     JLabel expertLabel = new JLabel();
     JPanel expertPanel = new JPanel();
     GridBagLayout expertLayout = new GridBagLayout();
@@ -197,7 +194,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         expertPanel.add(embed3DCmdLine, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
         this.add(expertLabel, new GridBagConstraints(0, 0, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 17, 0, 10), 0, 0));
         this.add(expertPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        this.add(sep1, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
+        this.add(expertControlsSeparator, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
         OnActionClickerLayoutSwitcher outPreFilterListener =
                 new OnActionClickerLayoutSwitcher(outPreFilterCheckBox, outPreFilterPanel);
@@ -241,7 +238,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         this.add(outPreFilterCheckBox, new GridBagConstraints(0, 2, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
         this.add(outPreFilterPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 
-        this.add(sep2, new GridBagConstraints(0, 3, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
+        this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 3, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
         OnActionClickerLayoutSwitcher out3DDestListener =
                 new OnActionClickerLayoutSwitcher(out3DCheckBox, out3DDestOptionsPanel);
@@ -315,7 +312,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         this.add(out3DDestPanel, new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(out3DDestOptionsPanel, new GridBagConstraints(1, 5, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-        this.add(sep3, new GridBagConstraints(0, 6, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
+        this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 6, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
         OnActionClickerLayoutSwitcher out2DDestListener =
                 new OnActionClickerLayoutSwitcher(out2DCheckBox, out2DDestOptionsPanel);
@@ -389,7 +386,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         this.add(out2DDestPanel, new GridBagConstraints(1, 7, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(out2DDestOptionsPanel, new GridBagConstraints(1, 8, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-        this.add(sep4, new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
+        this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
         OnActionClickerLayoutSwitcher outAdjDestListener =
                 new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
@@ -469,7 +466,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         expertLabel.setVisible(showExpertControls);
         expertLabel.setText(expertLabelText);
         expertPanel.setVisible(showExpertControls);
-        sep1.setVisible(showExpertControls);
+        expertControlsSeparator.setVisible(showExpertControls);
         if (showExpertControls) {
             generatorCmdLine.setToolTipText("generator command");
             String toolTipText = "embed command";
