@@ -66,51 +66,30 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JTextField embed3DCmdLine = new JTextField("");
     private JCheckBox outPreFilterCheckBox = new JCheckBox();
     private JTextField outPreFilterCommand = new JTextField();
-    private JPanel outPreFilterPanel = new JPanel();
-    private JPanel outPreFilterNonePanel = new JPanel();
     private JRadioButton outPreFilterNone = new JRadioButton();
     private JRadioButton outPreFilter = new JRadioButton();
     private ButtonGroup outPreFilterGroup = new ButtonGroup();
-    private JPanel out3DDestPanel = new JPanel();
     private JCheckBox out3DCheckBox = new JCheckBox();
-    private JPanel out3DDestOptionsPanel = new JPanel();
     private ButtonGroup out3DDestGroup = new ButtonGroup();
     private JRadioButton out3DViewer = new JRadioButton();
     private JRadioButton out3DFile = new JRadioButton();
     private JRadioButton out3DNoDest = new JRadioButton();
-    private JPanel out3DNoDestPanel = new JPanel();
-    private JPanel out3DViewerPanel = new JPanel();
     private Min1ButtonGroup out3DViewerGroup = new Min1ButtonGroup("3D", false, out3DCheckBox);
-    private JPanel out3DFilePanel = new JPanel();
-    private JLabel out3DFileFormatLabel = new JLabel();
-    private EnhancedJLabel out3DFileNameLabel = new EnhancedJLabel();
     private JTextField out3DFileName = new JTextField();
     private FileFormatBox out3DFileFormat = new FileFormatBox("3D", out3DFileName);
     private JCheckBox out2DCheckBox = new JCheckBox();
     private ButtonGroup out2DDestGroup = new ButtonGroup();
     private Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
-    private JPanel out2DNoDestPanel = new JPanel();
-    private JLabel out2DFileFormatLabel = new JLabel();
     private JRadioButton out2DViewer = new JRadioButton();
-    private EnhancedJLabel out2DFileNameLabel = new EnhancedJLabel();
     private JRadioButton out2DFile = new JRadioButton();
-    private JPanel out2DDestPanel = new JPanel();
     private JTextField out2DFileName = new JTextField();
-    private JPanel out2DFilePanel = new JPanel();
-    private JPanel out2DViewerPanel = new JPanel();
-    private JPanel out2DDestOptionsPanel = new JPanel();
     private JRadioButton out2DNoDest = new JRadioButton();
     private FileFormatBox out2DFileFormat = new FileFormatBox("2D", out2DFileName);
     private ButtonGroup outAdjDestGroup = new ButtonGroup();
     private JCheckBox outAdjCheckBox = new JCheckBox();
-    private JPanel outAdjFilePanel = new JPanel();
-    private EnhancedJLabel outAdjFileNameLabel = new EnhancedJLabel();
     private JRadioButton outAdjNoDest = new JRadioButton();
     private JRadioButton outAdjFile = new JRadioButton();
-    private JPanel outAdjNoDestPanel = new JPanel();
     private JTextField outAdjFileName = new JTextField();
-    private JPanel outAdjDestOptionsPanel = new JPanel();
-    private JLabel outAdjFileFormatLabel = new JLabel();
     private FileFormatBox outAdjFileFormat = new FileFormatBox("Adjacency", outAdjFileName);
 
     private ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
@@ -193,6 +172,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         this.add(expertPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(expertControlsSeparator, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
         expertControlsGroup.addComponent(expertControlsSeparator);
+        JPanel outPreFilterPanel = new JPanel();
         OnActionClickerLayoutSwitcher outPreFilterListener =
                 new OnActionClickerLayoutSwitcher(outPreFilterCheckBox, outPreFilterPanel);
         outPreFilterCheckBox.setText("Pre-filter graphs");
@@ -220,7 +200,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outPreFilterPanel.add(outPreFilter, "");
         outPreFilterPanel.add(outPreFilterNone, "");
         outPreFilterPanel.add(outPreFilterCommand, "outPreFilter");
-        outPreFilterPanel.add(outPreFilterNonePanel, "outPreFilterNone");
+        outPreFilterPanel.add(new JPanel(), "outPreFilterNone");
         outPreFilter.setVisible(false);
         outPreFilter.setActionCommand("outPreFilter");
         outPreFilter.addActionListener(outPreFilterListener);
@@ -237,14 +217,13 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 3, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
+        JPanel out3DDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher out3DDestListener =
                 new OnActionClickerLayoutSwitcher(out3DCheckBox, out3DDestOptionsPanel);
-        out3DDestPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10 , 5));
         out3DCheckBox.setText("3D representation");
         out3DCheckBox.setMnemonic(KeyEvent.VK_3);
         out3DCheckBox.setToolTipText(ShortcutHint);
         out3DCheckBox.addActionListener(this);
-        out3DDestOptionsPanel.setLayout(new CardLayout());
         out3DViewer.setText("Viewer");
         out3DViewer.setMnemonic(KeyEvent.VK_V);
         out3DViewer.setActionCommand("out3DViewer");
@@ -261,6 +240,12 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DNoDest.setActionCommand("out3DNoDest");
         out3DNoDest.addActionListener(out3DDestListener);
         out3DNoDest.setVisible(false);
+        JLabel out3DFileFormatLabel = new JLabel("Format");
+        out3DFileFormatLabel.setLabelFor(out3DFileFormat);
+        out3DFileFormatLabel.setDisplayedMnemonic(KeyEvent.VK_O);
+        out3DFileFormatLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
+        EnhancedJLabel out3DFileNameLabel = new EnhancedJLabel("Filename");
+        JPanel out3DFilePanel = new JPanel();
         out3DFilePanel.setLayout(new BoxLayout(out3DFilePanel, BoxLayout.X_AXIS));
         out3DFilePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         out3DFilePanel.add(out3DFileNameLabel, null);
@@ -268,13 +253,8 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DFilePanel.add(Box.createHorizontalGlue());
         out3DFilePanel.add(out3DFileFormatLabel, null);
         out3DFilePanel.add(out3DFileFormat, null);
-        out3DFileFormatLabel.setLabelFor(out3DFileFormat);
-        out3DFileFormatLabel.setDisplayedMnemonic(KeyEvent.VK_O);
-        out3DFileFormatLabel.setText("Format");
-        out3DFileFormatLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
         out3DFileFormat.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         out3DFileFormat.setMaximumSize(out3DFileFormat.getPreferredSize());
-        out3DFileNameLabel.setText("Filename");
         out3DFileNameLabel.setLabelFor(out3DFileName);
         out3DFileNameLabel.setDisplayedMnemonic(KeyEvent.VK_N);
         out3DFileNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
@@ -283,8 +263,9 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DFileName.setMaximumSize(out3DFileName.getPreferredSize());
         out3DFileName.setToolTipText(FilePipeHint);
         out3DFileName.addActionListener(this);
-        out3DViewerPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        JPanel out3DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
+        JPanel out3DDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10 , 5));
         if (addViewers("3D", viewers3D, out3DViewerGroup, out3DViewerPanel) > 0) {
             out3DDestGroup.add(out3DViewer);
             out3DDestPanel.add(out3DViewer, null);
@@ -295,7 +276,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DDestGroup.add(out3DFile);
         out3DDestGroup.add(out3DNoDest);
 
-        out3DDestOptionsPanel.add(out3DNoDestPanel, "out3DNoDest");
+        out3DDestOptionsPanel.add(new JPanel(), "out3DNoDest");
         out3DDestOptionsPanel.add(out3DViewerPanel, "out3DViewer");
         out3DDestOptionsPanel.add(out3DFilePanel, "out3DFile");
         out3DDestPanel.add(out3DFile, null);
@@ -307,6 +288,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 6, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
+        JPanel out2DDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher out2DDestListener =
                 new OnActionClickerLayoutSwitcher(out2DCheckBox, out2DDestOptionsPanel);
         out2DFile.addActionListener(out2DDestListener);
@@ -315,22 +297,22 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out2DFile.setActionCommand("out2DFile");
         out2DFile.setMnemonic(KeyEvent.VK_I);
         out2DFile.setToolTipText("send 2D embeddings into a file or pipe");
-        out2DDestPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        JPanel out2DDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         out2DFileName.setColumns(15);
         out2DFileName.setMaximumSize(out2DFileName.getPreferredSize());
         out2DFileName.setToolTipText(FilePipeHint);
         out2DFileName.addActionListener(this);
+        JPanel out2DFilePanel = new JPanel();
         out2DFilePanel.setLayout(new BoxLayout(out2DFilePanel, BoxLayout.X_AXIS));
         out2DFilePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-        out2DViewerPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        out2DDestOptionsPanel.setLayout(new CardLayout());
+        JPanel out2DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         out2DNoDest.setVisible(false);
         out2DNoDest.addActionListener(out2DDestListener);
         out2DNoDest.setActionCommand("out2DNoDest");
         out2DNoDest.setText("None");
+        EnhancedJLabel out2DFileNameLabel = new EnhancedJLabel("Filename");
         out2DFileNameLabel.setDisplayedMnemonic(KeyEvent.VK_M);
         out2DFileNameLabel.setLabelFor(out2DFileName);
-        out2DFileNameLabel.setText("Filename");
         out2DFileNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         out2DFileNameLabel.setToolTipText(FilePipeHint);
         out2DViewer.addActionListener(out2DDestListener);
@@ -339,9 +321,9 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out2DViewer.setText("Viewer");
         out2DViewer.setMnemonic(KeyEvent.VK_E);
         out2DViewer.setToolTipText("send 2D embeddings to some of the installed viewers");
+        JLabel out2DFileFormatLabel = new JLabel("Format");
         out2DFileFormatLabel.setDisplayedMnemonic(KeyEvent.VK_R);
         out2DFileFormatLabel.setLabelFor(out2DFileFormat);
-        out2DFileFormatLabel.setText("Format");
         out2DFileFormatLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
         out2DFileFormat.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         out2DFileFormat.setMaximumSize(out2DFileFormat.getPreferredSize());
@@ -367,7 +349,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         out2DDestPanel.add(out2DFile, null);
         out2DDestPanel.add(out2DNoDest, null);
-        out2DDestOptionsPanel.add(out2DNoDestPanel, "out2DNoDest");
+        out2DDestOptionsPanel.add(new JPanel(), "out2DNoDest");
         out2DDestOptionsPanel.add(out2DViewerPanel, "out2DViewer");
         out2DDestOptionsPanel.add(out2DFilePanel, "out2DFile");
         new JTextComponentFocusSelector(out2DFileName);
@@ -377,14 +359,17 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
+        JPanel outAdjDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher outAdjDestListener =
                 new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
         outAdjCheckBox.setText("Adjacency information");
         outAdjCheckBox.setMnemonic(KeyEvent.VK_A);
         outAdjCheckBox.setToolTipText("send connection table into a file or pipe");
         outAdjCheckBox.addActionListener(this);
+        JPanel outAdjFilePanel = new JPanel();
         outAdjFilePanel.setLayout(new BoxLayout(outAdjFilePanel, BoxLayout.X_AXIS));
         outAdjFilePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        EnhancedJLabel outAdjFileNameLabel = new EnhancedJLabel();
         outAdjFileNameLabel.setDisplayedMnemonic(0);
         outAdjNoDest.setVisible(false);
         outAdjFile.setVisible(false);
@@ -394,8 +379,8 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outAdjFileName.setMaximumSize(outAdjFileName.getPreferredSize());
         outAdjFileName.setToolTipText(FilePipeHint);
         outAdjFileName.addActionListener(this);
+        JLabel outAdjFileFormatLabel = new JLabel("Format");
         outAdjFileFormatLabel.setLabelFor(outAdjFileFormat);
-        outAdjFileFormatLabel.setText("Format");
         outAdjFileFormatLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
         outAdjFileFormat.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         outAdjFileFormat.setMaximumSize(outAdjFileFormat.getPreferredSize());
@@ -412,7 +397,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outAdjFileNameLabel.setToolTipText(FilePipeHint);
         outAdjDestOptionsPanel.add(outAdjFile, "");
         outAdjDestOptionsPanel.add(outAdjNoDest, "");
-        outAdjDestOptionsPanel.add(outAdjNoDestPanel, "outAdjNoDest");
+        outAdjDestOptionsPanel.add(new JPanel(), "outAdjNoDest");
         outAdjDestOptionsPanel.add(outAdjFilePanel, "outAdjFile");
         outAdjFilePanel.add(outAdjFileNameLabel, null);
         outAdjFilePanel.add(outAdjFileName, null);
