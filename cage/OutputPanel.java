@@ -116,25 +116,17 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         expertLabel.setText("generator/embedders");
         expertLabel.setForeground(Color.black);
-        Font font = expertLabel.getFont();
         expertControlsGroup.addComponent(expertLabel);
-        font = new Font(
-                font.getName(),
-                font.getStyle() & ~Font.BOLD,
-                font.getSize());
         JLabel generatorLabel = new JLabel();
         generatorLabel.setText("generator");
         generatorLabel.setLabelFor(generatorCmdLine);
         generatorLabel.setDisplayedMnemonic(KeyEvent.VK_G);
         generatorControlsGroup.addComponent(generatorLabel);
-        // generatorLabel.setFont(font);
         JLabel embed2DLabel = new JLabel("2D embedder");
-        // embed2DLabel.setFont(font);
         embed2DLabel.setLabelFor(embed2DCmdLine);
         embed2DLabel.setDisplayedMnemonic(KeyEvent.VK_M);
         embedControlsGroup.addComponent(embed2DLabel);
         JLabel embed3DLabel = new JLabel("3D embedder");
-        // embed3DLabel.setFont(font);
         embed3DLabel.setLabelFor(embed3DCmdLine);
         embed3DLabel.setDisplayedMnemonic(KeyEvent.VK_B);
         embedControlsGroup.addComponent(embed3DLabel);
