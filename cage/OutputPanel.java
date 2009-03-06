@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.ComponentLogicalGroup;
 import cage.utility.GenericButtonGroup;
 import cage.utility.Min1ButtonGroup;
 import cage.utility.OnActionClicker;
@@ -59,14 +60,9 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private Vector viewers2D, viewers3D, viewersXD;
     private StringBuffer viewerErrors;
     private JButton defaultButton;
-    private JSeparator expertControlsSeparator = new JSeparator(SwingConstants.HORIZONTAL);
     private JLabel expertLabel = new JLabel();
-    private JPanel expertPanel = new JPanel();
-    private JLabel generatorLabel = new JLabel();
     private JTextField generatorCmdLine = new JTextField("");
-    private JLabel embed2DLabel = new JLabel();
     private JTextField embed2DCmdLine = new JTextField("");
-    private JLabel embed3DLabel = new JLabel();
     private JTextField embed3DCmdLine = new JTextField("");
     private JCheckBox outPreFilterCheckBox = new JCheckBox();
     private JTextField outPreFilterCommand = new JTextField();
@@ -117,6 +113,10 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JLabel outAdjFileFormatLabel = new JLabel();
     private FileFormatBox outAdjFileFormat = new FileFormatBox("Adjacency", outAdjFileName);
 
+    private ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
+    private ComponentLogicalGroup embedControlsGroup = new ComponentLogicalGroup();
+    private ComponentLogicalGroup generatorControlsGroup = new ComponentLogicalGroup();
+
     public OutputPanel() {
         this(null);
     }
@@ -139,37 +139,46 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         expertLabel.setText("generator/embedders");
         expertLabel.setForeground(Color.black);
         Font font = expertLabel.getFont();
+        expertControlsGroup.addComponent(expertLabel);
         font = new Font(
                 font.getName(),
                 font.getStyle() & ~Font.BOLD,
                 font.getSize());
+        JLabel generatorLabel = new JLabel();
         generatorLabel.setText("generator");
         generatorLabel.setLabelFor(generatorCmdLine);
         generatorLabel.setDisplayedMnemonic(KeyEvent.VK_G);
+        generatorControlsGroup.addComponent(generatorLabel);
         // generatorLabel.setFont(font);
-        embed2DLabel.setText("2D embedder");
+        JLabel embed2DLabel = new JLabel("2D embedder");
         // embed2DLabel.setFont(font);
         embed2DLabel.setLabelFor(embed2DCmdLine);
         embed2DLabel.setDisplayedMnemonic(KeyEvent.VK_M);
-        embed3DLabel.setText("3D embedder");
+        embedControlsGroup.addComponent(embed2DLabel);
+        JLabel embed3DLabel = new JLabel("3D embedder");
         // embed3DLabel.setFont(font);
         embed3DLabel.setLabelFor(embed3DCmdLine);
         embed3DLabel.setDisplayedMnemonic(KeyEvent.VK_B);
+        embedControlsGroup.addComponent(embed3DLabel);
         generatorCmdLine.setColumns(10);
         generatorCmdLine.setActionCommand("generator");
         generatorCmdLine.addActionListener(this);
         generatorCmdLine.getDocument().addDocumentListener(this);
+        generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
         embed2DCmdLine.setColumns(10);
         embed2DCmdLine.setActionCommand("e2");
         embed2DCmdLine.addActionListener(this);
         embed2DCmdLine.getDocument().addDocumentListener(this);
         new JTextComponentFocusSelector(embed2DCmdLine);
+        embedControlsGroup.addComponent(embed2DCmdLine);
         embed3DCmdLine.setColumns(10);
         embed3DCmdLine.setActionCommand("e3");
         embed3DCmdLine.addActionListener(this);
         embed3DCmdLine.getDocument().addDocumentListener(this);
         new JTextComponentFocusSelector(embed3DCmdLine);
+        embedControlsGroup.addComponent(embed3DCmdLine);
+        JPanel expertPanel = new JPanel();
         expertPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         expertPanel.setLayout(new GridBagLayout());
         expertPanel.add(generatorLabel, new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
@@ -178,10 +187,12 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
         expertPanel.add(embed3DLabel, new GridBagConstraints(0, 2, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         expertPanel.add(embed3DCmdLine, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+        expertControlsGroup.addComponent(expertPanel);
+        JSeparator expertControlsSeparator = new JSeparator(SwingConstants.HORIZONTAL);
         this.add(expertLabel, new GridBagConstraints(0, 0, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 17, 0, 10), 0, 0));
         this.add(expertPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(expertControlsSeparator, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
-
+        expertControlsGroup.addComponent(expertControlsSeparator);
         OnActionClickerLayoutSwitcher outPreFilterListener =
                 new OnActionClickerLayoutSwitcher(outPreFilterCheckBox, outPreFilterPanel);
         outPreFilterCheckBox.setText("Pre-filter graphs");
@@ -428,8 +439,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
             generatorCmdLine.setText(Systoolbox.makeCmdLine(generatorInfo.getGenerator()));
             expertLabelText += "generator";
         }
-        generatorLabel.setVisible(showGeneratorControls);
-        generatorCmdLine.setVisible(showGeneratorControls);
+        generatorControlsGroup.setVisible(showGeneratorControls);
         if (showEmbedControls) {
             if (embed2DCmdLine.getText().length() == 0 || !embedder.isConstant()) {
                 embed2DCmdLine.setText(Systoolbox.makeCmdLine(embedder.getEmbed2DNew()));
@@ -437,14 +447,9 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
             }
             expertLabelText += (expertLabelText.length() > 0 ? "/" : "") + "embedders";
         }
-        embed2DLabel.setVisible(showEmbedControls);
-        embed3DLabel.setVisible(showEmbedControls);
-        embed2DCmdLine.setVisible(showEmbedControls);
-        embed3DCmdLine.setVisible(showEmbedControls);
-        expertLabel.setVisible(showExpertControls);
+        embedControlsGroup.setVisible(showEmbedControls);
+        expertControlsGroup.setVisible(showExpertControls);
         expertLabel.setText(expertLabelText);
-        expertPanel.setVisible(showExpertControls);
-        expertControlsSeparator.setVisible(showExpertControls);
         if (showExpertControls) {
             generatorCmdLine.setToolTipText("generator command");
             String toolTipText = "embed command";
