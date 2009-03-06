@@ -17,7 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import lisken.uitoolbox.EnhancedJLabel;
+
 import lisken.uitoolbox.FlaggedJDialog;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 
@@ -66,7 +66,7 @@ public class SaveDialog extends FlaggedJDialog
     saveFilenameField = new JTextField(15);
     saveFilenameField.addActionListener(this);
     new JTextComponentFocusSelector(saveFilenameField);
-    JLabel saveFilenameLabel = new EnhancedJLabel("save in:");
+    JLabel saveFilenameLabel = new JLabel("save in:");
     saveFilenameLabel.setLabelFor(saveFilenameField);
     saveFilenameLabel.setDisplayedMnemonic(KeyEvent.VK_S);
     Font font = saveFilenameLabel.getFont();
@@ -78,7 +78,7 @@ public class SaveDialog extends FlaggedJDialog
     saveInfoField = new JTextField(15);
     saveInfoField.addActionListener(this);
     new JTextComponentFocusSelector(saveInfoField);
-    infoLabel = new EnhancedJLabel("info:");
+    infoLabel = new JLabel("info:");
     infoLabel.setFont(font);
     infoLabel.setLabelFor(saveInfoField);
     infoLabel.setDisplayedMnemonic(KeyEvent.VK_O);

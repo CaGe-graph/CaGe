@@ -48,7 +48,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import lisken.systoolbox.Systoolbox;
-import lisken.uitoolbox.EnhancedJLabel;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 import lisken.uitoolbox.UItoolbox;
 
@@ -244,7 +243,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DFileFormatLabel.setLabelFor(out3DFileFormat);
         out3DFileFormatLabel.setDisplayedMnemonic(KeyEvent.VK_O);
         out3DFileFormatLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
-        EnhancedJLabel out3DFileNameLabel = new EnhancedJLabel("Filename");
+        JLabel out3DFileNameLabel = new JLabel("Filename");
         JPanel out3DFilePanel = new JPanel();
         out3DFilePanel.setLayout(new BoxLayout(out3DFilePanel, BoxLayout.X_AXIS));
         out3DFilePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
@@ -310,7 +309,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out2DNoDest.addActionListener(out2DDestListener);
         out2DNoDest.setActionCommand("out2DNoDest");
         out2DNoDest.setText("None");
-        EnhancedJLabel out2DFileNameLabel = new EnhancedJLabel("Filename");
+        JLabel out2DFileNameLabel = new JLabel("Filename");
         out2DFileNameLabel.setDisplayedMnemonic(KeyEvent.VK_M);
         out2DFileNameLabel.setLabelFor(out2DFileName);
         out2DFileNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
@@ -369,7 +368,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         JPanel outAdjFilePanel = new JPanel();
         outAdjFilePanel.setLayout(new BoxLayout(outAdjFilePanel, BoxLayout.X_AXIS));
         outAdjFilePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-        EnhancedJLabel outAdjFileNameLabel = new EnhancedJLabel();
+        JLabel outAdjFileNameLabel = new JLabel();
         outAdjFileNameLabel.setDisplayedMnemonic(0);
         outAdjNoDest.setVisible(false);
         outAdjFile.setVisible(false);
