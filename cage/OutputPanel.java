@@ -13,7 +13,6 @@ import cage.writer.CaGeWriter;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -114,55 +113,65 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
                 BorderFactory.createEtchedBorder()),
                 BorderFactory.createEmptyBorder(20, 20, 20, 20)), " Output Options "));
 
+        //-----------expert section--------------
         expertLabel.setText("generator/embedders");
         expertLabel.setForeground(Color.black);
         expertControlsGroup.addComponent(expertLabel);
+        JPanel expertPanel = new JPanel();
+        expertPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        expertPanel.setLayout(new GridBagLayout());
+
+        //expert section: generator
         JLabel generatorLabel = new JLabel();
         generatorLabel.setText("generator");
         generatorLabel.setLabelFor(generatorCmdLine);
         generatorLabel.setDisplayedMnemonic(KeyEvent.VK_G);
         generatorControlsGroup.addComponent(generatorLabel);
-        JLabel embed2DLabel = new JLabel("2D embedder");
-        embed2DLabel.setLabelFor(embed2DCmdLine);
-        embed2DLabel.setDisplayedMnemonic(KeyEvent.VK_M);
-        embedControlsGroup.addComponent(embed2DLabel);
-        JLabel embed3DLabel = new JLabel("3D embedder");
-        embed3DLabel.setLabelFor(embed3DCmdLine);
-        embed3DLabel.setDisplayedMnemonic(KeyEvent.VK_B);
-        embedControlsGroup.addComponent(embed3DLabel);
+        expertPanel.add(generatorLabel, new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         generatorCmdLine.setColumns(10);
         generatorCmdLine.setActionCommand("generator");
         generatorCmdLine.addActionListener(this);
         generatorCmdLine.getDocument().addDocumentListener(this);
         generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
+        expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+
+        //expert section: embed 2D
+        JLabel embed2DLabel = new JLabel("2D embedder");
+        embed2DLabel.setLabelFor(embed2DCmdLine);
+        embed2DLabel.setDisplayedMnemonic(KeyEvent.VK_M);
+        embedControlsGroup.addComponent(embed2DLabel);
+        expertPanel.add(embed2DLabel, new GridBagConstraints(0, 1, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         embed2DCmdLine.setColumns(10);
         embed2DCmdLine.setActionCommand("e2");
         embed2DCmdLine.addActionListener(this);
         embed2DCmdLine.getDocument().addDocumentListener(this);
         new JTextComponentFocusSelector(embed2DCmdLine);
         embedControlsGroup.addComponent(embed2DCmdLine);
+        expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+
+        //expert section: embed 3D
+        JLabel embed3DLabel = new JLabel("3D embedder");
+        embed3DLabel.setLabelFor(embed3DCmdLine);
+        embed3DLabel.setDisplayedMnemonic(KeyEvent.VK_B);
+        embedControlsGroup.addComponent(embed3DLabel);
+        expertPanel.add(embed3DLabel, new GridBagConstraints(0, 2, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         embed3DCmdLine.setColumns(10);
         embed3DCmdLine.setActionCommand("e3");
         embed3DCmdLine.addActionListener(this);
         embed3DCmdLine.getDocument().addDocumentListener(this);
         new JTextComponentFocusSelector(embed3DCmdLine);
         embedControlsGroup.addComponent(embed3DCmdLine);
-        JPanel expertPanel = new JPanel();
-        expertPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        expertPanel.setLayout(new GridBagLayout());
-        expertPanel.add(generatorLabel, new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
-        expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
-        expertPanel.add(embed2DLabel, new GridBagConstraints(0, 1, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
-        expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
-        expertPanel.add(embed3DLabel, new GridBagConstraints(0, 2, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         expertPanel.add(embed3DCmdLine, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
         expertControlsGroup.addComponent(expertPanel);
+
         JSeparator expertControlsSeparator = new JSeparator(SwingConstants.HORIZONTAL);
+        expertControlsGroup.addComponent(expertControlsSeparator);
         this.add(expertLabel, new GridBagConstraints(0, 0, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 17, 0, 10), 0, 0));
         this.add(expertPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(expertControlsSeparator, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
-        expertControlsGroup.addComponent(expertControlsSeparator);
+
+        //-----------prefilter section--------------
         JPanel outPreFilterPanel = new JPanel();
         OnActionClickerLayoutSwitcher outPreFilterListener =
                 new OnActionClickerLayoutSwitcher(outPreFilterCheckBox, outPreFilterPanel);
@@ -208,6 +217,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 3, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
+        //-----------3D section--------------
         JPanel out3DDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher out3DDestListener =
                 new OnActionClickerLayoutSwitcher(out3DCheckBox, out3DDestOptionsPanel);
@@ -279,6 +289,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 6, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
+        //-----------2D section--------------
         JPanel out2DDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher out2DDestListener =
                 new OnActionClickerLayoutSwitcher(out2DCheckBox, out2DDestOptionsPanel);
@@ -350,6 +361,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
 
+        //-----------Adjacency section--------------
         JPanel outAdjDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher outAdjDestListener =
                 new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
