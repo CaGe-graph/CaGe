@@ -4,7 +4,7 @@ package lisken.systoolbox;
 
 public class Integer2 implements Comparable
 {
-  public int value;
+  private int value;
 
   public Integer2 (int n)
   {

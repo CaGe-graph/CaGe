@@ -400,7 +400,8 @@ public class TwoView
      42.520 + vertexRadius, 658.493 - vertexRadius);
     // A4 page, 1.5 cm margin each side, another 5 cm clear on top
     painter.setGraph(result.graph);
-    savePS("\n%%Page: " + result.graphNo + " " + (++psPageNo.value) + "\n");
+    psPageNo.setValue(psPageNo.intValue()+1);
+    savePS("\n%%Page: " + result.graphNo + " " + psPageNo.intValue() + "\n");
     FloatingPoint[] box = painter.getBoundingBox();
     savePS("%%BoundingBox: "
      + (float) (box[0].x - vertexRadius) + " "

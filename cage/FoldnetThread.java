@@ -67,11 +67,12 @@ public class FoldnetThread extends Thread
       pageNo = new Integer2(0);
       foldnetPageNos.put(task.filename, pageNo);
     }
-    boolean append = pageNo.value > 0;
+    boolean append = pageNo.intValue() > 0;
+    pageNo.setValue(pageNo.intValue()+1);
     String command = "mkfoldnet"
      + (task.maxFacesize > 0 ? " -s " + task.maxFacesize : "")
      + (append ? " -n" : "")
-     + " -p " + task.result.graphNo + " " + ++pageNo.value;
+     + " -p " + task.result.graphNo + " " + pageNo.intValue();
     try {
       if (task.filename.trim().charAt(0) == '|') {
 	command += task.filename;
@@ -119,7 +120,7 @@ public class FoldnetThread extends Thread
       ++tasksCompleted;
       if (status != 0) {
 	++tasksFailed;
-	--pageNo.value;
+	pageNo.setValue(pageNo.intValue()-1);
       }
     }
     if (debug) System.err.println("firing ...");
@@ -145,11 +146,11 @@ public class FoldnetThread extends Thread
     {
       String filename = (String) files.nextElement();
       Integer2 pages = (Integer2) foldnetPageNos.get(filename);
-      if (pages.value > 0) {
+      if (pages.intValue() > 0) {
 	FileWriter file = null;
 	try {
 	  file = new FileWriter(filename, true);
-	  file.write("\n%%Pages: " + pages.value + "\n%%EOF\n\n");
+	  file.write("\n%%Pages: " + pages.intValue() + "\n%%EOF\n\n");
 	  file.close();
 	} catch (IOException ex) {
 	}
