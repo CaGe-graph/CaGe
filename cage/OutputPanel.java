@@ -197,10 +197,10 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         });
         outPreFilterPanel.setLayout(new CardLayout());
         outPreFilterPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        outPreFilterPanel.add(outPreFilter, "");
+        outPreFilterPanel.add(outPreFilter, "outPreFilterNone");
         outPreFilterPanel.add(outPreFilterNone, "");
         outPreFilterPanel.add(outPreFilterCommand, "outPreFilter");
-        outPreFilterPanel.add(new JPanel(), "outPreFilterNone");
+        //outPreFilterPanel.add(new JPanel(), "outPreFilterNone");
         outPreFilter.setVisible(false);
         outPreFilter.setActionCommand("outPreFilter");
         outPreFilter.addActionListener(outPreFilterListener);
