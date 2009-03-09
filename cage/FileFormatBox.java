@@ -16,10 +16,10 @@ import lisken.systoolbox.Systoolbox;
 
 public class FileFormatBox extends JComboBox implements ActionListener {
 
-    Vector writers = new Vector();
-    int dimension = 0;
-    JTextComponent filenameField;
-    String oldExtension;
+    private Vector writers = new Vector();
+    private int dimension = 0;
+    private JTextComponent filenameField;
+    private String oldExtension;
 
     public FileFormatBox(String variety, JTextComponent filenameField) {
         this.filenameField = filenameField;
@@ -44,7 +44,7 @@ public class FileFormatBox extends JComboBox implements ActionListener {
         oldExtension = getCaGeWriter().getFileExtension();
     }
 
-    CaGeWriter createCaGeWriter(String format) {
+    private CaGeWriter createCaGeWriter(String format) {
         CaGeWriter writer;
         writer = WriterFactory.createCaGeWriter(format);
         if (dimension > 0) {
