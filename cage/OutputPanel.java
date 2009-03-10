@@ -65,9 +65,6 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
     private JCheckBox outPreFilterCheckBox = new JCheckBox();
     private JTextField outPreFilterCommand = new JTextField();
-    private JRadioButton outPreFilterNone = new JRadioButton();
-    private JRadioButton outPreFilter = new JRadioButton();
-    private ButtonGroup outPreFilterGroup = new ButtonGroup();
 
     private JCheckBox out3DCheckBox = new JCheckBox();
     private ButtonGroup out3DDestGroup = new ButtonGroup();
@@ -178,8 +175,6 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         //-----------prefilter section--------------
         JPanel outPreFilterPanel = new JPanel();
-        OnActionClickerLayoutSwitcher outPreFilterListener =
-                new OnActionClickerLayoutSwitcher(outPreFilterCheckBox, outPreFilterPanel);
         outPreFilterCheckBox.setText("Pre-filter graphs");
         outPreFilterCheckBox.setMnemonic(KeyEvent.VK_P);
         outPreFilterCheckBox.setToolTipText(FilterHint);
@@ -188,35 +183,29 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outPreFilterCommand.setColumns(30);
         new JTextComponentFocusSelector(outPreFilterCommand);
         outPreFilterCommand.setToolTipText(FilterHint);
-        outPreFilterCommand.addFocusListener(new FocusListener() {
+        outPreFilterCommand.getDocument().addDocumentListener(new DocumentListener() {
 
-            public void focusGained(FocusEvent e) {
+            public void insertUpdate(DocumentEvent e) {
+                verifyCheckBox();
             }
 
-            public void focusLost(FocusEvent e) {
-                outPreFilterCommand.setText(outPreFilterCommand.getText().trim());
-                if (outPreFilterCommand.getText().length() == 0 && !outPreFilterCheckBox.hasFocus()) {
-                    outPreFilterCheckBox.doClick();
-                }
+            public void removeUpdate(DocumentEvent e) {
+                verifyCheckBox();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                verifyCheckBox();
+            }
+
+            private void verifyCheckBox(){
+                if(outPreFilterCommand.getText().trim().length()==0)
+                    outPreFilterCheckBox.setSelected(false);
+                else
+                    outPreFilterCheckBox.setSelected(true);
             }
         });
-        outPreFilterPanel.setLayout(new CardLayout());
         outPreFilterPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        outPreFilterPanel.add(outPreFilter, "outPreFilterNone");
-        outPreFilterPanel.add(outPreFilterNone, "");
-        outPreFilterPanel.add(outPreFilterCommand, "outPreFilter");
-        //outPreFilterPanel.add(new JPanel(), "outPreFilterNone");
-        outPreFilter.setVisible(false);
-        outPreFilter.setActionCommand("outPreFilter");
-        outPreFilter.addActionListener(outPreFilterListener);
-        outPreFilter.setText("Pipe");
-        outPreFilterNone.setVisible(false);
-        outPreFilterNone.addActionListener(outPreFilterListener);
-        outPreFilterNone.setActionCommand("outPreFilterNone");
-        outPreFilterNone.setText("None");
-        outPreFilterGroup.add(outPreFilter);
-        outPreFilterGroup.add(outPreFilterNone);
-        new OnActionClicker(outPreFilter, outPreFilterNone, outPreFilterCheckBox);
+        outPreFilterPanel.add(outPreFilterCommand, null);
         this.add(outPreFilterCheckBox, new GridBagConstraints(0, 2, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
         this.add(outPreFilterPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -558,7 +547,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     }
 
     public String[][] getPreFilter() {
-        if (outPreFilter.isSelected()) {
+        if (outPreFilterCheckBox.isSelected()) {
             return Systoolbox.parseCmdLine(outPreFilterCommand.getText());
         } else {
             return null;
