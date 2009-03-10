@@ -14,15 +14,26 @@ import javax.swing.text.JTextComponent;
 
 import lisken.systoolbox.Systoolbox;
 
+/**
+ * Combobox for selecting a file format. This component is connected
+ * with a textfield of which the name is altered based on the selected
+ * file format.
+ */
 public class FileFormatBox extends JComboBox implements ActionListener {
 
     private Vector writers = new Vector();
     private int dimension = 0;
     private JTextComponent filenameField;
     private String oldExtension;
+    private boolean addExtension;
 
     public FileFormatBox(String variety, JTextComponent filenameField) {
+        this(variety, filenameField, true);
+    }
+
+    public FileFormatBox(String variety, JTextComponent filenameField, boolean addExtension) {
         this.filenameField = filenameField;
+        this.addExtension = addExtension;
         char firstChar = variety.charAt(0);
         if (Character.isDigit(firstChar)) {
             dimension = firstChar - '0';
@@ -57,9 +68,12 @@ public class FileFormatBox extends JComboBox implements ActionListener {
         return (CaGeWriter) writers.elementAt(getSelectedIndex());
     }
 
+    /**
+     * Add an extension to the content of the corresponding text field.
+     */
     public void addExtension() {
         String currentName = filenameField.getText();
-        if (currentName.trim().startsWith("|")) {
+        if (currentName.trim().startsWith("|") || !addExtension) {
             return;
         }
         CaGeWriter writer = getCaGeWriter();
