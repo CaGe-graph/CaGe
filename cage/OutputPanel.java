@@ -62,11 +62,13 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JTextField generatorCmdLine = new JTextField("");
     private JTextField embed2DCmdLine = new JTextField("");
     private JTextField embed3DCmdLine = new JTextField("");
+
     private JCheckBox outPreFilterCheckBox = new JCheckBox();
     private JTextField outPreFilterCommand = new JTextField();
     private JRadioButton outPreFilterNone = new JRadioButton();
     private JRadioButton outPreFilter = new JRadioButton();
     private ButtonGroup outPreFilterGroup = new ButtonGroup();
+
     private JCheckBox out3DCheckBox = new JCheckBox();
     private ButtonGroup out3DDestGroup = new ButtonGroup();
     private JRadioButton out3DViewer = new JRadioButton();
@@ -76,6 +78,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private Min1ButtonGroup out3DViewerGroup = new Min1ButtonGroup("3D", false, out3DCheckBox);
     private TargetPanel out3DFilePanel = TargetPanel.creatFilePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
     private TargetPanel out3DPipePanel = TargetPanel.creatPipePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
+    
     private JCheckBox out2DCheckBox = new JCheckBox();
     private ButtonGroup out2DDestGroup = new ButtonGroup();
     private Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
@@ -84,6 +87,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JTextField out2DFileName = new JTextField();
     private JRadioButton out2DNoDest = new JRadioButton();
     private FileFormatBox out2DFileFormat = new FileFormatBox("2D", out2DFileName);
+    
     private ButtonGroup outAdjDestGroup = new ButtonGroup();
     private JCheckBox outAdjCheckBox = new JCheckBox();
     private JRadioButton outAdjNoDest = new JRadioButton();
