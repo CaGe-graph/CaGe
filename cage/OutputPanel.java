@@ -485,7 +485,10 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         someFile =
                 outAdjFile.isSelected() ||
                 out2DFile.isSelected() ||
-                out3DFile.isSelected();
+                out3DFile.isSelected() ||
+                outAdjPipe.isSelected() ||
+                out2DPipe.isSelected() ||
+                out3DPipe.isSelected();
         defaultButton.setEnabled(someViewer ^ someFile);
         defaultButton.setToolTipText(
                 defaultButton.isEnabled() ? "start generation process (Return)" : someFile | someViewer ? "don't mix viewer and file output" : "choose some output options and press Return");
