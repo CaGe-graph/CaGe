@@ -629,16 +629,22 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         ButtonModel dest;
         Vector writeDests = new Vector();
         dest = outAdjDestGroup.getSelection();
-        if (dest == outAdjFile.getModel()) {
+        if (outAdjFile.getModel().equals(dest)) {
             writeDests.addElement(outAdjFilePanel.getTargetName());
+        } else if(outAdjPipe.getModel().equals(dest)){
+            writeDests.addElement(outAdjPipePanel.getTargetName());
         }
         dest = out2DDestGroup.getSelection();
-        if (dest == out2DFile.getModel()) {
+        if (out2DFile.getModel().equals(dest)) {
             writeDests.addElement(out2DFilePanel.getTargetName());
+        } else if(out2DPipe.getModel().equals(dest)){
+            writeDests.addElement(out2DPipePanel.getTargetName());
         }
         dest = out3DDestGroup.getSelection();
-        if (dest == out3DFile.getModel()) {
+        if (out3DFile.getModel().equals(dest)) {
             writeDests.addElement(out3DFilePanel.getTargetName());
+        } else if(out3DPipe.getModel().equals(dest)){
+            writeDests.addElement(out3DPipePanel.getTargetName());
         }
         return writeDests;
     }
