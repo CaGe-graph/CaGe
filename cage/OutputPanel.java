@@ -351,7 +351,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outAdjFile.setToolTipText("send connection table into a file");
         outAdjPipe.setText("Pipe");
         outAdjPipe.setMnemonic(KeyEvent.VK_P);
-        outAdjPipe.setActionCommand("out2DPipe");
+        outAdjPipe.setActionCommand("outAdjPipe");
         outAdjPipe.addActionListener(outAdjDestListener);
         outAdjPipe.addActionListener(this);
         outAdjPipe.setToolTipText("send connection table into a pipe");
