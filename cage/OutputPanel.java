@@ -86,12 +86,13 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private TargetPanel out2DFilePanel = TargetPanel.creatFilePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
     private TargetPanel out2DPipePanel = TargetPanel.creatPipePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
     
-    private ButtonGroup outAdjDestGroup = new ButtonGroup();
     private JCheckBox outAdjCheckBox = new JCheckBox();
-    private JRadioButton outAdjNoDest = new JRadioButton();
+    private ButtonGroup outAdjDestGroup = new ButtonGroup();
     private JRadioButton outAdjFile = new JRadioButton();
-    private JTextField outAdjFileName = new JTextField();
-    private FileFormatBox outAdjFileFormat = new FileFormatBox("Adjacency", outAdjFileName);
+    private JRadioButton outAdjPipe = new JRadioButton();
+    private JRadioButton outAdjNoDest = new JRadioButton();
+    private TargetPanel outAdjFilePanel = TargetPanel.creatFilePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
+    private TargetPanel outAdjPipePanel = TargetPanel.creatFilePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
 
     private ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
     private ComponentLogicalGroup embedControlsGroup = new ComponentLogicalGroup();
@@ -333,58 +334,50 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         this.add(out2DDestOptionsPanel, new GridBagConstraints(1, 8, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
-        
+
         //-----------Adjacency section--------------
         JPanel outAdjDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher outAdjDestListener =
                 new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
         outAdjCheckBox.setText("Adjacency information");
         outAdjCheckBox.setMnemonic(KeyEvent.VK_A);
-        outAdjCheckBox.setToolTipText("send connection table into a file or pipe");
+        outAdjCheckBox.setToolTipText("send connection table into a file or a pipe");
         outAdjCheckBox.addActionListener(this);
-        JPanel outAdjFilePanel = new JPanel();
-        outAdjFilePanel.setLayout(new BoxLayout(outAdjFilePanel, BoxLayout.X_AXIS));
-        outAdjFilePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-        JLabel outAdjFileNameLabel = new JLabel();
-        outAdjFileNameLabel.setDisplayedMnemonic(0);
-        outAdjNoDest.setVisible(false);
-        outAdjFile.setVisible(false);
-        outAdjDestGroup.add(outAdjFile);
-        outAdjDestGroup.add(outAdjNoDest);
-        outAdjFileName.setColumns(15);
-        outAdjFileName.setMaximumSize(outAdjFileName.getPreferredSize());
-        outAdjFileName.setToolTipText(FilePipeHint);
-        outAdjFileName.addActionListener(this);
-        JLabel outAdjFileFormatLabel = new JLabel("Format");
-        outAdjFileFormatLabel.setLabelFor(outAdjFileFormat);
-        outAdjFileFormatLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
-        outAdjFileFormat.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        outAdjFileFormat.setMaximumSize(outAdjFileFormat.getPreferredSize());
-        outAdjDestOptionsPanel.setLayout(new CardLayout());
-        outAdjFile.addActionListener(outAdjDestListener);
+        outAdjFile.setText("File");
+        outAdjFile.setMnemonic(KeyEvent.VK_L);
         outAdjFile.setActionCommand("outAdjFile");
-        outAdjFile.setText("File/Pipe");
-        outAdjNoDest.addActionListener(outAdjDestListener);
-        outAdjNoDest.setActionCommand("outAdjNoDest");
+        outAdjFile.addActionListener(outAdjDestListener);
+        outAdjFile.addActionListener(this);
+        outAdjFile.setToolTipText("send connection table into a file");
+        outAdjPipe.setText("Pipe");
+        outAdjPipe.setMnemonic(KeyEvent.VK_P);
+        outAdjPipe.setActionCommand("out2DPipe");
+        outAdjPipe.addActionListener(outAdjDestListener);
+        outAdjPipe.addActionListener(this);
+        outAdjPipe.setToolTipText("send connection table into a pipe");
         outAdjNoDest.setText("None");
-        outAdjFileNameLabel.setLabelFor(outAdjFileName);
-        outAdjFileNameLabel.setText("Filename");
-        outAdjFileNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        outAdjFileNameLabel.setToolTipText(FilePipeHint);
-        outAdjDestOptionsPanel.add(outAdjFile, "");
-        outAdjDestOptionsPanel.add(outAdjNoDest, "");
+        outAdjNoDest.setActionCommand("outAdjNoDest");
+        outAdjNoDest.addActionListener(outAdjDestListener);
+        outAdjNoDest.setVisible(false);
+
+        outAdjFilePanel.addActionListener(this);
+
+        JPanel outAdjDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10 , 5));
+        new OnActionClicker(outAdjFile, outAdjNoDest, outAdjCheckBox);
+        outAdjDestGroup.add(outAdjFile);
+        outAdjDestGroup.add(outAdjPipe);
+        outAdjDestGroup.add(outAdjNoDest);
+
         outAdjDestOptionsPanel.add(new JPanel(), "outAdjNoDest");
         outAdjDestOptionsPanel.add(outAdjFilePanel, "outAdjFile");
-        outAdjFilePanel.add(outAdjFileNameLabel, null);
-        outAdjFilePanel.add(outAdjFileName, null);
-        outAdjFilePanel.add(Box.createHorizontalGlue());
-        outAdjFilePanel.add(outAdjFileFormatLabel, null);
-        outAdjFilePanel.add(outAdjFileFormat, null);
-        new OnActionClicker(outAdjFile, outAdjNoDest, outAdjCheckBox);
-        new JTextComponentFocusSelector(outAdjFileName);
-        this.add(outAdjCheckBox, new GridBagConstraints(0, 10, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
-        this.add(outAdjDestOptionsPanel, new GridBagConstraints(1, 10, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        outAdjDestOptionsPanel.add(outAdjPipePanel, "outAdjPipe");
+        outAdjDestPanel.add(outAdjFile, null);
+        outAdjDestPanel.add(outAdjPipe, null);
+        outAdjDestPanel.add(outAdjNoDest, null);
 
+        this.add(outAdjCheckBox, new GridBagConstraints(0, 10, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
+        this.add(outAdjDestPanel, new GridBagConstraints(1, 10, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        this.add(outAdjDestOptionsPanel, new GridBagConstraints(1, 11, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
     }
 
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
@@ -431,8 +424,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         String filename = generatorInfo.getFilename();
         out2DFilePanel.setTargetName(filename);
         out3DFilePanel.setTargetName(filename);
-        outAdjFileName.setText(filename);
-        outAdjFileFormat.addExtension();
+        outAdjFilePanel.setTargetName(filename);
     }
 
     public GeneratorInfo getGeneratorInfo() {
@@ -601,8 +593,10 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         ButtonModel dest;
         Vector writers = new Vector();
         dest = outAdjDestGroup.getSelection();
-        if (dest == outAdjFile.getModel()) {
-            addWriter(writers, outAdjFileFormat, 0);
+        if (outAdjFile.getModel().equals(dest)) {
+            addWriter(writers, outAdjFilePanel, 0);
+        } else if (outAdjPipe.getModel().equals(dest)){
+            addWriter(writers, outAdjPipePanel, 0);
         }
         dest = out2DDestGroup.getSelection();
         if (out2DFile.getModel().equals(dest)) {
@@ -636,7 +630,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         Vector writeDests = new Vector();
         dest = outAdjDestGroup.getSelection();
         if (dest == outAdjFile.getModel()) {
-            writeDests.addElement(outAdjFileName.getText());
+            writeDests.addElement(outAdjFilePanel.getTargetName());
         }
         dest = out2DDestGroup.getSelection();
         if (dest == out2DFile.getModel()) {
