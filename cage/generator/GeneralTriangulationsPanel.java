@@ -22,8 +22,7 @@ import javax.swing.JRadioButton;
 
 import lisken.uitoolbox.EnhancedSlider;
 
-class GeneralTriangulationsPanel extends GeneratorPanel
-        implements ActionListener {
+class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListener {
 
     //The minimum number of vertices allowed for this generator
     public static final int MIN_VERTICES = 4;
@@ -42,7 +41,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel
     private AbstractButton[] connButton = new AbstractButton[3];
     //checkbox to generate only graphs with exactly the minimum connectivity
     private JCheckBox exactConn;
-    
+
     public GeneralTriangulationsPanel() {
         setLayout(new GridBagLayout());
         verticesSlider = new EnhancedSlider();
