@@ -1,11 +1,9 @@
-
 package cage;
 
 import java.beans.PropertyChangeListener;
 
+public interface GeneratorListener extends PropertyChangeListener {
 
-public interface GeneratorListener extends PropertyChangeListener
-{
-  void showException(Exception e, String context);
+    void showException(Exception e, String context);
 }
 
