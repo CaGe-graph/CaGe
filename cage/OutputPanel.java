@@ -92,7 +92,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JRadioButton outAdjPipe = new JRadioButton();
     private JRadioButton outAdjNoDest = new JRadioButton();
     private TargetPanel outAdjFilePanel = TargetPanel.creatFilePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
-    private TargetPanel outAdjPipePanel = TargetPanel.creatFilePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
+    private TargetPanel outAdjPipePanel = TargetPanel.creatPipePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
 
     private ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
     private ComponentLogicalGroup embedControlsGroup = new ComponentLogicalGroup();
