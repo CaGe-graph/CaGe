@@ -78,12 +78,13 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     
     private JCheckBox out2DCheckBox = new JCheckBox();
     private ButtonGroup out2DDestGroup = new ButtonGroup();
-    private Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
     private JRadioButton out2DViewer = new JRadioButton();
     private JRadioButton out2DFile = new JRadioButton();
-    private JTextField out2DFileName = new JTextField();
+    private JRadioButton out2DPipe = new JRadioButton();
     private JRadioButton out2DNoDest = new JRadioButton();
-    private FileFormatBox out2DFileFormat = new FileFormatBox("2D", out2DFileName);
+    private Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
+    private TargetPanel out2DFilePanel = TargetPanel.creatFilePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
+    private TargetPanel out2DPipePanel = TargetPanel.creatPipePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
     
     private ButtonGroup outAdjDestGroup = new ButtonGroup();
     private JCheckBox outAdjCheckBox = new JCheckBox();
@@ -265,7 +266,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DDestPanel.add(out3DFile, null);
         out3DDestPanel.add(out3DPipe, null);
         out3DDestPanel.add(out3DNoDest, null);
-        
+
         this.add(out3DCheckBox, new GridBagConstraints(0, 4, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
         this.add(out3DDestPanel, new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(out3DDestOptionsPanel, new GridBagConstraints(1, 5, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -276,52 +277,38 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         JPanel out2DDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher out2DDestListener =
                 new OnActionClickerLayoutSwitcher(out2DCheckBox, out2DDestOptionsPanel);
-        out2DFile.addActionListener(out2DDestListener);
-        out2DFile.addActionListener(this);
-        out2DFile.setText("File/Pipe");
-        out2DFile.setActionCommand("out2DFile");
-        out2DFile.setMnemonic(KeyEvent.VK_I);
-        out2DFile.setToolTipText("send 2D embeddings into a file or pipe");
-        JPanel out2DDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        out2DFileName.setColumns(15);
-        out2DFileName.setMaximumSize(out2DFileName.getPreferredSize());
-        out2DFileName.setToolTipText(FilePipeHint);
-        out2DFileName.addActionListener(this);
-        JPanel out2DFilePanel = new JPanel();
-        out2DFilePanel.setLayout(new BoxLayout(out2DFilePanel, BoxLayout.X_AXIS));
-        out2DFilePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-        JPanel out2DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        out2DNoDest.setVisible(false);
-        out2DNoDest.addActionListener(out2DDestListener);
-        out2DNoDest.setActionCommand("out2DNoDest");
-        out2DNoDest.setText("None");
-        JLabel out2DFileNameLabel = new JLabel("Filename");
-        out2DFileNameLabel.setDisplayedMnemonic(KeyEvent.VK_M);
-        out2DFileNameLabel.setLabelFor(out2DFileName);
-        out2DFileNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        out2DFileNameLabel.setToolTipText(FilePipeHint);
-        out2DViewer.addActionListener(out2DDestListener);
-        out2DViewer.addActionListener(this);
-        out2DViewer.setActionCommand("out2DViewer");
-        out2DViewer.setText("Viewer");
-        out2DViewer.setMnemonic(KeyEvent.VK_E);
-        out2DViewer.setToolTipText("send 2D embeddings to some of the installed viewers");
-        JLabel out2DFileFormatLabel = new JLabel("Format");
-        out2DFileFormatLabel.setDisplayedMnemonic(KeyEvent.VK_R);
-        out2DFileFormatLabel.setLabelFor(out2DFileFormat);
-        out2DFileFormatLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
-        out2DFileFormat.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        out2DFileFormat.setMaximumSize(out2DFileFormat.getPreferredSize());
-        out2DFilePanel.add(out2DFileNameLabel, null);
-        out2DFilePanel.add(out2DFileName, null);
-        out2DFilePanel.add(Box.createHorizontalGlue());
-        out2DFilePanel.add(out2DFileFormatLabel, null);
-        out2DFilePanel.add(out2DFileFormat, null);
         out2DCheckBox.setText("2D representation");
         out2DCheckBox.setMnemonic(KeyEvent.VK_2);
         out2DCheckBox.setToolTipText(ShortcutHint);
         out2DCheckBox.addActionListener(this);
+        out2DViewer.setText("Viewer");
+        out2DViewer.setMnemonic(KeyEvent.VK_E);
+        out2DViewer.setActionCommand("out2DViewer");
+        out2DViewer.addActionListener(out2DDestListener);
+        out2DViewer.addActionListener(this);
+        out2DViewer.setToolTipText("send 2D embeddings to some of the installed viewers");
+        out2DFile.setText("File");
+        out2DFile.setMnemonic(KeyEvent.VK_I);
+        out2DFile.setActionCommand("out2DFile");
+        out2DFile.addActionListener(out2DDestListener);
+        out2DFile.addActionListener(this);
+        out2DFile.setToolTipText("send 2D embeddings into a file");
+        out2DPipe.setText("Pipe");
+        out2DPipe.setMnemonic(KeyEvent.VK_P);
+        out2DPipe.setActionCommand("out2DPipe");
+        out2DPipe.addActionListener(out2DDestListener);
+        out2DPipe.addActionListener(this);
+        out2DPipe.setToolTipText("send 2D embeddings into a pipe");
+        out2DNoDest.setText("None");
+        out2DNoDest.setActionCommand("out2DNoDest");
+        out2DNoDest.addActionListener(out2DDestListener);
+        out2DNoDest.setVisible(false);
 
+        out2DFilePanel.addActionListener(this);
+
+        JPanel out2DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+
+        JPanel out2DDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10 , 5));
         if (addViewers("2D", viewers2D, out2DViewerGroup, out2DViewerPanel) > 0) {
             out2DDestGroup.add(out2DViewer);
             out2DDestPanel.add(out2DViewer, null);
@@ -330,20 +317,23 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
             new OnActionClicker(out2DFile, out2DNoDest, out2DCheckBox);
         }
         out2DDestGroup.add(out2DFile);
+        out2DDestGroup.add(out2DPipe);
         out2DDestGroup.add(out2DNoDest);
 
-        out2DDestPanel.add(out2DFile, null);
-        out2DDestPanel.add(out2DNoDest, null);
         out2DDestOptionsPanel.add(new JPanel(), "out2DNoDest");
         out2DDestOptionsPanel.add(out2DViewerPanel, "out2DViewer");
         out2DDestOptionsPanel.add(out2DFilePanel, "out2DFile");
-        new JTextComponentFocusSelector(out2DFileName);
+        out2DDestOptionsPanel.add(out2DPipePanel, "out2DPipe");
+        out2DDestPanel.add(out2DFile, null);
+        out2DDestPanel.add(out2DPipe, null);
+        out2DDestPanel.add(out2DNoDest, null);
+
         this.add(out2DCheckBox, new GridBagConstraints(0, 7, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
         this.add(out2DDestPanel, new GridBagConstraints(1, 7, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(out2DDestOptionsPanel, new GridBagConstraints(1, 8, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 9, GridBagConstraints.REMAINDER, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(20, 0, 20, 10), 0, 0));
-
+        
         //-----------Adjacency section--------------
         JPanel outAdjDestOptionsPanel = new JPanel(new CardLayout());
         OnActionClickerLayoutSwitcher outAdjDestListener =
@@ -439,8 +429,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
             embed3DCmdLine.setToolTipText("3D " + toolTipText);
         }
         String filename = generatorInfo.getFilename();
-        out2DFileName.setText(filename);
-        out2DFileFormat.addExtension();
+        out2DFilePanel.setTargetName(filename);
         out3DFilePanel.setTargetName(filename);
         outAdjFileName.setText(filename);
         outAdjFileFormat.addExtension();
@@ -616,8 +605,10 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
             addWriter(writers, outAdjFileFormat, 0);
         }
         dest = out2DDestGroup.getSelection();
-        if (dest == out2DFile.getModel()) {
-            addWriter(writers, out2DFileFormat, 2);
+        if (out2DFile.getModel().equals(dest)) {
+            addWriter(writers, out2DFilePanel, 2);
+        } else if (out2DPipe.getModel().equals(dest)){
+            addWriter(writers, out2DPipePanel, 2);
         }
         dest = out3DDestGroup.getSelection();
         if (out3DFile.getModel().equals(dest)) {
@@ -649,7 +640,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         }
         dest = out2DDestGroup.getSelection();
         if (dest == out2DFile.getModel()) {
-            writeDests.addElement(out2DFileName.getText());
+            writeDests.addElement(out2DFilePanel.getTargetName());
         }
         dest = out3DDestGroup.getSelection();
         if (dest == out3DFile.getModel()) {
