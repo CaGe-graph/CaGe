@@ -34,7 +34,7 @@ import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.UItoolbox;
 import lisken.uitoolbox.Wizard;
 import lisken.uitoolbox.WizardStage;
-import org.SysInfo;
+import util.SysInfo;
 
 public class CaGe implements ActionListener {
 

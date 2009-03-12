@@ -12,7 +12,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
-import org.SysInfo;
+import util.SysInfo;
 
 
 public class Systoolbox
