@@ -61,7 +61,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.SpinButton;
@@ -289,12 +289,12 @@ public class TwoView
     title.setText(graphComment);
     savePSDialog.setInfo(graphComment);
     savePSButton.setSelected(result.saved2DPS > 0);
-    String filename = (String) psFilenames.get(new Integer2(graphNo));
+    String filename = (String) psFilenames.get(new MutableInteger(graphNo));
     if (filename == null && previousResult != null) {
       String previousFilename, previousNumber;
       int p;
       previousFilename =
-       (String) psFilenames.get(new Integer2(previousResult.graphNo));
+       (String) psFilenames.get(new MutableInteger(previousResult.graphNo));
       if (previousFilename == null) {
 	previousFilename = savePSDialog.getFilename();
       }
@@ -338,7 +338,7 @@ public class TwoView
       try {
 	savePSStream = Systoolbox.createOutputStream(
 	 psFilename, CaGe.config.getProperty("CaGe.Generators.RunDir"), true);
-	savePS("\n\n%%Pages: " + ((Integer2) psPageNos.get(psFilename)).intValue() + "\n");
+	savePS("\n\n%%Pages: " + ((MutableInteger) psPageNos.get(psFilename)).intValue() + "\n");
 	savePS("%%EOF\n\n");
 	savePSStream.close();
       } catch (Exception ex) {
@@ -355,7 +355,7 @@ public class TwoView
   public void savePostScript()
   {
     String psFilename = savePSDialog.getFilename();
-    Integer2 psPageNo = (Integer2) psPageNos.get(psFilename);
+    MutableInteger psPageNo = (MutableInteger) psPageNos.get(psFilename);
     boolean append = (psPageNo != null);
     try {
       savePSStream = Systoolbox.createOutputStream(
@@ -387,7 +387,7 @@ public class TwoView
 	  savePSStream = null;
 	}
       }
-      psPageNo = new Integer2(0);
+      psPageNo = new MutableInteger(0);
     }
     if (savePSStream == null) return;
 
@@ -440,7 +440,7 @@ public class TwoView
     }
     savePSStream = null;
     result.saved2DPS += 1;
-    psFilenames.put(new Integer2(result.graphNo), psFilename);
+    psFilenames.put(new MutableInteger(result.graphNo), psFilename);
   }
 
 /*

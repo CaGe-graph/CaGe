@@ -42,7 +42,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 import lisken.uitoolbox.NumberDocument;
@@ -393,7 +393,7 @@ public class ResultPanel extends JPanel implements
 
   public void setStatus(String statusText, int statusLevel)
   {
-    statusMap.put(new Integer2(statusLevel), statusText);
+    statusMap.put(new MutableInteger(statusLevel), statusText);
     updateStatus();
   }
 
@@ -404,7 +404,7 @@ public class ResultPanel extends JPanel implements
 
   public void clearStatus(int statusLevel, boolean update)
   {
-    statusMap.remove(new Integer2(statusLevel));
+    statusMap.remove(new MutableInteger(statusLevel));
     if (update) updateStatus();
   }
 

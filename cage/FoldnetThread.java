@@ -9,7 +9,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 import lisken.systoolbox.BufferedFDOutputStream;
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.MessageQueue;
 import lisken.systoolbox.Pipe;
 import lisken.systoolbox.Systoolbox;
@@ -59,9 +59,9 @@ public class FoldnetThread extends Thread {
     }
 
     private void processTask() {
-        Integer2 pageNo;
-        if ((pageNo = (Integer2) foldnetPageNos.get(task.filename)) == null) {
-            pageNo = new Integer2(0);
+        MutableInteger pageNo;
+        if ((pageNo = (MutableInteger) foldnetPageNos.get(task.filename)) == null) {
+            pageNo = new MutableInteger(0);
             foldnetPageNos.put(task.filename, pageNo);
         }
         boolean append = pageNo.intValue() > 0;
@@ -138,7 +138,7 @@ public class FoldnetThread extends Thread {
         Enumeration files = foldnetPageNos.keys();
         while (files.hasMoreElements()) {
             String filename = (String) files.nextElement();
-            Integer2 pages = (Integer2) foldnetPageNos.get(filename);
+            MutableInteger pages = (MutableInteger) foldnetPageNos.get(filename);
             if (pages.intValue() > 0) {
                 FileWriter file = null;
                 try {

@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
@@ -142,7 +142,7 @@ class GonOption implements ChangeListener, ActionListener
     if (source == (Object) limitGons) {
       if (limitGons.isSelected()) minGonsButton.requestFocus();
     } else if (source == (Object) gonIncludedButton) {
-      optionsMap.actionPerformed(new ActionEvent(new Integer2(faces), gonIncludedButton.isSelected() ? 1 : 0, null));
+      optionsMap.actionPerformed(new ActionEvent(new MutableInteger(faces), gonIncludedButton.isSelected() ? 1 : 0, null));
     }
   }
 }

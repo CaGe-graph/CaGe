@@ -2,7 +2,7 @@ package cage;
 
 import java.util.NoSuchElementException;
 
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 
 /**
  * Returned by a {@link NativeEmbeddableGraph} as an iterator over its edges.
@@ -34,11 +34,11 @@ public class NativeEdgeIterator extends EdgeIterator {
      * repeatedly until the {@link #hasNext()} method returns false will
      * return each element in the underlying collection exactly once.
      *
-     * @return the next edge in the iteration as an <code>Integer2</code>.
+     * @return the next edge in the iteration as an <code>MutableInteger</code>.
      * @exception NoSuchElementException iteration has no more elements.
      */
     public Object next() throws NoSuchElementException {
-        return new Integer2(nGetNextEdge(nIter));
+        return new MutableInteger(nGetNextEdge(nIter));
     }
 
     /**

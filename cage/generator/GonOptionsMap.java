@@ -10,7 +10,7 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 
 
 
@@ -34,7 +34,7 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener
 
   public void setGonIncluded(int faces, boolean included)
   {
-    Integer2 key = new Integer2(faces);
+    MutableInteger key = new MutableInteger(faces);
     GonOption gonOption = (GonOption) this.get(key);
     if (included) {
 
@@ -66,7 +66,7 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener
   public void stateChanged(ChangeEvent e)
   {
     int faces = facesModel.getValue();
-    GonOption gonOption = (GonOption) this.get(new Integer2(faces));
+    GonOption gonOption = (GonOption) this.get(new MutableInteger(faces));
     boolean included = gonOption == null ? false : gonOption.isActive();
     includedButton.setSelected(included);
     includedButton.setText((included ? "discard " : "include ") + faces + "-gons");
@@ -75,16 +75,16 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener
   public void actionPerformed(ActionEvent e)
   {
     Object source = e.getSource();
-    Integer2 key = null;
+    MutableInteger key = null;
     GonOption gonOption;
     boolean included = false;
     int faces = 0;
     if (source == (Object) includedButton) {
       faces = facesModel.getValue();
-      key = new Integer2(faces);
+      key = new MutableInteger(faces);
       included = includedButton.isSelected();
-    } else if (source instanceof Integer2) {
-      key = (Integer2) source;
+    } else if (source instanceof MutableInteger) {
+      key = (MutableInteger) source;
       faces = key.intValue();
       included = e.getID() != 0;
     }

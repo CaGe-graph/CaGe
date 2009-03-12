@@ -2,7 +2,7 @@
 package cage;
 
 import java.util.Hashtable;
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 
 
@@ -24,18 +24,18 @@ public class ValencyElementRule implements ElementRule
 	if (entry.length() == 0) throw new Exception();
 	n = k;
       } catch (Exception e) {
-        while (elements.containsKey(new Integer2(++n)))
+        while (elements.containsKey(new MutableInteger(++n)))
 	{
 	}
       }
-      elements.put(new Integer2(n), entry);
+      elements.put(new MutableInteger(n), entry);
     }
   }
 
   public String getElement(EmbeddableGraph graph, int vertex)
   {
     int valency = graph.getValency(vertex);
-    return (String) elements.get(new Integer2(valency));
+    return (String) elements.get(new MutableInteger(valency));
   }
 
   static public void main(String[] argv)

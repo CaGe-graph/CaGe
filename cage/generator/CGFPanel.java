@@ -29,7 +29,7 @@ import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import lisken.systoolbox.Integer2;
+import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.MinMaxEqListener;
@@ -397,7 +397,7 @@ public class CGFPanel extends GeneratorPanel {
         if (dual.isSelected()) {
             maxFacesize = 3;
         } else {
-            maxFacesize = ((Integer2) gonOptionsMap.lastKey()).intValue();
+            maxFacesize = ((MutableInteger) gonOptionsMap.lastKey()).intValue();
         }
 
         ElementRule rule = new ValencyElementRule("H O C Si N S I");
