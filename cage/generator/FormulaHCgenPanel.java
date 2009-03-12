@@ -7,6 +7,7 @@ import cage.GeneratorInfo;
 import cage.GeneratorPanel;
 import cage.StaticGeneratorInfo;
 import cage.ValencyElementRule;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,6 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
+
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.ChangeAdapter;
 import lisken.uitoolbox.EnhancedSlider;

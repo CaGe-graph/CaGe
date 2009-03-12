@@ -108,7 +108,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
 
         String ipr = iprBox.isSelected() ? " -i" : "";
 
-        String layers = hexagonLayersBox.isSelected() ? Integer.toString(hexagonLayers.getValue()) : "" ;
+        String layers = hexagonLayersBox.isSelected() ? Integer.toString(hexagonLayers.getValue()) : "";
 
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
@@ -138,11 +138,10 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
     /**
      * Listener responsible for disabling the hexagon layers SpinButton
      */
-    private class HexagonLayersBoxListener implements ActionListener{
+    private class HexagonLayersBoxListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
             hexagonLayers.setEnabled(hexagonLayersBox.isSelected());
         }
-
     }
 }

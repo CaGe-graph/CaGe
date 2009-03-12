@@ -51,7 +51,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
     private ButtonGroup embeddedModeGroup = new ButtonGroup();
     private ButtonGroup embedTemplateGroup = new ButtonGroup();
     private JLabel embedTemplateLabel = new JLabel();
-    private boolean nonNullCmd, embedderRequired;
+    private boolean nonNullCmd,  embedderRequired;
     private boolean embedderIsConstant = false;
     private EnhancedSlider embedIntensity = new EnhancedSlider();
     private JCheckBox embedExpertBox = new JCheckBox();
@@ -87,7 +87,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
 
             public void stateChanged(ChangeEvent e) {
                 externalCmd.setEnabled(externalCmdButton.isSelected());
-                if(externalCmdButton.isSelected()){
+                if (externalCmdButton.isSelected()) {
                     externalCmd.requestFocusInWindow();
                     checkCmd();
                 }
@@ -120,7 +120,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
 
             public void stateChanged(ChangeEvent e) {
                 fromFileCmd.setEnabled(fromFileButton.isSelected());
-                if(fromFileButton.isSelected()){
+                if (fromFileButton.isSelected()) {
                     fromFileCmd.requestFocusInWindow();
                     checkCmd();
                 }
@@ -129,7 +129,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
 
         //commandPanel.add(externalCmdLabel);
         commandPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,0,0,0), 5, 5);
+        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 5, 5);
         commandPanel.add(externalCmdButton, gbc);
         gbc.gridx++;
         commandPanel.add(externalCmd, gbc);
@@ -311,7 +311,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         boolean embedExpert =
                 embedExpertBox.isEnabled() && embedExpertBox.isSelected();
         String generatorCmdLine;
-        if(externalCmdButton.isSelected()){
+        if (externalCmdButton.isSelected()) {
             generatorCmdLine = externalCmd.getText();
         } else {
             generatorCmdLine = "cat " + fromFileCmd.getText();
