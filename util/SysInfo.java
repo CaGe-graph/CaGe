@@ -1,4 +1,4 @@
-package org;
+package util;
 
 public class SysInfo
 {

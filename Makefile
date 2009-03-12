@@ -2,10 +2,10 @@
 what?:
 
 rebuild: clean
-	javac -cp .:JmolApplet.jar -deprecation -source 1.4 -target 1.4 ` find cage lisken org -name "*.java" -print `
+	javac -cp .:JmolApplet.jar -deprecation -source 1.4 -target 1.4 ` find cage lisken util -name "*.java" -print `
 
 clean:
-	rm -f ` find cage lisken org -name "*.class" -print `
+	rm -f ` find cage lisken util -name "*.class" -print `
 
 backup:
 	find . -type f -print | cut -c3- | tar -hT- -cf CaGe-backup.tar
@@ -19,7 +19,7 @@ CaGe.jar: clear_distribution
 	./j jar c0f CaGe.jar ` sed -e 's:\./::' -e "s:.*:'&':" `
 
 sysinfo.jar: clear_distribution
-	./j jar c0f sysinfo.jar org/SysInfo.class
+	./j jar c0f sysinfo.jar util/SysInfo.class
 
 CaGe-C.zip: clear_distribution
 	find Native Generators PreCompute -print | sed -e 's:\./::' | \
@@ -29,7 +29,7 @@ CaGe-C.zip: clear_distribution
 
 source_distribution:
 	( \
-	 find cage lisken Images org Native Generators PreCompute Makefile -print | \
+	 find cage lisken Images util Native Generators PreCompute Makefile -print | \
 	 egrep "(\.(java|gif|ps|c|h)$$)|((Makefile|Sysdir)$$)" | \
 	 egrep -v "test|embed\.tar|Viewers|(^hall/)|HelloWorld|\.xvpics"; \
 	 find INSTALL.sh cage.sh CaGe.ini java j .rasmolrc \

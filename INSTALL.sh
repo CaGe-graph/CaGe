@@ -225,8 +225,8 @@ echo ""
 ### find directory for native libraries ##############################
 
 echo "echo '$javadir'" > javadir
-sysname=` sh ./java -cp sysinfo.jar org.SysInfo os.name `
-test -z "$sysname" && error_exit "-  Can't determine system name ('java -cp sysinfo.jar org.SysInfo os.name') - aborted."
+sysname=` sh ./java -cp sysinfo.jar util.SysInfo os.name `
+test -z "$sysname" && error_exit "-  Can't determine system name ('java -cp sysinfo.jar util.SysInfo os.name') - aborted."
 
 
 ### find include files for native compilation ########################

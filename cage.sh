@@ -60,7 +60,7 @@ LANG=POSIX; export LANG
 # Construct a class path appropriate for the Java version
 # (include standard path for versions before 1.2)
 
-version=` cd "${CaGe_InstallDir}."; sh ./java -cp sysinfo.jar org.SysInfo java.version `
+version=` cd "${CaGe_InstallDir}."; sh ./java -cp sysinfo.jar util.SysInfo java.version `
 javadir="` cd \"${CaGe_InstallDir}.\"; sh ./javadir `"
 if expr $version : '^1-[01]-' 2>&- >&-
   then cp1="$javadir/lib/classes.zip:$javadir/classes:${CaGe_InstallDir}swing.jar:"
