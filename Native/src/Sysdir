@@ -1,5 +1,5 @@
 #! /bin/sh
 
 cd ../..
-sh ./java -cp sysinfo.jar org.SysInfo os.name
+sh ./java -cp sysinfo.jar util.SysInfo os.name
 
