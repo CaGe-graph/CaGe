@@ -1,12 +1,14 @@
-
 package cage;
 
+public interface CaGeOutlet {
 
-public interface CaGeOutlet
-{
-  void setGeneratorInfo(GeneratorInfo generatorInfo);
-  void setDimension(int d);
-  int getDimension();
-  void outputResult(CaGeResult result);
-  void stop();
+    void setGeneratorInfo(GeneratorInfo generatorInfo);
+
+    void setDimension(int d);
+
+    int getDimension();
+
+    void outputResult(CaGeResult result);
+
+    void stop();
 }

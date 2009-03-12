@@ -1,9 +1,7 @@
-
 package cage;
 
+public interface ElementRule {
 
-public interface ElementRule
-{
-  public String getElement(EmbeddableGraph graph, int vertex);
+    public String getElement(EmbeddableGraph graph, int vertex);
 }
 

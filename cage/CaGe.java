@@ -1,4 +1,3 @@
-
 package cage;
 
 /**
@@ -9,7 +8,6 @@ package cage;
  * @author Sebastian Lisken
  * @version
  */
-
 import cage.writer.CaGeWriter;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -38,9 +36,8 @@ import lisken.uitoolbox.Wizard;
 import lisken.uitoolbox.WizardStage;
 import org.SysInfo;
 
-
 public class CaGe implements ActionListener {
-    
+
     public static final String title = " CaGe - Chemical & abstract Graph environment ";
     public static final String configFile = "CaGe.ini";
     public static final boolean expertMode;
@@ -48,25 +45,21 @@ public class CaGe implements ActionListener {
     public static final String osName;
     public static int graphNoDigits = 6;
     static final String installDirProperty = "CaGe.InstallDir";
-
     public static Properties config;
-
     static Hashtable substitutedNames;
     static Properties systemProperties;
     static Wizard wizard;
     static CaGeListener listener = new CaGeListener();
-
     static public int generators;
     static public int lastGeneratorChoice = -1;
     static public String[] generator;
     static AbstractButton[] generatorButton;
     static boolean rememberPanels;
-    static Hashtable generatorPanels, outputPanels;
-
+    static Hashtable generatorPanels,  outputPanels;
     private static FoldnetThread foldnetThread;
     // private static CaGeFoldnetDialog foldnetDialog;
-
     private static BackgroundWindow backgroundWindow;
+
 
     static {
         boolean nativesAvailableValue = false, expertModeValue = false;
@@ -163,7 +156,7 @@ public class CaGe implements ActionListener {
     static String substituteConfigValue(String name) {
         return substituteConfigValue(name, false);
     }
-  
+
     static String substituteConfigValue(String name, boolean throwStackOverflow) {
         String value = config.getProperty(name);
         if (substitutedNames.containsKey(name)) {
@@ -185,9 +178,7 @@ public class CaGe implements ActionListener {
                 String substValue = null;
                 try {
                     substValue =
-                    index == 0 ? Systoolbox.getenv(substName) :
-                    index == 1 ? getSystemProperty(substName) :
-                    index == 2 ? substituteConfigValue(substName, true) : null;
+                            index == 0 ? Systoolbox.getenv(substName) : index == 1 ? getSystemProperty(substName) : index == 2 ? substituteConfigValue(substName, true) : null;
                 } catch (StackOverflowError er) {
                     if (throwStackOverflow) {
                         throw er;
@@ -358,25 +349,25 @@ public class CaGe implements ActionListener {
         }
     }
 
-/*
-  public static void exit()
-  {
+    /*
+    public static void exit()
+    {
     if (! foldnetThread().isAlive()) {
-      System.exit(0);
+    System.exit(0);
     } else if (foldnetThread().tasksLeft() > 0) {
-      foldnetThread.addPropertyChangeListener(foldnetDialog);
-      foldnetThread.fireTasksChanged();
-      foldnetDialog.setVisible(true);
+    foldnetThread.addPropertyChangeListener(foldnetDialog);
+    foldnetThread.fireTasksChanged();
+    foldnetDialog.setVisible(true);
     } else {
-      foldnetThread.last();
-      try {
-	foldnetThread.join();
-      } catch (InterruptedException ex) {
-      }
-      System.exit(0);
+    foldnetThread.last();
+    try {
+    foldnetThread.join();
+    } catch (InterruptedException ex) {
     }
-  }
-*/
+    System.exit(0);
+    }
+    }
+     */
     public static void loadNativeLibrary(String libName) {
         System.load(
                 (String) config.getProperty("CaGe.Native.FullLibDir") + libName);
@@ -390,125 +381,124 @@ public class CaGe implements ActionListener {
 
 /*
 class CaGeFoldnetDialog extends FlaggedJDialog
- implements PropertyChangeListener, Runnable
+implements PropertyChangeListener, Runnable
 {
-  FoldnetThread foldnetThread;
-  boolean aborted = false;
+FoldnetThread foldnetThread;
+boolean aborted = false;
 
-  JPanel msgPanel = new JPanel();
-  JLabel msg1 = new JLabel();
-  JLabel msg2 = new JLabel();
-  JButton cancelButton = new JButton();
-  JButton exitButton = new JButton();
-  JButton abortButton = new JButton();
+JPanel msgPanel = new JPanel();
+JLabel msg1 = new JLabel();
+JLabel msg2 = new JLabel();
+JButton cancelButton = new JButton();
+JButton exitButton = new JButton();
+JButton abortButton = new JButton();
 
-  public CaGeFoldnetDialog(FoldnetThread foldnetThread)
-  {
-    super((Frame) null, "waiting for folding nets", true);
-    setNearComponent(CaGe.getWizardWindow());
-    this.foldnetThread = foldnetThread;
-    cancelButton.setText("Cancel");
-    setCancelButton(cancelButton);
-    exitButton.setText("Exit");
-    setDefaultButton(exitButton);
-    abortButton.setText("Abort current");
-    abortButton.addActionListener(this);
-    Font font = msg1.getFont();
-    font = new Font(
-     font.getName(),
-     font.getStyle() & ~ Font.BOLD,
-     font.getSize());
-    abortButton.setFont(font);
-    msg1.setText("All folding nets have been made.");
-    msg1.setFont(font);
-    msg1.setAlignmentX(0.0f);
-    msg2.setText("\u00a0");
-    msg2.setFont(font);
-    msg2.setAlignmentX(0.0f);
-    JPanel buttonPanel = new JPanel();
-    buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-    buttonPanel.add(exitButton);
-    buttonPanel.add(Box.createHorizontalStrut(10));
-    buttonPanel.add(cancelButton);
-    buttonPanel.add(Box.createHorizontalStrut(10));
-    buttonPanel.add(abortButton);
-    buttonPanel.setAlignmentX(0.0f);
-    JPanel content = (JPanel) getContentPane();
-    content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-    content.add(msg1);
-    content.add(msg2);
-    content.add(Box.createVerticalStrut(20));
-    content.add(buttonPanel);
-    content.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-    pack();
-  }
-
-  public void setVisible(boolean visible)
-  {
-    if (visible) {
-      aborted = false;
-      abortButton.setEnabled(true);
-      exitButton.requestFocus();
-    }
-    super.setVisible(visible);
-  }
-
-  public void propertyChange(PropertyChangeEvent e)
-  {
-    SwingUtilities.invokeLater(this);
-  }
-
-  public void run()
-  {
-    int left = foldnetThread.tasksLeft();
-    if (left > 0) {
-      msg1.setText(left + " folding net" + (left == 1 ? "" : "s") + " left to make.");
-      msg2.setText("Waiting ...");
-    } else {
-      msg1.setText("All folding nets have been made.");
-      if (aborted) {
-	abortButton.setEnabled(false);
-	msg2.setText("Click to exit or cancel.");
-	exitButton.requestFocus();
-      } else {
-	msg2.setText("CaGe will now exit.");
-	foldnetThread.last();
-	finishAndExit();
-      }
-    }
-  }
-
-  public void actionPerformed(ActionEvent e)
-  {
-    Object source = e.getSource();
-    if (source == cancelButton) {
-      foldnetThread.removePropertyChangeListener(this);
-    } else if (source == exitButton) {
-      cancelButton.setEnabled(false);
-      foldnetThread.removePropertyChangeListener(this);
-      foldnetThread.last();
-      foldnetThread.abortCurrent();
-      finishAndExit();
-    } else if (source == abortButton) {
-      aborted = true;
-      foldnetThread.abortCurrent();
-      return;
-    }
-    super.actionPerformed(e);
-  }
-
-  private void finishAndExit()
-  {
-    try {
-      foldnetThread.join();
-    } catch (InterruptedException ex) {
-    }
-    setVisible(false);
-    CaGe.exit();
-  }
+public CaGeFoldnetDialog(FoldnetThread foldnetThread)
+{
+super((Frame) null, "waiting for folding nets", true);
+setNearComponent(CaGe.getWizardWindow());
+this.foldnetThread = foldnetThread;
+cancelButton.setText("Cancel");
+setCancelButton(cancelButton);
+exitButton.setText("Exit");
+setDefaultButton(exitButton);
+abortButton.setText("Abort current");
+abortButton.addActionListener(this);
+Font font = msg1.getFont();
+font = new Font(
+font.getName(),
+font.getStyle() & ~ Font.BOLD,
+font.getSize());
+abortButton.setFont(font);
+msg1.setText("All folding nets have been made.");
+msg1.setFont(font);
+msg1.setAlignmentX(0.0f);
+msg2.setText("\u00a0");
+msg2.setFont(font);
+msg2.setAlignmentX(0.0f);
+JPanel buttonPanel = new JPanel();
+buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+buttonPanel.add(exitButton);
+buttonPanel.add(Box.createHorizontalStrut(10));
+buttonPanel.add(cancelButton);
+buttonPanel.add(Box.createHorizontalStrut(10));
+buttonPanel.add(abortButton);
+buttonPanel.setAlignmentX(0.0f);
+JPanel content = (JPanel) getContentPane();
+content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+content.add(msg1);
+content.add(msg2);
+content.add(Box.createVerticalStrut(20));
+content.add(buttonPanel);
+content.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+pack();
 }
-*/
 
+public void setVisible(boolean visible)
+{
+if (visible) {
+aborted = false;
+abortButton.setEnabled(true);
+exitButton.requestFocus();
+}
+super.setVisible(visible);
+}
+
+public void propertyChange(PropertyChangeEvent e)
+{
+SwingUtilities.invokeLater(this);
+}
+
+public void run()
+{
+int left = foldnetThread.tasksLeft();
+if (left > 0) {
+msg1.setText(left + " folding net" + (left == 1 ? "" : "s") + " left to make.");
+msg2.setText("Waiting ...");
+} else {
+msg1.setText("All folding nets have been made.");
+if (aborted) {
+abortButton.setEnabled(false);
+msg2.setText("Click to exit or cancel.");
+exitButton.requestFocus();
+} else {
+msg2.setText("CaGe will now exit.");
+foldnetThread.last();
+finishAndExit();
+}
+}
+}
+
+public void actionPerformed(ActionEvent e)
+{
+Object source = e.getSource();
+if (source == cancelButton) {
+foldnetThread.removePropertyChangeListener(this);
+} else if (source == exitButton) {
+cancelButton.setEnabled(false);
+foldnetThread.removePropertyChangeListener(this);
+foldnetThread.last();
+foldnetThread.abortCurrent();
+finishAndExit();
+} else if (source == abortButton) {
+aborted = true;
+foldnetThread.abortCurrent();
+return;
+}
+super.actionPerformed(e);
+}
+
+private void finishAndExit()
+{
+try {
+foldnetThread.join();
+} catch (InterruptedException ex) {
+}
+setVisible(false);
+CaGe.exit();
+}
+}
+ */
 class CaGeListener implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
