@@ -15,7 +15,7 @@ all: generators embedders others clean
 generators: fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
-	    kekule_all cone_all
+	    kekule_all cone_all quad_restrict$(SUFFIX)
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
@@ -25,10 +25,10 @@ clean: kekule_clean cone_clean
 	rm -f *.o
 
 clear: clean kekule_clear cone_clear
-	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen
+	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen quad_restrict
 
 reset: clean
-	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) fusgen$(SUFFIX)
+	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) fusgen$(SUFFIX) quad_restrict$(SUFFIX)
 
 
 fullgen$(SUFFIX) : fullgen.c
@@ -98,3 +98,7 @@ cone_clean:
 
 cone_clear:
 	rm -f cone$(SUFFIX)
+
+quad_restrict$(SUFFIX) : plantri.c quad_restrict.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="quad_restrict.c"' '-DALLTOGETHER' plantri.c
+
