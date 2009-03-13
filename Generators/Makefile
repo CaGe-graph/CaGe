@@ -100,5 +100,5 @@ cone_clear:
 	rm -f cone$(SUFFIX)
 
 quad_restrict$(SUFFIX) : plantri.c quad_restrict.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="quad_restrict.c"' '-DALLTOGETHER' plantri.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="quad_restrict.c"' '-DALLTOGETHER' plantri.c -lm
 
