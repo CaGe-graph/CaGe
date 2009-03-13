@@ -18,8 +18,18 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
     Component facesComponent;
     BoundedRangeModel facesModel;
     AbstractButton includedButton;
+    boolean dual;
+    boolean limited;
 
+    //p should have a GridBagLayout
+    //b should be a JToggleButton
     public GonOptionsMap(JPanel p, Component c, BoundedRangeModel r, AbstractButton b) {
+        this(p, c, r, b, false, true);
+    }
+
+    public GonOptionsMap(JPanel p, Component c, BoundedRangeModel r, AbstractButton b, boolean d, boolean l) {
+        dual = d;
+        limited = l;
         optionsPanel = p;
         facesComponent = c;
         facesModel = r;
@@ -36,7 +46,7 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
 
             if (gonOption == null) {
                 gonOption = new GonOption(faces, this);
-                gonOption.addTo(optionsPanel);
+                gonOption.addTo(optionsPanel, dual, limited);
             } else if (!gonOption.isActive()) {
                 gonOption.reactivate();
             } else {
@@ -45,7 +55,7 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
             this.put(key, gonOption);
 
         } else {
-
+            
             if (gonOption != null) {
                 if (gonOption.isActive()) {
                     gonOption.deactivate();
@@ -64,7 +74,10 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
         GonOption gonOption = (GonOption) this.get(new MutableInteger(faces));
         boolean included = gonOption == null ? false : gonOption.isActive();
         includedButton.setSelected(included);
-        includedButton.setText((included ? "discard " : "include ") + faces + "-gons");
+        if(!dual)
+            includedButton.setText((included ? "discard " : "include ") + faces + "-gons");
+        else
+            includedButton.setText((included ? "discard " : "include ") + "degree " + faces);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -85,7 +98,8 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
         setGonIncluded(faces, included);
         gonOption = (GonOption) this.get(key);
         if (included) {
-            gonOption.limitGons.requestFocus();
+            if(gonOption.limitGons!=null)
+                gonOption.limitGons.requestFocus();
         } else {
             facesComponent.requestFocus();
         }

@@ -43,28 +43,36 @@ class GonOption implements ChangeListener, ActionListener {
     }
 
     public void addTo(JPanel p) {
+        addTo(p, false, true);
+    }
+
+    public void addTo(JPanel p, boolean dual, boolean isLimitable) {
         panelToExtend = p;
         isIncluded = true;
         gonIncludedButton = new JCheckBox("  ", true);
         gonIncludedButton.addActionListener(this);
-        limitGons = new JCheckBox("limits");
-        limitGons.setSelected(isLimited);
-        gonLabel = new JLabel(faces + "-gons");
+        if(isLimitable){
+            limitGons = new JCheckBox("limits");
+            limitGons.setSelected(isLimited);
+            limitGons.addChangeListener(this);
+            limitGons.addActionListener(this);
+        }
+        gonLabel = new JLabel(dual ? "degree " + faces : faces + "-gons");
         gonLabel.setLabelFor(gonIncludedButton);
         if (4 <= faces && faces <= 10) {
             gonLabel.setDisplayedMnemonic(KeyEvent.VK_0 + faces % 10);
         }
-        minGonsButton = new SpinButton(min, 0, CGFPanel.maxAtoms);
-        minGonsButton.setVisible(limitGons.isSelected());
-        maxGonsButton = new SpinButton(max, 0, CGFPanel.maxAtoms);
-        maxGonsButton.setVisible(limitGons.isSelected());
-        DefaultButtonModel minNotEqMax = new DefaultButtonModel();
-        minNotEqMax.setSelected(false);
-        limitGons.addChangeListener(this);
-        limitGons.addActionListener(this);
-        minGonsButton.addChangeListener(this);
-        maxGonsButton.addChangeListener(this);
-        new MinMaxEqListener(minGonsButton.getModel(), maxGonsButton.getModel(), minNotEqMax, false);
+        if(isLimitable){
+            minGonsButton = new SpinButton(min, 0, CGFPanel.maxAtoms);
+            minGonsButton.setVisible(limitGons.isSelected());
+            maxGonsButton = new SpinButton(max, 0, CGFPanel.maxAtoms);
+            maxGonsButton.setVisible(limitGons.isSelected());
+            DefaultButtonModel minNotEqMax = new DefaultButtonModel();
+            minNotEqMax.setSelected(false);
+            minGonsButton.addChangeListener(this);
+            maxGonsButton.addChangeListener(this);
+            new MinMaxEqListener(minGonsButton.getModel(), maxGonsButton.getModel(), minNotEqMax, false);
+        }
         GridBagConstraints lc = new GridBagConstraints();
         GridBagLayout l = (GridBagLayout) panelToExtend.getLayout();
         lc.gridx = 0;
@@ -76,14 +84,16 @@ class GonOption implements ChangeListener, ActionListener {
         lc.insets = new Insets(10, 0, 0, 40);
         lc.gridx = 1;
         panelToExtend.add(gonLabel, lc);
-        lc.anchor = lc.CENTER;
-        lc.insets = new Insets(10, 10, 0, 10);
-        lc.gridx = 2;
-        panelToExtend.add(limitGons, lc);
-        lc.gridx = 3;
-        panelToExtend.add(minGonsButton, lc);
-        lc.gridx = 4;
-        panelToExtend.add(maxGonsButton, lc);
+        if(isLimitable){
+            lc.anchor = lc.CENTER;
+            lc.insets = new Insets(10, 10, 0, 10);
+            lc.gridx = 2;
+            panelToExtend.add(limitGons, lc);
+            lc.gridx = 3;
+            panelToExtend.add(minGonsButton, lc);
+            lc.gridx = 4;
+            panelToExtend.add(maxGonsButton, lc);
+        }
         UItoolbox.pack(panelToExtend);
     }
 
@@ -92,9 +102,12 @@ class GonOption implements ChangeListener, ActionListener {
         gonIncludedButton.setSelected(false);
         gonIncludedButton.setVisible(false);
         gonLabel.setVisible(false);
-        limitGons.setVisible(false);
-        minGonsButton.setVisible(false);
-        maxGonsButton.setVisible(false);
+        if(limitGons!=null)
+            limitGons.setVisible(false);
+        if(minGonsButton!=null)
+            minGonsButton.setVisible(false);
+        if(maxGonsButton!=null)
+            maxGonsButton.setVisible(false);
         UItoolbox.pack(panelToExtend);
     }
 
@@ -103,14 +116,21 @@ class GonOption implements ChangeListener, ActionListener {
         gonIncludedButton.setSelected(true);
         gonIncludedButton.setVisible(true);
         gonLabel.setVisible(true);
-        limitGons.setVisible(true);
-        minGonsButton.setVisible(isLimited);
-        maxGonsButton.setVisible(isLimited);
+        if(limitGons!=null)
+            limitGons.setVisible(true);
+        if(minGonsButton!=null)
+            minGonsButton.setVisible(isLimited);
+        if(maxGonsButton!=null)
+            maxGonsButton.setVisible(isLimited);
         UItoolbox.pack(panelToExtend);
     }
 
     public boolean isActive() {
         return isIncluded;
+    }
+
+    public int getSize() {
+        return faces;
     }
 
     public void stateChanged(ChangeEvent e) {
