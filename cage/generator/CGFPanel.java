@@ -6,6 +6,7 @@ import cage.GeneratorInfo;
 import cage.GeneratorPanel;
 import cage.StaticGeneratorInfo;
 import cage.ValencyElementRule;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,6 +30,7 @@ import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+
 import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
