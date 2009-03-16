@@ -34,6 +34,14 @@ public class PolytopesPanel extends GeneratorPanel
     public static final int MAX_VERTICES = 40;
     public static final int DEFAULT_VERTICES = 4;
 
+    private JCheckBox dual;
+    private EnhancedSlider verticesSlider;
+    private ButtonGroup minDegGroup;
+    private SpinButton minEdges, maxEdges;
+    private JCheckBox defaultEdges;
+    private SpinButton maxFacesize;
+    private JCheckBox defaultMaxFacesize;
+
     public PolytopesPanel() {
         setLayout(new GridBagLayout());
         dual = new JCheckBox("dual graphs");
@@ -78,6 +86,11 @@ public class PolytopesPanel extends GeneratorPanel
             degButton.setMnemonic(KeyEvent.VK_0 + i);
             minDegGroup.add(degButton);
             minDegPanel.add(degButton);
+            degButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    setValues();
+                }
+            });
         }
         add(minDegPanel,
                 new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
@@ -87,18 +100,18 @@ public class PolytopesPanel extends GeneratorPanel
                 new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 10), 0, 0));
-        defaultEdges = new JCheckBox("default", true);
-        defaultEdges.setMnemonic(KeyEvent.VK_E);
+        defaultEdges = new JCheckBox("all", true);
+        defaultEdges.setMnemonic(KeyEvent.VK_A);
         defaultEdges.setActionCommand("a");
         defaultEdges.addActionListener(this);
         minEdges = new SpinButton(1, 1, 999);
         minEdges.setEnabled(false);
         maxEdges = new SpinButton(1, 1, 999);
         maxEdges.setEnabled(false);
-        minEdgesLabel = new JLabel("min.");
+        JLabel minEdgesLabel = new JLabel("min.");
         minEdgesLabel.setLabelFor(minEdges);
         minEdgesLabel.setDisplayedMnemonic(KeyEvent.VK_I);
-        maxEdgesLabel = new JLabel("max.");
+        JLabel maxEdgesLabel = new JLabel("max.");
         maxEdgesLabel.setLabelFor(maxEdges);
         maxEdgesLabel.setDisplayedMnemonic(KeyEvent.VK_A);
         JPanel edgesPanel = new JPanel();
@@ -117,7 +130,7 @@ public class PolytopesPanel extends GeneratorPanel
                 new Insets(0, 20, 10, 0), 0, 0));
         maxFacesize = new SpinButton(DEFAULT_VERTICES - 1, 3, MAX_VERTICES - 1);
         maxFacesize.setEnabled(false);
-        maxFacesizeLabel = new JLabel("max.");
+        JLabel maxFacesizeLabel = new JLabel("max.");
         maxFacesizeLabel.setLabelFor(maxFacesize);
         maxFacesizeLabel.setDisplayedMnemonic(KeyEvent.VK_X);
         JPanel maxFacesizePanel = new JPanel();
@@ -131,8 +144,8 @@ public class PolytopesPanel extends GeneratorPanel
                 new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        defaultMaxFacesize = new JCheckBox("default", true);
-        defaultMaxFacesize.setMnemonic(KeyEvent.VK_F);
+        defaultMaxFacesize = new JCheckBox("all", true);
+        defaultMaxFacesize.setMnemonic(KeyEvent.VK_L);
         defaultMaxFacesize.setActionCommand("d");
         defaultMaxFacesize.addActionListener(this);
         add(defaultMaxFacesize,
@@ -149,7 +162,9 @@ public class PolytopesPanel extends GeneratorPanel
 
     private void setValues() {
         int n = verticesSlider.getValue();
-        int min = 3 * (n + 1) / 2;
+        int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
+        //the lowerbound is the ceil of minDegree * n / 2
+        int min = minDegree * n / 2 + (minDegree * n % 2);
         int max = 3 * n - 6;
         // make sure both intervals are first widened and then narrowed.
         boolean nIncreased = maxEdges.getMaximum() < max;
@@ -248,14 +263,5 @@ public class PolytopesPanel extends GeneratorPanel
     public void stateChanged(ChangeEvent e) {
         setValues();
     }
-    JCheckBox dual;
-    EnhancedSlider verticesSlider;
-    ButtonGroup minDegGroup;
-    JLabel minEdgesLabel, maxEdgesLabel;
-    SpinButton minEdges, maxEdges;
-    JCheckBox defaultEdges;
-    JLabel maxFacesizeLabel;
-    SpinButton maxFacesize;
-    JCheckBox defaultMaxFacesize;
 }
 
