@@ -12,13 +12,13 @@ backup:
 	rm -f CaGe-backup.tar.gz
 	gzip -9 CaGe-backup.tar
 
-CaGe.jar: clear_distribution
+CaGe.jar: clear_distribution rebuild
 	find cage lisken Images -print | \
 	egrep "\.(class|gif|ps)$$" | \
 	egrep -v "SysInfo|test|embed\.tar|Viewers|(^hall/)|HelloWorld|\.xvpics" | \
 	./j jar c0f CaGe.jar ` sed -e 's:\./::' -e "s:.*:'&':" `
 
-sysinfo.jar: clear_distribution
+sysinfo.jar: clear_distribution rebuild
 	./j jar c0f sysinfo.jar util/SysInfo.class
 
 CaGe-C.zip: clear_distribution
