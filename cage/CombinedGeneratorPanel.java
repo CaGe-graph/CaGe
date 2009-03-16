@@ -25,7 +25,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
      * calls all of the {@link lisken.uitoolbox.WizardAwareComponent} methods.
      *
      * @param title the title to be displayed in this tab
-     * @param component the component to be displayed when this tab is clicked
+     * @param panel the component to be displayed when this tab is clicked
      */
     protected void addTab(String title, GeneratorPanel panel) {
         pane.addTab(title, panel);
