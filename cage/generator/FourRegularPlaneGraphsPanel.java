@@ -1,8 +1,6 @@
 package cage.generator;
 
 import cage.CombinedGeneratorPanel;
-import cage.GeneratorInfo;
-import cage.GeneratorPanel;
 
 /**
  * Panel that combines all the configuration panels for generators of 4-regular
@@ -17,10 +15,5 @@ public class FourRegularPlaneGraphsPanel extends CombinedGeneratorPanel {
         addTab("quartic graphs with given faces", new QuadRestrictPanel(true));
         add(pane);
     }
-
-    public GeneratorInfo getGeneratorInfo() {
-        GeneratorPanel chosenPanel = (GeneratorPanel) pane.getSelectedComponent();
-        GeneratorInfo info = chosenPanel.getGeneratorInfo();
-        return info;
-    }
+    
 }

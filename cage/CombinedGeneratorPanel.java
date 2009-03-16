@@ -82,6 +82,21 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
             ((GeneratorPanel) pane.getSelectedComponent()).showing();
     }
 
+    /**
+     * If there currently is a <code>GeneratorPanel</code> selected on the
+     * <code>JTabbedPane</code>, calls the <code>getGeneratorInfo()</code> method of
+     * this panel and returns that <code>GeneratorInfo</code>.
+     *
+     * @return The <code>GeneratorInfo</code> of the currently selected generator
+     *         or <tt>null</tt> if no generator is selected.
+     */
+    public GeneratorInfo getGeneratorInfo() {
+        if(pane.getSelectedComponent()!=null)
+            return ((GeneratorPanel) pane.getSelectedComponent()).getGeneratorInfo();
+        else
+            return null;
+    }
+
     public void stateChanged(ChangeEvent e) {
         //this object should only listen to its own tabbed pane
         if(e.getSource().equals(pane)){

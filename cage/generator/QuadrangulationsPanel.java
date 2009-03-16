@@ -1,8 +1,6 @@
 package cage.generator;
 
 import cage.CombinedGeneratorPanel;
-import cage.GeneratorInfo;
-import cage.GeneratorPanel;
 
 /**
  * Panel that combines all the configuration panels for generators of
@@ -18,11 +16,6 @@ public class QuadrangulationsPanel extends CombinedGeneratorPanel {
         add(pane);
     }
 
-    public GeneratorInfo getGeneratorInfo() {
-        GeneratorPanel chosenPanel = (GeneratorPanel) pane.getSelectedComponent();
-        GeneratorInfo info = chosenPanel.getGeneratorInfo();
-        return info;
-    }
 }
 
 
