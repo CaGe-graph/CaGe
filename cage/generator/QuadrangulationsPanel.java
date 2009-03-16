@@ -18,9 +18,6 @@ public class QuadrangulationsPanel extends CombinedGeneratorPanel {
         add(pane);
     }
 
-    public void showing() {
-    }
-
     public GeneratorInfo getGeneratorInfo() {
         GeneratorPanel chosenPanel = (GeneratorPanel) pane.getSelectedComponent();
         GeneratorInfo info = chosenPanel.getGeneratorInfo();
