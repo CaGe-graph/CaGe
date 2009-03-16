@@ -38,6 +38,15 @@ public class WizardStage {
         finishButton   = createButton(finish,   Wizard.FINISH,   null, 0);
         cancelButton   = createButton(cancel,   Wizard.CANCEL,   null, 0);
         exitButton     = createButton(exit,     Wizard.EXIT,     null, 0);
+
+        if(content instanceof WizardAwareComponent){
+            WizardAwareComponent wac = (WizardAwareComponent)content;
+            wac.setPreviousButton(previousButton);
+            wac.setNextButton(nextButton);
+            wac.setFinishButton(finishButton);
+            wac.setCancelButton(cancelButton);
+            wac.setExitButton(exitButton);
+        }
     }
 
     JButton createButton(String buttonText, String actionCmd, String IconPath, int textPosition) {
