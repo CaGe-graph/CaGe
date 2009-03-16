@@ -3,6 +3,8 @@ package cage.generator;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import javax.swing.AbstractButton;
 import javax.swing.BoundedRangeModel;
@@ -53,13 +55,14 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
                 return;
             }
             this.put(key, gonOption);
-
+            fireStateChanged();
         } else {
             
             if (gonOption != null) {
                 if (gonOption.isActive()) {
                     gonOption.deactivate();
                     this.put(key, gonOption);
+                    fireStateChanged();
                 }
             }
 
@@ -102,6 +105,34 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
                 gonOption.limitGons.requestFocus();
         } else {
             facesComponent.requestFocus();
+        }
+    }
+
+    private List changeListenersList = new ArrayList();
+    private ChangeEvent e = new ChangeEvent(this);
+
+    /**
+     * Add a <code>ChangeListener</code> to this object.
+     * @param l The <code>ChangeListener</code> to add.
+     */
+    public void addChangeListener(ChangeListener l){
+        changeListenersList.add(l);
+    }
+
+    /**
+     * Remove a <code>ChangeListener</code> from this object.
+     * @param l The <code>ChangeListener</code> to remove.
+     */
+    public void removeChangeListener(ChangeListener l){
+        changeListenersList.remove(l);
+    }
+
+    /**
+     * Notify all <code>ChangeListener</code>s of a change.
+     */
+    private void fireStateChanged(){
+        for (int i = 0; i < changeListenersList.size(); i++) {
+            ((ChangeListener)changeListenersList.get(i)).stateChanged(e);
         }
     }
 }
