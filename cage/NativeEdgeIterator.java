@@ -7,7 +7,7 @@ import lisken.systoolbox.MutableInteger;
 /**
  * Returned by a {@link NativeEmbeddableGraph} as an iterator over its edges.
  */
-public class NativeEdgeIterator extends EdgeIterator {
+public class NativeEdgeIterator implements EdgeIterator {
 
     /** The pointer to the iterator in the native code*/
     private long nIter;

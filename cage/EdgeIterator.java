@@ -3,7 +3,7 @@ package cage;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class EdgeIterator implements Iterator {
+public interface EdgeIterator extends Iterator {
 
     public abstract int nextEdge() throws NoSuchElementException;
 }
