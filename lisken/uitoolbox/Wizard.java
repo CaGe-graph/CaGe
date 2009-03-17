@@ -1,4 +1,3 @@
-
 package lisken.uitoolbox;
 
 import java.awt.BorderLayout;
@@ -19,25 +18,20 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-
 public class Wizard implements ActionListener {
-    
-    public static final String PREVIOUS  = "Previous";
-    public static final String NEXT      = "Next";
-    public static final String FINISH    = "Finish";
-    public static final String CANCEL    = "Cancel";
-    public static final String EXIT      = "Exit";
-    
-    public static final String SHOWING   = "Showing";
 
+    public static final String PREVIOUS = "Previous";
+    public static final String NEXT = "Next";
+    public static final String FINISH = "Finish";
+    public static final String CANCEL = "Cancel";
+    public static final String EXIT = "Exit";
+    public static final String SHOWING = "Showing";
     private WizardStage stage;
     private int stageNo;
-
     private String title;
     private WindowListener windowListener;
     private ActionListener escapeListener;
     private Vector stageVector;
-
     private JFrame currentWindow;
 
     public Wizard(String title) {
@@ -170,10 +164,10 @@ public class Wizard implements ActionListener {
             lc.fill = lc.VERTICAL;
             lc.insets = new Insets(5, 10, 10, 10);
             addButton(buttonPanel, lc, stage.getPreviousButton(), KeyEvent.VK_LEFT);
-            addButton(buttonPanel, lc, stage.getNextButton(),     KeyEvent.VK_RIGHT);
-            addButton(buttonPanel, lc, stage.getFinishButton(),   KeyEvent.VK_UNDEFINED);
-            addButton(buttonPanel, lc, stage.getCancelButton(),   KeyEvent.VK_UNDEFINED);
-            addButton(buttonPanel, lc, stage.getExitButton(),     KeyEvent.VK_UNDEFINED);
+            addButton(buttonPanel, lc, stage.getNextButton(), KeyEvent.VK_RIGHT);
+            addButton(buttonPanel, lc, stage.getFinishButton(), KeyEvent.VK_UNDEFINED);
+            addButton(buttonPanel, lc, stage.getCancelButton(), KeyEvent.VK_UNDEFINED);
+            addButton(buttonPanel, lc, stage.getExitButton(), KeyEvent.VK_UNDEFINED);
             pane.add(buttonPanel, BorderLayout.SOUTH);
             if (stage.mustSetDefaultButton()) {
                 stage.setDefaultButton(currentWindow.getRootPane());

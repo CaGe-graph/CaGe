@@ -45,5 +45,4 @@ public interface WizardAwareComponent {
      * @param exitButton The exit button of this WizardStage
      */
     public void setExitButton(JButton exitButton);
-
 }

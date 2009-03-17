@@ -1,4 +1,3 @@
-
 package lisken.uitoolbox;
 
 import java.awt.event.ActionListener;
@@ -9,12 +8,10 @@ import javax.swing.JComponent;
 import javax.swing.JRootPane;
 import javax.swing.SwingConstants;
 
-
 public class WizardStage {
-    
+
     private JComponent content;
     private ActionListener listener;
-
     private JButton previousButton;
     private JButton nextButton;
     private JButton finishButton;
@@ -28,19 +25,19 @@ public class WizardStage {
             ActionListener wizardListener,
             String previous, String next, String finish, String cancel, String exit,
             boolean setDefaultButton) {
-        this.content           = content;
-        this.listener          = wizardListener;
-        this.setDefaultButton  = setDefaultButton;
-        hasAnyButtons          = false;
+        this.content = content;
+        this.listener = wizardListener;
+        this.setDefaultButton = setDefaultButton;
+        hasAnyButtons = false;
 
         previousButton = createButton(previous, Wizard.PREVIOUS, "lisken/uitoolbox/WizardPrevious.gif", SwingConstants.RIGHT);
-        nextButton     = createButton(next,     Wizard.NEXT,     "lisken/uitoolbox/WizardNext.gif",     SwingConstants.LEFT);
-        finishButton   = createButton(finish,   Wizard.FINISH,   null, 0);
-        cancelButton   = createButton(cancel,   Wizard.CANCEL,   null, 0);
-        exitButton     = createButton(exit,     Wizard.EXIT,     null, 0);
+        nextButton = createButton(next, Wizard.NEXT, "lisken/uitoolbox/WizardNext.gif", SwingConstants.LEFT);
+        finishButton = createButton(finish, Wizard.FINISH, null, 0);
+        cancelButton = createButton(cancel, Wizard.CANCEL, null, 0);
+        exitButton = createButton(exit, Wizard.EXIT, null, 0);
 
-        if(content instanceof WizardAwareComponent){
-            WizardAwareComponent wac = (WizardAwareComponent)content;
+        if (content instanceof WizardAwareComponent) {
+            WizardAwareComponent wac = (WizardAwareComponent) content;
             wac.setPreviousButton(previousButton);
             wac.setNextButton(nextButton);
             wac.setFinishButton(finishButton);
@@ -64,15 +61,14 @@ public class WizardStage {
         return button;
     }
 
-/*
-  public void setDefaultButton(JButton defaultButton)
-  {
+    /*
+    public void setDefaultButton(JButton defaultButton)
+    {
     if (defaultButton != null || getRootPane().getDefaultButton() != null) {
-      getRootPane().setDefaultButton(defaultButton);
+    getRootPane().setDefaultButton(defaultButton);
     }
-  }
-*/
-
+    }
+     */
     public void setDefaultButton(JRootPane rootPane) {
         if (nextButton != null) {
             rootPane.setDefaultButton(nextButton);
@@ -118,5 +114,4 @@ public class WizardStage {
     public boolean hasAnyButtons() {
         return hasAnyButtons;
     }
-
 }
