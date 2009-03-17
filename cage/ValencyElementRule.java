@@ -1,12 +1,13 @@
 package cage;
 
 import java.util.Hashtable;
+
 import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 
 public class ValencyElementRule implements ElementRule {
 
-    Hashtable elements = new Hashtable();
+    private Hashtable elements = new Hashtable();
 
     public ValencyElementRule(String elementRule) {
         String[] rule = Systoolbox.stringToArray(elementRule);
