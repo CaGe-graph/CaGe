@@ -42,45 +42,29 @@ public class CPFPanel extends GeneratorPanel {
     public static final int maxAtoms = 250;
     public static final int minPolygonFaces = 3;
     public static final int maxPolygonFaces = 40;
-    JSeparator sep1 = new JSeparator(SwingConstants.HORIZONTAL);
-    JSeparator sep2 = new JSeparator(SwingConstants.HORIZONTAL);
-    JPanel CPFFacesPanel = new JPanel();
-    JPanel CPFFaceOptionsPanel = new JPanel();
-    JPanel CPFExtrasPanel = new JPanel();
-    EnhancedSlider facesSlider = new EnhancedSlider();
-    Hashtable facesLabels = new Hashtable();
-    JPanel CPFAtomsPanel = new JPanel();
-    JLabel minAtomsLabel = new JLabel();
-    JLabel maxAtomsLabel = new JLabel();
-    EnhancedSlider minAtomsSlider = new EnhancedSlider();
-    EnhancedSlider maxAtomsSlider = new EnhancedSlider();
-    JCheckBox minEqMax = new JCheckBox();
-    GridBagLayout CPFAtomsPanelLayout = new GridBagLayout();
-    GridBagLayout CPFPanelLayout = new GridBagLayout();
-    GridBagLayout CPFFaceOptionsLayout = new GridBagLayout();
-    GridBagLayout CPFExtrasLayout = new GridBagLayout();
-    JLabel faceTypeLabel = new JLabel();
-    JToggleButton facesButton = new JToggleButton();
-    JLabel includedFacesLabel = new JLabel();
-    GridBagLayout CPFFacesLayout = new GridBagLayout();
-    JLabel dummyLabel = new JLabel();
-    JCheckBox dual = new JCheckBox();
-    JCheckBox altECC = new JCheckBox();
-    JCheckBox maxPathFace = new JCheckBox();
-    JCheckBox faceStats = new JCheckBox();
-    JCheckBox patchStats = new JCheckBox();
-    JCheckBox conn1 = new JCheckBox();
-    JCheckBox conn2 = new JCheckBox();
-    JCheckBox conn3 = new JCheckBox();
+
+    private EnhancedSlider minAtomsSlider = new EnhancedSlider();
+    private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
+    private JCheckBox minEqMax = new JCheckBox();
+    private JToggleButton facesButton = new JToggleButton();
+    private JCheckBox dual = new JCheckBox();
+    private JCheckBox altECC = new JCheckBox();
+    private JCheckBox maxPathFace = new JCheckBox();
+    private JCheckBox faceStats = new JCheckBox();
+    private JCheckBox patchStats = new JCheckBox();
+    private JCheckBox conn1 = new JCheckBox();
+    private JCheckBox conn2 = new JCheckBox();
+    private JCheckBox conn3 = new JCheckBox();
     /* --- "Cases and Priorities" disabled ---
     JToggleButton selectCasesPrios = new JToggleButton();
      */
-    GonOptionsMap gonOptionsMap;
+    private GonOptionsMap gonOptionsMap;
 
     /* --- "Cases and Priorities" disabled ---
     OrderedChoice casesPriosChoice;
     String cases, nonCases;
      */
+
     public CPFPanel() {
         try {
             jbInit();
@@ -89,15 +73,15 @@ public class CPFPanel extends GeneratorPanel {
         }
     }
 
-    void jbInit() throws Exception {
-        setLayout(CPFPanelLayout);
-        CPFExtrasPanel.setLayout(CPFExtrasLayout);
-        CPFAtomsPanel.setLayout(CPFAtomsPanelLayout);
-        CPFFaceOptionsPanel.setLayout(CPFFaceOptionsLayout);
-        minAtomsLabel.setText("minimum number of Atoms");
+    private void jbInit() throws Exception {
+        setLayout(new GridBagLayout());
+        JPanel CPFExtrasPanel = new JPanel(new GridBagLayout());
+        JPanel CPFAtomsPanel = new JPanel(new GridBagLayout());
+        JPanel CPFFaceOptionsPanel = new JPanel(new GridBagLayout());
+        JLabel minAtomsLabel = new JLabel("minimum number of Atoms");
         minAtomsLabel.setLabelFor(minAtomsSlider.slider());
         minAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_N);
-        maxAtomsLabel.setText("maximum number of Atoms");
+        JLabel maxAtomsLabel = new JLabel("maximum number of Atoms");
         maxAtomsLabel.setLabelFor(maxAtomsSlider.slider());
         maxAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_X);
         minAtomsSlider.setMajorTickSpacing(maxAtoms - minAtoms);
@@ -126,10 +110,11 @@ public class CPFPanel extends GeneratorPanel {
         minEqMax.setSelected(true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
         EventListener l = new MinMaxEqListener(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel(), false);
-        facesLabels = facesSlider.createStandardLabels(5, 10);
+        final EnhancedSlider facesSlider = new EnhancedSlider();
+        Hashtable facesLabels = facesSlider.createStandardLabels(5, 10);
         facesLabels.put(new Integer(3), new JLabel("3"));
         facesLabels.put(new Integer(6), new JLabel("6"));
-        faceTypeLabel.setText("Face Type");
+        JLabel faceTypeLabel = new JLabel("Face Type");
         faceTypeLabel.setLabelFor(facesSlider.slider());
         faceTypeLabel.setDisplayedMnemonic(KeyEvent.VK_F);
 //    faceTypeLabel.setAlignmentX((float) 0.5);
@@ -168,7 +153,7 @@ public class CPFPanel extends GeneratorPanel {
         });
         gonOptionsMap = new GonOptionsMap(CPFFaceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton);
         gonOptionsMap.setGonIncluded(facesSlider.getMinimum(), true);
-        includedFacesLabel.setText("included Face Types:");
+        JLabel includedFacesLabel = new JLabel("included Face Types:");
 //    includedFacesLabel.setLabelFor(CPFFaceOptionsPanel);
 //    includedFacesLabel.setDisplayedMnemonic(KeyEvent.VK_L);
         ActionListener connDualListener = new ActionListener() {
@@ -246,7 +231,7 @@ public class CPFPanel extends GeneratorPanel {
         casesPriosChoice.allowEmptySelection(false);
         cases = "123";
          */
-        CPFFacesPanel.setLayout(CPFFacesLayout);
+        JPanel CPFFacesPanel = new JPanel(new GridBagLayout());
         CPFFacesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
         CPFFacesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         CPFFacesPanel.add(facesButton, new GridBagConstraints(1, 1, 1, 1, 0.0010, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 30, 0, 5), 0, 0));
@@ -258,7 +243,7 @@ public class CPFPanel extends GeneratorPanel {
         CPFAtomsPanel.add(minAtomsSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
         CPFAtomsPanel.add(maxAtomsSlider, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
         CPFAtomsPanel.add(minEqMax, new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-        CPFExtrasPanel.add(dummyLabel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        CPFExtrasPanel.add(new JLabel(), new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         CPFExtrasPanel.add(dual, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         CPFExtrasPanel.add(altECC, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         CPFExtrasPanel.add(maxPathFace, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -272,11 +257,11 @@ public class CPFPanel extends GeneratorPanel {
         ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
          */
         this.add(CPFAtomsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        this.add(sep1, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
+        this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
         this.add(CPFFacesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(includedFacesLabel, new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 5, 0, 0), 0, 0));
         this.add(CPFFaceOptionsPanel, new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
-        this.add(sep2, new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
+        this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
         this.add(CPFExtrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
     }
 
