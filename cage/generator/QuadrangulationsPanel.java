@@ -11,8 +11,8 @@ import cage.CombinedGeneratorPanel;
 public class QuadrangulationsPanel extends CombinedGeneratorPanel {
 
     public QuadrangulationsPanel() {
-        addTab("general", new GeneralQuadrangulationsPanel(false));
-        addTab("with given degree", new QuadRestrictPanel(false));
+        addTab("all degrees allowed", new GeneralQuadrangulationsPanel(false));
+        addTab("quadrangulations with given degrees", new QuadRestrictPanel(false));
         add(pane);
     }
 
