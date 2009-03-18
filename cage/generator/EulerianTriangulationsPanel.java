@@ -20,12 +20,28 @@ import lisken.uitoolbox.EnhancedSlider;
 
 public class EulerianTriangulationsPanel extends GeneratorPanel {
 
+    /**
+     * Is this panel in the normal mode or the dual mode? This needs to be set
+     * on construction, i.e. the dual state of the panel is immutable.
+     */
+    private final boolean dual;
+
     //The minimum number of vertices allowed for this generator
     private static final int MIN_VERTICES = 6;
     //The maximum number of vertices allowed for this generator
     private static final int MAX_VERTICES = 40;
     //The default number of vertices for this generator
     private static final int DEFAULT_VERTICES = 6;
+
+    //The minimum number of vertices allowed for this generator in the dual case
+    //The minimum for a eulerian triangulation is 6 = (8+4/2)
+    private static final int DUAL_MIN_VERTICES = 8;
+    //The maximum number of vertices allowed for this generator in the dual case
+    //The maximum for a eulerian triangulation is 40 = (76+4/2)
+    private static final int DUAL_MAX_VERTICES = 76;
+    //The default number of vertices for this generator in the dual case
+    private static final int DUAL_DEFAULT_VERTICES = 8;
+
 
     //slider to select number of vertices
     private EnhancedSlider verticesSlider;
@@ -35,13 +51,20 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
     private JCheckBox exactConn;
 
     public EulerianTriangulationsPanel() {
+        this(false);
+    }
+
+    public EulerianTriangulationsPanel(final boolean dual) {
+        this.dual = dual;
         setLayout(new GridBagLayout());
         verticesSlider = new EnhancedSlider();
-        verticesSlider.setMinimum(MIN_VERTICES);
-        verticesSlider.setMaximum(MAX_VERTICES);
-        verticesSlider.setValue(DEFAULT_VERTICES);
+        verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
+        verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
+        verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
         verticesSlider.setMinorTickSpacing(1);
-        verticesSlider.setMajorTickSpacing(MAX_VERTICES - MIN_VERTICES);
+        verticesSlider.setMajorTickSpacing(dual ?
+            (DUAL_MAX_VERTICES - DUAL_MIN_VERTICES) :
+            (MAX_VERTICES - MIN_VERTICES));
         verticesSlider.setPaintTicks(true);
         verticesSlider.setPaintLabels(true);
         verticesSlider.setSnapWhileDragging(1);
@@ -58,7 +81,7 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 20, 10), 0, 0));
-        JLabel minConnLabel = new JLabel("minimum connectivity");
+        JLabel minConnLabel = new JLabel(dual ? "minimum connectivity of the dual" : "minimum connectivity");
         add(minConnLabel,
                 new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -94,8 +117,20 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
         genCmd.addElement("plantri");
         genCmd.addElement("-b");
         filename += "tri_euler";
-        String v = Integer.toString(verticesSlider.getValue());
+        String v;
+        if(dual)
+            v = Integer.toString(verticesSlider.getValue());
+        else
+            v = Integer.toString(verticesSlider.getValue() / 2 + 2);
+            //plantri takes the number of vertices as argument, i.e. number of
+            //faces in the dual graph so we use the euler formula to derive it
+            //from the number of vertices
+
         filename += "_" + v;
+        if(dual){
+            genCmd.addElement("-d");
+            filename += "_d";
+        }
         String minConn = minConnGroup.getSelection().getActionCommand();
         if (minConn.charAt(0) < '4') {
             minConn += exactConn.isSelected() ? "x" : "";
