@@ -54,7 +54,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
@@ -108,7 +107,6 @@ public class TwoView
     private Hashtable psPageNos = new Hashtable();
 
     public TwoView() {
-        JScrollPane scrollPane;
         title = new JLabel("TwoView diagrams");
         titleFont = title.getFont();
         titleFont = new Font(
