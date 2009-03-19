@@ -49,8 +49,7 @@ import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
-public class TwoView
-        implements ActionListener, CaGeViewer, TwoViewDevice {
+public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
 
     public static boolean debug = true;
     private JFrame frame;
@@ -59,13 +58,11 @@ public class TwoView
     private JPanel savePanel;
     private TwoViewPanel twoViewPanel;
     private TwoViewPainter painter;
-    private Font titleFont;
     private GeneratorInfo generatorInfo;
     private ResultPanel resultPanel;
     private CaGeResult result;
     private float edgeBrightness = 0.75f;
     private JSlider edgeBrightnessSlider;
-    private SpinButton edgeWidthButton;
     private JToggleButton savePSButton;
     private SavePSDialog savePSDialog;
     private OutputStream savePSStream = null;
@@ -74,7 +71,7 @@ public class TwoView
 
     public TwoView() {
         title = new JLabel("TwoView diagrams");
-        titleFont = title.getFont();
+        Font titleFont = title.getFont();
         titleFont = new Font(
                 titleFont.getName(),
                 titleFont.getStyle() & ~Font.BOLD,
@@ -100,7 +97,7 @@ public class TwoView
         edgeBrightnessLabel.setFont(titleFont);
         edgeBrightnessLabel.setLabelFor(edgeBrightnessSlider);
         edgeBrightnessLabel.setDisplayedMnemonic(KeyEvent.VK_B);
-        edgeWidthButton = new SpinButton(
+        final SpinButton edgeWidthButton = new SpinButton(
                 TwoViewPanel.DEFAULT_EDGE_WIDTH,
                 TwoViewPanel.MIN_EDGE_WIDTH, TwoViewPanel.MAX_EDGE_WIDTH);
         edgeWidthButton.setMaximumSize(edgeWidthButton.getPreferredSize());
