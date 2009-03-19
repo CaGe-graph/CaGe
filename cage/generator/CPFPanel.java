@@ -67,13 +67,13 @@ public class CPFPanel extends GeneratorPanel {
 
     public CPFPanel() {
         try {
-            jbInit();
+            initGui();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void jbInit() throws Exception {
+    private void initGui() throws Exception {
         setLayout(new GridBagLayout());
         JPanel CPFExtrasPanel = new JPanel(new GridBagLayout());
         JPanel CPFAtomsPanel = new JPanel(new GridBagLayout());
