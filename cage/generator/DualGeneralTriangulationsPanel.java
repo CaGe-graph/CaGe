@@ -95,7 +95,7 @@ public class DualGeneralTriangulationsPanel extends GeneratorPanel
                 new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 0), 0, 0));
-        JLabel minConnLabel = new JLabel("minimum connectivity of the dual");
+        JLabel minConnLabel = new JLabel("minimum cyclic connectivity");
         add(minConnLabel,
                 new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
