@@ -11,7 +11,7 @@ public class PlaneTriangulationsPanel extends GeneratorPanel {
     private GeneratorPanel lastChosenPanel = null;
 
     public PlaneTriangulationsPanel() {
-        pane.addTab("all degrees allowed", new GeneralTriangulationsPanel());
+        pane.addTab("all degrees allowed", new GeneralTriangulationsPanel(false));
         pane.addTab("eulerian", new EulerianTriangulationsPanel(false));
         for (int i = 0; i < pane.getTabCount(); ++i) {
             ((GeneratorPanel) pane.getComponentAt(i)).setBorder(

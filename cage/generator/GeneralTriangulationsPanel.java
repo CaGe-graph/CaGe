@@ -22,7 +22,32 @@ import javax.swing.JRadioButton;
 
 import lisken.uitoolbox.EnhancedSlider;
 
-class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListener {
+/**
+ * Configuration panel for general triangulations and 3-regular plane graphs.
+ * This is used to configure the generator <i>plantri</i>.
+ * <p>
+ * This configuration panel can be used to generate both triangulations and
+ * there dual, 3-regular plane graphs. The number of vertices
+ * in the dual, i.e. the number of faces in the original, is calculated
+ * using the Euler formula.
+ * <p>
+ * For the triangulations: E=(3/2)F<br>
+ * Therefore:
+ * <blockquote>
+ *     V - E + F = 2<br>
+ *     V - (3/2)F + F = 2<br>
+ *     F/2 = V - 2<br>
+ *     F = 2V - 4<br>
+ * </blockquote>
+ * So the dual has two vertices less than the original.
+ */
+public class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListener {
+
+    /**
+     * Is this panel in the normal mode or the dual mode? This needs to be set
+     * on construction, i.e. the dual state of the panel is immutable.
+     */
+    private final boolean dual;
 
     //The minimum number of vertices allowed for this generator
     public static final int MIN_VERTICES = 4;
@@ -30,6 +55,16 @@ class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListene
     public static final int MAX_VERTICES = 50;
     //The default number of vertices for this generator
     public static final int DEFAULT_VERTICES = 4;
+
+    //The minimum number of vertices allowed for this generator in the dual case
+    //The minimum for a general triangulation is 4 = (4+4/2)
+    private static final int DUAL_MIN_VERTICES = 4;
+    //The maximum number of vertices allowed for this generator in the dual case
+    //The maximum for a general triangulation is 50 = (96+4/2)
+    private static final int DUAL_MAX_VERTICES = 96;
+    //The default number of vertices for this generator in the dual case
+    private static final int DUAL_DEFAULT_VERTICES = 4;
+
 
     //slider to select number of vertices
     private EnhancedSlider verticesSlider;
@@ -43,13 +78,20 @@ class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListene
     private JCheckBox exactConn;
 
     public GeneralTriangulationsPanel() {
+        this(false);
+    }
+
+    public GeneralTriangulationsPanel(boolean dual) {
+        this.dual = dual;
         setLayout(new GridBagLayout());
         verticesSlider = new EnhancedSlider();
-        verticesSlider.setMinimum(MIN_VERTICES);
-        verticesSlider.setMaximum(MAX_VERTICES);
-        verticesSlider.setValue(DEFAULT_VERTICES);
+        verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
+        verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
+        verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
         verticesSlider.setMinorTickSpacing(2); //vertices has to be even
-        verticesSlider.setMajorTickSpacing(MAX_VERTICES - MIN_VERTICES);
+        verticesSlider.setMajorTickSpacing(dual ?
+            (DUAL_MAX_VERTICES - DUAL_MIN_VERTICES) :
+            (MAX_VERTICES - MIN_VERTICES));
         verticesSlider.setPaintTicks(true);
         verticesSlider.setPaintLabels(true);
         verticesSlider.setSnapWhileDragging(2);
@@ -67,7 +109,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListene
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 20, 10), 0, 0));
-        JLabel minDegLabel = new JLabel("minimum degree");
+        JLabel minDegLabel = new JLabel(dual ? "minimum face size" : "minimum degree");
         add(minDegLabel,
                 new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -90,7 +132,7 @@ class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListene
                 new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 0), 0, 0));
-        JLabel minConnLabel = new JLabel("minimum connectivity");
+        JLabel minConnLabel = new JLabel(dual ? "minimum cyclic connectivity" : "minimum connectivity");
         add(minConnLabel,
                 new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -131,8 +173,19 @@ class GeneralTriangulationsPanel extends GeneratorPanel implements ActionListene
 
         genCmd.addElement("plantri");
         filename += "tri";
-        String vertices = Integer.toString(verticesSlider.getValue());
+        String vertices;
+        if(dual)
+            vertices = Integer.toString(verticesSlider.getValue());
+        else
+            vertices = Integer.toString(verticesSlider.getValue() / 2 + 2);
+            //plantri takes the number of vertices as argument, i.e. number of
+            //faces in the dual graph so we use the euler formula to derive it
+            //from the number of vertices
         filename += "_" + vertices;
+        if(dual){
+            genCmd.addElement("-d");
+            filename += "_d";
+        }
         String minConn = minConnGroup.getSelection().getActionCommand().substring(1);
         minConn += exactConn.isSelected() ? "x" : "";
         genCmd.addElement("-c" + minConn);
