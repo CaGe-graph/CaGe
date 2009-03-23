@@ -81,7 +81,7 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 20, 10), 0, 0));
-        JLabel minConnLabel = new JLabel(dual ? "minimum connectivity of the dual" : "minimum connectivity");
+        JLabel minConnLabel = new JLabel(dual ? "minimum cyclic connectivity" : "minimum connectivity");
         add(minConnLabel,
                 new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
