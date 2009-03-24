@@ -11,6 +11,6 @@
 
 #include "cone.h"
 
-int getTwoPentagonsPatch(int sside, int symmetric, int mirror);
+int getTwoPentagonsPatch(int sside, boolean symmetric, boolean mirror, boolean onlyCount, int hexagonLayers);
 
 #endif // end if not defined, and end the header file

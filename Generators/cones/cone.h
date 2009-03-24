@@ -30,6 +30,12 @@ typedef int boolean;
 #define OUTSIDE 1
 #define UNSET 0
 
+int getMarkValue();
+void resetMark(EDGE* e, int i);
+void setAllMarksTo(int value, EDGE *start, int maxVertex);
+
+
+int determineMaximumOrder(int pentagons, int sside, boolean symmetric);
 EDGE *getNewEdge();
 
 EDGE *getNextBreakEdge(EDGE *breakEdge);
@@ -40,7 +46,10 @@ int constructFaceToRightNeighbourRestricted(int size, EDGE *start, int *vertexCo
 void setFaceSizeToRight(int size, EDGE *start);
 int patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vertexCounter);
 
-int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter, boolean IPR, boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode, int numberOfStructures, EDGE **startPoints, int numberOfStartPoints, EDGE **mirrorStartPoints, int numberOfMirrorStartPoints);
+int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter, boolean IPR, boolean mirror,
+                 int pentagons, int sside, boolean symmetric, int *spiralCode, int numberOfStructures, EDGE **startPoints,
+				 int* disabledStartPoints, int numberOfStartPoints, EDGE **mirrorStartPoints, int* disabledMirrorStartPoints,
+				 int numberOfMirrorStartPoints, int depth, boolean lastEdgeWasBreakEdge, int hexagonsAddedAtStart);
 boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices);
 boolean isMirrorSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices);
 

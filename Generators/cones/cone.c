@@ -12,8 +12,6 @@
  *  with the option -m mirror images of cones are considered to
  *  be non-isomorphic
  *
- *  returns a the number of canonical cones or a negative number in case of an error
- *
  * compile with gcc cone.c util.c twopentagons.c -o cone -Wall
  */
 /*
@@ -32,12 +30,25 @@
 #include <limits.h>
 
 /*
-Some utility macros
+Some utility macros and methods for use in other files
 */
 int markValue = 0;
 #define MARKED(e) (e->mark == markValue)
 #define MARK(e) (e->mark = markValue)
 #define RESET_MARK(e, i) {if(markValue == INT_MAX){setAllMarksTo(0,e,i);markValue=1;}else{markValue++;}}
+
+int getMarkValue(){
+	return markValue;
+}
+
+void resetMark(EDGE* e, int i){
+	if(markValue == INT_MAX){
+		setAllMarksTo(0,e,i);
+		markValue=1;
+	} else {
+		markValue++;
+	}
+}
 
 //set to 1 when only the number of structures needs to be counted
 int onlyCount = 0;
@@ -76,7 +87,7 @@ void setAllMarksTo(int value, EDGE *start, int maxVertex){
 	}
 	if(start->inverse->right!=NULL){
 		start->inverse->right->mark = value;
-		stack[stacksize++] = start->inverse->left;
+		stack[stacksize++] = start->inverse->right;
 	}
 	
 	while(stacksize>0){
@@ -130,7 +141,7 @@ int *EDGEsToPlanarGraph(EDGE *start, int maxVertex){
 	}
 	if(start->inverse->right!=NULL){
 		graph[(start->from * 4) + ++j] = start->inverse->right->to;
-		stack[stacksize++] = start->inverse->left;
+		stack[stacksize++] = start->inverse->right;
 	}
 	graph[(start->from * 4) + 0] = j; //degree of start->from
 	
@@ -267,6 +278,59 @@ void exportPlanarGraphTable(EDGE *start, int maxVertex){
 	}
 }
 #endif
+
+/* int determineMaximumOrder(int pentagons, int sside, boolean symmetric) */
+/*
+	returns the maximum number of vertices in a canonical conepatch with given parameters.
+*/
+int determineMaximumOrder(int pentagons, int sside, boolean symmetric){
+	if(symmetric){
+		switch(pentagons){
+			int uboundHexagons;
+			case 1:
+				return 5;
+				break;
+			case 2:
+				uboundHexagons = ((4*sside+1)*(4*sside+1)-6)/10;
+				return 2*uboundHexagons + 4*sside + 6;
+				break;
+			case 3:
+				uboundHexagons = ((3*sside+1)*(3*sside+1)-16)/8;
+				return 2*uboundHexagons + 3*sside + 7;
+				break;
+			case 4:
+				uboundHexagons = (4*sside*sside - 20)/6;
+				return 2*uboundHexagons + 2*sside + 8;
+				break;
+			case 5:
+				uboundHexagons = (sside*sside - 25)/4;
+				return 2*uboundHexagons + sside + 9;
+				break;
+			default:
+				//error
+				return 0;
+		}
+	} else {
+		switch(pentagons){
+			int uboundHexagons;
+			case 2:
+				uboundHexagons = ((4*sside+4)*(4*sside+4)-6)/10;
+				return 2*uboundHexagons + 4*sside + 6;
+				break;
+			case 3:
+				uboundHexagons = ((3*sside+3)*(3*sside+3)-16)/8;
+				return 2*uboundHexagons + 3*sside + 7;
+				break;
+			case 4:
+				uboundHexagons = ((2*sside+1)*(2*sside+1)-20)/6;
+				return 2*uboundHexagons + 2*sside + 8;
+				break;
+			default:
+				//error
+				return 0;
+		}	
+	}
+}
 
 /* EDGE *getNewEdge() */
 /*
@@ -741,52 +805,115 @@ void removeLastFace(EDGE *currentStart, int *vertexCounter){
 	free(toRemove);
 }
 
+void cleanDisabledMarks(int* disabledStartPoints, int numberOfStartPoints, int* disabledMirrorStartPoints, int numberOfMirrorStartPoints, int depth){
+	int i;
+	for(i = 0; i < numberOfStartPoints; i++){
+		if(disabledStartPoints[i]==depth)
+			disabledStartPoints[i]=0;
+	}
+	for(i = 0; i < numberOfMirrorStartPoints; i++){
+		if(disabledMirrorStartPoints[i]==depth)
+			disabledMirrorStartPoints[i]=0;
+	}
+}
+
+boolean checkDifferentSpirals(EDGE *currentStart, int *vertexCounter, int pentagonsUsed, int *spiralCode,
+                 EDGE **startPoints, int* disabledStartPoints, int numberOfStartPoints,
+				 EDGE **mirrorStartPoints, int* disabledMirrorStartPoints, int numberOfMirrorStartPoints, int depth){
+		int i;
+		for(i = 0; i < numberOfStartPoints; i++){
+			if(!disabledStartPoints[i]){
+				int spiralCodeSmaller = isSpiralCodeSmaller(spiralCode, pentagonsUsed, startPoints[i], *vertexCounter);
+				if(spiralCodeSmaller>0){
+					cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
+					return 1;
+				} else if(spiralCodeSmaller<0){
+					disabledStartPoints[i]=depth;
+				}
+			}
+		}
+		for(i = 0; i < numberOfMirrorStartPoints; i++){
+			if(!disabledMirrorStartPoints[i]){
+				int mirrorSpiralCodeSmaller = isMirrorSpiralCodeSmaller(spiralCode, pentagonsUsed, mirrorStartPoints[i], *vertexCounter);
+				if(mirrorSpiralCodeSmaller>0){
+					cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
+					return 1;
+				} else if(mirrorSpiralCodeSmaller<0){
+					disabledMirrorStartPoints[i]=depth;
+				}
+			}
+		}
+		return 0;
+}
+
 /* int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter, boolean IPR,
                     boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode,
                     int numberOfStructures, EDGE **startPoints, int numberOfStartPoints, EDGE **mirrorStartPoints,
-					int numberOfMirrorStartPoints){
+					int numberOfMirrorStartPoints, int depth, boolean lastEdgeWasBreakEdge){
 */
 /*
 	tries to fill the boundary by adding a pentagon or a hexagon and then calling itself.
 */
 int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int *vertexCounter,
                  boolean IPR, boolean mirror, int pentagons, int sside, boolean symmetric, int *spiralCode,
-                 int numberOfStructures, EDGE **startPoints, int numberOfStartPoints, EDGE **mirrorStartPoints,
-				 int numberOfMirrorStartPoints){
+                 int numberOfStructures, EDGE **startPoints, int* disabledStartPoints, int numberOfStartPoints,
+				 EDGE **mirrorStartPoints, int* disabledMirrorStartPoints, int numberOfMirrorStartPoints, int depth,
+				 boolean lastEdgeWasBreakEdge, int hexagonsAddedAtStart){
+	
 	//check some bound criteria
 
 	//first pentagon is checked seperately because this cuts larg parts early
 	if(pentagonsLeft == pentagons){
 		if(symmetric){
-			if(!mirror && spiralCode[0]>halfFloor(sside)){
+			if(!mirror && spiralCode[0]-hexagonsAddedAtStart>halfFloor(sside)){
 				return numberOfStructures;
-			} else if(mirror && spiralCode[0] >= sside){
+			} else if(mirror && spiralCode[0]-hexagonsAddedAtStart >= sside){
 				return numberOfStructures;
 			}
 		} else if(!symmetric){
-			if(!mirror && spiralCode[0]>halfCeil(sside + (sside+1)*(6-pentagons-1)) + halfFloor(sside)){
+			if(!mirror && spiralCode[0]-hexagonsAddedAtStart>halfCeil(sside + (sside+1)*(6-pentagons-1)) + halfFloor(sside)){
 				return numberOfStructures;
-			} else if(mirror && spiralCode[0] >= sside + (sside+1)*(6-pentagons-1)){
+			} else if(mirror && spiralCode[0]-hexagonsAddedAtStart >= sside + (sside+1)*(6-pentagons-1)){
 				//stop when first pentagon doesn't belong to boundary
 				return numberOfStructures;
 			}
 		}
 	} else if(pentagonsLeft == pentagons - 1 && !symmetric && !mirror){
 		//this case can only be checked after the first pentagon in placed
-		if(spiralCode[0] > halfFloor(sside) && spiralCode[0]<=sside)
+		if(spiralCode[0]-hexagonsAddedAtStart > halfFloor(sside) && spiralCode[0]-hexagonsAddedAtStart<=sside)
 			return numberOfStructures;
 	}
 	
 	//as soon as one pentagon is placed we start to check whether the spiral code is canonical
-	if(pentagonsLeft!=pentagons){
+	//if a spiral is greater than the current spiral we mark it as disabled. This means that we don't
+	//need to  consider it in further steps. We however need to remove these marks as soon as we return
+	//after this point.
+	
+	//uncomment for testing difference with always checking alternative spirals
+	//lastEdgeWasBreakEdge = 1;
+	if(pentagonsLeft!=pentagons && lastEdgeWasBreakEdge){
 		int i;
 		for(i = 0; i < numberOfStartPoints; i++){
-			if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, startPoints[i], *vertexCounter))
-				return numberOfStructures;
+			if(!disabledStartPoints[i]){
+				int spiralCodeSmaller = isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, startPoints[i], *vertexCounter);
+				if(spiralCodeSmaller>0){
+					cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
+					return numberOfStructures;
+				} else if(spiralCodeSmaller<0){
+					disabledStartPoints[i]=depth;
+				}
+			}
 		}
 		for(i = 0; i < numberOfMirrorStartPoints; i++){
-			if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, mirrorStartPoints[i], *vertexCounter))
-				return numberOfStructures;
+			if(!disabledMirrorStartPoints[i]){
+				int mirrorSpiralCodeSmaller = isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, mirrorStartPoints[i], *vertexCounter);
+				if(mirrorSpiralCodeSmaller>0){
+					cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
+					return numberOfStructures;
+				} else if(mirrorSpiralCodeSmaller<0){
+					disabledMirrorStartPoints[i]=depth;
+				}
+			}
 		}
 	}
 	
@@ -827,14 +954,16 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 					//check whether this is a canonical patch
 					int i;
 					for(i = 0; i < numberOfStartPoints; i++){
-						if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft+1, startPoints[i], *vertexCounter)){
+						if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft+1, startPoints[i], *vertexCounter)>0){
 							setFaceSizeToRight(UNSET, currentStart);
+							cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 							return numberOfStructures;
 						}
 					}
 					for(i = 0; i < numberOfMirrorStartPoints; i++){
-						if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft+1, mirrorStartPoints[i], *vertexCounter)){
+						if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft+1, mirrorStartPoints[i], *vertexCounter)>0){
 							setFaceSizeToRight(UNSET, currentStart);
+							cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 							return numberOfStructures;
 						}
 					}
@@ -846,8 +975,10 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 #endif
 					//remove the face
 					setFaceSizeToRight(UNSET, currentStart);
+					cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 					return numberOfStructures + 1;
 				}
+				boolean isBreakEdge = (temp->inverse->right != NULL);
 				temp = temp->inverse;
 				while(temp->right==NULL){
 					temp = temp->left;
@@ -859,8 +990,9 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 
 				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft - 1, vertexCounter,
 													IPR, mirror, pentagons, sside, symmetric, spiralCode,
-													numberOfStructures, startPoints, numberOfStartPoints,
-													mirrorStartPoints, numberOfMirrorStartPoints);
+													numberOfStructures, startPoints, disabledStartPoints,
+													numberOfStartPoints, mirrorStartPoints, disabledMirrorStartPoints,
+													numberOfMirrorStartPoints, depth + 1, isBreakEdge, hexagonsAddedAtStart);
 				removeLastFace(temp, vertexCounter);
 			}
 		} else {
@@ -875,14 +1007,16 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 					//check whether this is a canonical patch
 					int i;
 					for(i = 0; i < numberOfStartPoints; i++){
-						if(isSpiralCodeSmaller(spiralCode, pentagons, startPoints[i], *vertexCounter)){
+						if(isSpiralCodeSmaller(spiralCode, pentagons, startPoints[i], *vertexCounter)>0){
 							setFaceSizeToRight(UNSET, currentStart);
+							cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 							return numberOfStructures;
 						}
 					}
 					for(i = 0; i < numberOfMirrorStartPoints; i++){
-						if(isMirrorSpiralCodeSmaller(spiralCode, pentagons, mirrorStartPoints[i], *vertexCounter)){
+						if(isMirrorSpiralCodeSmaller(spiralCode, pentagons, mirrorStartPoints[i], *vertexCounter)>0){
 							setFaceSizeToRight(UNSET, currentStart);
+							cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 							return numberOfStructures;
 						}
 					}
@@ -893,8 +1027,10 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 #endif
 					//remove the face
 					setFaceSizeToRight(UNSET, currentStart);
+					cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 					return numberOfStructures + 1;
 				}
+				boolean isBreakEdge = (temp->inverse->right != NULL);
 				temp = temp->inverse;
 				while(temp->right==NULL){
 					temp = temp->left;
@@ -906,8 +1042,9 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 
 				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft - 1, vertexCounter,
 													IPR, mirror, pentagons, sside, symmetric, spiralCode,
-													numberOfStructures, startPoints, numberOfStartPoints,
-													mirrorStartPoints, numberOfMirrorStartPoints);
+													numberOfStructures, startPoints, disabledStartPoints,
+													numberOfStartPoints, mirrorStartPoints, disabledMirrorStartPoints,
+													numberOfMirrorStartPoints, depth + 1, isBreakEdge, hexagonsAddedAtStart);
 				removeLastFace(temp, vertexCounter);
 			}
 		}
@@ -922,8 +1059,10 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 				//error: there are still pentagons left
 				//remove the face
 				setFaceSizeToRight(UNSET, currentStart);
+				cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 				return numberOfStructures;
 			}
+			boolean isBreakEdge = (temp->inverse->right != NULL);
 			temp = temp->inverse;
 			while(temp->right==NULL){
 				temp = temp->left;
@@ -932,12 +1071,14 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 			//increase current position of spiral code
 			spiralCode[pentagons-pentagonsLeft]++;
 			
-			numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter, 
-												IPR, mirror, pentagons, sside, symmetric, spiralCode,
-												numberOfStructures, startPoints, numberOfStartPoints,
-												mirrorStartPoints, numberOfMirrorStartPoints);
+				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter,
+													IPR, mirror, pentagons, sside, symmetric, spiralCode,
+													numberOfStructures, startPoints, disabledStartPoints,
+													numberOfStartPoints, mirrorStartPoints, disabledMirrorStartPoints,
+													numberOfMirrorStartPoints, depth + 1, isBreakEdge, hexagonsAddedAtStart);
 			removeLastFace(temp, vertexCounter);
 		}
+		cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 		return numberOfStructures;
 	} else {
 #ifdef _DEBUG
@@ -952,14 +1093,16 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 				//check whether this is a canonical patch
 				int i;
 				for(i = 0; i < numberOfStartPoints; i++){
-					if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, startPoints[i], *vertexCounter)){
+					if(isSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, startPoints[i], *vertexCounter)>0){
 						setFaceSizeToRight(UNSET, currentStart);
+						cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 						return numberOfStructures;
 					}
 				}
 				for(i = 0; i < numberOfMirrorStartPoints; i++){
-					if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, mirrorStartPoints[i], *vertexCounter)){
+					if(isMirrorSpiralCodeSmaller(spiralCode, pentagons - pentagonsLeft, mirrorStartPoints[i], *vertexCounter)>0){
 						setFaceSizeToRight(UNSET, currentStart);
+						cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 						return numberOfStructures;
 					}
 				}
@@ -969,18 +1112,22 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 #endif
 				//remove the face
 				setFaceSizeToRight(UNSET, currentStart);
+				cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 				return numberOfStructures + 1;
 			}
+			boolean isBreakEdge = (temp->inverse->right != NULL);
 			temp = temp->inverse;
 			while(temp->right==NULL){
 				temp = temp->left;
 			}
-			numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter,
-												IPR, mirror, pentagons, sside, symmetric, spiralCode,
-												numberOfStructures, startPoints, numberOfStartPoints,
-												mirrorStartPoints, numberOfMirrorStartPoints);
+				numberOfStructures = fillBoundary(boundaryStart, temp, pentagonsLeft, vertexCounter,
+													IPR, mirror, pentagons, sside, symmetric, spiralCode,
+													numberOfStructures, startPoints, disabledStartPoints,
+													numberOfStartPoints, mirrorStartPoints, disabledMirrorStartPoints,
+													numberOfMirrorStartPoints, depth + 1, isBreakEdge, hexagonsAddedAtStart);
 			removeLastFace(temp, vertexCounter);
 		}
+		cleanDisabledMarks(disabledStartPoints, numberOfStartPoints, disabledMirrorStartPoints, numberOfMirrorStartPoints, depth);
 		return numberOfStructures;
 	}
 }
@@ -988,6 +1135,7 @@ int fillBoundary(EDGE *boundaryStart, EDGE *currentStart, int pentagonsLeft, int
 /* boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices) */
 /*
 	Returns 1 if the spiralcode obtained by starting at alternateStart is smaller then the given spiralcode.
+	Returns -1 if the spiralcode obtained by starting at alternateStart is greater then the given spiralcode.
 */
 boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateStart, int numberOfVertices){
 	RESET_MARK(alternateStart, numberOfVertices)
@@ -1024,7 +1172,7 @@ boolean isSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alternateS
 
 		if(spiralCode[currentPosition]<currentValue)
 			//it is no longer possible to find a smaller spiral code in this case
-			return 0;
+			return -1;
 		
 		
 		//progress to next edge
@@ -1110,77 +1258,6 @@ boolean isMirrorSpiralCodeSmaller(int *spiralCode, int currentLength, EDGE *alte
 	return 0;
 }
 
-/*
-//TODO: remove because incorrect
-void mirroredSpiralCode(int *oldSpiralCode, int *newSpiralCode, int sside, int pentagons, boolean symmetric){
-	int currentLayerSize, previousLayersSize = 0;
-	int last_i = 0;
-	int i, j;
-	
-	if(symmetric)
-		currentLayerSize = sside*(6-pentagons);
-	else
-		;
-		
-	while(last_i<pentagons){
-		i = last_i;
-
-		//face at start of layer remains at the start
-		if(oldSpiralCode[i] == previousLayersSize){
-			newSpiralCode[i] = oldSpiralCode[i];
-			i++;
-			last_i = i;
-		}
-
-		while(i < pentagons && oldSpiralCode[i] < currentLayerSize + previousLayersSize) i++;
-		
-		for(j = i - 1; j >= last_i;j--){
-			newSpiralCode[last_i+i-j-1]=previousLayersSize + 
-						((currentLayerSize - (oldSpiralCode[j]-previousLayersSize))%currentLayerSize);
-		}
-		last_i = i;
-		previousLayersSize += currentLayerSize;
-		currentLayerSize -= (6 - (pentagons-last_i)); //(pentagons-last_i) is the number of remaining pentagons
-		//TODO: last layer can be wrong size!!!
-		//But, the result should be correct: check this
-	}
-}
-
-//TODO: remove because incorrect
-void shiftedSpiralCode(int *oldSpiralCode, int *newSpiralCode, int sside, int pentagons, boolean symmetric){
-	int currentLayerSize, previousLayersSize = 0;
-	int last_i = 0;
-	int i, j;
-	int currentShift;
-	
-	if(symmetric)
-		currentLayerSize = sside*(6-pentagons);
-	else
-		;
-		
-	currentShift = sside;
-	
-	while(last_i<pentagons){
-		i = last_i;
-
-		while(i < pentagons && oldSpiralCode[i] < currentLayerSize + previousLayersSize) i++;
-		
-		int pentagonsInShift = 0;
-		for(j = last_i; j < i;j++){
-			newSpiralCode[j]=previousLayersSize + 
-						((oldSpiralCode[j] - previousLayersSize + currentShift)%currentLayerSize);
-			if(oldSpiralCode[j] - previousLayersSize < currentShift) pentagonsInShift++;
-		}
-		last_i = i;
-		previousLayersSize += currentLayerSize;
-		currentLayerSize -= (6 - (pentagons-last_i)); //(pentagons-last_i) is the number of remaining pentagons
-		currentShift -= pentagonsInShift + 1;
-		//TODO: last layer can be wrong size!!!
-		//But, the result should be correct: check this
-	}
-}
-*/
-
 /* int main(int argc, char *argv[]) */
 /*
 	reads the command line arguments and starts the generation process
@@ -1190,6 +1267,7 @@ int main(int argc, char *argv[])
 	int c;
 	int pentagons, sside;
 	boolean symmetric, ipr=0, error = 0;
+	int hexagonLayers = 0;
     int mirror = 0;
     char *name = argv[0];
 
@@ -1209,13 +1287,13 @@ int main(int argc, char *argv[])
 			symmetric = 0;
 			break;
 		default:
-			fprintf(stderr,"Usage: %s (# pentagons) (shortest 'side') (n/s) [options] \n",name);
+			fprintf(stderr,"Usage: %s (# pentagons) (shortest 'side') (n/s) [options] (# hexagon layers) \n",name);
 			fprintf(stderr,"For more information type: %s 0 0 s -h \n",name);
 			exit(2);
 	}
 	
 	while (--argc > 3 && (*++argv)[0] == '-'){
-		while ((c = *++argv[0]))
+		while ((c = *++argv[0])){
 			switch (c) {
 			case 'm':
 				mirror = 1;
@@ -1229,7 +1307,7 @@ int main(int argc, char *argv[])
 			case 'h':
 				//print help
 				fprintf(stderr, "The program %s calculates canonical conepatches.\n", name);
-				fprintf(stderr, "Usage: %s (# pentagons) (shortest 'side') (n/s) [options] \n\n", name);
+				fprintf(stderr, "Usage: %s (# pentagons) (shortest 'side') (n/s) [options] (# hexagon layers) \n\n", name);
 				fprintf(stderr, "Valid options:\n");
 				fprintf(stderr, "  -h          : Print this help and return.\n");
 				fprintf(stderr, "  -m          : Mirror-images are considered nonisomorphic.\n");
@@ -1242,10 +1320,16 @@ int main(int argc, char *argv[])
 				error = 1;
 				break;
 			}
+		}
+	}
+	
+	if(argc>3){
+		argc--;
+		hexagonLayers = parseNumber(argv);
 	}
 	
 	if(error || argc != 3){
-		fprintf(stderr,"Usage: %s (# pentagons) (shortest 'side') (n/s) [options] \n",name);
+		fprintf(stderr,"Usage: %s (# pentagons) (shortest 'side') (n/s) [options] (# hexagon layers) \n",name);
 		fprintf(stderr,"For more information type: %s 0 0 s -h\n",name);
 		return 3;
 	}
@@ -1283,6 +1367,11 @@ int main(int argc, char *argv[])
 				return 0;
 		}
 	}
+	
+	if(symmetric)
+		fprintf(stderr, "Generating all symmetric cones with side length %d and %d pentagons and surrounding the patches with %d hexagon layers.\n", sside, pentagons, hexagonLayers);
+	else
+		fprintf(stderr, "Generating all nearsymmetric cones with side length %d and %d pentagons and surrounding the patches with %d hexagon layers.\n", sside, pentagons, hexagonLayers);
 
 	//in case of 1 pentagon there is also an upperbound
 	if(pentagons == 1 && sside > 0){
@@ -1292,7 +1381,19 @@ int main(int argc, char *argv[])
 		//There is only one canonical cone patch with 1 pentagon and that is the pentagon itself
 		fprintf(stderr, "There is one canonical patch.\n");
 		int vertexCounter = 0;
-		EDGE *boundaryStart = createBoundary(sside, symmetric, pentagons, &vertexCounter);
+		EDGE *boundaryStart;
+		if(hexagonLayers==0)
+			boundaryStart = createBoundary(sside, symmetric, pentagons, &vertexCounter);
+		else {
+			boundaryStart = createBoundary(sside + hexagonLayers, symmetric, pentagons, &vertexCounter);
+			int code[1];
+			code[0] = 1;
+			int i;
+			for(i = 0; i<hexagonLayers; i++){
+				code[0] += (sside + hexagonLayers - i)*(6-pentagons);
+			}
+			patchFromSpiralCode(boundaryStart, code, pentagons, &vertexCounter);
+		}
 		fprintf(stderr, "vertices: %d\n", vertexCounter);
 		exportPlanarGraphCode(boundaryStart, vertexCounter);
 		fprintf(stderr, "Generated a total of 1 canonical cone patch.\n");
@@ -1301,7 +1402,7 @@ int main(int argc, char *argv[])
 
 	//in case of two pentagons we don't need the branch and bound
 	if(pentagons == 2){
-		int numberOfStructures = getTwoPentagonsPatch(sside,symmetric, mirror);
+		int numberOfStructures = getTwoPentagonsPatch(sside,symmetric, mirror, onlyCount, hexagonLayers);
 		fprintf(stderr, "Generated a total of %d canonical cone patches.\n", numberOfStructures);
 		return 0;
 	}
@@ -1310,19 +1411,52 @@ int main(int argc, char *argv[])
 	int vertexCounter = 0;
 	int spiralCode[pentagons];
 	spiralCode[0] = 0;
-	EDGE *boundaryStart = createBoundary(sside, symmetric, pentagons, &vertexCounter);
+	EDGE *boundaryStart = createBoundary(sside + hexagonLayers, symmetric, pentagons, &vertexCounter);
+	EDGE *patchStart;
+	
+	//determine the amount of hexagons to add for the given number of layers
+	int hexagonsToAdd = 0;
+	{
+		int i;
+		for(i = 0; i<hexagonLayers; i++){
+			hexagonsToAdd += (sside + 1 - symmetric + hexagonLayers - i)*(6-pentagons);
+		}
+		if(!symmetric) hexagonsToAdd -= hexagonLayers;
+		
+		EDGE *localStart = boundaryStart;
+		EDGE *temp = boundaryStart;
+		for(i = 0; i<hexagonsToAdd; i++){
+			if(!constructFaceToRight(6,localStart, &vertexCounter, &temp)){
+#ifdef _DEBUG
+				fprintf(stderr, "Error: hexagon could not be added\n");
+#endif
+				return 8;
+			}
+			temp = temp->inverse;
+			while(temp->right==NULL){
+				temp = temp->left;
+			}
+			localStart = temp;
+		}
+		spiralCode[0]=hexagonsToAdd;
+		patchStart = localStart;
+	}
 	
 	//search all possible begin positions
 	int variations;
 	EDGE **startPoints;
+	int *disabledStartPoints;
 	if(symmetric){
 		variations = 6-pentagons-1;
 		if(variations > 0){
 			startPoints = (EDGE **)malloc(sizeof(EDGE *)*variations);
+			disabledStartPoints = (int *)malloc(sizeof(int)*variations);
 			int i;
 			startPoints[0] = getNextBreakEdge(boundaryStart);
+			disabledStartPoints[0]=0;
 			for(i = 1; i<variations; i++){
 				startPoints[i] = getNextBreakEdge(startPoints[i-1]);
+				disabledStartPoints[i]=0;
 			}
 		}
 	} else {
@@ -1331,26 +1465,35 @@ int main(int argc, char *argv[])
 
 	int mirrorVariations;
 	EDGE **mirrorStartPoints;
-	
+	int *disabledMirrorStartPoints;
+
 	if(mirror){
 		mirrorVariations = 0;
 	} else {
 		if(symmetric){
 			mirrorVariations = 6-pentagons;
 			mirrorStartPoints = (EDGE **)malloc(sizeof(EDGE *)*mirrorVariations);
+			disabledMirrorStartPoints = (int *)malloc(sizeof(int)*mirrorVariations);
 			mirrorStartPoints[0] = boundaryStart->inverse;
+			disabledMirrorStartPoints[0]=0;
 			int i;
-			for(i=0;i<mirrorVariations-1; i++)
+			for(i=0;i<mirrorVariations-1; i++){
 				mirrorStartPoints[i+1] = startPoints[i]->inverse;
+				disabledMirrorStartPoints[i+1]=0;
+			}
 		} else {
 			mirrorVariations = 1;
 			mirrorStartPoints = (EDGE **)malloc(sizeof(EDGE *)*mirrorVariations);
+			disabledMirrorStartPoints = (int *)malloc(sizeof(int)*mirrorVariations);
 			mirrorStartPoints[0] = getNextBreakEdge(boundaryStart)->inverse;
+			disabledMirrorStartPoints[0]=0;
 		}
 	}
-	int numberOfStructures = fillBoundary(boundaryStart, boundaryStart, pentagons, &vertexCounter, ipr,
+
+	int numberOfStructures = fillBoundary(boundaryStart, patchStart, pentagons, &vertexCounter, ipr,
 											mirror, pentagons, sside, symmetric, spiralCode, 0, startPoints,
-											variations, mirrorStartPoints, mirrorVariations);
+											disabledStartPoints, variations, mirrorStartPoints, disabledMirrorStartPoints,
+											mirrorVariations, 1, 0, hexagonsToAdd);
 	fprintf(stderr, "Generated a total of %d canonical cone patches.\n", numberOfStructures);
 	return 0;
 }

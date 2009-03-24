@@ -15,29 +15,38 @@
 /*
 	generates the canonical cone patches with two pentagons and the given boundary
 */
-int getTwoPentagonsPatch(int sside, int symmetric, int mirror){
+int getTwoPentagonsPatch(int sside, boolean symmetric, boolean mirror, boolean onlyCount, int hexagonLayers){
 	int i;
 
+	//determine the amount of hexagons to add for the given number of layers
+	int hexagonsToAdd = 0;
+	for(i = 0; i<hexagonLayers; i++){
+		hexagonsToAdd += (sside + 1 - symmetric + hexagonLayers - i)*4;
+	}
+	if(!symmetric) hexagonsToAdd -= hexagonLayers;
+	
 	if(symmetric){
 		//sside patches with spiral code i, 2*sside + i (i=0,...,sside-1)
 		int upperbound = sside;
 		if(!mirror){
 			upperbound = halfFloor(sside) + 1;
 		}
-		for(i=0;i<upperbound;i++){
-			fprintf(stderr,"\nnew patch with first pentagon on position %d\n", i+1);
-			int vertexCounter = 0;
-			//first create the boundary
-			EDGE *boundaryStart = createBoundary(sside, symmetric, 2, &vertexCounter);
-			int code[2];
-			code[0] = i + 1;
-			code[1] = 2*sside+ i + 1;
-			if(patchFromSpiralCode(boundaryStart, code, 2, &vertexCounter)){
-				//---------
-				fprintf(stderr, "vertices: %d\n", vertexCounter);
-				exportPlanarGraphCode(boundaryStart, vertexCounter);
-				//exportPlanarGraphTable(boundaryStart, vertexCounter);
-				fprintf(stderr, "\n");
+		if(!onlyCount){
+			for(i=0;i<upperbound;i++){
+				fprintf(stderr,"\nnew patch with first pentagon on position %d\n", i+1);
+				int vertexCounter = 0;
+				//first create the boundary
+				EDGE *boundaryStart = createBoundary(sside + hexagonLayers, symmetric, 2, &vertexCounter);
+				int code[2];
+				code[0] = hexagonsToAdd + i + 1;
+				code[1] = hexagonsToAdd + 2*sside+ i + 1;
+				if(patchFromSpiralCode(boundaryStart, code, 2, &vertexCounter)){
+					//---------
+					fprintf(stderr, "vertices: %d\n", vertexCounter);
+					exportPlanarGraphCode(boundaryStart, vertexCounter);
+					//exportPlanarGraphTable(boundaryStart, vertexCounter);
+					fprintf(stderr, "\n");
+				}
 			}
 		}
 		return upperbound;
@@ -48,20 +57,22 @@ int getTwoPentagonsPatch(int sside, int symmetric, int mirror){
 			lowerbound += halfFloor(sside+1);
 			upperbound -= halfFloor(sside);
 		}
-		for(i=lowerbound;i<=upperbound;i++){
-			fprintf(stderr,"\nnew patch with first pentagon on position %d\n", i+1);
-			int vertexCounter = 0;
-			//first create the boundary
-			EDGE *boundaryStart = createBoundary(sside, symmetric, 2, &vertexCounter);
-			int code[2];
-			code[0] = i + 1;
-			code[1] = 2*sside+ i + 1 + 1;
-			if(patchFromSpiralCode(boundaryStart, code, 2, &vertexCounter)){
-				//---------
-				fprintf(stderr, "vertices: %d\n", vertexCounter);
-				exportPlanarGraphCode(boundaryStart, vertexCounter);
-				//exportPlanarGraphTable(boundaryStart, vertexCounter);
-				fprintf(stderr, "\n");
+		if(!onlyCount){
+			for(i=lowerbound;i<=upperbound;i++){
+				fprintf(stderr,"\nnew patch with first pentagon on position %d\n", i+1);
+				int vertexCounter = 0;
+				//first create the boundary
+				EDGE *boundaryStart = createBoundary(sside + hexagonLayers, symmetric, 2, &vertexCounter);
+				int code[2];
+				code[0] = hexagonsToAdd + i + 1;
+				code[1] = hexagonsToAdd + 2*sside+ i + 1 + 1;
+				if(patchFromSpiralCode(boundaryStart, code, 2, &vertexCounter)){
+					//---------
+					fprintf(stderr, "vertices: %d\n", vertexCounter);
+					exportPlanarGraphCode(boundaryStart, vertexCounter);
+					//exportPlanarGraphTable(boundaryStart, vertexCounter);
+					fprintf(stderr, "\n");
+				}
 			}
 		}
 		return upperbound - lowerbound + 1;
