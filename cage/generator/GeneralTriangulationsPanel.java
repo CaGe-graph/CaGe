@@ -175,12 +175,12 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
         filename += "tri";
         String vertices;
         if(dual)
-            vertices = Integer.toString(verticesSlider.getValue());
-        else
             vertices = Integer.toString(verticesSlider.getValue() / 2 + 2);
             //plantri takes the number of vertices as argument, i.e. number of
             //faces in the dual graph so we use the euler formula to derive it
             //from the number of vertices
+        else
+            vertices = Integer.toString(verticesSlider.getValue());
         filename += "_" + vertices;
         if(dual){
             genCmd.addElement("-d");
