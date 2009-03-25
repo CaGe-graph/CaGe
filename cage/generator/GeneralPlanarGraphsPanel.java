@@ -26,7 +26,7 @@ import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.SpinButton;
 
-public class PolytopesPanel extends GeneratorPanel
+public class GeneralPlanarGraphsPanel extends GeneratorPanel
         implements ActionListener, ChangeListener {
 
     private static final boolean debug = false;
@@ -37,12 +37,16 @@ public class PolytopesPanel extends GeneratorPanel
     private JCheckBox dual;
     private EnhancedSlider verticesSlider;
     private ButtonGroup minDegGroup;
+    private ButtonGroup minConnGroup;
     private SpinButton minEdges, maxEdges;
     private JCheckBox defaultEdges;
     private SpinButton maxFacesize;
     private JCheckBox defaultMaxFacesize;
+    private JRadioButton[] degButtons = new JRadioButton[5];
+    private JRadioButton[] connButtons = new JRadioButton[3];
+    private JCheckBox exactConn;
 
-    public PolytopesPanel() {
+    public GeneralPlanarGraphsPanel() {
         setLayout(new GridBagLayout());
         dual = new JCheckBox("dual graphs");
         dual.setMnemonic(KeyEvent.VK_D);
@@ -79,15 +83,19 @@ public class PolytopesPanel extends GeneratorPanel
                 new Insets(0, 0, 20, 10), 0, 0));
         minDegGroup = new ButtonGroup();
         JPanel minDegPanel = new JPanel();
-        for (int i = 3; i <= 5; ++i) {
+        for (int i = 1; i <= 5; ++i) {
             String is = Integer.toString(i);
-            JRadioButton degButton = new JRadioButton(is, i == 3);
-            degButton.setActionCommand(is);
-            degButton.setMnemonic(KeyEvent.VK_0 + i);
-            minDegGroup.add(degButton);
-            minDegPanel.add(degButton);
-            degButton.addActionListener(new ActionListener() {
+            degButtons[i-1] = new JRadioButton(is, i == 3);
+            degButtons[i-1].setActionCommand(is);
+            degButtons[i-1].setMnemonic(KeyEvent.VK_0 + i);
+            minDegGroup.add(degButtons[i-1]);
+            minDegPanel.add(degButtons[i-1]);
+            degButtons[i-1].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
+                    int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
+                    if(minDegree < minConn)
+                        connButtons[minDegree - 1].setSelected(true);
                     setValues();
                 }
             });
@@ -96,8 +104,48 @@ public class PolytopesPanel extends GeneratorPanel
                 new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 20, 0), 0, 0));
-        add(new JLabel("number of edges"),
+        add(new JLabel("minimum connectivity"),
                 new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 20, 10), 0, 0));
+        minConnGroup = new ButtonGroup();
+        JPanel minConnPanel = new JPanel();
+        for (int i = 1; i <= 3; ++i) {
+            String is = Integer.toString(i);
+            connButtons[i-1] = new JRadioButton(is, i == 3);
+            connButtons[i-1].setActionCommand(is);
+            connButtons[i-1].setMnemonic(KeyEvent.VK_0 + i);
+            minConnGroup.add(connButtons[i-1]);
+            minConnPanel.add(connButtons[i-1]);
+            connButtons[i-1].addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
+                    int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
+                    if(minDegree < minConn)
+                        degButtons[minConn - 1].setSelected(true);
+                    if(minConn==3){
+                        exactConn.setSelected(false);
+                        exactConn.setEnabled(false);
+                    } else {
+                        exactConn.setEnabled(true);
+                    }
+                    setValues();
+                }
+            });
+        }
+        add(minConnPanel,
+                new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 20, 0), 0, 0));
+        exactConn = new JCheckBox("only graphs with connectivity exactly the given minimum");
+        exactConn.setMnemonic(KeyEvent.VK_R);
+        exactConn.setEnabled(false);
+        add(exactConn,
+                new GridBagConstraints(0, 4, 2, 1, 1.0, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 10, 10), 0, 0));
+        add(new JLabel("number of edges"),
+                new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 10), 0, 0));
         defaultEdges = new JCheckBox("all", true);
@@ -121,11 +169,11 @@ public class PolytopesPanel extends GeneratorPanel
         edgesPanel.add(maxEdgesLabel);
         edgesPanel.add(maxEdges);
         add(edgesPanel,
-                new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(1, 5, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 0), 0, 0));
         add(defaultEdges,
-                new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(2, 5, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 20, 10, 0), 0, 0));
         maxFacesize = new SpinButton(DEFAULT_VERTICES - 1, 3, MAX_VERTICES - 1);
@@ -137,11 +185,11 @@ public class PolytopesPanel extends GeneratorPanel
         maxFacesizePanel.add(maxFacesizeLabel);
         maxFacesizePanel.add(maxFacesize);
         add(new JLabel("face size"),
-                new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 10), 0, 0));
         add(maxFacesizePanel,
-                new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(1, 6, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         defaultMaxFacesize = new JCheckBox("all", true);
@@ -149,11 +197,11 @@ public class PolytopesPanel extends GeneratorPanel
         defaultMaxFacesize.setActionCommand("d");
         defaultMaxFacesize.addActionListener(this);
         add(defaultMaxFacesize,
-                new GridBagConstraints(2, 4, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(2, 6, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 20, 0, 0), 0, 0));
         add(Box.createVerticalStrut(80),
-                new GridBagConstraints(3, 3, 1, 2, 1.0, 1.0,
+                new GridBagConstraints(3, 5, 1, 2, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         setValues();
@@ -163,8 +211,10 @@ public class PolytopesPanel extends GeneratorPanel
     private void setValues() {
         int n = verticesSlider.getValue();
         int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
-        //the lowerbound is the ceil of minDegree * n / 2
-        int min = minDegree * n / 2 + (minDegree * n % 2);
+        int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
+        //the lowerbound is the ceil of minDegree * n / 2 except in case of minimum degree
+        //equal to 1. Because of the connectedness the lowerbound is then n-1.
+        int min = minDegree == 1 ? (n-1) : (minDegree * n / 2 + (minDegree * n % 2));
         int max = 3 * n - 6;
         // make sure both intervals are first widened and then narrowed.
         boolean nIncreased = maxEdges.getMaximum() < max;
@@ -198,7 +248,7 @@ public class PolytopesPanel extends GeneratorPanel
 
         genCmd.addElement("plantri");
         genCmd.addElement("-p");
-        filename += "ptopes";
+        filename += "genplan";
         String v = Integer.toString(verticesSlider.getValue());
         filename += "_" + v;
         if (dual.isSelected()) {
@@ -208,6 +258,9 @@ public class PolytopesPanel extends GeneratorPanel
         String minDeg = minDegGroup.getSelection().getActionCommand();
         genCmd.addElement("-m" + minDeg);
         filename += "_m" + minDeg;
+        String minConn = minConnGroup.getSelection().getActionCommand();
+        genCmd.addElement("-c" + minConn + (exactConn.isSelected() ? "x" : ""));
+        filename += "_c" + minConn + (exactConn.isSelected() ? "x" : "");
         if (!defaultEdges.isSelected()) {
             genCmd.addElement("-e" + minEdges.getValue() + ":" + maxEdges.getValue());
             filename += "_e" + minEdges.getValue() + "-" + maxEdges.getValue();
