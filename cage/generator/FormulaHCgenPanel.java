@@ -397,7 +397,9 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
     }
 
     public void showing() {
-        defaultButton = SwingUtilities.getRootPane(this).getDefaultButton();
+       // if(SwingUtilities.getRootPane(this)!=null)
+       //     defaultButton = SwingUtilities.getRootPane(this).getDefaultButton();
+        defaultButton = getNextButton();
         getCLimits();
         getHLimits();
         getPentagonLimits();
