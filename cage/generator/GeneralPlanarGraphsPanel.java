@@ -211,7 +211,6 @@ public class GeneralPlanarGraphsPanel extends GeneratorPanel
     private void setValues() {
         int n = verticesSlider.getValue();
         int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
-        int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
         //the lowerbound is the ceil of minDegree * n / 2 except in case of minimum degree
         //equal to 1. Because of the connectedness the lowerbound is then n-1.
         int min = minDegree == 1 ? (n-1) : (minDegree * n / 2 + (minDegree * n % 2));
