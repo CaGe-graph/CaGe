@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.util.Vector;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -136,7 +135,7 @@ public class GeneralQuadrangulationsPanel extends GeneratorPanel {
             //for the dual case this has no meaning, because
             //the option -c2m2 would lead to multigraphs, which
             //are not supported by CaGe at the moment
-            button = new JRadioButton("2-connected", true);
+            button = new JRadioButton("minimum degree 2", true);
             button.setActionCommand("-c2m2");
             button.addChangeListener(new ChangeListener() {
 

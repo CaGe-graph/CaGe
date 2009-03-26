@@ -13,7 +13,7 @@ public class ThreeRegularPlaneGraphsPanel extends GeneratorPanel {
     private JTabbedPane pane = new JTabbedPane();
 
     public ThreeRegularPlaneGraphsPanel() {
-        pane.addTab("all face sizes allowed", new GeneralTriangulationsPanel(true));
+        pane.addTab("general 3-regular plane graphs", new GeneralTriangulationsPanel(true));
         pane.addTab("fullerenes", new FullgenPanel());
         pane.addTab("cubic graphs with given faces", new CGFPanel());
         pane.addTab("bipartite cubic graphs", new EulerianTriangulationsPanel(true));
