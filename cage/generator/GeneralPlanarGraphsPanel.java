@@ -48,7 +48,7 @@ public class GeneralPlanarGraphsPanel extends GeneratorPanel
 
     public GeneralPlanarGraphsPanel() {
         setLayout(new GridBagLayout());
-        dual = new JCheckBox("dual graphs");
+        dual = new JCheckBox("output dual graphs");
         dual.setMnemonic(KeyEvent.VK_D);
         add(dual,
                 new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
@@ -211,6 +211,13 @@ public class GeneralPlanarGraphsPanel extends GeneratorPanel
     private void setValues() {
         int n = verticesSlider.getValue();
         int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
+        int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
+        if(minConn<3){
+            dual.setSelected(false);
+            dual.setEnabled(false);
+        } else {
+            dual.setEnabled(true);
+        }
         //the lowerbound is the ceil of minDegree * n / 2 except in case of minimum degree
         //equal to 1. Because of the connectedness the lowerbound is then n-1.
         int min = minDegree == 1 ? (n-1) : (minDegree * n / 2 + (minDegree * n % 2));
