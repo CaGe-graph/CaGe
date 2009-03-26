@@ -13,10 +13,10 @@ public class ThreeRegularPlaneGraphsPanel extends GeneratorPanel {
     private JTabbedPane pane = new JTabbedPane();
 
     public ThreeRegularPlaneGraphsPanel() {
-        pane.addTab("general 3-regular plane graphs", new GeneralTriangulationsPanel(true));
+        pane.addTab("general cubic plane graphs", new GeneralTriangulationsPanel(true));
         pane.addTab("fullerenes", new FullgenPanel());
-        pane.addTab("cubic graphs with given faces", new CGFPanel());
-        pane.addTab("bipartite cubic graphs", new EulerianTriangulationsPanel(true));
+        pane.addTab("cubic plane graphs with given faces", new CGFPanel());
+        pane.addTab("bipartite cubic plane graphs", new EulerianTriangulationsPanel(true));
         for (int i = 0; i < pane.getTabCount(); ++i) {
             ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
                     BorderFactory.createEmptyBorder(20, 20, 20, 20));
