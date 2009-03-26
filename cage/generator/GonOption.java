@@ -39,7 +39,7 @@ class GonOption implements ChangeListener, ActionListener {
         isIncluded = false;
         isLimited = false;
         min = 0;
-        max = CGFPanel.maxAtoms;
+        max = CGFPanel.MAX_ATOMS;
     }
 
     public void addTo(JPanel p) {
@@ -63,9 +63,9 @@ class GonOption implements ChangeListener, ActionListener {
             gonLabel.setDisplayedMnemonic(KeyEvent.VK_0 + faces % 10);
         }
         if(isLimitable){
-            minGonsButton = new SpinButton(min, 0, CGFPanel.maxAtoms);
+            minGonsButton = new SpinButton(min, 0, CGFPanel.MAX_ATOMS);
             minGonsButton.setVisible(limitGons.isSelected());
-            maxGonsButton = new SpinButton(max, 0, CGFPanel.maxAtoms);
+            maxGonsButton = new SpinButton(max, 0, CGFPanel.MAX_ATOMS);
             maxGonsButton.setVisible(limitGons.isSelected());
             DefaultButtonModel minNotEqMax = new DefaultButtonModel();
             minNotEqMax.setSelected(false);

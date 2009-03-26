@@ -39,10 +39,10 @@ import lisken.uitoolbox.UItoolbox;
 
 public class CGFPanel extends GeneratorPanel {
 
-    public static final int minAtoms = 4;
-    public static final int maxAtoms = 250;
-    public static final int minPolygonFaces = 3;
-    public static final int maxPolygonFaces = 40;
+    public static final int MIN_ATOMS = 4;
+    public static final int MAX_ATOMS = 250;
+    public static final int MIN_POLYGON_FACES = 3;
+    public static final int MAX_POLYGON_FACES = 40;
     JSeparator sep1 = new JSeparator(SwingConstants.HORIZONTAL);
     JSeparator sep2 = new JSeparator(SwingConstants.HORIZONTAL);
     JPanel CGFFacesPanel = new JPanel();
@@ -100,23 +100,23 @@ public class CGFPanel extends GeneratorPanel {
         maxAtomsLabel.setText("maximum number of Atoms");
         maxAtomsLabel.setLabelFor(maxAtomsSlider.slider());
         maxAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_X);
-        minAtomsSlider.setMajorTickSpacing(maxAtoms - minAtoms);
+        minAtomsSlider.setMajorTickSpacing(MAX_ATOMS - MIN_ATOMS);
         minAtomsSlider.setSnapToTicks(true);
-        minAtomsSlider.setMinimum(minAtoms);
-        minAtomsSlider.setMaximum(maxAtoms);
+        minAtomsSlider.setMinimum(MIN_ATOMS);
+        minAtomsSlider.setMaximum(MAX_ATOMS);
         minAtomsSlider.setValue(minAtomsSlider.getMinimum());
-        minAtomsSlider.setMinorTickSpacing(2 - (maxAtoms - minAtoms) % 2);
+        minAtomsSlider.setMinorTickSpacing(2 - (MAX_ATOMS - MIN_ATOMS) % 2);
         minAtomsSlider.setPaintMinorTicks(false);
         minAtomsSlider.setPaintLabels(true);
         minAtomsSlider.setPaintTicks(true);
         minAtomsSlider.setSnapWhileDragging(minAtomsSlider.getMinorTickSpacing());
         minAtomsSlider.setClickScrollByBlock(false);
-        maxAtomsSlider.setMajorTickSpacing(maxAtoms - minAtoms);
+        maxAtomsSlider.setMajorTickSpacing(MAX_ATOMS - MIN_ATOMS);
         maxAtomsSlider.setSnapToTicks(true);
-        maxAtomsSlider.setMinimum(minAtoms);
-        maxAtomsSlider.setMaximum(maxAtoms);
+        maxAtomsSlider.setMinimum(MIN_ATOMS);
+        maxAtomsSlider.setMaximum(MAX_ATOMS);
         maxAtomsSlider.setValue(maxAtomsSlider.getMinimum());
-        maxAtomsSlider.setMinorTickSpacing(2 - (maxAtoms - minAtoms) % 2);
+        maxAtomsSlider.setMinorTickSpacing(2 - (MAX_ATOMS - MIN_ATOMS) % 2);
         maxAtomsSlider.setPaintMinorTicks(false);
         maxAtomsSlider.setPaintLabels(true);
         maxAtomsSlider.setPaintTicks(true);
@@ -147,8 +147,8 @@ public class CGFPanel extends GeneratorPanel {
         facesSlider.setSnapToTicks(true);
         facesSlider.setPaintTicks(true);
         facesSlider.setPaintLabels(true);
-        facesSlider.setMaximum(maxPolygonFaces);
-        facesSlider.setMinimum(minPolygonFaces);
+        facesSlider.setMaximum(MAX_POLYGON_FACES);
+        facesSlider.setMinimum(MIN_POLYGON_FACES);
         facesSlider.setValue(facesSlider.getMinimum() + 1);
         facesSlider.setMajorTickSpacing(facesSlider.getMaximum() - facesSlider.getMinimum());
         facesSlider.setSnapWhileDragging(1);
