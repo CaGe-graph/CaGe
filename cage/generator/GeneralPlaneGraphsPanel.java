@@ -26,7 +26,7 @@ import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.SpinButton;
 
-public class GeneralPlanarGraphsPanel extends GeneratorPanel
+public class GeneralPlaneGraphsPanel extends GeneratorPanel
         implements ActionListener, ChangeListener {
 
     private static final boolean debug = false;
@@ -46,7 +46,7 @@ public class GeneralPlanarGraphsPanel extends GeneratorPanel
     private JRadioButton[] connButtons = new JRadioButton[3];
     private JCheckBox exactConn;
 
-    public GeneralPlanarGraphsPanel() {
+    public GeneralPlaneGraphsPanel() {
         setLayout(new GridBagLayout());
         dual = new JCheckBox("output dual graphs");
         dual.setMnemonic(KeyEvent.VK_D);
