@@ -350,7 +350,6 @@ public class CGFPanel extends GeneratorPanel {
             c = "3";
         } else {
             c = "";
-            genV.addElement("-mapcon");
             if (conn1.isSelected()) {
                 c = c + "1";
             }
@@ -361,6 +360,7 @@ public class CGFPanel extends GeneratorPanel {
                 c = c + "3";
             }
         }
+        genV.addElement("-mapcon");
         genV.addElement(c);
         if (c.length() < 4) {
             fileV.addElement("c" + c);
