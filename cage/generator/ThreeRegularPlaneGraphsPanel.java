@@ -15,7 +15,7 @@ public class ThreeRegularPlaneGraphsPanel extends GeneratorPanel {
     public ThreeRegularPlaneGraphsPanel() {
         pane.addTab("general cubic plane graphs", new GeneralTriangulationsPanel(true));
         pane.addTab("fullerenes", new FullgenPanel());
-        pane.addTab("cubic plane graphs with given faces", new CGFPanel());
+        pane.addTab("cubic plane graphs with given faces", new CGFPanel(false));
         pane.addTab("bipartite cubic plane graphs", new EulerianTriangulationsPanel(true));
         for (int i = 0; i < pane.getTabCount(); ++i) {
             ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
