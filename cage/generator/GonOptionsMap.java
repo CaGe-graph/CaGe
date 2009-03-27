@@ -6,9 +6,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-import javax.swing.AbstractButton;
 import javax.swing.BoundedRangeModel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -16,22 +16,28 @@ import lisken.systoolbox.MutableInteger;
 
 public class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
 
-    JPanel optionsPanel;
-    Component facesComponent;
-    BoundedRangeModel facesModel;
-    AbstractButton includedButton;
-    boolean dual;
-    boolean limited;
+    //the panel on which the options for the allowed gons are shown
+    private JPanel optionsPanel;
+    //the component that is used for the selection of the faces usually a slider)
+    private Component facesComponent;
+    //the model that contains the bounds for the face sizes
+    private BoundedRangeModel facesModel;
+    //the toggle button to add or remove faces
+    private JToggleButton includedButton;
+    //if true then were talking about vertex degrees and not face sizes
+    private boolean dual;
+    //if true the user can limit the number of faces of a certain size
+    private boolean limitable;
 
     //p should have a GridBagLayout
     //b should be a JToggleButton
-    public GonOptionsMap(JPanel p, Component c, BoundedRangeModel r, AbstractButton b) {
+    public GonOptionsMap(JPanel p, Component c, BoundedRangeModel r, JToggleButton b) {
         this(p, c, r, b, false, true);
     }
 
-    public GonOptionsMap(JPanel p, Component c, BoundedRangeModel r, AbstractButton b, boolean d, boolean l) {
+    public GonOptionsMap(JPanel p, Component c, BoundedRangeModel r, JToggleButton b, boolean d, boolean l) {
         dual = d;
-        limited = l;
+        limitable = l;
         optionsPanel = p;
         facesComponent = c;
         facesModel = r;
@@ -48,7 +54,7 @@ public class GonOptionsMap extends TreeMap implements ChangeListener, ActionList
 
             if (gonOption == null) {
                 gonOption = new GonOption(faces, this);
-                gonOption.addTo(optionsPanel, dual, limited);
+                gonOption.addTo(optionsPanel, dual, limitable);
             } else if (!gonOption.isActive()) {
                 gonOption.reactivate();
             } else {
