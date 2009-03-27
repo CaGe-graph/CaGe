@@ -51,21 +51,12 @@ public class CGFPanel extends GeneratorPanel {
 
     private EnhancedSlider minAtomsSlider = new EnhancedSlider();
     private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
-    private JCheckBox altECC = new JCheckBox();
     private JCheckBox faceStats = new JCheckBox();
-    private JCheckBox patchStats = new JCheckBox();
     private JCheckBox conn1 = new JCheckBox();
     private JCheckBox conn2 = new JCheckBox();
     private JCheckBox conn3 = new JCheckBox();
-    /* --- "Cases and Priorities" disabled ---
-    JToggleButton selectCasesPrios = new JToggleButton();
-     */
     private GonOptionsMap gonOptionsMap;
 
-    /* --- "Cases and Priorities" disabled ---
-    OrderedChoice casesPriosChoice;
-    String cases, nonCases;
-     */
     public CGFPanel() {
         this(false);
     }
@@ -122,15 +113,8 @@ public class CGFPanel extends GeneratorPanel {
         JLabel faceTypeLabel = new JLabel(dual ? "Degrees" : "Face Type");
         faceTypeLabel.setLabelFor(facesSlider.slider());
         faceTypeLabel.setDisplayedMnemonic(KeyEvent.VK_F);
-//    faceTypeLabel.setAlignmentX((float) 0.5);
         JToggleButton facesButton = new JToggleButton(dual ? "include this degree" : "include this face type");
-//    facesButton.setAlignmentX((float) 0.5);
         facesButton.setMnemonic(KeyEvent.VK_I);
-//    facesButton.setBorder(BorderFactory.createCompoundBorder(facesButton.getBorder(), BorderFactory.createEmptyBorder(5, 0, 5, 0)));
-        //Insets insets = facesButton.getMargin();
-        //insets.bottom += 5;
-        //insets.top += 5;
-        //facesButton.setMargin(insets);
         facesSlider.setOrientation(SwingConstants.HORIZONTAL);
         facesSlider.setLabelTable(facesLabels);
         facesSlider.setMinorTickSpacing(1);
@@ -161,8 +145,6 @@ public class CGFPanel extends GeneratorPanel {
         gonOptionsMap = new GonOptionsMap(CGFFaceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton, dual, true);
         gonOptionsMap.setGonIncluded(facesSlider.getMinimum(), true);
         JLabel includedFacesLabel = new JLabel(dual ? "included degrees" : "included face types:");
-//    includedFacesLabel.setLabelFor(CGFFaceOptionsPanel);
-//    includedFacesLabel.setDisplayedMnemonic(KeyEvent.VK_L);
         ActionListener connListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -182,13 +164,8 @@ public class CGFPanel extends GeneratorPanel {
                 }
             }
         };
-        altECC.setText("alternative ECC");
-        altECC.setMnemonic(KeyEvent.VK_E);
-        altECC.setVisible(false); // for simplicity
         faceStats.setText(dual ? "Degree Statistics" : "Face Statistics");
         faceStats.setMnemonic(KeyEvent.VK_S);
-        patchStats.setText("Patch Statistics");
-        patchStats.setMnemonic(KeyEvent.VK_P);
         conn1.setText("1-connected graphs");
         conn1.setMnemonic(KeyEvent.VK_1);
         conn1.setActionCommand("1");
@@ -204,49 +181,22 @@ public class CGFPanel extends GeneratorPanel {
         conn3.setSelected(true);
         conn3.setActionCommand("3");
         conn3.addActionListener(connListener);
-        /* --- "Cases and Priorities" disabled ---
-        selectCasesPrios.setText("Cases and Priorities");
-        selectCasesPrios.setMnemonic(KeyEvent.VK_C);
-        selectCasesPrios.setBorder(BorderFactory.createCompoundBorder(
-        selectCasesPrios.getBorder(),
-        BorderFactory.createEmptyBorder(5, 0, 5, 0)));
-        selectCasesPrios.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e)
-        {
-        selectCasesPrios();
-        }
-        });
-        casesPriosChoice = new OrderedChoice(new String[] { "case 1", "case 2", "case 3" });
-        casesPriosChoice.setPositions(new int[] { 0, 1, 2 });
-        casesPriosChoice.allowEmptySelection(false);
-        cases = "123";
-         */
         JPanel CGFFacesPanel = new JPanel(new GridBagLayout());
         CGFFacesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
         CGFFacesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         CGFFacesPanel.add(facesButton, new GridBagConstraints(1, 1, 1, 1, 0.0010, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 30, 0, 5), 0, 5));
-//    CGFFacesPanel.setBorder(BorderFactory.createEtchedBorder());
-//    CGFFaceOptionsPanel.setBorder(BorderFactory.createEtchedBorder());
-//    CGFExtrasPanel.setBorder(BorderFactory.createEtchedBorder());
         CGFAtomsPanel.add(minAtomsLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 5, 5, 0), 0, 0));
         CGFAtomsPanel.add(maxAtomsLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 5, 5, 0), 0, 0));
         CGFAtomsPanel.add(minAtomsSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
         CGFAtomsPanel.add(maxAtomsSlider, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
         CGFAtomsPanel.add(minEqMax, new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         if(!dual) CGFExtrasPanel.add(new JLabel(), new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//        CGFExtrasPanel.add(dual, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         CGFExtrasPanel.add(faceStats, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//        CGFExtrasPanel.add(patchStats, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        CGFExtrasPanel.add(altECC, new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         if(!dual){
             CGFExtrasPanel.add(conn1, new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
             CGFExtrasPanel.add(conn2, new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
             CGFExtrasPanel.add(conn3, new GridBagConstraints(3, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         }
-        /* --- "Cases and Priorities" disabled ---
-        CGFExtrasPanel.add(selectCasesPrios, new GridBagConstraints(3, 3, 1, 3, 1.0, 1.0
-        ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
-         */
         this.add(CGFAtomsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
         this.add(CGFFacesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -256,29 +206,6 @@ public class CGFPanel extends GeneratorPanel {
         this.add(CGFExtrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
     }
 
-    /*
-    void selectCasesPrios()
-    {
-    selectCasesPrios.setSelected(true);
-    casesPriosChoice.runDialog("CaGe - CGF - select cases and priorities");
-    if (casesPriosChoice.getDialogCompleted()) {
-    cases = "";
-    Object[] selection = casesPriosChoice.getSelection();
-    for (int i = 0; i < selection.length; ++i)
-    {
-    cases += ((String) selection[i]).charAt(5);
-    }
-    nonCases = "";
-    for (int i = 1; i <= 3; ++i)
-    {
-    if (cases.indexOf('0' + i) < 0) {
-    nonCases += i;
-    }
-    }
-    }
-    selectCasesPrios.setSelected(! cases.equals("123"));
-    }
-     */
     public GeneratorInfo getGeneratorInfo() {
         String[][] generator, embed2D, embed3D;
         String filename;
@@ -320,31 +247,8 @@ public class CGFPanel extends GeneratorPanel {
             fileV.addElement(s);
         }
 
-        /*
-        c = "";
-        genV.addElement("-types");
-        for (int i = 1; i <= 3; ++i)
-        {
-        if (cases.indexOf('0' + i) >= 0) {
-        c += i;
-        }
-        }
-        genV.addElement(c);
-        if (c.length() < 4) fileV.addElement("t" + c);
-        if (! cases.equals("123")) {
-        genV.addElement("-priority");
-        genV.addElement(cases + nonCases);
-        fileV.addElement("p" + cases + nonCases);
-        }
-         */
-
-        // cage.Utils.addIfSelected(genV, dual, "-dual");
         if(dual) genV.add("-dual");
-        cage.Utils.addIfSelected(genV, altECC, "-alt");
         cage.Utils.addIfSelected(genV, faceStats, "-facestat");
-        cage.Utils.addIfSelected(genV, patchStats, "-patchstat");
-
-        cage.Utils.addIfSelected(fileV, altECC, "alt");
 
         if(dual){
             c = "3";
@@ -366,7 +270,6 @@ public class CGFPanel extends GeneratorPanel {
             fileV.addElement("c" + c);
         }
 
-        //cage.Utils.addIfSelected(fileV, dual, "dual");
         if(dual) fileV.add("dual");
 
         generator = new String[1][genV.size()];
@@ -397,9 +300,6 @@ public class CGFPanel extends GeneratorPanel {
 
     public static void main(String[] args) {
         try {
-            //com.sun.java.swing.UIManager.setLookAndFeel(new com.sun.java.swing.plaf.windows.WindowsLookAndFeel());
-            //com.sun.java.swing.UIManager.setLookAndFeel(new com.sun.java.swing.plaf.motif.MotifLookAndFeel());
-            //com.sun.java.swing.UIManager.setLookAndFeel(new com.sun.java.swing.plaf.metal.MetalLookAndFeel());
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception e) {
         }
@@ -420,7 +320,6 @@ public class CGFPanel extends GeneratorPanel {
         f.setContentPane(p);
         f.pack();
         f.setVisible(true);
-//    f.setResizable(false);
     }
 }
 
