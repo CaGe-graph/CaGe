@@ -1,7 +1,6 @@
 package cage.generator;
 
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +21,6 @@ public class GonOption implements ChangeListener, ActionListener {
 
     private boolean isIncluded;
     private int faces;
-    private boolean isLimited;
     private int min;
     private int max;
     private JPanel panelToExtend;
@@ -37,7 +35,6 @@ public class GonOption implements ChangeListener, ActionListener {
         faces = f;
         optionsMap = m;
         isIncluded = false;
-        isLimited = false;
         min = 0;
         max = CGFPanel.MAX_ATOMS;
     }
@@ -53,7 +50,7 @@ public class GonOption implements ChangeListener, ActionListener {
         gonIncludedButton.addActionListener(this);
         if(isLimitable){
             limitGons = new JCheckBox("limits");
-            limitGons.setSelected(isLimited);
+            limitGons.setSelected(false);
             limitGons.addChangeListener(this);
             limitGons.addActionListener(this);
         }
@@ -74,7 +71,6 @@ public class GonOption implements ChangeListener, ActionListener {
             new MinMaxEqListener(minGonsButton.getModel(), maxGonsButton.getModel(), minNotEqMax, false);
         }
         GridBagConstraints lc = new GridBagConstraints();
-        GridBagLayout l = (GridBagLayout) panelToExtend.getLayout();
         lc.gridx = 0;
         lc.gridy = faces;
         lc.anchor = GridBagConstraints.CENTER;
@@ -119,9 +115,9 @@ public class GonOption implements ChangeListener, ActionListener {
         if(limitGons!=null)
             limitGons.setVisible(true);
         if(minGonsButton!=null)
-            minGonsButton.setVisible(isLimited);
+            minGonsButton.setVisible(isLimited());
         if(maxGonsButton!=null)
-            maxGonsButton.setVisible(isLimited);
+            maxGonsButton.setVisible(isLimited());
         UItoolbox.pack(panelToExtend);
     }
 
@@ -136,9 +132,8 @@ public class GonOption implements ChangeListener, ActionListener {
     public void stateChanged(ChangeEvent e) {
         Object source = e.getSource();
         if (source == (Object) limitGons) {
-            isLimited = limitGons.isSelected();
-            minGonsButton.setVisible(isLimited);
-            maxGonsButton.setVisible(isLimited);
+            minGonsButton.setVisible(isLimited());
+            maxGonsButton.setVisible(isLimited());
             UItoolbox.pack(panelToExtend);
         } else if (source == (Object) minGonsButton) {
             min = minGonsButton.getValue();
