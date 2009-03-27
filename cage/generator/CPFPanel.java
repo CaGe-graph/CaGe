@@ -319,12 +319,12 @@ public class CPFPanel extends GeneratorPanel {
                 continue;
             }
             genV.addElement("f");
-            genV.addElement(Integer.toString(gonOption.faces));
-            String s = "f" + gonOption.faces;
-            if (gonOption.isLimited) {
-                genV.addElement("+" + gonOption.min);
-                genV.addElement("-" + gonOption.max);
-                s = s + "+" + gonOption.min + "-" + gonOption.max;
+            genV.addElement(Integer.toString(gonOption.getFaces()));
+            String s = "f" + gonOption.getFaces();
+            if (gonOption.isLimited()) {
+                genV.addElement("+" + gonOption.getMin());
+                genV.addElement("-" + gonOption.getMax());
+                s = s + "+" + gonOption.getMin() + "-" + gonOption.getMax();
             }
             fileV.addElement(s);
         }

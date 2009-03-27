@@ -14,7 +14,7 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
 
-class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
+public class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
 
     JPanel optionsPanel;
     Component facesComponent;
@@ -101,8 +101,7 @@ class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
         setGonIncluded(faces, included);
         gonOption = (GonOption) this.get(key);
         if (included) {
-            if(gonOption.limitGons!=null)
-                gonOption.limitGons.requestFocus();
+            gonOption.focusToLimitControl();
         } else {
             facesComponent.requestFocus();
         }

@@ -335,11 +335,11 @@ public class CGFPanel extends GeneratorPanel {
                 continue;
             }
             genV.addElement("-f");
-            genV.addElement(Integer.toString(gonOption.faces));
-            String s = "f" + gonOption.faces;
-            if (gonOption.isLimited) {
-                genV.addElement("l" + gonOption.min + "-" + gonOption.max + "u");
-                s = s + "+" + gonOption.min + "-" + gonOption.max;
+            genV.addElement(Integer.toString(gonOption.getFaces()));
+            String s = "f" + gonOption.getFaces();
+            if (gonOption.isLimited()) {
+                genV.addElement("l" + gonOption.getMin() + "-" + gonOption.getMax() + "u");
+                s = s + "+" + gonOption.getMin() + "-" + gonOption.getMax();
             }
             fileV.addElement(s);
         }

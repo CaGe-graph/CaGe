@@ -18,20 +18,20 @@ import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
-class GonOption implements ChangeListener, ActionListener {
+public class GonOption implements ChangeListener, ActionListener {
 
-    boolean isIncluded;
-    int faces;
-    boolean isLimited;
-    int min;
-    int max;
-    JPanel panelToExtend;
-    JCheckBox gonIncludedButton;
-    JLabel gonLabel;
-    JCheckBox limitGons;
-    SpinButton minGonsButton;
-    SpinButton maxGonsButton;
-    GonOptionsMap optionsMap;
+    private boolean isIncluded;
+    private int faces;
+    private boolean isLimited;
+    private int min;
+    private int max;
+    private JPanel panelToExtend;
+    private JCheckBox gonIncludedButton;
+    private JLabel gonLabel;
+    private JCheckBox limitGons;
+    private SpinButton minGonsButton;
+    private SpinButton maxGonsButton;
+    private GonOptionsMap optionsMap;
 
     public GonOption(int f, GonOptionsMap m) {
         faces = f;
@@ -77,15 +77,15 @@ class GonOption implements ChangeListener, ActionListener {
         GridBagLayout l = (GridBagLayout) panelToExtend.getLayout();
         lc.gridx = 0;
         lc.gridy = faces;
-        lc.anchor = lc.CENTER;
+        lc.anchor = GridBagConstraints.CENTER;
         lc.insets = new Insets(10, 10, 0, 0);
         panelToExtend.add(gonIncludedButton, lc);
-        lc.anchor = lc.EAST;
+        lc.anchor = GridBagConstraints.EAST;
         lc.insets = new Insets(10, 0, 0, 40);
         lc.gridx = 1;
         panelToExtend.add(gonLabel, lc);
         if(isLimitable){
-            lc.anchor = lc.CENTER;
+            lc.anchor = GridBagConstraints.CENTER;
             lc.insets = new Insets(10, 10, 0, 10);
             lc.gridx = 2;
             panelToExtend.add(limitGons, lc);
@@ -156,6 +156,27 @@ class GonOption implements ChangeListener, ActionListener {
         } else if (source == (Object) gonIncludedButton) {
             optionsMap.actionPerformed(new ActionEvent(new MutableInteger(faces), gonIncludedButton.isSelected() ? 1 : 0, null));
         }
+    }
+
+    public boolean isLimited(){
+        return limitGons.isSelected();
+    }
+
+    public void focusToLimitControl(){
+        if(limitGons!=null)
+            limitGons.requestFocus();
+    }
+
+    public int getFaces() {
+        return faces;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public int getMin() {
+        return min;
     }
 }
 
