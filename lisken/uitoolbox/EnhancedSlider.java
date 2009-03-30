@@ -72,6 +72,11 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         return valueLabel;
     }
 
+    /**
+     * Sets the sliders step size.
+     *
+     * @param n The step size for this slider
+     */
     public void setSnapWhileDragging(int n) {
         snapWhileDragging = n;
     }

@@ -407,7 +407,15 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
     return dialog.getSuccess() ? psFilenameField.getText() : null;
     }
      */
-    public void savePS(String portion) {
+
+    /**
+     * If there is a PS stream, this method writes <tt>portion</tt> to
+     * that stream and otherwise returns. If this method fails to write to the
+     * streams it will try to close the stream and set it to <tt>null</tt>.
+     *
+     * @param portion The text that should be written to the PS stream.
+     */
+    private void savePS(String portion) {
         if (savePSStream == null) {
             return;
         }

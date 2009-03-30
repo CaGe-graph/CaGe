@@ -10,12 +10,29 @@ public abstract class EmbeddableGraph
   public abstract String getComment();
   public abstract void setComment(String comment);
 
+  /**
+   * Adds a vertex to this graph.
+   */
   public abstract void addVertex();
 
+  /**
+   * Adds an edge from the last added vertex to a <code>to</code>.
+   * @param to The destination of the edge to add.
+   */
   public abstract void addEdge(int to);
 
+  /**
+   * Returns the order of the graph, i.e. the number of vertices.
+   * @return The number of vertices in this graph.
+   */
   public abstract int getSize();
 
+  /**
+   * Returns the valency of <code>vertex</code> i.e. The number of edges that
+   * are incident with this vertex.
+   * @param vertex The vertex for which the valency should be returned
+   * @return The number of edges that are incident with <code>vertex</code>.
+   */
   public abstract int getValency(int vertex);
 
   public abstract EdgeIterator getEdgeIterator (int vertex);

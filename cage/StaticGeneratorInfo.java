@@ -1,5 +1,9 @@
 package cage;
 
+/**
+ * Implementation of {@link GeneratorInfo} that sets all settings using
+ * setters and doesn't calculate any of the values.
+ */
 public class StaticGeneratorInfo extends GeneratorInfo {
 
     private String[][] generator;
@@ -10,6 +14,27 @@ public class StaticGeneratorInfo extends GeneratorInfo {
     private ElementRule elementRule;
     private int expertMode;
 
+    /**
+     * Creates a <code>StaticGeneratorInfo</code> object with the given generator
+     * commands, embedder, filename and maximum face size. Reembedding is enabled.
+     * The expert mode is disabled for this generator and a default
+     * {@link ValencyElementRule} is used that maps the vertices as follows:
+     * <table border="1" align="center" cellspacing="0">
+     * <tr align="center"><th>Degree</th><th>Element</th></tr>
+     * <tr align="center"><td>1</td><td>H</td></tr>
+     * <tr align="center"><td>2</td><td>O</td></tr>
+     * <tr align="center"><td>3</td><td>C</td></tr>
+     * <tr align="center"><td>4</td><td>Si</td></tr>
+     * <tr align="center"><td>5</td><td>N</td></tr>
+     * <tr align="center"><td>6</td><td>S</td></tr>
+     * <tr align="center"><td>7</td><td>I</td></tr>
+     * </table>
+     *
+     * @param generator The generator commands
+     * @param embedder The embedder
+     * @param filename The filename for export to file
+     * @param maxFacesize The maximum face size
+     */
     public StaticGeneratorInfo(String[][] generator,
             Embedder embedder,
             String filename,
@@ -17,6 +42,29 @@ public class StaticGeneratorInfo extends GeneratorInfo {
         this(generator, embedder, filename, maxFacesize, true);
     }
 
+    /**
+     * Creates a <code>StaticGeneratorInfo</code> object with the given generator
+     * commands, embedder, filename and maximum face size. Reembedding is enabled
+     * based on the value of <tt>reembed2DEnabled</tt>. The expert mode is disabled
+     * for this generator and a default {@link ValencyElementRule} is used that maps
+     * the vertices as follows:
+     * <table border="1" align="center" cellspacing="0">
+     * <tr align="center"><th>Degree</th><th>Element</th></tr>
+     * <tr align="center"><td>1</td><td>H</td></tr>
+     * <tr align="center"><td>2</td><td>O</td></tr>
+     * <tr align="center"><td>3</td><td>C</td></tr>
+     * <tr align="center"><td>4</td><td>Si</td></tr>
+     * <tr align="center"><td>5</td><td>N</td></tr>
+     * <tr align="center"><td>6</td><td>S</td></tr>
+     * <tr align="center"><td>7</td><td>I</td></tr>
+     * </table>
+     *
+     * @param generator The generator commands
+     * @param embedder The embedder
+     * @param filename The filename for export to file
+     * @param maxFacesize The maximum face size
+     * @param reembed2DEnabled Is reembedding enabled.
+     */
     public StaticGeneratorInfo(String[][] generator,
             Embedder embedder,
             String filename,
@@ -98,6 +146,11 @@ public class StaticGeneratorInfo extends GeneratorInfo {
         return reembed2DEnabled;
     }
 
+    /**
+     * Returns the element rule to be used with this generator.
+     * 
+     * @return The element rule to be used with this generator.
+     */
     public ElementRule getElementRule() {
         return elementRule;
     }

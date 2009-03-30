@@ -11,9 +11,19 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
+
 import util.SysInfo;
 
+/**
+ * Utility class that combines several static methods for system operations
+ * such as getting the environment, file operations and other minor utility
+ * methods.
+ */
 public class Systoolbox {
+
+    private Systoolbox(){
+        //private constructor
+    }
 
     private static native byte[] nGetEnv(byte[] name);
 
@@ -188,6 +198,12 @@ public class Systoolbox {
         return result;
     }
 
+    /**
+     * Utility method to add all elements of an array to a vector.
+     *
+     * @param vector The vector to which the elements need to be added.
+     * @param array The array of which the elements will be added.
+     */
     public static void addArray(Vector vector, Object[] array) {
         int i;
         for (i = 0; i < array.length; ++i) {

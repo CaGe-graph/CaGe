@@ -38,11 +38,27 @@ public class ViewerFactory {
         return result;
     }
 
+    /**
+     * Returns the last error message created in the methode
+     * {@link #getCaGeViewer(java.lang.String, int)}.
+     * @return the last error message created in the methode
+     * {@link #getCaGeViewer(java.lang.String, int)}.
+     */
     public static String lastErrorMessage() {
         return lastErrorMessage;
     }
 
-    static void checkAvailability(Class viewerClass, int dimension)
+    /**
+     * Checks whether the given class of viewers is available for the given
+     * dimension. If this class of viewers is not available for the given
+     * dimension, this method will throw an exception.
+     *
+     * @param viewerClass A class of viewers
+     * @param dimension A dimension
+     * @throws java.lang.Exception If this class of viewers is not available for the given
+     * dimension.
+     */
+    private static void checkAvailability(Class viewerClass, int dimension)
             throws Exception {
         Method availabilityMethod = null;
         try {
@@ -66,6 +82,14 @@ public class ViewerFactory {
         }
     }
 
+    /**
+     * Returns whether the given type of viewer is available for the given
+     * dimension.
+     *
+     * @param viewerName A type of viewer
+     * @param dimension A dimension
+     * @return <tt>true</tt> if this type is available for the given dimension
+     */
     public static boolean checkAvailability(String viewerName, int dimension) {
         try {
             checkAvailability(getViewerClass(viewerName), dimension);
@@ -75,7 +99,15 @@ public class ViewerFactory {
         }
     }
 
-    static Class getViewerClass(String viewerName)
+    /**
+     * Returns the <code>Class</code> for a given type of viewer.
+     *
+     * @param viewerName The name of a type of viewer
+     * @return the <code>Class</code> for <tt>viewerName</tt>
+     * @throws java.lang.Exception If the <code>Class</tt> for this type
+     * cannot be found.
+     */
+    private static Class getViewerClass(String viewerName)
             throws Exception {
         Class viewerClass;
         viewerClass = (Class) viewerClasses.get(viewerName);
