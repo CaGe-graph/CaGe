@@ -217,66 +217,119 @@ public class CGFPanel extends GeneratorPanel {
         int min = dual ? minAtomsSlider.getValue()*2-4 : minAtomsSlider.getValue();
         int max = dual ? maxAtomsSlider.getValue()*2-4 : maxAtomsSlider.getValue();
 
-        Systoolbox.addArray(genV, new String[]{
-                    "cgf", "-g", "0", "-output", "stdout", "-logfile", "stderr",
-                    "-save", "0", "-no_recover", "-topdown", "-outputmem", "0", "0"});
-        genV.addElement("-v");
-        genV.addElement(Integer.toString(max));
-        fileV.addElement("cgf");
-        fileV.addElement("n" + max);
-
-        if (min != max) {
-            genV.addElement("-vs");
-            genV.addElement(Integer.toString(min));
-            fileV.addElement("s" + min);
+        int nrOfRestrictions = 0;
+        {
+            Iterator it = gonOptionsMap.values().iterator();
+            while (it.hasNext()) {
+                GonOption gonOption = (GonOption) it.next();
+                if (!gonOption.isActive()) {
+                    continue;
+                }
+                nrOfRestrictions++;
+            }
         }
 
-        Iterator it = gonOptionsMap.values().iterator();
-        while (it.hasNext()) {
-            GonOption gonOption = (GonOption) it.next();
-            if (!gonOption.isActive()) {
-                continue;
-            }
-            genV.addElement("-f");
-            genV.addElement(Integer.toString(gonOption.getFaces()));
-            String s = "f" + gonOption.getFaces();
-            if (gonOption.isLimited()) {
-                genV.addElement("l" + gonOption.getMin() + "-" + gonOption.getMax() + "u");
-                s = s + "+" + gonOption.getMin() + "-" + gonOption.getMax();
-            }
-            fileV.addElement(s);
-        }
+        boolean useCgf = (min != max) || faceStats.isSelected() ||
+                conn1.isSelected() || conn2.isSelected() ||
+                (nrOfRestrictions > 5);
 
-        if(dual) genV.add("-dual");
-        cage.Utils.addIfSelected(genV, faceStats, "-facestat");
+        if(useCgf){
+            Systoolbox.addArray(genV, new String[]{
+                        "cgf", "-g", "0", "-output", "stdout", "-logfile", "stderr",
+                        "-save", "0", "-no_recover", "-topdown", "-outputmem", "0", "0"});
+            genV.addElement("-v");
+            genV.addElement(Integer.toString(max));
+            fileV.addElement("cgf");
+            fileV.addElement("n" + max);
 
-        if(dual){
-            c = "3";
+            if (min != max) {
+                genV.addElement("-vs");
+                genV.addElement(Integer.toString(min));
+                fileV.addElement("s" + min);
+            }
+
+            Iterator it = gonOptionsMap.values().iterator();
+            while (it.hasNext()) {
+                GonOption gonOption = (GonOption) it.next();
+                if (!gonOption.isActive()) {
+                    continue;
+                }
+                genV.addElement("-f");
+                genV.addElement(Integer.toString(gonOption.getFaces()));
+                String s = "f" + gonOption.getFaces();
+                if (gonOption.isLimited()) {
+                    genV.addElement("l" + gonOption.getMin() + "-" + gonOption.getMax() + "u");
+                    s = s + "+" + gonOption.getMin() + "-" + gonOption.getMax();
+                }
+                fileV.addElement(s);
+            }
+
+            if(dual) genV.add("-dual");
+            cage.Utils.addIfSelected(genV, faceStats, "-facestat");
+
+            if(dual){
+                c = "3";
+            } else {
+                c = "";
+                if (conn1.isSelected()) {
+                    c = c + "1";
+                }
+                if (conn2.isSelected()) {
+                    c = c + "2";
+                }
+                if (conn3.isSelected()) {
+                    c = c + "3";
+                }
+            }
+            genV.addElement("-mapcon");
+            genV.addElement(c);
+            if (c.length() < 4) {
+                fileV.addElement("c" + c);
+            }
+
+            if(dual) fileV.add("dual");
+
+            generator = new String[1][genV.size()];
+            genV.copyInto(generator[0]);
+            String[] array = new String[fileV.size()];
+            fileV.copyInto(array);
+            filename = Systoolbox.join(array, "_");
+
         } else {
-            c = "";
-            if (conn1.isSelected()) {
-                c = c + "1";
+            int vertices = dual ? minAtomsSlider.getValue() : minAtomsSlider.getValue()/2+2;
+            generator = new String[1][dual ? 3 : 4];
+            Iterator it = gonOptionsMap.values().iterator();
+            genV.addElement("-");
+            fileV.addElement("plantri_ad_");
+            while (it.hasNext()) {
+                GonOption gonOption = (GonOption) it.next();
+                if (!gonOption.isActive()) {
+                    continue;
+                }
+                genV.addElement("F");
+                fileV.addElement("F");
+                genV.addElement(Integer.toString(gonOption.getFaces()));
+                fileV.addElement(Integer.toString(gonOption.getFaces()));
+                if (gonOption.isLimited()) {
+                    genV.addElement("_" + gonOption.getMin() + "^" + gonOption.getMax());
+                    fileV.addElement("m" + gonOption.getMin() + "M" + gonOption.getMax());
+                }
             }
-            if (conn2.isSelected()) {
-                c = c + "2";
-            }
-            if (conn3.isSelected()) {
-                c = c + "3";
-            }
+            if(!dual) fileV.addElement("_d");
+            fileV.addElement("_" + vertices);
+            String[] array = new String[genV.size()];
+            genV.copyInto(array);
+            String restrict = Systoolbox.join(array, "");
+            int j = 0;
+            generator[0][j++] = "plantri_ad";
+            generator[0][j++] = restrict;
+            if(!dual)
+                generator[0][j++] = "-d";
+            generator[0][j++] = Integer.toString(vertices);
+            String[] fileArray = new String[fileV.size()];
+            fileV.copyInto(fileArray);
+            filename = Systoolbox.join(fileArray, "");
         }
-        genV.addElement("-mapcon");
-        genV.addElement(c);
-        if (c.length() < 4) {
-            fileV.addElement("c" + c);
-        }
-
-        if(dual) fileV.add("dual");
-
-        generator = new String[1][genV.size()];
-        genV.copyInto(generator[0]);
-        String[] array = new String[fileV.size()];
-        fileV.copyInto(array);
-        filename = Systoolbox.join(array, "_");
 
         embed2D = new String[][]{{"embed"}};
         embed3D = new String[][]{{"embed", "-d3", "-it"}};
