@@ -7,6 +7,7 @@ package cage.viewer.jmol;
 import cage.CaGe;
 import cage.EmbeddableGraph;
 import cage.GeneratorInfo;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -33,6 +34,10 @@ public class JmolPanel extends JPanel {
     }
 
     public void setGraph(EmbeddableGraph graph){
+        /*
+         * First we set the graph on the adapter and then we trigger the viewer
+         * to reread the graph from the adapter.
+         */
         adapter.setGraph(graph);
         viewer.openDOM(null);
         viewer.evalString("delay;");
