@@ -2,7 +2,7 @@
 what?:
 
 rebuild: clean
-	javac -cp .:JmolApplet.jar -deprecation -source 1.4 -target 1.4 ` find cage lisken util -name "*.java" -print `
+	javac -cp .:Jmol.jar -deprecation -source 1.4 -target 1.4 ` find cage lisken util -name "*.java" -print `
 
 clean:
 	rm -f ` find cage lisken util -name "*.class" -print `
@@ -33,7 +33,7 @@ source_distribution:
 	 egrep "(\.(java|gif|ps|c|h)$$)|((Makefile|Sysdir)$$)" | \
 	 egrep -v "test|embed\.tar|Viewers|(^hall/)|HelloWorld|\.xvpics"; \
 	 find INSTALL.sh cage.sh CaGe.ini java j .rasmolrc \
-	  JmolApplet.jar -print \
+	  Jmol.jar -print \
 	) | \
 	tar -hT- -cf CaGe-sources.tar
 	rm -f CaGe-sources.tar.gz
@@ -43,7 +43,7 @@ publish: distribution
 	scp CaGe-dist.zip jupiter:WWW/CaGe/CaGe.zip && rm CaGe-dist.zip
 
 distribution: CaGe.jar CaGe-C.zip sysinfo.jar
-	zip -oqX9 CaGe-dist.zip INSTALL.sh cage.sh CaGe.ini java sysinfo.jar .rasmolrc Data CaGe-C.zip CaGe.jar JmolApplet.jar
+	zip -oqX9 CaGe-dist.zip INSTALL.sh cage.sh CaGe.ini java sysinfo.jar .rasmolrc Data CaGe-C.zip CaGe.jar Jmol.jar
 	rm -f CaGe.jar CaGe-C.zip sysinfo.jar
 
 clear_distribution:

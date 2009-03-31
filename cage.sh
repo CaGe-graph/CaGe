@@ -66,7 +66,7 @@ if expr $version : '^1-[01]-' 2>&- >&-
   then cp1="$javadir/lib/classes.zip:$javadir/classes:${CaGe_InstallDir}swing.jar:"
   else cp1=""
 fi
-cp2="${CaGe_InstallDir}collections.jar:${CaGe_InstallDir}CaGe.jar:${CaGe_InstallDir}JmolApplet.jar:${CaGe_InstallDir}sysinfo.jar:${CaGe_InstallDir}."
+cp2="${CaGe_InstallDir}collections.jar:${CaGe_InstallDir}CaGe.jar:${CaGe_InstallDir}Jmol.jar:${CaGe_InstallDir}sysinfo.jar:${CaGe_InstallDir}."
 
 
 # start CaGe
