@@ -3,6 +3,7 @@ package cage.generator;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
+import cage.SingleElementRule;
 import cage.StaticGeneratorInfo;
 
 import java.awt.GridBagConstraints;
@@ -114,7 +115,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
                 Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
                 EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
                 "test",
-                6);
+                6, true, new SingleElementRule("C"), 0);
     }
 
     public void showing() {
