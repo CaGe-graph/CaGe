@@ -4,6 +4,7 @@ import cage.CaGeResult;
 import cage.EmbeddableGraph;
 import cage.GeneratorInfo;
 import cage.ResultPanel;
+import cage.viewer.jmol.JmolMenu;
 import cage.viewer.jmol.JmolPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -39,6 +40,7 @@ public class CaGeJmolViewer implements CaGeViewer{
         frame.setLayout(new BorderLayout());
         frame.add(comment, BorderLayout.NORTH);
         frame.add(jmolPanel, BorderLayout.CENTER);
+        frame.setJMenuBar(JmolMenu.getJMenuBar(jmolPanel, jmolPanel.getViewer(), frame));
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 setVisible(false);
