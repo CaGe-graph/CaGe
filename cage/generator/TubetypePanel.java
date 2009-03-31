@@ -6,6 +6,7 @@ import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
+import cage.SingleElementRule;
 import cage.StaticGeneratorInfo;
 import cage.ValencyElementRule;
 import java.awt.Dimension;
@@ -384,7 +385,7 @@ public class TubetypePanel extends GeneratorPanel
     String[][] embed2D = { { "embed" } };
     String[][] embed3D = { { "embed", "-d3", "-it" } };
 
-    ElementRule rule = new ValencyElementRule("1:H 3:C");
+    ElementRule rule = new SingleElementRule("C");
 
     return new StaticGeneratorInfo(
      generator,
