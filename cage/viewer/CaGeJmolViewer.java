@@ -22,15 +22,13 @@ public class CaGeJmolViewer implements CaGeViewer{
 
     private int dimension = 0;
     private ResultPanel resultPanel;
-    private JLabel comment,  status;
+    private JLabel comment;
     private JFrame frame;
     private JmolPanel jmolPanel = new JmolPanel();
 
     public CaGeJmolViewer() {
         comment = new JLabel("\u00a0");
         comment.setHorizontalAlignment(SwingConstants.CENTER);
-        status = new JLabel("\u00a0");
-        status.setHorizontalAlignment(SwingConstants.RIGHT);
     }
 
     private void createFrame() {
@@ -40,7 +38,6 @@ public class CaGeJmolViewer implements CaGeViewer{
         frame = new JFrame("CaGe - Jmol Viewer");
         frame.setLayout(new BorderLayout());
         frame.add(comment, BorderLayout.NORTH);
-        frame.add(status, BorderLayout.SOUTH);
         frame.add(jmolPanel, BorderLayout.CENTER);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -104,9 +101,8 @@ public class CaGeJmolViewer implements CaGeViewer{
     public void setViewerSize(int width, int height) {
         Insets insets = frame.getInsets();
         Dimension commentSize = comment.getPreferredSize();
-        Dimension statusSize = status.getPreferredSize();
         frame.setSize(
-                Math.max(width, Math.max(commentSize.width, statusSize.width)) + insets.left + insets.right,
-                height + commentSize.height + statusSize.height + insets.top + insets.bottom);
+                Math.max(width, commentSize.width) + insets.left + insets.right,
+                height + commentSize.height + insets.top + insets.bottom);
     }
 }
