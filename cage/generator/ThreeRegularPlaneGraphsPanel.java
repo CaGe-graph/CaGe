@@ -9,7 +9,6 @@ import javax.swing.JTabbedPane;
 public class ThreeRegularPlaneGraphsPanel extends GeneratorPanel {
 
     private static final boolean debug = false;
-    private GeneratorPanel lastChosenPanel = null;
     private JTabbedPane pane = new JTabbedPane();
 
     public ThreeRegularPlaneGraphsPanel() {
@@ -30,12 +29,6 @@ public class ThreeRegularPlaneGraphsPanel extends GeneratorPanel {
     public GeneratorInfo getGeneratorInfo() {
         GeneratorPanel chosenPanel = (GeneratorPanel) pane.getSelectedComponent();
         GeneratorInfo info = chosenPanel.getGeneratorInfo();
-        if (chosenPanel != lastChosenPanel &&
-                (chosenPanel instanceof DiskTriangulationsPanel ||
-                lastChosenPanel instanceof DiskTriangulationsPanel)) {
-            info.getEmbedder().setConstant(false);
-        }
-        lastChosenPanel = chosenPanel;
         return info;
     }
 }
