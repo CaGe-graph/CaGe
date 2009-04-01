@@ -8,11 +8,18 @@ int main (int argc, char *argv[])
   FILE **outfile;
   int c, i;
   int value = 0;
-  outfile = (FILE **) malloc (argc * sizeof (FILE *));
+  int append = 0;
+  char option[2] = "wb";
+  /* first check for the option a */
+  if (argv[i][0] == '-' && argv[i][1] == 'a') {
+    option[0] = 'a';
+    append = 1;
+  }
+  outfile = (FILE **) malloc ((argc - append) * sizeof (FILE *));
   outfile [0] = stdout;
-  for (i = 1; i < argc; ++i)
+  for (i = 1 + append; i < argc; ++i)
   {
-    if ((outfile [i] = fopen (argv [i], "wb")) == NULL) {
+    if ((outfile [i] = fopen (argv [i], option)) == NULL) {
       fprintf (stderr, "%s: ", argv [0]);
       perror (argv [i]);
       value = 1;
