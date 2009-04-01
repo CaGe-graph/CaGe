@@ -181,7 +181,7 @@ embed_graph
   if (debug_native_embedder) {
       write_writegraph_file (graph, stderr, dimension, 1, 0, 0);
   }
-  write_writegraph_file (graph, pipeinfile, dimension, 1, 0, 1);
+  write_writegraph_file (graph, pipeinfile, dimension, 1, 1, 1);
   fclose (pipeinfile);
   if (debug_native_embedder) fprintf (stderr, "Finished writing\n");
   if (debug_native_embedder) fprintf (stderr, "reading embedding (fildes %d)\n", pipeoutfd);
