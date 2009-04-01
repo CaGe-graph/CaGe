@@ -614,7 +614,8 @@ readgraph_vega(FILE *fp, GRAPH *G_out, POSITIONING *P_out)
     if (dim == 0) {
       if(sscanf(remain_line,"%d %n", &tmp, &read_char) < 1)
 	dim = 2;
-      else if (tmp <= 0 || strchr(".eE", remain_line[read_char]))
+      else if (tmp <= 0 || (remain_line[read_char]
+			    && strchr(".eE", remain_line[read_char])))
 	dim = 3;
       else
 	dim = 2;
@@ -3306,5 +3307,4 @@ write_result(GRAPH *G, POSITIONING *P, FILE *f, char output_format)
 ** compile-command: "make -k embed"
 ** End:
 */
-
 
