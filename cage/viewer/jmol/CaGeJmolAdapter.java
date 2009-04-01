@@ -113,15 +113,15 @@ public class CaGeJmolAdapter extends JmolAdapter{
         }
 
         public float getX() {
-            return graph.get3DCoordinates(position)[0]*10;
+            return graph.get3DCoordinates(position)[0];
         }
 
         public float getY() {
-            return graph.get3DCoordinates(position)[1]*10;
+            return graph.get3DCoordinates(position)[1];
         }
 
         public float getZ() {
-            return graph.get3DCoordinates(position)[2]*10;
+            return graph.get3DCoordinates(position)[2];
         }
 
         public String getElementSymbol() {
