@@ -2234,12 +2234,12 @@ normalize_graph(GRAPH *G, EDGE *outer, int *max_gap)
     old_deg = new_deg;
   }
 
-  /*  count = add_sticks(G);        if (status) return NULL;
-  if (count >= 3)
-  close_gaps(G, 4, &e, NULL); if (status) return NULL; */
   count = add_sticks(G);        if (status) return NULL;
   if (count >= 3)
     close_gaps(G, 3, &e, NULL); if (status) return NULL;
+  count = add_sticks(G);        if (status) return NULL;
+  if (count >= 3)
+    close_gaps(G, 2, &e, NULL); if (status) return NULL;
 
   return e;
 }
