@@ -2,7 +2,16 @@ package cage;
 
 import lisken.systoolbox.Systoolbox;
 
-public class NativeEmbedEmbedder extends Embedder {
+/**
+ * An implementation of <code>Embedder</code> that runs external processes
+ * as embedder. This implementation uses native methods to communicate with
+ * these processes. This class is package-private, because an <code>Embedder
+ * </code> that uses external processes should be created using {@link
+ * EmbedFactory}.
+ *
+ * @author nvcleemp
+ */
+class NativeEmbedEmbedder extends Embedder {
 
     static final boolean debug = false;
     boolean isConstant = false;
@@ -30,13 +39,13 @@ public class NativeEmbedEmbedder extends Embedder {
 
     native void nStop(long pid);
 
-    public NativeEmbedEmbedder(String[][] embed2D, String[][] embed3D) {
+    NativeEmbedEmbedder(String[][] embed2D, String[][] embed3D) {
         this.embed2DOrigCmd = embed2D;
         this.embed3DOrigCmd = embed3D;
         computeEmbedders();
     }
 
-    public NativeEmbedEmbedder(boolean isConstant,
+    NativeEmbedEmbedder(boolean isConstant,
             String[][] embed2D, String[][] embed3D) {
         this.isConstant = isConstant;
         this.embed2DOrigCmd = embed2D;
@@ -44,7 +53,7 @@ public class NativeEmbedEmbedder extends Embedder {
         computeEmbedders();
     }
 
-    public NativeEmbedEmbedder(boolean isConstant,
+    NativeEmbedEmbedder(boolean isConstant,
             String[][] embed2D, String[][] embed3D,
             float intensityFactor, int embeddedMode) {
         this.isConstant = isConstant;
