@@ -108,13 +108,14 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         String length = Integer.toString(lengthOfSide.getValue() - (symmetricButton.isSelected() ? 0 : 1));
 
         String ipr = iprBox.isSelected() ? " -i" : "";
+        String iprFile = iprBox.isSelected() ? "_i" : "";
 
         String layers = hexagonLayersBox.isSelected() ? Integer.toString(hexagonLayers.getValue()) : "";
 
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
                 EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
-                "test",
+                "cone_" + pentagons + "_" + length + "_" + symmetric + iprFile + "_" + layers,
                 6, true, new SingleElementRule("C"), 0);
     }
 
