@@ -9,6 +9,9 @@ import lisken.systoolbox.Systoolbox;
  * </code> that uses external processes should be created using {@link
  * EmbedFactory}.
  *
+ * <b>Warning!</b> A <code>NativeEmbedEmbedder</code> is only capable of
+ * embedding a <code>NativeEmbeddableGraph</code>.
+ *
  * @author nvcleemp
  */
 class NativeEmbedEmbedder extends Embedder {
