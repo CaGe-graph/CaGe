@@ -1,11 +1,9 @@
-
 package cage;
 
+public interface EmbedThreadListener {
 
-public interface EmbedThreadListener
-{
-  void showEmbeddingException 
-   (Exception e, String context, String embedDiagnostics);
-  void embeddingFinished();
+    void showEmbeddingException(Exception e, String context, String embedDiagnostics);
+
+    void embeddingFinished();
 }
 
