@@ -45,9 +45,10 @@ public abstract class Embedder {
     public abstract void abort();
 
     /**
-     * Returns whether the point (<tt>x</tt>, <tt>y</tt>) lies in the outer
-     * face or not. This method also stores the new outer face in case the
-     * graph needs to be reembedded. (TODO: document this last fact better.)
+     * Returns whether the graph needs to be reembedded for the point
+     * (<tt>x</tt>, <tt>y</tt>) to lie in the outer face or not. This method
+     * also stores the new outer face in case the graph needs to be reembedded.
+     * (TODO: document this last fact better.)
      *
      * @param graph
      * @param x
