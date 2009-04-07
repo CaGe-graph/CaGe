@@ -1,6 +1,6 @@
 package cage;
 
-public class NativeEmbeddableGraph extends EmbeddableGraph {
+public class NativeEmbeddableGraph implements EmbeddableGraph {
 
     protected long nGraph;
 
