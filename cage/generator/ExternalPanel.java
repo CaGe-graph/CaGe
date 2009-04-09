@@ -2,6 +2,7 @@ package cage.generator;
 
 import cage.CaGe;
 import cage.Embedder;
+import cage.EmbeddingTypeFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
 import cage.StaticGeneratorInfo;
@@ -172,31 +173,21 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         add(Box.createVerticalStrut(20));
         add(new JSeparator(SwingConstants.HORIZONTAL));
         add(Box.createVerticalStrut(20));
-
-        //------------Embedded Template section-----------------
+        //------------Embedding type section--------------------
         add(embedTemplateLabel);
         add(Box.createVerticalStrut(5));
         JPanel embedTemplatePanel = new JPanel();
         embedTemplatePanel.setLayout(new BoxLayout(embedTemplatePanel, BoxLayout.Y_AXIS));
-        for (int i = 0; i < CaGe.generator.length; ++i) {
-            if (i == CaGe.lastGeneratorChoice) {
-                continue;
+        for (int i = 0; i < CaGe.getNumberOfEmbeddingTypeFactories(); ++i) {
+            Object[] types = CaGe.getEmbeddingTypeFactory(i).getEmbeddingTypes();
+            for (int j = 0; j < types.length; j++) {
+                Object type = types[j];
+                JRadioButton embedTemplateButton = new JRadioButton(type.toString());
+                embedTemplateButton.setActionCommand("e" + type.toString());
+                embedTemplateButton.addActionListener(this);
+                embedTemplateGroup.add(embedTemplateButton);
+                embedTemplatePanel.add(embedTemplateButton);
             }
-            String generatorName = CaGe.generator[i];
-            boolean enabled =
-                    CaGe.getCaGePropertyAsBoolean(generatorName + ".ForExternal", true);
-            if (!enabled) {
-                continue;
-            }
-            JRadioButton embedTemplateButton = new JRadioButton();
-            embedTemplateButton.setText(CaGe.config.getProperty(generatorName + ".Title"));
-            if (i < 10) {
-                embedTemplateButton.setMnemonic(KeyEvent.VK_0 + (i + 1) % 10);
-            }
-            embedTemplateButton.setActionCommand("e" + generatorName);
-            embedTemplateButton.addActionListener(this);
-            embedTemplateGroup.add(embedTemplateButton);
-            embedTemplatePanel.add(embedTemplateButton);
         }
         add(embedTemplatePanel);
         embedIntensity.setMinimum(10);
@@ -295,15 +286,18 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
                 embeddedMode = Embedder.REFINE_OLD_EMBEDDING;
                 break;
         }
-        try {
-            String templateGenerator = embedTemplateGroup.getSelection().getActionCommand().substring(1);
-            GeneratorPanel templatePanel = (GeneratorPanel) Class.forName(CaGe.config.getProperty(templateGenerator + ".ConfigPanel")).newInstance();
-            // Don't call templatePanel.showing() - it might try to manipulate a null default button
-            templateInfo = templatePanel.getGeneratorInfo();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+        String embeddingType = embedTemplateGroup.getSelection().getActionCommand().substring(1);
+        Embedder embedder = null;
+        {
+            int i=0;
+            while(i < CaGe.getNumberOfEmbeddingTypeFactories() && embedder == null) {
+                embedder = CaGe.getEmbeddingTypeFactory(i).getEmbedderFor(embeddingType);
+                i++;
+            }
+            if(embedder==null)
+                throw new RuntimeException("Unknown embedding type " + embeddingType);
         }
-        Embedder embedder = templateInfo.getEmbedder();
         embedder.setConstant(embedderIsConstant);
         embedderIsConstant = true;
         embedder.setIntensityFactor(embedIntensity.getValue() / 100.0f);

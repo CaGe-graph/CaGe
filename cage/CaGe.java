@@ -18,8 +18,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import javax.swing.AbstractButton;
@@ -56,6 +58,8 @@ public class CaGe implements ActionListener {
     private static FoldnetThread foldnetThread;
     // private static CaGeFoldnetDialog foldnetDialog;
     private static BackgroundWindow backgroundWindow;
+    private static List embeddingTypeFactories = new ArrayList();
+    //TODO: when upgrading to Java 1.5: generify this list
 
 
     static {
@@ -146,6 +150,23 @@ public class CaGe implements ActionListener {
         nativesAvailable = nativesAvailableValue;
         expertMode = expertModeValue;
         osName = osNameValue;
+
+        // construct the list with embedding type factories
+        Vector embeddingTypeFactoryVector = Systoolbox.stringToVector(config.getProperty("CaGe.EmbeddingTypeFactory"));
+        for (int i = 0; i < embeddingTypeFactoryVector.size(); i++) {
+            try {
+                Object o = Class.forName(embeddingTypeFactoryVector.get(i).toString()).newInstance();
+                if(o instanceof EmbeddingTypeFactory)
+                    embeddingTypeFactories.add(o);
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            } catch (InstantiationException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     // perform configuration substitution on a name from CaGe.ini
@@ -331,6 +352,28 @@ public class CaGe implements ActionListener {
             return;
         }
         wizard.actionPerformed(e);
+    }
+
+    /**
+     * Returns the number of <code>EmbeddingTypeFactory</code> instances that
+     * are registered.
+     *
+     * @return the number of <code>EmbeddingTypeFactory</code> instances that
+     * are registered.
+     */
+    public static int getNumberOfEmbeddingTypeFactories(){
+        return embeddingTypeFactories.size();
+    }
+
+    /**
+     * Returns the <tt>i</tt>th <code>EmbeddingTypeFactory</code>
+     * @param i The index of the requested <code>EmbeddingTypeFactory</code>
+     * @return the <tt>i</tt>th <code>EmbeddingTypeFactory</code>
+     * @throws IndexOutOfBoundsException when i $lt; 0 or i is larger than the
+     * number of <code>EmbeddingTypeFactory</code> instances.
+     */
+    public static EmbeddingTypeFactory getEmbeddingTypeFactory(int i){
+        return (EmbeddingTypeFactory)embeddingTypeFactories.get(i);
     }
 
     public static void exit() {
