@@ -51,7 +51,6 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
     private ButtonGroup commandGroup = new ButtonGroup();
     private ButtonGroup embeddedModeGroup = new ButtonGroup();
     private ButtonGroup embedTemplateGroup = new ButtonGroup();
-    private JLabel embedTemplateLabel = new JLabel();
     private boolean nonNullCmd,  embedderRequired;
     private boolean embedderIsConstant = false;
     private EnhancedSlider embedIntensity = new EnhancedSlider();
@@ -174,7 +173,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         add(new JSeparator(SwingConstants.HORIZONTAL));
         add(Box.createVerticalStrut(20));
         //------------Embedding type section--------------------
-        add(embedTemplateLabel);
+        add(new JLabel("The expected form of the graphs is"));
         add(Box.createVerticalStrut(5));
         JPanel embedTemplatePanel = new JPanel();
         embedTemplatePanel.setLayout(new BoxLayout(embedTemplatePanel, BoxLayout.Y_AXIS));
@@ -245,15 +244,9 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
                 break;
             case 'i':
             case 'r':
-                embedderRequired = true;
-                // enableEmbedControls(embedderRequired);
-                embedTemplateLabel.setText("embed graphs as:");
-                checkNextEnabled();
-                break;
             case 'k':
                 embedderRequired = true;
                 // enableEmbedControls(embedderRequired);
-                embedTemplateLabel.setText("if no coordinates provided, embed graphs as:");
                 checkNextEnabled();
                 break;
             case 'x':

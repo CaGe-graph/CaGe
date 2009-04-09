@@ -12,7 +12,7 @@ public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
 
     static {
         TYPES = new Type[3];
-        TYPES[0] = new Type("Planar") {
+        TYPES[0] = new Type("rather flat") {
 
             private String[][] embed2D = {{"embed"}};
             private String[][] embed3D = {{"embed", "-d3", "-ip"}};
@@ -21,7 +21,7 @@ public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
                 return EmbedFactory.createEmbedder(true, embed2D, embed3D);
             }
         };
-        TYPES[1] = new Type("Polyhedral") {
+        TYPES[1] = new Type("rather spherical") {
 
             private String[][] embed2D = {{"embed"}};
             private String[][] embed3D = {{"embed", "-d3", "-is"}};
@@ -30,7 +30,7 @@ public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
                 return EmbedFactory.createEmbedder(true, embed2D, embed3D);
             }
         };
-        TYPES[2] = new Type("Tubular") {
+        TYPES[2] = new Type("rather tubular") {
 
             private String[][] embed2D = {{"embed"}};
             private String[][] embed3D = {{"embed", "-d3", "-it"}};
