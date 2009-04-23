@@ -389,7 +389,7 @@ public class TubetypePanel extends GeneratorPanel
 
     return new StaticGeneratorInfo(
      generator,
-     EmbedFactory.createEmbedder(true, embed2D, embed3D),
+     EmbedFactory.createEmbedder(false, embed2D, embed3D),
      filename, 6, rule);
   }
 
