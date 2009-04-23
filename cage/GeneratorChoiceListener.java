@@ -30,11 +30,13 @@ public class GeneratorChoiceListener implements ActionListener {
             if (CaGe.rememberPanels) {
                 CaGe.generatorPanels.put(configPanelName, configPanel);
             }
-            configPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createCompoundBorder(
-                    BorderFactory.createEmptyBorder(10, 10, 10, 10),
-                    BorderFactory.createEtchedBorder()),
-                    BorderFactory.createEmptyBorder(20, 20, 20, 20)), " Generator Options:  " + ((JButton) e.getSource()).getText() + " "));
+            configPanel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createCompoundBorder(
+                            BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                            BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), " Generator Options:  " + ((JButton) e.getSource()).getText() + " ")
+                        ),
+                        BorderFactory.createEmptyBorder(20, 20, 20, 20)
+                    ));
             CaGe.wizard().nextStage(configPanel,
                     new GeneratorParamsListener(configPanel, generator),
                     Wizard.PREVIOUS, Wizard.NEXT, null, null, null);
