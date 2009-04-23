@@ -114,7 +114,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
 
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
-                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3", "-ip", "-f1,1,3.0"}}),
+                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3", "-ip", "-f2,40,40"}}),
                 "cone_" + pentagons + "_" + length + "_" + symmetric + iprFile + "_" + layers,
                 6, true, new SingleElementRule("C"), 0);
     }
