@@ -280,7 +280,7 @@ public class JmolMenu {
         bar.add(zoom);
         //----------------ABOUT-----------------------
         JMenu about = new JMenu("About");
-        //about.add(new ShowWindowAction("About Jmol", new ToolWindow(new AboutJmolPanel(viewer), target)));
+        about.add(new ShowWindowAction("About Jmol", new ToolWindow(new AboutJmolPanel(viewer), target)));
         bar.add(about);
         return bar;
     }
