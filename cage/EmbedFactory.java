@@ -11,7 +11,7 @@ public class EmbedFactory {
      * @param embed2D The commands for the 2D embedder
      * @param embed3D The commands for the 3D embedder
      * @return an embedder object
-     * @see NativeEmbedEmbedder
+     * @see cage.NativeEmbedEmbedder
      */
     public static Embedder createEmbedder(String[][] embed2D, String[][] embed3D) {
         return createEmbedder(CaGe.nativesAvailable, false,
@@ -25,7 +25,7 @@ public class EmbedFactory {
      * @param embed2D The commands for the 2D embedder
      * @param embed3D The commands for the 3D embedder
      * @return an embedder object
-     * @see NativeEmbedEmbedder
+     * @see cage.NativeEmbedEmbedder
      */
     public static Embedder createEmbedder(boolean isConstant, String[][] embed2D, String[][] embed3D) {
         return createEmbedder(CaGe.nativesAvailable, isConstant,
@@ -40,7 +40,7 @@ public class EmbedFactory {
      * @param embed2D The commands for the 2D embedder
      * @param embed3D The commands for the 3D embedder
      * @return an embedder object
-     * @see NativeEmbedEmbedder
+     * @see cage.NativeEmbedEmbedder
      */
     public static Embedder createEmbedder(boolean nativesAvailable, boolean isConstant,
             String[][] embed2D, String[][] embed3D) {
@@ -57,7 +57,7 @@ public class EmbedFactory {
      *                        of iterations.
      * @param embeddedMode One of the constants defined in {@link Embedder}
      * @return an embedder object
-     * @see NativeEmbedEmbedder
+     * @see cage.NativeEmbedEmbedder
      */
     public static Embedder createEmbedder(String[][] embed2D, String[][] embed3D,
             float intensityFactor, int embeddedMode) {
@@ -75,7 +75,7 @@ public class EmbedFactory {
      *                        of iterations.
      * @param embeddedMode One of the constants defined in {@link Embedder}
      * @return an embedder object
-     * @see NativeEmbedEmbedder
+     * @see cage.NativeEmbedEmbedder
      */
     public static Embedder createEmbedder(boolean isConstant,
             String[][] embed2D, String[][] embed3D,
@@ -95,7 +95,7 @@ public class EmbedFactory {
      *                        of iterations.
      * @param embeddedMode One of the constants defined in {@link Embedder}
      * @return an embedder object
-     * @see NativeEmbedEmbedder
+     * @see cage.NativeEmbedEmbedder
      */
     public static Embedder createEmbedder(boolean nativesAvailable, boolean isConstant,
             String[][] embed2D, String[][] embed3D,
