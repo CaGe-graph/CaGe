@@ -4458,8 +4458,7 @@ threeconn(EDGE *e)
 
   On the left hand side of e there must be a triangle
   (e->left_facesize==3) and it is assumed that it is checked before
-  that the endvertices adjacent to e have degree at least 3 after the
-  deletion.
+  that the endvertices of e have degree at least 3 after the deletion.
 
   If there is a 2-cut, e->start and e->end cannot be contained, but they
   must be in different components, so v=e->prev->end MUST be contained.
@@ -4551,6 +4550,10 @@ edge_del_conn(EDGE *e, int connectivity)
   so that the map is k-connected before the removal of e. Larger values
   for the connectivity lead to an error. The value returned is also one
   of 1,2,3.
+
+  If connectivity==3 then the endvertices of e are assumed to have
+  degree>3 before removing e. This must be guaranteed before calling
+  the function.
 
   On the left hand side of e there must be a triangle (e->left_facesize==3).
 */
@@ -13659,7 +13662,7 @@ maybe_delete_bip(EDGE *edel, int oldmaxface, int oldmaxlist0, int oldmaxlist1,
    if (mindeg < *connec)
 	newconnec = mindeg;
    else if (*connec == 3)
-	newconnec = 1 + threeconn_quad(edel);
+	newconnec = 2 + threeconn_quad(edel);
    else if (*connec == 2)
 	newconnec = 1 + twoconn_quad(edel);
    else
