@@ -73,7 +73,7 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
     private AbstractButton[] degButton = new AbstractButton[3];
     //buttons to select the minimum connectivity
     private ButtonGroup minConnGroup;
-    private AbstractButton[] connButton = new AbstractButton[3];
+    private AbstractButton[] connButton;
     //checkbox to generate only graphs with exactly the minimum connectivity
     private JCheckBox exactConn;
 
@@ -139,9 +139,10 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
                 new Insets(0, 0, 10, 10), 0, 0));
         minConnGroup = new ButtonGroup();
         JPanel minConnPanel = new JPanel();
+        connButton = new AbstractButton[dual ? 5 : 3];
         for (int i = 0; i < connButton.length; ++i) {
-            String is = Integer.toString(i + 3);
-            connButton[i] = new JRadioButton(is, i == 0);
+            String is = Integer.toString(i + (dual? 1 : 3));
+            connButton[i] = new JRadioButton(is, i == connButton.length - 3);
             connButton[i].setActionCommand(is);
             connButton[i].setActionCommand("c" + is);
             connButton[i].addActionListener(this);
@@ -156,7 +157,7 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
                 new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 0), 0, 0));
-        exactConn = new JCheckBox("only graphs with connectivity exactly the given minimum");
+        exactConn = new JCheckBox(dual ? "only graphs with cyclic connectivity exactly the given minimum" : "only graphs with connectivity exactly the given minimum");
         exactConn.setMnemonic(KeyEvent.VK_R);
         add(exactConn,
                 new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
@@ -222,7 +223,7 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
                 conn = minConnGroup.getSelection().getActionCommand().charAt(1);
                 deg = cmd.charAt(1);
                 if (deg < conn) {
-                    connButton[deg - '0' - 3].setSelected(true);
+                    connButton[deg - '0' - (dual ? 1 : 3)].setSelected(true);
                 }
                 break;
         }
