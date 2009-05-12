@@ -1,4 +1,4 @@
-#define VERSION "4.4 - May 2, 2009"
+#define VERSION "4.4 - May 11, 2009"
 #define SWITCHES "[-uagsEh -c#txm#P#bpe#f#q -odGV -v]"
 #define TMP
 
@@ -463,6 +463,7 @@ static bigint ntriv;      /* counter of those with trivial groups
    (needs -G or something that implies it, like -o, -p, -P)  */
 static bigint nummindeg[6];  /* count according to min degree */
 static bigint numbigface[MAXN+1];  /* count according to outside face */
+static bigint numrooted_e[MAXE/2+1];  /* rooted maps per undirected edges */
 #endif
 #if defined(STATS2) && defined(STATS)   /* even more statistics collection */
 static bigint numtwos[MAXN+1];   /* number of vertices of degree 2 */
@@ -2041,6 +2042,9 @@ hastwocut(void)
 static int
 hascutvertex(void)
 {int i;
+
+if (nv>2) { for (i=0;i<nv;i++) if (degree[i]==1) return 1; }
+
 for (i=0;i<nv;i++)
   {RESETMARKS_V;
   MARK_V(i);
@@ -4219,7 +4223,9 @@ got_one(int nbtot, int nbop, int connec)
 #ifdef STATS
    if (polygonsize < 0)
    {
-	ADDBIG(numrooted,wt * numedgeorbits(nbtot,nbop));
+	numroot = wt * numedgeorbits(nbtot,nbop);
+	ADDBIG(numrooted,numroot);
+	if (pswitch) ADDBIG(numrooted_e[ne/2],numroot);
        if (degree[nv-1] < 6) ADDBIG(nummindeg[degree[nv-1]],wt);
    }
    else
@@ -17943,6 +17949,9 @@ polytope_dispatch(void)
    {
 	ZEROBIG(nout_e[i]);
 	ZEROBIG(nout_e_op[i]);
+#ifdef STATS
+	ZEROBIG(numrooted_e[i]);
+#endif
    }
 
    needgroup = TRUE;
@@ -18009,7 +18018,13 @@ polytope_dispatch(void)
 		PRINTBIG(msgfile,nout_e_op[i]);
 		fprintf(msgfile," (");
                PRINTBIG(msgfile,nout_e[i]);
-		fprintf(msgfile," classes)\n");
+		fprintf(msgfile," classes)");
+#ifdef STATS
+		fprintf(msgfile," ");
+		PRINTBIG(msgfile,numrooted_e[i]);
+		fprintf(msgfile," rooted");
+#endif
+		fprintf(msgfile,"\n");
 	    }
 	    else
 	    {
@@ -18269,7 +18284,8 @@ bipartite_dispatch(void)
 	}
 	if (minpolydeg == 1 && edgebound[0] <= 2*maxnv-2
 		            && edgebound[1] >= 2*maxnv-2
-                           && maxfacesize >= 2*maxnv-2)
+                           && maxfacesize >= 2*maxnv-2
+			    && res == 0)
 	{
 	    make_me_a_star(maxnv);
 	    canon(degree,numbering,&nbtot,&nbop);
@@ -18304,7 +18320,13 @@ bipartite_dispatch(void)
 		PRINTBIG(msgfile,nout_e_op[i]);
 		fprintf(msgfile," (");
                PRINTBIG(msgfile,nout_e[i]);
-		fprintf(msgfile," classes)\n");
+		fprintf(msgfile," classes)");
+#ifdef STATS
+		fprintf(msgfile," ");
+		PRINTBIG(msgfile,numrooted_e[i]);
+		fprintf(msgfile," rooted");
+#endif
+		fprintf(msgfile,"\n");
 	    }
 	    else
 	    {
