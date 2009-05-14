@@ -231,7 +231,7 @@ public class CGFPanel extends GeneratorPanel {
 
         boolean useCgf = (min != max) || faceStats.isSelected() ||
                 conn1.isSelected() || conn2.isSelected() ||
-                (nrOfRestrictions > 5);
+                (nrOfRestrictions < 5);
 
         if(useCgf){
             Systoolbox.addArray(genV, new String[]{
