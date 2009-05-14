@@ -20,8 +20,6 @@ import java.util.EventListener;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
