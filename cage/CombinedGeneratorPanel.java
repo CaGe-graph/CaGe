@@ -102,6 +102,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
     public void stateChanged(ChangeEvent e) {
         //this object should only listen to its own tabbed pane
         if(!notShown && e.getSource().equals(pane)){
+            getNextButton().setEnabled(true); //TODO: provide method for this in GeneratorPanel
             ((GeneratorPanel) pane.getSelectedComponent()).showing();
         }
     }
