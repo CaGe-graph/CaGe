@@ -11,5 +11,6 @@ public class ThreeRegularPlaneGraphsPanel extends CombinedGeneratorPanel {
         addTab("fullerenes", new FullgenPanel());
         addTab("cubic plane graphs with given faces", new CGFPanel(false));
         addTab("bipartite cubic plane graphs", new EulerianTriangulationsPanel(true));
+        add(pane);
     }
 }
