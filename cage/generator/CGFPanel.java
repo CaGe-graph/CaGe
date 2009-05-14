@@ -21,6 +21,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.AbstractButton;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,6 +32,8 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
@@ -144,24 +147,16 @@ public class CGFPanel extends GeneratorPanel {
         });
         gonOptionsMap = new GonOptionsMap(CGFFaceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton, dual, true);
         gonOptionsMap.setGonIncluded(facesSlider.getMinimum(), true);
+        gonOptionsMap.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                verifyData();
+            }
+        });
         JLabel includedFacesLabel = new JLabel(dual ? "included degrees" : "included face types:");
         ActionListener connListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                boolean c[] = {conn1.isSelected(), conn2.isSelected(), conn3.isSelected()};
-                AbstractButton conn[] = {conn1, conn2, conn3};
-                int cs = (c[0] ? 1 : 0) + (c[1] ? 1 : 0) + (c[2] ? 1 : 0);
-                char a;
-                switch (a = ((AbstractButton) e.getSource()).getActionCommand().charAt(0)) {
-                    case '1':
-                    case '2':
-                    case '3':
-                        int i = a - '1';
-                        if (cs == 0) {
-                            conn[i].setSelected(c[i] = true);
-                            cs = 1;
-                        }
-                }
+                verifyData();
             }
         };
         faceStats.setText(dual ? "Degree Statistics" : "Face Statistics");
@@ -349,6 +344,29 @@ public class CGFPanel extends GeneratorPanel {
     }
 
     public void showing() {
+    }
+
+    /**
+     * verifies whether the next button should be enabled or disabled.
+     */
+    private void verifyData(){
+        //is at least one of the connected boxes checked
+        boolean c[] = {conn1.isSelected(), conn2.isSelected(), conn3.isSelected()};
+        int cs = (c[0] ? 1 : 0) + (c[1] ? 1 : 0) + (c[2] ? 1 : 0);
+
+        //is at least one face type added
+        boolean faceAdded = false;
+
+        Iterator it = gonOptionsMap.values().iterator();
+        if(it.hasNext()){
+            GonOption gonOption = (GonOption) it.next();
+            while (!gonOption.isActive() && it.hasNext()) {
+                gonOption = (GonOption) it.next();
+            }
+            faceAdded = gonOption.isActive();
+        }
+
+        getNextButton().setEnabled(cs!=0 && faceAdded);
     }
 
     public static void main(String[] args) {
