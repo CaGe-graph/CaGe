@@ -262,7 +262,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         if (getNextButton() != null) {
             boolean enabled = false;
             for(Iterator it = gonOptionsMap.values().iterator(); it.hasNext();)
-                enabled = enabled || ((GonOption)it.next()).isActive();
+                enabled =(((GonOption)it.next()).isActive() || enabled);
             getNextButton().setEnabled(enabled);
         }
     }
