@@ -159,17 +159,17 @@ public class CGFPanel extends GeneratorPanel {
         };
         faceStats.setText(dual ? "Degree Statistics" : "Face Statistics");
         faceStats.setMnemonic(KeyEvent.VK_S);
-        conn1.setText("1-connected graphs");
+        conn1.setText("graphs with connectivity number 1");
         conn1.setMnemonic(KeyEvent.VK_1);
         conn1.setActionCommand("1");
         conn1.setSelected(false);
         conn1.addActionListener(connListener);
-        conn2.setText("2-connected graphs");
+        conn2.setText("graphs with connectivity number 2");
         conn2.setMnemonic(KeyEvent.VK_2);
         conn2.setSelected(false);
         conn2.setActionCommand("2");
         conn2.addActionListener(connListener);
-        conn3.setText("3-connected graphs");
+        conn3.setText("graphs with connectivity number 3");
         conn3.setMnemonic(KeyEvent.VK_3);
         conn3.setSelected(true);
         conn3.setActionCommand("3");
@@ -184,7 +184,7 @@ public class CGFPanel extends GeneratorPanel {
         CGFAtomsPanel.add(maxAtomsSlider, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 20), 0, 0));
         CGFAtomsPanel.add(minEqMax, new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         if(!dual) CGFExtrasPanel.add(new JLabel(), new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        CGFExtrasPanel.add(faceStats, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        //CGFExtrasPanel.add(faceStats, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         if(!dual){
             CGFExtrasPanel.add(conn1, new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
             CGFExtrasPanel.add(conn2, new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -195,8 +195,10 @@ public class CGFPanel extends GeneratorPanel {
         this.add(CGFFacesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(includedFacesLabel, new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 5, 0, 0), 0, 0));
         this.add(CGFFaceOptionsPanel, new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
-        this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
-        this.add(CGFExtrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        if(!dual){
+            this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 0, 20, 0), 0, 0));
+            this.add(CGFExtrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        }
     }
 
     public GeneratorInfo getGeneratorInfo() {
