@@ -344,6 +344,7 @@ public class CGFPanel extends GeneratorPanel {
     }
 
     public void showing() {
+        verifyData();
     }
 
     /**
