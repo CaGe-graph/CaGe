@@ -160,7 +160,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         ipr.setText("isolated pentagons (ipr)");
         ipr.setMnemonic(KeyEvent.VK_I);
         ipr.setSelected(false);
-        includeH.setText("include H atoms");
+        includeH.setText("include H atoms in output");
         includeH.setMnemonic(KeyEvent.VK_A);
         includeH.setSelected(true);
         peri.setText("strictly peri-condensed");
@@ -261,20 +261,24 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
                 new GridBagConstraints(0, 4, 3, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(5, 10, 5, 0), 0, 0));
-        add(includeH,
+        add(peri,
                 new GridBagConstraints(0, 5, 3, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(5, 10, 5, 0), 0, 0));
-        add(peri,
+        add(Box.createVerticalStrut(20),
                 new GridBagConstraints(0, 6, 3, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(5, 10, 5, 0), 0, 0));
-        add(HGapLabel,
+        add(includeH,
                 new GridBagConstraints(0, 7, 3, 1, 1.0, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(5, 10, 5, 0), 0, 0));
+        add(HGapLabel,
+                new GridBagConstraints(0, 8, 3, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(30, 10, 5, 0), 0, 0));
         add(HGapSlider,
-                new GridBagConstraints(0, 8, 2, 1, 1.0, 1.0,
+                new GridBagConstraints(0, 9, 2, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
     }
