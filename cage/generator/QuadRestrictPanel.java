@@ -177,7 +177,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         });
         addRestrictedSizeButton.setMnemonic(KeyEvent.VK_I);
         JPanel restrictedPanel = new JPanel(new GridBagLayout());
-        gonOptionsMap = new GonOptionsMap(restrictedPanel, restrictionSlider.slider(), restrictionSlider.getModel(), addRestrictedSizeButton, !dual, false);
+        gonOptionsMap = new GonOptionsMap(restrictedPanel, restrictionSlider.slider(), restrictionSlider.getModel(), addRestrictedSizeButton, !dual, true);
         gonOptionsMap.addChangeListener(this);
         gonOptionsMap.setGonIncluded(restrictionSlider.getMinimum(), true);
         JLabel includedRestrictionsLabel = new JLabel(dual ? "included face types:" : "included degrees");
@@ -229,6 +229,12 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
             }
             restrictions.append("F");
             restrictions.append(Integer.toString(gonOption.getSize()));
+            if(gonOption.isLimited()){
+                restrictions.append("_");
+                restrictions.append(Integer.toString(gonOption.getMin()));
+                restrictions.append("^");
+                restrictions.append(Integer.toString(gonOption.getMax()));
+            }
         }
         filename.append("_").append(restrictions.toString());
 
