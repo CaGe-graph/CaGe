@@ -12,11 +12,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
@@ -33,7 +31,6 @@ public class BoundaryHCgenPanel extends GeneratorPanel
     JLabel numberOfPentagonsLabel;
     JCheckBox iprBox;
     JCheckBox showHBox;
-    JButton defaultButton;
 
     public BoundaryHCgenPanel() {
         setLayout(new GridBagLayout());
@@ -90,8 +87,6 @@ public class BoundaryHCgenPanel extends GeneratorPanel
     }
 
     public void showing() {
-        defaultButton = SwingUtilities.getRootPane(this).getDefaultButton();
-        defaultButton.setText("Next");
         checkList();
     }
 
@@ -111,10 +106,10 @@ public class BoundaryHCgenPanel extends GeneratorPanel
         numberOfPentagonsLabel.setText("Number of pentagons: " + pentagons);
         if (pentagons > 5 || pentagons < 0) {
             numberOfPentagonsLabel.setForeground(Color.RED);
-            defaultButton.setEnabled(false);
+            getNextButton().setEnabled(false);
         } else {
-            defaultButton.setEnabled(true);
             numberOfPentagonsLabel.setForeground(Color.BLACK);
+            getNextButton().setEnabled(true);
         }
     }
 
