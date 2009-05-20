@@ -177,12 +177,8 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
                 new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-        FullgenExtrasPanel.add(spiralStats,
-                new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
         FullgenExtrasPanel.add(symmStats,
-                new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         FullgenExtrasPanel.add(symmetryFilterButton,
