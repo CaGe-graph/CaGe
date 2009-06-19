@@ -88,13 +88,13 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
-        verticesSlider.setMinorTickSpacing(2); //vertices has to be even
+        verticesSlider.setMinorTickSpacing(dual ? 2 : 1); //vertices has to be even for dual
         verticesSlider.setMajorTickSpacing(dual ?
             (DUAL_MAX_VERTICES - DUAL_MIN_VERTICES) :
             (MAX_VERTICES - MIN_VERTICES));
         verticesSlider.setPaintTicks(true);
         verticesSlider.setPaintLabels(true);
-        verticesSlider.setSnapWhileDragging(2);
+        verticesSlider.setSnapWhileDragging(dual ? 2 : 1);
         verticesSlider.setClickScrollByBlock(false);
         verticesSlider.setSnapToTicks(true); //vertices has to be even
         verticesSlider.setSizeFactor(4);

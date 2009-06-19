@@ -111,11 +111,11 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
-        verticesSlider.setMinorTickSpacing(2); //vertices has to be even
+        verticesSlider.setMinorTickSpacing(1);
         verticesSlider.setMajorTickSpacing(dual ? DUAL_MAX_VERTICES - DUAL_MIN_VERTICES : MAX_VERTICES - MIN_VERTICES);
         verticesSlider.setPaintTicks(true);
         verticesSlider.setPaintLabels(true);
-        verticesSlider.setSnapWhileDragging(2);
+        verticesSlider.setSnapWhileDragging(1);
         verticesSlider.setClickScrollByBlock(false);
         verticesSlider.setSnapToTicks(true); //vertices has to be even
         verticesSlider.setSizeFactor(4);
