@@ -213,6 +213,7 @@ public class CGFPanel extends GeneratorPanel {
         int max = dual ? maxAtomsSlider.getValue()*2-4 : maxAtomsSlider.getValue();
 
         int nrOfRestrictions = 0;
+        int maxSize = 0;
         {
             Iterator it = gonOptionsMap.values().iterator();
             while (it.hasNext()) {
@@ -221,12 +222,14 @@ public class CGFPanel extends GeneratorPanel {
                     continue;
                 }
                 nrOfRestrictions++;
+                if(maxSize<gonOption.getSize())
+                    maxSize = gonOption.getSize();
             }
         }
 
         boolean useCgf = (min != max) || faceStats.isSelected() ||
                 conn1.isSelected() || conn2.isSelected() ||
-                (nrOfRestrictions < 5);
+                (nrOfRestrictions < 5) || (maxSize>10);
 
         if(useCgf){
             Systoolbox.addArray(genV, new String[]{
@@ -332,7 +335,7 @@ public class CGFPanel extends GeneratorPanel {
         if (dual) {
             maxFacesize = 3;
         } else {
-            maxFacesize = ((MutableInteger) gonOptionsMap.lastKey()).intValue();
+            maxFacesize = maxSize;
         }
 
         ElementRule rule = new ValencyElementRule("H O C Si N S I");
