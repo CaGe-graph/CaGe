@@ -253,8 +253,8 @@ public class CGFPanel extends GeneratorPanel {
                     continue;
                 }
                 genV.addElement("-f");
-                genV.addElement(Integer.toString(gonOption.getFaces()));
-                String s = "f" + gonOption.getFaces();
+                genV.addElement(Integer.toString(gonOption.getSize()));
+                String s = "f" + gonOption.getSize();
                 if (gonOption.isLimited()) {
                     genV.addElement("l" + gonOption.getMin() + "-" + gonOption.getMax() + "u");
                     s = s + "+" + gonOption.getMin() + "-" + gonOption.getMax();
@@ -306,8 +306,8 @@ public class CGFPanel extends GeneratorPanel {
                 }
                 genV.addElement("F");
                 fileV.addElement("F");
-                genV.addElement(Integer.toString(gonOption.getFaces()));
-                fileV.addElement(Integer.toString(gonOption.getFaces()));
+                genV.addElement(Integer.toString(gonOption.getSize()));
+                fileV.addElement(Integer.toString(gonOption.getSize()));
                 if (gonOption.isLimited()) {
                     genV.addElement("_" + gonOption.getMin() + "^" + gonOption.getMax());
                     fileV.addElement("m" + gonOption.getMin() + "M" + gonOption.getMax());

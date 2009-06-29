@@ -319,8 +319,8 @@ public class CPFPanel extends GeneratorPanel {
                 continue;
             }
             genV.addElement("f");
-            genV.addElement(Integer.toString(gonOption.getFaces()));
-            String s = "f" + gonOption.getFaces();
+            genV.addElement(Integer.toString(gonOption.getSize()));
+            String s = "f" + gonOption.getSize();
             if (gonOption.isLimited()) {
                 genV.addElement("+" + gonOption.getMin());
                 genV.addElement("-" + gonOption.getMax());

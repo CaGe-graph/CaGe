@@ -17,6 +17,10 @@ import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
+/**
+ * This class represents the single configuration for one face type or vertex type
+ * and is used in {@link GonOptionsMap}.
+ */
 public class GonOption implements ChangeListener, ActionListener {
 
     private boolean isIncluded;
@@ -37,6 +41,7 @@ public class GonOption implements ChangeListener, ActionListener {
         isIncluded = false;
         min = 0;
         max = CGFPanel.MAX_ATOMS;
+        //TODO: remove this dependency on CGFPanel since this now also used in other generators
     }
 
     public void addTo(JPanel p) {
@@ -125,6 +130,12 @@ public class GonOption implements ChangeListener, ActionListener {
         return isIncluded;
     }
 
+    /**
+     * Returns the size that is represented by this <tt>GonOption</tt>. This is
+     * either the degree of a vertex or the size of a face.
+     *
+     * @return the size that is represented by this <tt>GonOption</tt>.
+     */
     public int getSize() {
         return faces;
     }
@@ -153,23 +164,40 @@ public class GonOption implements ChangeListener, ActionListener {
         }
     }
 
+    /**
+     * Returns whether there are bounds imposed for the number of faces/vertices
+     * this option represents.
+     *
+     * @return <tt>true</tt> if there are bounds for the number of faces/vertices,
+     *         <tt>false</tt> otherwise.
+     */
     public boolean isLimited(){
         return limitGons.isSelected();
     }
 
+    /**
+     * Tries to move the focus to the <tt>JCheckBox</tt> that disables and enables
+     * this vertex/face type.
+     */
     public void focusToLimitControl(){
         if(limitGons!=null)
             limitGons.requestFocus();
     }
 
-    public int getFaces() {
-        return faces;
-    }
-
+    /**
+     * Returns the upper bound set for these kind of faces/vertices.
+     *
+     * @return
+     */
     public int getMax() {
         return max;
     }
 
+    /**
+     * Returns the lower bound set for these kind of faces/vertices.
+     *
+     * @return
+     */
     public int getMin() {
         return min;
     }
