@@ -15,9 +15,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import lisken.uitoolbox.EnhancedSlider;
 
 /**

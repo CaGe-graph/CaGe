@@ -5,6 +5,7 @@ import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
 import cage.StaticGeneratorInfo;
+
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,6 +23,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.DocumentFilter.FilterBypass;
+
 import lisken.systoolbox.Systoolbox;
 
 public class BoundaryHCgenPanel extends GeneratorPanel

@@ -2,7 +2,6 @@ package cage.generator;
 
 import cage.CaGe;
 import cage.Embedder;
-import cage.EmbeddingTypeFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
 import cage.StaticGeneratorInfo;

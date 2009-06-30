@@ -8,7 +8,7 @@ import cage.GeneratorInfo;
 import cage.GeneratorPanel;
 import cage.SingleElementRule;
 import cage.StaticGeneratorInfo;
-import cage.ValencyElementRule;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.MinMaxEqListener;
