@@ -43,9 +43,9 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
      * the face size that needs to be added or removed when <tt>includedButton</tt> is pressed.
      *
      * @param optionsPanel The panel on which the options for the allowed gons are shown
-     * @param facesComponent The component that is used for the selection of the faces (usually a slider)
-     * @param facesModel The model that shows which face size needs to be added or remoed.
-     * @param includedButton The button used to add or remove face sizes.
+     * @param sizesComponent The component that is used for the selection of the sizes (usually a slider)
+     * @param sizesModel The model that shows which size needs to be added or removed.
+     * @param includedButton The button used to add or remove sizes.
      */
     public SizeOptionsMap(JPanel optionsPanel, Component sizesComponent, BoundedRangeModel sizesModel, JToggleButton includedButton) {
         this(optionsPanel, sizesComponent, sizesModel, includedButton, false, true);
@@ -67,9 +67,9 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
      * degree) that needs to be added or removed when <tt>includedButton</tt> is pressed.
      *
      * @param optionsPanel The panel on which the options for the allowed gons are shown
-     * @param facesComponent The component that is used for the selection of the faces (usually a slider)
-     * @param facesModel The model that shows which face size needs to be added or removed.
-     * @param includedButton The button used to add or remove face sizes.
+     * @param sizesComponent The component that is used for the selection of the sizes (usually a slider)
+     * @param sizesModel The model that shows which size needs to be added or removed.
+     * @param includedButton The button used to add or remove sizes.
      * @param dual If <tt>true</tt> this object is used for vertex degrees.
      * @param limitable If <tt>true</tt> the user can limit the number of faces (resp. vertices)
      *                  with a certain size (resp. degree).
