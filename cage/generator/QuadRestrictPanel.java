@@ -87,7 +87,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
     private EnhancedSlider verticesSlider;
 
     //
-    private GonOptionsMap gonOptionsMap;
+    private SizeOptionsMap sizeOptionsMap;
 
     /**
      * Constructs a non-dual <code>GeneralQuadrangulationsPanel</code> object.
@@ -177,9 +177,9 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         });
         addRestrictedSizeButton.setMnemonic(KeyEvent.VK_I);
         JPanel restrictedPanel = new JPanel(new GridBagLayout());
-        gonOptionsMap = new GonOptionsMap(restrictedPanel, restrictionSlider.slider(), restrictionSlider.getModel(), addRestrictedSizeButton, !dual, true);
-        gonOptionsMap.addChangeListener(this);
-        gonOptionsMap.setGonIncluded(restrictionSlider.getMinimum(), true);
+        sizeOptionsMap = new SizeOptionsMap(restrictedPanel, restrictionSlider.slider(), restrictionSlider.getModel(), addRestrictedSizeButton, !dual, true);
+        sizeOptionsMap.addChangeListener(this);
+        sizeOptionsMap.setSizeIncluded(restrictionSlider.getMinimum(), true);
         JLabel includedRestrictionsLabel = new JLabel(dual ? "included face types:" : "included degrees");
         restrictionPanel.add(restrictionTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
         restrictionPanel.add(restrictionSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
@@ -221,19 +221,19 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
 
         //restrictions
         StringBuilder restrictions = new StringBuilder();
-        Iterator it = gonOptionsMap.values().iterator();
+        Iterator it = sizeOptionsMap.values().iterator();
         while (it.hasNext()) {
-            GonOption gonOption = (GonOption) it.next();
-            if (!gonOption.isActive()) {
+            SizeOption sizeOption = (SizeOption) it.next();
+            if (!sizeOption.isActive()) {
                 continue;
             }
             restrictions.append("F");
-            restrictions.append(Integer.toString(gonOption.getSize()));
-            if(gonOption.isLimited()){
+            restrictions.append(Integer.toString(sizeOption.getSize()));
+            if(sizeOption.isLimited()){
                 restrictions.append("_");
-                restrictions.append(Integer.toString(gonOption.getMin()));
+                restrictions.append(Integer.toString(sizeOption.getMin()));
                 restrictions.append("^");
-                restrictions.append(Integer.toString(gonOption.getMax()));
+                restrictions.append(Integer.toString(sizeOption.getMax()));
             }
         }
         filename.append("_").append(restrictions.toString());
@@ -267,8 +267,8 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
     private void checkParameters(){
         if (getNextButton() != null) {
             boolean enabled = false;
-            for(Iterator it = gonOptionsMap.values().iterator(); it.hasNext();)
-                enabled =(((GonOption)it.next()).isActive() || enabled);
+            for(Iterator it = sizeOptionsMap.values().iterator(); it.hasNext();)
+                enabled =(((SizeOption)it.next()).isActive() || enabled);
             getNextButton().setEnabled(enabled);
         }
     }

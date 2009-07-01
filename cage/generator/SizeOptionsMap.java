@@ -15,14 +15,14 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
 
-public class GonOptionsMap extends TreeMap implements ChangeListener, ActionListener {
+public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionListener {
 
-    //the panel on which the options for the allowed gons are shown
+    //the panel on which the options for the allowed sizes are shown
     private JPanel optionsPanel;
-    //the component that is used for the selection of the faces (usually a slider)
-    private Component facesComponent;
-    //the model that contains the bounds for the face sizes
-    private BoundedRangeModel facesModel;
+    //the component that is used for the selection of the sizes (usually a slider)
+    private Component sizesComponent;
+    //the model that contains the bounds for the face sizes or the vertex degrees
+    private BoundedRangeModel sizesModel;
     //the toggle button to add or remove faces
     private JToggleButton includedButton;
     //if true then were talking about vertex degrees and not face sizes
@@ -31,10 +31,10 @@ public class GonOptionsMap extends TreeMap implements ChangeListener, ActionList
     private boolean limitable;
 
     /**
-     * Creates a new <code>GonOptionsMap</code> that allows a user to add certain
-     * allowed face sizes. The panel <tt>optionsPanel</tt> is used to add controls
-     * to which allow the user to easily remove an allowed face size or limit the number
-     * of those faces. For this to work correctly it is assumed that this panel has
+     * Creates a new <code>SizeOptionsMap</code> that allows a user to add certain
+     * allowed sizes (face sizes or vertex degrees). The panel <tt>optionsPanel</tt> is used to add controls
+     * to which allow the user to easily remove an allowed size or limit the number
+     * of those faces/vertices. For this to work correctly it is assumed that this panel has
      * a <code>GridBagLayout</code>. The constructor explicitly sets this layout and
      * you should not alter this at a later point. The component <tt>facesComponent</tt>
      * is the component that is used for selecting the face size and will usually be
@@ -47,12 +47,12 @@ public class GonOptionsMap extends TreeMap implements ChangeListener, ActionList
      * @param facesModel The model that shows which face size needs to be added or remoed.
      * @param includedButton The button used to add or remove face sizes.
      */
-    public GonOptionsMap(JPanel optionsPanel, Component facesComponent, BoundedRangeModel facesModel, JToggleButton includedButton) {
-        this(optionsPanel, facesComponent, facesModel, includedButton, false, true);
+    public SizeOptionsMap(JPanel optionsPanel, Component sizesComponent, BoundedRangeModel sizesModel, JToggleButton includedButton) {
+        this(optionsPanel, sizesComponent, sizesModel, includedButton, false, true);
     }
 
     /**
-     * Creates a new <code>GonOptionsMap</code> that allows a user to add certain
+     * Creates a new <code>SizeOptionsMap</code> that allows a user to add certain
      * allowed face sizes or vertex degree (in case <tt>dual</tt> is <tt>true</tt>).
      * The panel <tt>optionsPanel</tt> is used to add controls to which allow the user
      * to easily remove an allowed face size (respectively vertex degree) or limit the number
@@ -68,60 +68,60 @@ public class GonOptionsMap extends TreeMap implements ChangeListener, ActionList
      *
      * @param optionsPanel The panel on which the options for the allowed gons are shown
      * @param facesComponent The component that is used for the selection of the faces (usually a slider)
-     * @param facesModel The model that shows which face size needs to be added or remoed.
+     * @param facesModel The model that shows which face size needs to be added or removed.
      * @param includedButton The button used to add or remove face sizes.
      * @param dual If <tt>true</tt> this object is used for vertex degrees.
      * @param limitable If <tt>true</tt> the user can limit the number of faces (resp. vertices)
      *                  with a certain size (resp. degree).
      */
-    public GonOptionsMap(JPanel optionsPanel, Component facesComponent, BoundedRangeModel facesModel, JToggleButton includedButton, boolean dual, boolean limitable) {
+    public SizeOptionsMap(JPanel optionsPanel, Component sizesComponent, BoundedRangeModel sizesModel, JToggleButton includedButton, boolean dual, boolean limitable) {
         this.dual = dual;
         this.limitable = limitable;
         this.optionsPanel = optionsPanel;
-        this.facesComponent = facesComponent;
-        this.facesModel = facesModel;
+        this.sizesComponent = sizesComponent;
+        this.sizesModel = sizesModel;
         this.includedButton = includedButton;
-        this.facesModel.addChangeListener(this);
+        this.sizesModel.addChangeListener(this);
         this.includedButton.addActionListener(this);
         this.optionsPanel.setLayout(new GridBagLayout());
-        stateChanged(new ChangeEvent(facesModel));
+        stateChanged(new ChangeEvent(sizesModel));
     }
 
-    public void setGonIncluded(int faces, boolean included) {
-        MutableInteger key = new MutableInteger(faces);
-        GonOption gonOption = (GonOption) this.get(key);
+    public void setSizeIncluded(int size, boolean included) {
+        //TODO: this uses a mutable object as a key in a map!!! Why?
+        MutableInteger key = new MutableInteger(size);
+        SizeOption sizeOption = (SizeOption) this.get(key);
         if (included) {
-
-            if (gonOption == null) {
-                gonOption = new GonOption(faces, this);
-                gonOption.addTo(optionsPanel, dual, limitable);
-            } else if (!gonOption.isActive()) {
-                gonOption.reactivate();
+            if (sizeOption == null) {
+                sizeOption = new SizeOption(size, this);
+                sizeOption.addTo(optionsPanel, dual, limitable);
+            } else if (!sizeOption.isActive()) {
+                sizeOption.reactivate();
             } else {
                 return;
             }
-            this.put(key, gonOption);
+            this.put(key, sizeOption);
             fireStateChanged();
         } else {
             
-            if (gonOption != null) {
-                if (gonOption.isActive()) {
-                    gonOption.deactivate();
-                    this.put(key, gonOption);
+            if (sizeOption != null) {
+                if (sizeOption.isActive()) {
+                    sizeOption.deactivate();
+                    this.put(key, sizeOption);
                     fireStateChanged();
                 }
             }
 
         }
-        if (facesModel.getValue() == faces) {
+        if (sizesModel.getValue() == size) {
             stateChanged(new ChangeEvent(this));
         }
     }
 
     public void stateChanged(ChangeEvent e) {
-        int faces = facesModel.getValue();
-        GonOption gonOption = (GonOption) this.get(new MutableInteger(faces));
-        boolean included = gonOption == null ? false : gonOption.isActive();
+        int faces = sizesModel.getValue();
+        SizeOption sizeOption = (SizeOption) this.get(new MutableInteger(faces));
+        boolean included = sizeOption == null ? false : sizeOption.isActive();
         includedButton.setSelected(included);
         if(!dual)
             includedButton.setText((included ? "discard " : "include ") + faces + "-gons");
@@ -132,24 +132,24 @@ public class GonOptionsMap extends TreeMap implements ChangeListener, ActionList
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         MutableInteger key = null;
-        GonOption gonOption;
+        SizeOption sizeOption;
         boolean included = false;
-        int faces = 0;
+        int size = 0;
         if (source.equals(includedButton)) {
-            faces = facesModel.getValue();
-            key = new MutableInteger(faces);
+            size = sizesModel.getValue();
+            key = new MutableInteger(size);
             included = includedButton.isSelected();
         } else if (source instanceof MutableInteger) {
             key = (MutableInteger) source;
-            faces = key.intValue();
+            size = key.intValue();
             included = e.getID() != 0;
         }
-        setGonIncluded(faces, included);
-        gonOption = (GonOption) this.get(key);
+        setSizeIncluded(size, included);
+        sizeOption = (SizeOption) this.get(key);
         if (included) {
-            gonOption.focusToLimitControl();
+            sizeOption.focusToLimitControl();
         } else {
-            facesComponent.requestFocus();
+            sizesComponent.requestFocus();
         }
     }
 

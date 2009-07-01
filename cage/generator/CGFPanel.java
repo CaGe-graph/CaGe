@@ -55,7 +55,7 @@ public class CGFPanel extends GeneratorPanel {
     private JCheckBox conn1 = new JCheckBox();
     private JCheckBox conn2 = new JCheckBox();
     private JCheckBox conn3 = new JCheckBox();
-    private GonOptionsMap gonOptionsMap;
+    private SizeOptionsMap sizeOptionsMap;
 
     public CGFPanel() {
         this(false);
@@ -142,9 +142,9 @@ public class CGFPanel extends GeneratorPanel {
                 facesSlider.setValue(n);
             }
         });
-        gonOptionsMap = new GonOptionsMap(CGFFaceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton, dual, true);
-        gonOptionsMap.setGonIncluded(facesSlider.getMinimum(), true);
-        gonOptionsMap.addChangeListener(new ChangeListener() {
+        sizeOptionsMap = new SizeOptionsMap(CGFFaceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton, dual, true);
+        sizeOptionsMap.setSizeIncluded(facesSlider.getMinimum(), true);
+        sizeOptionsMap.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 verifyData();
             }
@@ -214,15 +214,15 @@ public class CGFPanel extends GeneratorPanel {
         int nrOfRestrictions = 0;
         int maxSize = 0;
         {
-            Iterator it = gonOptionsMap.values().iterator();
+            Iterator it = sizeOptionsMap.values().iterator();
             while (it.hasNext()) {
-                GonOption gonOption = (GonOption) it.next();
-                if (!gonOption.isActive()) {
+                SizeOption sizeOption = (SizeOption) it.next();
+                if (!sizeOption.isActive()) {
                     continue;
                 }
                 nrOfRestrictions++;
-                if(maxSize<gonOption.getSize())
-                    maxSize = gonOption.getSize();
+                if(maxSize<sizeOption.getSize())
+                    maxSize = sizeOption.getSize();
             }
         }
 
@@ -245,18 +245,18 @@ public class CGFPanel extends GeneratorPanel {
                 fileV.addElement("s" + min);
             }
 
-            Iterator it = gonOptionsMap.values().iterator();
+            Iterator it = sizeOptionsMap.values().iterator();
             while (it.hasNext()) {
-                GonOption gonOption = (GonOption) it.next();
-                if (!gonOption.isActive()) {
+                SizeOption sizeOption = (SizeOption) it.next();
+                if (!sizeOption.isActive()) {
                     continue;
                 }
                 genV.addElement("-f");
-                genV.addElement(Integer.toString(gonOption.getSize()));
-                String s = "f" + gonOption.getSize();
-                if (gonOption.isLimited()) {
-                    genV.addElement("l" + gonOption.getMin() + "-" + gonOption.getMax() + "u");
-                    s = s + "+" + gonOption.getMin() + "-" + gonOption.getMax();
+                genV.addElement(Integer.toString(sizeOption.getSize()));
+                String s = "f" + sizeOption.getSize();
+                if (sizeOption.isLimited()) {
+                    genV.addElement("l" + sizeOption.getMin() + "-" + sizeOption.getMax() + "u");
+                    s = s + "+" + sizeOption.getMin() + "-" + sizeOption.getMax();
                 }
                 fileV.addElement(s);
             }
@@ -295,21 +295,21 @@ public class CGFPanel extends GeneratorPanel {
         } else {
             int vertices = dual ? minAtomsSlider.getValue() : minAtomsSlider.getValue()/2+2;
             generator = new String[1][dual ? 3 : 4];
-            Iterator it = gonOptionsMap.values().iterator();
+            Iterator it = sizeOptionsMap.values().iterator();
             genV.addElement("-");
             fileV.addElement("plantri_ad_");
             while (it.hasNext()) {
-                GonOption gonOption = (GonOption) it.next();
-                if (!gonOption.isActive()) {
+                SizeOption sizeOption = (SizeOption) it.next();
+                if (!sizeOption.isActive()) {
                     continue;
                 }
                 genV.addElement("F");
                 fileV.addElement("F");
-                genV.addElement(Integer.toString(gonOption.getSize()));
-                fileV.addElement(Integer.toString(gonOption.getSize()));
-                if (gonOption.isLimited()) {
-                    genV.addElement("_" + gonOption.getMin() + "^" + gonOption.getMax());
-                    fileV.addElement("m" + gonOption.getMin() + "M" + gonOption.getMax());
+                genV.addElement(Integer.toString(sizeOption.getSize()));
+                fileV.addElement(Integer.toString(sizeOption.getSize()));
+                if (sizeOption.isLimited()) {
+                    genV.addElement("_" + sizeOption.getMin() + "^" + sizeOption.getMax());
+                    fileV.addElement("m" + sizeOption.getMin() + "M" + sizeOption.getMax());
                 }
             }
             if(!dual) fileV.addElement("_d");
@@ -360,13 +360,13 @@ public class CGFPanel extends GeneratorPanel {
         //is at least one face type added
         boolean faceAdded = false;
 
-        Iterator it = gonOptionsMap.values().iterator();
+        Iterator it = sizeOptionsMap.values().iterator();
         if(it.hasNext()){
-            GonOption gonOption = (GonOption) it.next();
-            while (!gonOption.isActive() && it.hasNext()) {
-                gonOption = (GonOption) it.next();
+            SizeOption sizeOption = (SizeOption) it.next();
+            while (!sizeOption.isActive() && it.hasNext()) {
+                sizeOption = (SizeOption) it.next();
             }
-            faceAdded = gonOption.isActive();
+            faceAdded = sizeOption.isActive();
         }
 
         getNextButton().setEnabled(cs!=0 && faceAdded);
