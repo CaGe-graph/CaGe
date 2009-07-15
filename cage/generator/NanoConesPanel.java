@@ -45,7 +45,8 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         numberOfPentagonsSlider.setPaintTicks(true);
         numberOfPentagonsSlider.setPaintLabels(true);
         numberOfPentagonsSlider.setSnapToTicks(true);
-
+        numberOfPentagonsSlider.setSnapWhileDragging(1);
+        
         JLabel numberOfPentagonsLabel = new JLabel("Number of pentagons");
 
         symmetricButton = new JRadioButton("symmetric");
