@@ -73,7 +73,8 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     }
 
     /**
-     * Sets the sliders step size.
+     * Sets the sliders step size. This will cause the slider to jump in
+     * discrete steps instead of sliding and jumping when released.
      *
      * @param n The step size for this slider
      */
