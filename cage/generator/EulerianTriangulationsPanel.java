@@ -61,13 +61,13 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
-        verticesSlider.setMinorTickSpacing(1);
+        verticesSlider.setMinorTickSpacing(dual ? 2 : 1);
         verticesSlider.setMajorTickSpacing(dual ?
             (DUAL_MAX_VERTICES - DUAL_MIN_VERTICES) :
             (MAX_VERTICES - MIN_VERTICES));
         verticesSlider.setPaintTicks(true);
         verticesSlider.setPaintLabels(true);
-        verticesSlider.setSnapWhileDragging(1);
+        verticesSlider.setSnapWhileDragging(dual ? 2 : 1);
         verticesSlider.setClickScrollByBlock(false);
         verticesSlider.setSizeFactor(4);
         add(verticesSlider,
@@ -119,12 +119,12 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
         filename += "tri_euler";
         String v;
         if(dual)
-            v = Integer.toString(verticesSlider.getValue());
-        else
             v = Integer.toString(verticesSlider.getValue() / 2 + 2);
             //plantri takes the number of vertices as argument, i.e. number of
             //faces in the dual graph so we use the euler formula to derive it
             //from the number of vertices
+        else
+            v = Integer.toString(verticesSlider.getValue());
 
         filename += "_" + v;
         if(dual){
