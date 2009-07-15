@@ -78,7 +78,7 @@ public class SpinButton extends JPanel
         modelChanged();
         text.setColumns(Math.max(2, Math.max(Integer.toString(minValue).length(), Integer.toString(maxValue).length())));
 
-        Keymap km = text.addKeymap(null, text.getKeymap());
+        Keymap km = EnhancedTextField.addKeymap(null, text.getKeymap());
         km.addActionForKeyStroke(
                 KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0),
                 new AdjustAction(0.0, 1));
