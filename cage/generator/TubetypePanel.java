@@ -39,18 +39,7 @@ public class TubetypePanel extends GeneratorPanel {
     public static final int MAX_TUBELENGTH = 30;
     public static final int MAX_OFFSET = 30;
 
-    /*
-    JRadioButton tubeButton = new JRadioButton();
-    JRadioButton fullButton = new JRadioButton();
-    ButtonGroup capsGroup = new ButtonGroup();
-     */
     EnhancedSlider tubelengthSlider = new EnhancedSlider();
-    /*
-    SpinButton perimeterControl = new SpinButton(10, 4, 2 * MAX_OFFSET + 1);
-    SpinButton shiftControl = new SpinButton(0, 0, MAX_OFFSET);
-    SpinButton offset1Control = new SpinButton(5, 2, MAX_OFFSET);
-    SpinButton offset2Control = new SpinButton(0, 0, MAX_OFFSET);
-     */
     EnhancedSlider offset1Control = new EnhancedSlider();
     EnhancedSlider offset2Control = new EnhancedSlider();
     JCheckBox ipr = new JCheckBox();
@@ -87,26 +76,6 @@ public class TubetypePanel extends GeneratorPanel {
                 }
             }
         });
-        /*
-        perimeterControl.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e)
-        {
-        adjustShift();
-        adjustOffsets();
-        if (defaultTubelengthButton.isSelected()) adjustTubelength();
-        }
-        });
-        perimeterControl.setNextFocusableComponent(shiftControl);
-        shiftControl.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e)
-        {
-        adjustPerimeter();
-        adjustOffsets();
-        if (defaultTubelengthButton.isSelected()) adjustTubelength();
-        }
-        });
-        shiftControl.setNextFocusableComponent(offset1Control);
-         */
         offset1Control.setMinimum(2);
         offset1Control.setMaximum(MAX_OFFSET);
         offset1Control.setValue(5);
@@ -131,7 +100,6 @@ public class TubetypePanel extends GeneratorPanel {
         ChangeListener offsetListener = new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
-//	adjustPerimeterAndShift();
                 if (defaultTubelengthButton.isSelected()) {
                     adjustTubelength();
                 }
@@ -144,17 +112,6 @@ public class TubetypePanel extends GeneratorPanel {
         JLabel tubelengthLabel = new JLabel("Tube length:");
         tubelengthLabel.setDisplayedMnemonic(KeyEvent.VK_T);
         tubelengthLabel.setLabelFor(tubelengthSlider.slider());
-        /*
-        tubeButton.setText("one side (half-open tubes)");
-        tubeButton.setMnemonic(KeyEvent.VK_O);
-        tubeButton.setActionCommand("1");
-        capsGroup.add(tubeButton);
-        fullButton.setText("both sides (spherical fullerenes)");
-        fullButton.setMnemonic(KeyEvent.VK_B);
-        fullButton.setActionCommand("2");
-        capsGroup.add(fullButton);
-        tubeButton.setSelected(true);
-         */
         ipr.setText("isolated pentagons");
         ipr.setMnemonic(KeyEvent.VK_I);
         Font font = ipr.getFont();
@@ -164,10 +121,6 @@ public class TubetypePanel extends GeneratorPanel {
                 font.getSize());
         defaultTubelengthButton.setFont(font);
         ipr.setFont(font);
-        /*
-        tubeButton.setFont(font);
-        fullButton.setFont(font);
-         */
         add(tubelengthLabel,
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
@@ -180,56 +133,6 @@ public class TubetypePanel extends GeneratorPanel {
                 new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 10, 20, 0), 0, 0));
-        /*
-        JLabel perimeterLabel = new JLabel("Perimeter");
-        perimeterLabel.setDisplayedMnemonic(KeyEvent.VK_P);
-        perimeterLabel.setLabelFor(perimeterControl);
-        add(perimeterLabel,
-        new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(5, 5, 5, 0), 0, 0));
-        add(perimeterControl,
-        new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(0, 5, 0, 0), 0, 0));
-        JLabel shiftLabel = new JLabel("Shift");
-        shiftLabel.setDisplayedMnemonic(KeyEvent.VK_S);
-        shiftLabel.setLabelFor(shiftControl);
-        add(shiftLabel,
-        new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(5, 5, 5, 0), 0, 0));
-        add(shiftControl,
-        new GridBagConstraints(1, 5, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(0, 5, 0, 0), 0, 0));
-        add(new JLabel(""),
-        new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
-        GridBagConstraints.CENTER, GridBagConstraints.NONE,
-        new Insets(0, 0, 0, 0), 0, 0));
-        JLabel offset1Label = new JLabel("Offset 1");
-        offset1Label.setDisplayedMnemonic(KeyEvent.VK_1);
-        offset1Label.setLabelFor(offset1Control);
-        add(offset1Label,
-        new GridBagConstraints(3, 2, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(5, 5, 5, 0), 0, 0));
-        add(offset1Control,
-        new GridBagConstraints(3, 3, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(0, 5, 0, 0), 0, 0));
-        JLabel offset2Label = new JLabel("Offset 2");
-        offset2Label.setDisplayedMnemonic(KeyEvent.VK_2);
-        offset2Label.setLabelFor(offset2Control);
-        add(offset2Label,
-        new GridBagConstraints(3, 4, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(5, 5, 5, 0), 0, 0));
-        add(offset2Control,
-        new GridBagConstraints(3, 5, 1, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(0, 5, 0, 0), 0, 0));
-         */
         JLabel offsetsLabel = new JLabel("Boundary parameters:");
         add(offsetsLabel,
                 new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
@@ -261,20 +164,6 @@ public class TubetypePanel extends GeneratorPanel {
                 new GridBagConstraints(3, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        /*
-        add(new JLabel("Caps on:"),
-        new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0,
-        GridBagConstraints.EAST, GridBagConstraints.NONE,
-        new Insets(20, 0, 0, 10), 0, 0));
-        JPanel capsPanel = new JPanel();
-        capsPanel.add(tubeButton);
-        capsPanel.add(Box.createHorizontalStrut(5));
-        capsPanel.add(fullButton);
-        add(capsPanel,
-        new GridBagConstraints(1, 6, 4, 1, 1.0, 1.0,
-        GridBagConstraints.WEST, GridBagConstraints.NONE,
-        new Insets(20, 0, 0, 0), 0, 0));
-         */
         add(ipr,
                 new GridBagConstraints(1, 7, 3, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -291,78 +180,13 @@ public class TubetypePanel extends GeneratorPanel {
         adjusting = false;
     }
 
-    /*
-    void adjustOffsets()
-    {
-    if (adjusting) return;
-    adjusting = true;
-    int perimeter = perimeterControl.getValue();
-    int shift = shiftControl.getValue();
-    int o_n = perimeter / 2 - shift, o_m = shift;
-    boolean n_is_1 = shift >= 0;
-    if (n_is_1) {
-    offset1Control.setValue(o_n);
-    offset2Control.setValue(o_m);
-    } else {
-    offset1Control.setValue(o_m);
-    offset2Control.setValue(o_n);
-    }
-    adjusting = false;
-    }
-
-    void adjustPerimeterAndShift()
-    {
-    if (adjusting) return;
-    adjusting = true;
-    int o1 = offset1Control.getValue();
-    int o2 = offset2Control.getValue();
-    int shift = Math.min(o1, o2);
-    perimeterControl.setValue(2 * (o1 + o2) + shift % 2);
-    shiftControl.setValue(shift);
-    adjusting = false;
-    }
-
-    void adjustShift()
-    {
-    if (adjusting) return;
-    adjusting = true;
-    int perimeter = perimeterControl.getValue();
-    int shift = shiftControl.getValue();
-    int d = perimeter % 2 - shift % 2;
-    if (d != 0) shiftControl.setValue(shift + d);
-    adjusting = false;
-    }
-
-    void adjustPerimeter()
-    {
-    if (adjusting) return;
-    adjusting = true;
-    int perimeter = perimeterControl.getValue();
-    int shift = shiftControl.getValue();
-    int d = perimeter % 2 - shift % 2;
-    if (d != 0) perimeterControl.setValue(perimeter - d);
-    adjusting = false;
-    }
-
-    public String divideBy2(int value)
-    {
-    return (value / 2) + "." + (value % 2 == 1 ? "5" : "0");
-    }
-     */
     public GeneratorInfo getGeneratorInfo() {
         Vector command = new Vector();
         String filename;
 
         command.addElement("tubetype");
-        /*
-        if (tubeButton.isSelected()) {
-         */
         filename = "tubetypes";
-        /*
-        } else {
-        filename = "ttfullerenes";
-        }
-         */
+
         command.addElement(Integer.toString(offset1Control.getValue()));
         command.addElement(Integer.toString(offset2Control.getValue()));
         filename += "_l" + offset1Control.getValue();
@@ -370,11 +194,7 @@ public class TubetypePanel extends GeneratorPanel {
         command.addElement("tube");
         command.addElement(Integer.toString(tubelengthSlider.getValue()));
         filename += "_t" + tubelengthSlider.getValue();
-        /*
-        if (fullButton.isSelected()) {
-        command.addElement("fullerenes");
-        }
-         */
+
         if (ipr.isSelected()) {
             command.addElement("ipr");
             filename += "_ip";
