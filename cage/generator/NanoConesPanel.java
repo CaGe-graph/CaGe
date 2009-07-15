@@ -46,8 +46,6 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         numberOfPentagonsSlider.setPaintLabels(true);
         numberOfPentagonsSlider.setSnapToTicks(true);
         numberOfPentagonsSlider.setSnapWhileDragging(1);
-        
-        JLabel numberOfPentagonsLabel = new JLabel("Number of pentagons");
 
         symmetricButton = new JRadioButton("symmetric");
         nearSymmetricButton = new JRadioButton("nonsymmetric");
@@ -63,8 +61,6 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
         hexagonLayers.setEnabled(hexagonLayersBox.isSelected());
         hexagonLayersBox.addActionListener(new HexagonLayersBoxListener());
 
-        JLabel lengthOfSideLabel = new JLabel("Length of longest Side");
-
         add(symmetricButton,
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
@@ -73,7 +69,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
                 new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 10, 0, 10), 0, 0));
-        add(numberOfPentagonsLabel,
+        add(new JLabel("Number of pentagons"),
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 10, 5, 10), 0, 0));
@@ -81,7 +77,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
                 new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 10, 0, 10), 0, 0));
-        add(lengthOfSideLabel,
+        add(new JLabel("Length of longest Side"),
                 new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 10, 5, 10), 0, 0));
