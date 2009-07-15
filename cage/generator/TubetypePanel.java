@@ -35,8 +35,8 @@ import lisken.uitoolbox.UItoolbox;
 
 public class TubetypePanel extends GeneratorPanel {
 
-    public static final int MAX_TUBELENGTH = 30;
-    public static final int MAX_OFFSET = 30;
+    private static final int MAX_TUBELENGTH = 30;
+    private static final int MAX_OFFSET = 30;
 
     private EnhancedSlider tubelengthSlider = new EnhancedSlider();
     private EnhancedSlider offset1Control = new EnhancedSlider();
