@@ -125,8 +125,7 @@ public class TubetypePanel extends GeneratorPanel {
                 new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 10, 20, 0), 0, 0));
-        JLabel offsetsLabel = new JLabel("Boundary parameters:");
-        add(offsetsLabel,
+        add(new JLabel("Boundary parameters:"),
                 new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
                 new Insets(5, 0, 5, 10), 0, 0));
