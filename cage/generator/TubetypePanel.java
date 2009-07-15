@@ -8,7 +8,6 @@ import cage.SingleElementRule;
 import cage.StaticGeneratorInfo;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -114,13 +113,6 @@ public class TubetypePanel extends GeneratorPanel {
         tubelengthLabel.setLabelFor(tubelengthSlider.slider());
         ipr.setText("isolated pentagons");
         ipr.setMnemonic(KeyEvent.VK_I);
-        Font font = ipr.getFont();
-        font = new Font(
-                font.getName(),
-                font.getStyle() & ~Font.BOLD,
-                font.getSize());
-        defaultTubelengthButton.setFont(font);
-        ipr.setFont(font);
         add(tubelengthLabel,
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
