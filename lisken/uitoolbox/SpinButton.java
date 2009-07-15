@@ -490,7 +490,7 @@ public class SpinButton extends JPanel
                 setArmed(false);
                 // Transfer focus if requested.
                 if (supportedComponent != null) {
-                    supportedComponent.requestFocus();
+                    supportedComponent.requestFocusInWindow();
                 }
             }
             super.setPressed(b);
