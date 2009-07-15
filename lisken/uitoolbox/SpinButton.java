@@ -377,7 +377,7 @@ public class SpinButton extends JPanel
     }
 
     /**
-    A JTextField that can notify one other object of size changes.
+     * A JTextField that can notify one other object of size changes.
      */
     private class EnhancedTextField extends JTextField {
         // too lazy to implement a full list - for internal use only
@@ -449,10 +449,10 @@ public class SpinButton extends JPanel
     }
 
     /**
-    A button model that modifies DefaultButtonModel to enable
-    repeated action firing by keeping the button pressed.
-    Optionally, the model transfers focus to another JComponent
-    when the button is released.
+     * A button model that modifies DefaultButtonModel to enable
+     * repeated action firing by keeping the button pressed.
+     * Optionally, the model transfers focus to another JComponent
+     * when the button is released.
      */
     private class ButtonMouseRepeaterModel extends DefaultButtonModel
             implements ActionListener {
