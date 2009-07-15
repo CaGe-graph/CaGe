@@ -105,11 +105,11 @@ public class SpinButton extends JPanel
 //    bar.addAdjustmentListener(new ScrollAdjustmentListener());
 
         up = new ImageButton(new ImageIcon(ClassLoader.getSystemResource("lisken/uitoolbox/SpinButtonUp.gif")), text);
-        up.setFocusTraversable(false);
+        up.setFocusable(false);
         up.addActionListener(new AdjustAction(0.0, 1));
 
         down = new ImageButton(new ImageIcon(ClassLoader.getSystemResource("lisken/uitoolbox/SpinButtonDown.gif")), text);
-        down.setFocusTraversable(false);
+        down.setFocusable(false);
         down.addActionListener(new AdjustAction(0.0, -1));
 
         sep = new JSeparator(SwingConstants.HORIZONTAL);
@@ -439,7 +439,6 @@ button is released.
  */
 class ImageButton extends JButton {
 
-    boolean focusTraversable;
     SizeListener sizeListener;
 
     public ImageButton(Icon icon) {
@@ -450,19 +449,10 @@ class ImageButton extends JButton {
         super(icon);
         setBorder(BorderFactory.createEmptyBorder());
         setModel(new ButtonMouseRepeaterModel(this, supportedComponent));
-        focusTraversable = true;
         sizeListener = null;
     }
 
     public void setText(String text) {
-    }
-
-    public void setFocusTraversable(boolean b) {
-        focusTraversable = b;
-    }
-
-    public boolean isFocusTraversable() {
-        return focusTraversable;
     }
 }
 
