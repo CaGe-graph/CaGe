@@ -375,169 +375,163 @@ public class SpinButton extends JPanel
         s.requestFocus();
         f.setVisible(true);
     }
-}
 
+    /**
+    A JTextField that can notify one other object of size changes.
+     */
+    private class EnhancedTextField extends JTextField {
+        // too lazy to implement a full list - for internal use only
 
-// an object that can be notified when some other object's size changes
-interface SizeListener {
+        SizeListener sizeListener;
 
-    public void sizing();
-}
-
-/**
-A JTextField that can notify one other object of size changes.
- */
-class EnhancedTextField extends JTextField {
-    // too lazy to implement a full list - for internal use only
-
-    SizeListener sizeListener;
-
-    public EnhancedTextField() {
-        super();
-    }
-
-    public EnhancedTextField(int columns) {
-        super(columns);
-    }
-
-    public void setSizeListener(SizeListener l) {
-        sizeListener = l;
-    }
-
-    private void fireSizing() {
-        if (sizeListener != null) {
-            sizeListener.sizing();
+        public EnhancedTextField() {
+            super();
         }
-    }
-    // this version of setBounds does the notifying
 
-    public void setBounds(int x, int y, int newWidth, int newHeight) {
-        super.setBounds(x, y, newWidth, newHeight);
-        fireSizing();
-    }
-    // all other size-changing methods are redirected into the one above
-
-    public void setBounds(Rectangle r) {
-        setBounds(r.x, r.y, r.width, r.height);
-    }
-
-    public void setSize(Dimension d) {
-        Point p = getLocation();
-        setBounds(p.x, p.y, d.width, d.height);
-    }
-
-    public void setSize(int newWidth, int newHeight) {
-        Point p = getLocation();
-        setBounds(p.x, p.y, newWidth, newHeight);
-    }
-}
-
-/**
-A button with just an image and a "repeated action" capability.
-Optionally, focus is transferred to another JComponent after the
-button is released.
- */
-class ImageButton extends JButton {
-
-    SizeListener sizeListener;
-
-    public ImageButton(Icon icon) {
-        this(icon, null);
-    }
-
-    public ImageButton(Icon icon, JComponent supportedComponent) {
-        super(icon);
-        setBorder(BorderFactory.createEmptyBorder());
-        setModel(new ButtonMouseRepeaterModel(this, supportedComponent));
-        sizeListener = null;
-    }
-
-    public void setText(String text) {
-    }
-}
-
-/**
-A button model that modifies DefaultButtonModel to enable
-repeated action firing by keeping the button pressed.
-Optionally, the model transfers focus to another JComponent
-when the button is released.
- */
-class ButtonMouseRepeaterModel extends DefaultButtonModel
-        implements ActionListener {
-
-    final static int INITIAL_DELAY = 500,  DELAY = 50;
-    AbstractButton button;
-    JComponent supportedComponent;
-    javax.swing.Timer firingTimer;
-    ActionEvent action;
-
-    public ButtonMouseRepeaterModel(AbstractButton b) {
-        this(b, null);
-    }
-
-    public ButtonMouseRepeaterModel(AbstractButton b, JComponent c) {
-        button = b;
-        supportedComponent = c;
-        // We want a timer that fires once immediately as it starts,
-        // then proceeds like any other timer.
-        firingTimer = new ImmediateFireTimer(DELAY, this);
-        firingTimer.setInitialDelay(INITIAL_DELAY);
-        action = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand());
-    }
-
-    public void setPressed(boolean b) {
-        // Stolen from the original source.
-        if ((isPressed() == b) || !isEnabled()) {
-            return;
+        public EnhancedTextField(int columns) {
+            super(columns);
         }
-        if (b) {
-            firingTimer.start();
-        } else {
-            firingTimer.stop();
-            // Persuade the original procedure not to fire on button release.
-            setArmed(false);
-            // Transfer focus if requested.
-            if (supportedComponent != null) {
-                supportedComponent.requestFocus();
+
+        public void setSizeListener(SizeListener l) {
+            sizeListener = l;
+        }
+
+        private void fireSizing() {
+            if (sizeListener != null) {
+                sizeListener.sizing();
             }
         }
-        super.setPressed(b);
-    }
+        // this version of setBounds does the notifying
 
-    public void actionPerformed(ActionEvent e) {
-        if (isArmed()) {
-            fireActionPerformed(action);
+        public void setBounds(int x, int y, int newWidth, int newHeight) {
+            super.setBounds(x, y, newWidth, newHeight);
+            fireSizing();
+        }
+        // all other size-changing methods are redirected into the one above
+
+        public void setBounds(Rectangle r) {
+            setBounds(r.x, r.y, r.width, r.height);
+        }
+
+        public void setSize(Dimension d) {
+            Point p = getLocation();
+            setBounds(p.x, p.y, d.width, d.height);
+        }
+
+        public void setSize(int newWidth, int newHeight) {
+            Point p = getLocation();
+            setBounds(p.x, p.y, newWidth, newHeight);
         }
     }
-}
 
-class ImmediateFireTimer extends javax.swing.Timer
-        implements Runnable {
+    /**
+     * A button with just an image and a "repeated action" capability.
+     * Optionally, focus is transferred to another JComponent after the
+     * button is released.
+     */
+    private class ImageButton extends JButton {
 
-    boolean running;
+        SizeListener sizeListener;
 
-    public ImmediateFireTimer(int delay, ActionListener listener) {
-        super(delay, listener);
-        running = false;
+        public ImageButton(Icon icon) {
+            this(icon, null);
+        }
+
+        public ImageButton(Icon icon, JComponent supportedComponent) {
+            super(icon);
+            setBorder(BorderFactory.createEmptyBorder());
+            setModel(new ButtonMouseRepeaterModel(this, supportedComponent));
+            sizeListener = null;
+        }
+
+        public void setText(String text) {
+        }
     }
 
-    public void start() {
-        running = true;
-        SwingUtilities.invokeLater(this);
-        synchronized (this) {
-            if (running) {
-                super.start();
+    /**
+    A button model that modifies DefaultButtonModel to enable
+    repeated action firing by keeping the button pressed.
+    Optionally, the model transfers focus to another JComponent
+    when the button is released.
+     */
+    private class ButtonMouseRepeaterModel extends DefaultButtonModel
+            implements ActionListener {
+
+        final static int INITIAL_DELAY = 500,  DELAY = 50;
+        AbstractButton button;
+        JComponent supportedComponent;
+        javax.swing.Timer firingTimer;
+        ActionEvent action;
+
+        public ButtonMouseRepeaterModel(AbstractButton b) {
+            this(b, null);
+        }
+
+        public ButtonMouseRepeaterModel(AbstractButton b, JComponent c) {
+            button = b;
+            supportedComponent = c;
+            // We want a timer that fires once immediately as it starts,
+            // then proceeds like any other timer.
+            firingTimer = new ImmediateFireTimer(DELAY, this);
+            firingTimer.setInitialDelay(INITIAL_DELAY);
+            action = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand());
+        }
+
+        public void setPressed(boolean b) {
+            // Stolen from the original source.
+            if ((isPressed() == b) || !isEnabled()) {
+                return;
+            }
+            if (b) {
+                firingTimer.start();
+            } else {
+                firingTimer.stop();
+                // Persuade the original procedure not to fire on button release.
+                setArmed(false);
+                // Transfer focus if requested.
+                if (supportedComponent != null) {
+                    supportedComponent.requestFocus();
+                }
+            }
+            super.setPressed(b);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (isArmed()) {
+                fireActionPerformed(action);
             }
         }
     }
 
-    public synchronized void stop() {
-        running = false;
-        super.stop();
-    }
+    private class ImmediateFireTimer extends javax.swing.Timer
+            implements Runnable {
 
-    public void run() {
-        fireActionPerformed(new ActionEvent(this, 0, null));
+        boolean running;
+
+        public ImmediateFireTimer(int delay, ActionListener listener) {
+            super(delay, listener);
+            running = false;
+        }
+
+        public void start() {
+            running = true;
+            SwingUtilities.invokeLater(this);
+            synchronized (this) {
+                if (running) {
+                    super.start();
+                }
+            }
+        }
+
+        public synchronized void stop() {
+            running = false;
+            super.stop();
+        }
+
+        public void run() {
+            fireActionPerformed(new ActionEvent(this, 0, null));
+        }
     }
 }
+
 
