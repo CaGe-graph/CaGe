@@ -63,6 +63,9 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JTextField embed2DCmdLine = new JTextField("");
     private JTextField embed3DCmdLine = new JTextField("");
 
+    //button group that makes sure that text viewers are always all in the same selection state.
+    private SyncButtonGroup viewersXDGroup = new SyncButtonGroup();
+
     private JCheckBox outPreFilterCheckBox = new JCheckBox();
     private JTextField outPreFilterCommand = new JTextField();
 
@@ -508,7 +511,6 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         viewersDim = createViewerNames(dimName, viewersDim);
         viewersXD = createViewerNames("xD", viewersXD);
         Vector[] vector = new Vector[]{viewersDim, viewersXD};
-        SyncButtonGroup viewersXDGroup = new SyncButtonGroup();
         int n = 0;
         for (int i = 0; i < vector.length; ++i) {
             Enumeration viewerNames = vector[i].elements();
@@ -523,6 +525,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
                 buttonGroup.add(viewerButton);
                 component.add(viewerButton);
                 if (i == 1) {
+                    //add text viewer button to viewersXDGroup
                     viewersXDGroup.add(viewerButton);
                 }
             }
