@@ -38,12 +38,12 @@ public class TubetypePanel extends GeneratorPanel {
     public static final int MAX_TUBELENGTH = 30;
     public static final int MAX_OFFSET = 30;
 
-    EnhancedSlider tubelengthSlider = new EnhancedSlider();
-    EnhancedSlider offset1Control = new EnhancedSlider();
-    EnhancedSlider offset2Control = new EnhancedSlider();
-    JCheckBox ipr = new JCheckBox();
-    AbstractButton defaultTubelengthButton = new JToggleButton();
-    boolean adjusting = false;
+    private EnhancedSlider tubelengthSlider = new EnhancedSlider();
+    private EnhancedSlider offset1Control = new EnhancedSlider();
+    private EnhancedSlider offset2Control = new EnhancedSlider();
+    private JCheckBox ipr = new JCheckBox();
+    private AbstractButton defaultTubelengthButton = new JToggleButton();
+    private boolean adjusting = false;
 
     public TubetypePanel() {
         setLayout(new GridBagLayout());
@@ -162,13 +162,12 @@ public class TubetypePanel extends GeneratorPanel {
     }
 
     void adjustTubelength() {
-        if (adjusting) {
-            return;
+        if (!adjusting) {
+            adjusting = true;
+            int l = Math.max(offset1Control.getValue(), offset2Control.getValue()) - 1;
+            tubelengthSlider.setValue(l);
+            adjusting = false;
         }
-        adjusting = true;
-        int l = Math.max(offset1Control.getValue(), offset2Control.getValue()) - 1;
-        tubelengthSlider.setValue(l);
-        adjusting = false;
     }
 
     public GeneratorInfo getGeneratorInfo() {
