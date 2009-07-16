@@ -32,12 +32,10 @@ public class UItoolbox {
 
     public static void addExitOnEscape(RootPaneContainer container) {
         container.getRootPane().registerKeyboardAction(new ActionListener() {
-
             public void actionPerformed(ActionEvent actionEvent) {
                 System.exit(0);
             }
-        },
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public static void showTextInfo(String title, String info) {
@@ -55,7 +53,6 @@ public class UItoolbox {
     public static void showTextInfo(String title, String info, boolean monospaced, Component nearComponent) {
         final JDialog dialog = new JDialog((Frame) null, title, true);
         ActionListener endDialog = new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
             }
@@ -206,33 +203,8 @@ public class UItoolbox {
 
             public void run() {
                 window.toFront();
-            // focusSomeComponentIn(window);
             }
         });
     }
-
-    /*
-    static boolean focusSomeComponentIn(Container container)
-    {
-    int components = container.getComponentCount();
-    for (int i = 0; i < components; ++i)
-    {
-    Component component = container.getComponent(i);
-    boolean mayRequestFocus = component.isFocusTraversable();
-    if (mayRequestFocus && component instanceof JComponent) {
-    mayRequestFocus = ((JComponent) component).isRequestFocusEnabled();
-    }
-    if (mayRequestFocus) {
-    component.requestFocus();
-    return true;
-    } else if (component instanceof Container) {
-    if (focusSomeComponentIn((Container) component)) {
-    return true;
-    }
-    }
-    }
-    return false;
-    }
-     */
 }
 
