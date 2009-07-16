@@ -7,6 +7,10 @@ import java.awt.Insets;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
+/**
+ * Extension of <code>JTextArea</code> that automatically recalculates its size
+ * whenever the text, font or border changes.
+ */
 public class AutosizedTextArea extends JTextArea {
 
     Dimension size;
@@ -36,7 +40,7 @@ public class AutosizedTextArea extends JTextArea {
         recalculateSize();
     }
 
-    void recalculateSize() {
+    private void recalculateSize() {
         FontMetrics fm = getFontMetrics(getFont());
         if (size == null) {
             size = new Dimension();
