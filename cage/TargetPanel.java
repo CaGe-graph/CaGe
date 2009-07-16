@@ -100,7 +100,7 @@ public class TargetPanel extends JPanel {
 
     /**
      *
-     * @return
+     * @return The name of the target
      */
     public String getTargetName(){
         String[] args = {fileName.getText()};

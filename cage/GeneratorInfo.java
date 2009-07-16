@@ -211,7 +211,8 @@ public abstract class GeneratorInfo {
      * 
      * @param modes
      * @param defaultIncluded
-     * @return
+     * @return <tt>true</tt> if the current mode contains <tt>modes</tt>,
+     *         <tt>false</tt> otherwise
      */
     public boolean expertModeContains(int modes, boolean defaultIncluded) {
         return defaultIncluded ? (getExcludedExpertModes() & modes) != modes : (getIncludedExpertModes() & modes) != 0;

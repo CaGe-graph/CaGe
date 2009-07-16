@@ -187,7 +187,7 @@ public class SizeOption implements ChangeListener, ActionListener {
     /**
      * Returns the upper bound set for these kind of faces/vertices.
      *
-     * @return
+     * @return the upper bound set for these kind of faces/vertices
      */
     public int getMax() {
         return max;
@@ -196,7 +196,7 @@ public class SizeOption implements ChangeListener, ActionListener {
     /**
      * Returns the lower bound set for these kind of faces/vertices.
      *
-     * @return
+     * @return the lower bound set for these kind of faces/vertices
      */
     public int getMin() {
         return min;
