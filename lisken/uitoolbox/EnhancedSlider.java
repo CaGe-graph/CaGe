@@ -73,8 +73,8 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     }
 
     /**
-     * Sets the sliders step size. This will cause the slider to jump in
-     * discrete steps instead of sliding and jumping when released.
+     * Sets the sliders step size while dragging. This will cause the slider
+     * to jump in discrete steps instead of sliding and jumping when released.
      *
      * @param n The step size for this slider
      */
@@ -82,6 +82,12 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         snapWhileDragging = n;
     }
 
+    /**
+     * Returns the sliders step size while dragging.
+     *
+     * @param n The step size for this slider
+     * @see #setSnapWhileDragging(int)
+     */
     public int getSnapWhileDragging() {
         return snapWhileDragging;
     }
@@ -333,267 +339,266 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             }
         }
     }
-}
 
-class EnhancedSliderUI extends javax.swing.plaf.basic.BasicSliderUI {
+    private class EnhancedSliderUI extends javax.swing.plaf.basic.BasicSliderUI {
 
-    EnhancedSlider enhancedSlider;
+        EnhancedSlider enhancedSlider;
 
-    public EnhancedSliderUI(EnhancedSlider s) {
-        super(s.slider());
-        enhancedSlider = s;
-    }
+        public EnhancedSliderUI(EnhancedSlider s) {
+            super(s.slider());
+            enhancedSlider = s;
+        }
 
-    public Rectangle getTrackRectangle() {
-        return trackRect;
-    }
+        public Rectangle getTrackRectangle() {
+            return trackRect;
+        }
 
-    public Rectangle getThumbRectangle() {
-        return thumbRect;
-    }
+        public Rectangle getThumbRectangle() {
+            return thumbRect;
+        }
 
-    protected void calculateTrackRect() {
-        super.calculateTrackRect();
-        adjustValueLabelLocation();
-    }
+        protected void calculateTrackRect() {
+            super.calculateTrackRect();
+            adjustValueLabelLocation();
+        }
 
-    protected void calculateThumbLocation() {
-        super.calculateThumbLocation();
-        adjustValueLabelLocation();
-    }
+        protected void calculateThumbLocation() {
+            super.calculateThumbLocation();
+            adjustValueLabelLocation();
+        }
 
-    public void setThumbLocation(int x, int y) {
-        int snap = enhancedSlider.getSnapWhileDragging();
-        if (snap != 0) {
-            switch (slider.getOrientation()) {
-                case SwingConstants.HORIZONTAL:
-                    x = snappedPosition(x, snap, trackRect.x - thumbRect.width / 2, trackRect.width);
-                    break;
-                case SwingConstants.VERTICAL:
-                    y = snappedPosition(y, snap, trackRect.y - thumbRect.height / 2, trackRect.height);
-                    break;
+        public void setThumbLocation(int x, int y) {
+            int snap = enhancedSlider.getSnapWhileDragging();
+            if (snap != 0) {
+                switch (slider.getOrientation()) {
+                    case SwingConstants.HORIZONTAL:
+                        x = snappedPosition(x, snap, trackRect.x - thumbRect.width / 2, trackRect.width);
+                        break;
+                    case SwingConstants.VERTICAL:
+                        y = snappedPosition(y, snap, trackRect.y - thumbRect.height / 2, trackRect.height);
+                        break;
+                }
+            }
+            super.setThumbLocation(x, y);
+            adjustValueLabelLocation();
+        }
+
+        void adjustValueLabelLocation() {
+            if (enhancedSlider.getParent() != null) {
+                enhancedSlider.adjustValueLabelLocation();
             }
         }
-        super.setThumbLocation(x, y);
-        adjustValueLabelLocation();
-    }
 
-    void adjustValueLabelLocation() {
-        if (enhancedSlider.getParent() != null) {
-            enhancedSlider.adjustValueLabelLocation();
+        int snappedPosition(int position, int snap, int start, int width) {
+            int min, max, range, value, distance;
+            boolean inverted;
+            min = slider.getMinimum();
+            max = slider.getMaximum();
+            inverted = slider.getInverted();
+            range = max - min;
+            distance = roundIntFraction((position - start) * range, width, snap);
+            value = inverted ? max - distance : min + distance;
+            enhancedSlider.setSnappedValue(value);
+            return roundIntFraction(distance * width, range, 1) + start;
+        }
+
+        int roundIntFraction(int nom, int denom, int gran) {
+            return ((2 * nom + denom * gran) / (denom * 2 * gran)) * gran;
+        }
+
+        protected void paintMinorTickForHorizSlider(Graphics g, Rectangle tickBounds, int x) {
+            if (enhancedSlider.getPaintMinorTicks()) {
+                super.paintMinorTickForHorizSlider(g, tickBounds, x);
+            }
+        }
+
+        protected void paintMinorTickForVertSlider(Graphics g, Rectangle tickBounds, int y) {
+            if (enhancedSlider.getPaintMinorTicks()) {
+                super.paintMinorTickForVertSlider(g, tickBounds, y);
+            }
+        }
+
+        protected int epsilon() {
+            return enhancedSlider.getSnapToTicks() ? enhancedSlider.getMinorTickSpacing() : 1;
+        }
+
+        protected void scrollBy(int dist, int direction) {
+            synchronized (enhancedSlider.slider()) {
+                int oldValue = enhancedSlider.getValue();
+                int delta = dist * ((direction > 0) ? POSITIVE_SCROLL : NEGATIVE_SCROLL);
+                enhancedSlider.setValue(oldValue + delta);
+            }
+        }
+
+        public void scrollByUnit(int direction) {
+            scrollBy(epsilon(), direction);
+        }
+
+        public void scrollByBlock(int direction) {
+            scrollBy(
+                    roundIntFraction(
+                    enhancedSlider.getMaximum() - enhancedSlider.getMinimum(), 10,
+                    epsilon()),
+                    direction);
+        }
+
+        protected void scrollDueToClickInTrack(int direction) {
+            if (enhancedSlider.getClickScrollByBlock()) {
+                scrollByBlock(direction);
+            } else {
+                scrollByUnit(direction);
+            }
         }
     }
 
-    int snappedPosition(int position, int snap, int start, int width) {
-        int min, max, range, value, distance;
-        boolean inverted;
-        min = slider.getMinimum();
-        max = slider.getMaximum();
-        inverted = slider.getInverted();
-        range = max - min;
-        distance = roundIntFraction((position - start) * range, width, snap);
-        value = inverted ? max - distance : min + distance;
-        enhancedSlider.setSnappedValue(value);
-        return roundIntFraction(distance * width, range, 1) + start;
-    }
+    private class EnhancedSliderChangeListener implements ChangeListener {
 
-    int roundIntFraction(int nom, int denom, int gran) {
-        return ((2 * nom + denom * gran) / (denom * 2 * gran)) * gran;
-    }
+        EnhancedSlider enhancedSlider;
 
-    protected void paintMinorTickForHorizSlider(Graphics g, Rectangle tickBounds, int x) {
-        if (enhancedSlider.getPaintMinorTicks()) {
-            super.paintMinorTickForHorizSlider(g, tickBounds, x);
+        public EnhancedSliderChangeListener(EnhancedSlider es) {
+            enhancedSlider = es;
         }
-    }
 
-    protected void paintMinorTickForVertSlider(Graphics g, Rectangle tickBounds, int y) {
-        if (enhancedSlider.getPaintMinorTicks()) {
-            super.paintMinorTickForVertSlider(g, tickBounds, y);
-        }
-    }
-
-    protected int epsilon() {
-        return enhancedSlider.getSnapToTicks() ? enhancedSlider.getMinorTickSpacing() : 1;
-    }
-
-    protected void scrollBy(int dist, int direction) {
-        synchronized (enhancedSlider.slider()) {
-            int oldValue = enhancedSlider.getValue();
-            int delta = dist * ((direction > 0) ? POSITIVE_SCROLL : NEGATIVE_SCROLL);
-            enhancedSlider.setValue(oldValue + delta);
-        }
-    }
-
-    public void scrollByUnit(int direction) {
-        scrollBy(epsilon(), direction);
-    }
-
-    public void scrollByBlock(int direction) {
-        scrollBy(
-                roundIntFraction(
-                enhancedSlider.getMaximum() - enhancedSlider.getMinimum(), 10,
-                epsilon()),
-                direction);
-    }
-
-    protected void scrollDueToClickInTrack(int direction) {
-        if (enhancedSlider.getClickScrollByBlock()) {
-            scrollByBlock(direction);
-        } else {
-            scrollByUnit(direction);
-        }
-    }
-}
-
-class EnhancedSliderChangeListener implements ChangeListener {
-
-    EnhancedSlider enhancedSlider;
-
-    public EnhancedSliderChangeListener(EnhancedSlider es) {
-        enhancedSlider = es;
-    }
-
-    public void stateChanged(ChangeEvent e) {
-        JLabel label = enhancedSlider.getValueLabel();
-        if (label == null) {
-            return;
-        }
-        label.setText(Integer.toString(enhancedSlider.getValue()));
+        public void stateChanged(ChangeEvent e) {
+            JLabel label = enhancedSlider.getValueLabel();
+            if (label == null) {
+                return;
+            }
+            label.setText(Integer.toString(enhancedSlider.getValue()));
 //    if (enhancedSlider.getValue() == enhancedSlider.getMaximum()) enhancedSlider.setOrientation(SwingConstants.HORIZONTAL + SwingConstants.VERTICAL - enhancedSlider.getOrientation());
-        enhancedSlider.fireStateChanged();
+            enhancedSlider.fireStateChanged();
+        }
     }
-}
 
-class SliderValueLabel extends JLabel {
+    private class SliderValueLabel extends JLabel {
 
-    JSlider slider;
-    int width, height;
+        JSlider slider;
+        int width, height;
 
-    public SliderValueLabel(JSlider s) {
-        slider = s;
-        setBorder(BorderFactory.createEmptyBorder(0, 2, 1, 2));
-        calculateSize();
-        setForeground(Color.black);
+        public SliderValueLabel(JSlider s) {
+            slider = s;
+            setBorder(BorderFactory.createEmptyBorder(0, 2, 1, 2));
+            calculateSize();
+            setForeground(Color.black);
 //    setBackground(Color.white);
 //    this.setOpaque(true);
-    }
+        }
 
-    public void setLocation(Point p) {
-        setBounds(p.x, p.y, this.getWidth(), this.getHeight());
-    }
+        public void setLocation(Point p) {
+            setBounds(p.x, p.y, this.getWidth(), this.getHeight());
+        }
 
-    public void setLocation(int x, int y) {
-        setBounds(x, y, this.getWidth(), this.getHeight());
-    }
+        public void setLocation(int x, int y) {
+            setBounds(x, y, this.getWidth(), this.getHeight());
+        }
 
-    public void setBounds(Rectangle r) {
-        setBounds(r.x, r.y, r.width, r.height);
-    }
+        public void setBounds(Rectangle r) {
+            setBounds(r.x, r.y, r.width, r.height);
+        }
 
-    public void setBounds(int x, int y, int newWidth, int newHeight) {
-        if (slider == null) {
-            if (EnhancedSlider.debug) {
-                System.err.println("  new place as requested: " + x + ", " + y);
+        public void setBounds(int x, int y, int newWidth, int newHeight) {
+            if (slider == null) {
+                if (EnhancedSlider.debug) {
+                    System.err.println("  new place as requested: " + x + ", " + y);
+                }
+                super.setBounds(x, y, newWidth, newHeight);
+            } else {
+                adjustBounds(newWidth, newHeight);
             }
-            super.setBounds(x, y, newWidth, newHeight);
-        } else {
-            adjustBounds(newWidth, newHeight);
         }
-    }
 
-    public void setSize(Dimension d) {
-        Point p = this.getLocation();
-        setBounds(p.x, p.y, d.width, d.height);
-    }
-
-    public void setSize(int newWidth, int newHeight) {
-        Point p = this.getLocation();
-        setBounds(p.x, p.y, newWidth, newHeight);
-    }
-
-    public void adjustBounds() {
-        adjustBounds(getWidth(), getHeight());
-    }
-
-    public void adjustBounds(int newWidth, int newHeight) {
-        newWidth = width;
-        newHeight = height;
-        Rectangle rect = ((EnhancedSliderUI) slider.getUI()).getThumbRectangle();
-        switch (slider.getOrientation()) {
-            case SwingConstants.HORIZONTAL:
-                if (EnhancedSlider.debug) {
-                    System.err.println("  new width: " + newWidth + ", th = " + rect.x + ", " + rect.width);
-                }
-                if (EnhancedSlider.debug) {
-                    System.err.println("  new place: " + (rect.x + (rect.width - newWidth) / 2) + ", " + getLocation().y);
-                }
-                super.setBounds(rect.x + (rect.width - newWidth) / 2, getLocation().y, newWidth, newHeight);
-                break;
-            case SwingConstants.VERTICAL:
-                if (EnhancedSlider.debug) {
-                    System.err.println("  new height: " + newHeight + ", th = " + rect.y + ", " + rect.height);
-                }
-                if (EnhancedSlider.debug) {
-                    System.err.println("  new place: " + getLocation().x + ", " + (rect.y + (rect.height - newHeight) / 2));
-                }
-                super.setBounds(getLocation().x, rect.y + (rect.height - newHeight) / 2, newWidth, newHeight);
-                break;
+        public void setSize(Dimension d) {
+            Point p = this.getLocation();
+            setBounds(p.x, p.y, d.width, d.height);
         }
-    }
 
-    public void setFont(Font font) {
-        super.setFont(font);
-        calculateSize();
-    }
-
-    public void calculateSize() {
-        Insets insets = getInsets();
-        if (slider == null) {
-            return;
+        public void setSize(int newWidth, int newHeight) {
+            Point p = this.getLocation();
+            setBounds(p.x, p.y, newWidth, newHeight);
         }
-        FontMetrics metrics = getFontMetrics(getFont());
-        width = Math.max(
-                metrics.stringWidth(Integer.toString(slider.getMinimum())),
-                metrics.stringWidth(Integer.toString(slider.getMaximum())));
-        width += insets.left + insets.right;
-        height = metrics.getHeight() + insets.top + insets.bottom;
-    }
 
-    public void adjustSize() {
-        setSize(width, height);
-    }
-
-    public void setText(String text) {
-        super.setText(text);
-        adjustSize();
-    }
-
-    public Dimension getMinimumSize() {
-        return new Dimension(width, height);
-    }
-
-    public Dimension getPreferredSize() {
-        return new Dimension(width, height);
-    }
-
-    public void adjustOrientation(int sliderOrientation) {
-        switch (sliderOrientation) {
-            case SwingConstants.VERTICAL:
-                setHorizontalAlignment(SwingConstants.RIGHT);
-                break;
-            case SwingConstants.HORIZONTAL:
-                setHorizontalAlignment(SwingConstants.CENTER);
-                break;
+        public void adjustBounds() {
+            adjustBounds(getWidth(), getHeight());
         }
-        EnhancedSlider es = (EnhancedSlider) this.getParent();
-        if (es == null) {
-            return;
+
+        public void adjustBounds(int newWidth, int newHeight) {
+            newWidth = width;
+            newHeight = height;
+            Rectangle rect = ((EnhancedSliderUI) slider.getUI()).getThumbRectangle();
+            switch (slider.getOrientation()) {
+                case SwingConstants.HORIZONTAL:
+                    if (EnhancedSlider.debug) {
+                        System.err.println("  new width: " + newWidth + ", th = " + rect.x + ", " + rect.width);
+                    }
+                    if (EnhancedSlider.debug) {
+                        System.err.println("  new place: " + (rect.x + (rect.width - newWidth) / 2) + ", " + getLocation().y);
+                    }
+                    super.setBounds(rect.x + (rect.width - newWidth) / 2, getLocation().y, newWidth, newHeight);
+                    break;
+                case SwingConstants.VERTICAL:
+                    if (EnhancedSlider.debug) {
+                        System.err.println("  new height: " + newHeight + ", th = " + rect.y + ", " + rect.height);
+                    }
+                    if (EnhancedSlider.debug) {
+                        System.err.println("  new place: " + getLocation().x + ", " + (rect.y + (rect.height - newHeight) / 2));
+                    }
+                    super.setBounds(getLocation().x, rect.y + (rect.height - newHeight) / 2, newWidth, newHeight);
+                    break;
+            }
         }
-        slider = null;
-        UItoolbox.pack(this);
-        slider = es.slider();
-        adjustBounds();
+
+        public void setFont(Font font) {
+            super.setFont(font);
+            calculateSize();
+        }
+
+        public void calculateSize() {
+            Insets insets = getInsets();
+            if (slider == null) {
+                return;
+            }
+            FontMetrics metrics = getFontMetrics(getFont());
+            width = Math.max(
+                    metrics.stringWidth(Integer.toString(slider.getMinimum())),
+                    metrics.stringWidth(Integer.toString(slider.getMaximum())));
+            width += insets.left + insets.right;
+            height = metrics.getHeight() + insets.top + insets.bottom;
+        }
+
+        public void adjustSize() {
+            setSize(width, height);
+        }
+
+        public void setText(String text) {
+            super.setText(text);
+            adjustSize();
+        }
+
+        public Dimension getMinimumSize() {
+            return new Dimension(width, height);
+        }
+
+        public Dimension getPreferredSize() {
+            return new Dimension(width, height);
+        }
+
+        public void adjustOrientation(int sliderOrientation) {
+            switch (sliderOrientation) {
+                case SwingConstants.VERTICAL:
+                    setHorizontalAlignment(SwingConstants.RIGHT);
+                    break;
+                case SwingConstants.HORIZONTAL:
+                    setHorizontalAlignment(SwingConstants.CENTER);
+                    break;
+            }
+            EnhancedSlider es = (EnhancedSlider) this.getParent();
+            if (es == null) {
+                return;
+            }
+            slider = null;
+            UItoolbox.pack(this);
+            slider = es.slider();
+            adjustBounds();
+        }
     }
 }
-
