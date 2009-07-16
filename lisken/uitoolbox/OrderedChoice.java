@@ -30,20 +30,20 @@ import lisken.systoolbox.MutableInteger;
 
 public class OrderedChoice extends JPanel implements ListSelectionListener {
 
-    JButton addButton;
-    JButton removeButton;
-    JButton upButton;
-    JButton downButton;
-    JList choiceList;
-    JList selectionList;
-    Dimension listSize;
-    JScrollPane choicePane;
-    JScrollPane selectionPane;
-    Object[] choices;
-    int[] position;
-    Vector choice, selection, highlight;
-    boolean dialogCompleted;
-    boolean noEmptySelection;
+    private JButton addButton;
+    private JButton removeButton;
+    private JButton upButton;
+    private JButton downButton;
+    private JList choiceList;
+    private JList selectionList;
+    private Dimension listSize;
+    private JScrollPane choicePane;
+    private JScrollPane selectionPane;
+    private Object[] choices;
+    private int[] position;
+    private Vector choice, selection, highlight;
+    private boolean dialogCompleted;
+    private boolean noEmptySelection;
     private boolean building;
 
     public OrderedChoice(Object[] choices) {
@@ -249,12 +249,12 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         selectionList.setSelectedIndices(sel);
     }
 
-    void buildLists() {
+    private void buildLists() {
         buildChoiceList();
         buildSelectionList();
     }
 
-    void buildChoiceList() {
+    private void buildChoiceList() {
         building = true;
         int choiceSize = choice.size();
         Object[] choiceData = new Object[choiceSize];
@@ -268,7 +268,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         building = false;
     }
 
-    void buildSelectionList() {
+    private void buildSelectionList() {
         building = true;
         int selectionSize = selection.size();
         Object[] selectionData = new Object[selectionSize];
@@ -282,12 +282,12 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         building = false;
     }
 
-    void buildVectors() {
+    private void buildVectors() {
         buildChoiceVector();
         buildSelectionVector();
     }
 
-    void buildChoiceVector() {
+    private void buildChoiceVector() {
         choice.setSize(0);
         for (int i = 0; i < choices.length; ++i) {
             if (position[i] < 0) {
@@ -296,7 +296,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         }
     }
 
-    void buildSelectionVector() {
+    private void buildSelectionVector() {
         int pos, maxPos = -1;
         selection.setSize(choices.length);
         for (int i = 0; i < choices.length; ++i) {
