@@ -31,9 +31,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.Systoolbox;
-import lisken.uitoolbox.ChangeAdapter;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.UItoolbox;
 
@@ -86,7 +86,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         CSlider.setSnapWhileDragging(1);
         CSlider.setSizeFactor(0.5);
         CSlider.setClickScrollByBlock(false);
-        CSlider.addChangeListener(new ChangeAdapter() {
+        CSlider.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
                 C = CSlider.getValue();
@@ -108,7 +108,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         HSlider.setPaintLabels(true);
         HSlider.setSnapWhileDragging(1);
         HSlider.setClickScrollByBlock(false);
-        HSlider.addChangeListener(new ChangeAdapter() {
+        HSlider.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
                 H = HSlider.getValue();
@@ -131,7 +131,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         pentSlider.setSnapWhileDragging(1);
 //    pentSlider.setSizeFactor(35);
         pentSlider.setClickScrollByBlock(false);
-        pentSlider.addChangeListener(new ChangeAdapter() {
+        pentSlider.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
                 pentagons = pentSlider.getValue();
