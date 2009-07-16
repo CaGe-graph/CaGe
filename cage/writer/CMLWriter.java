@@ -7,7 +7,7 @@ import cage.EmbeddableGraph;
 import java.util.NoSuchElementException;
 
 
-class CMLWriter extends AbstractChemicalWriter
+public class CMLWriter extends AbstractChemicalWriter
 {
   public String getFormatName()
   {
