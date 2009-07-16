@@ -57,9 +57,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
             position[i] = -1;
         }
         noEmptySelection = false;
-        addButton = new JButton();
-        addButton.setText("Add");
-        addButton.setIcon(new ImageIcon(ClassLoader.getSystemResource("lisken/uitoolbox/right.gif")));
+        addButton = new JButton("Add", new ImageIcon(ClassLoader.getSystemResource("lisken/uitoolbox/right.gif")));
         addButton.setHorizontalTextPosition(SwingConstants.LEFT);
         addButton.setMnemonic(KeyEvent.VK_A);
         addButton.addActionListener(new ActionListener() {
@@ -68,9 +66,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
                 addToSelection();
             }
         });
-        removeButton = new JButton();
-        removeButton.setText("Remove");
-        removeButton.setIcon(new ImageIcon(ClassLoader.getSystemResource("lisken/uitoolbox/left.gif")));
+        removeButton = new JButton("Remove", new ImageIcon(ClassLoader.getSystemResource("lisken/uitoolbox/left.gif")));
         removeButton.setHorizontalTextPosition(SwingConstants.RIGHT);
         removeButton.setMnemonic(KeyEvent.VK_R);
         removeButton.addActionListener(new ActionListener() {
@@ -79,8 +75,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
                 removeFromSelection();
             }
         });
-        upButton = new JButton();
-        upButton.setText("Up");
+        upButton = new JButton("Up");
         upButton.setMnemonic(KeyEvent.VK_U);
         upButton.addActionListener(new ActionListener() {
 
@@ -88,8 +83,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
                 upInSelection();
             }
         });
-        downButton = new JButton();
-        downButton.setText("Down");
+        downButton = new JButton("Down");
         downButton.setMnemonic(KeyEvent.VK_D);
         downButton.addActionListener(new ActionListener() {
 
