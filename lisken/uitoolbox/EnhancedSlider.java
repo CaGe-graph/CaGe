@@ -342,7 +342,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
 
     private class EnhancedSliderUI extends javax.swing.plaf.basic.BasicSliderUI {
 
-        EnhancedSlider enhancedSlider;
+        private EnhancedSlider enhancedSlider;
 
         public EnhancedSliderUI(EnhancedSlider s) {
             super(s.slider());
@@ -383,7 +383,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             adjustValueLabelLocation();
         }
 
-        void adjustValueLabelLocation() {
+        private void adjustValueLabelLocation() {
             if (enhancedSlider.getParent() != null) {
                 enhancedSlider.adjustValueLabelLocation();
             }
@@ -453,7 +453,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
 
     private class EnhancedSliderChangeListener implements ChangeListener {
 
-        EnhancedSlider enhancedSlider;
+        private EnhancedSlider enhancedSlider;
 
         public EnhancedSliderChangeListener(EnhancedSlider es) {
             enhancedSlider = es;
@@ -465,23 +465,20 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
                 return;
             }
             label.setText(Integer.toString(enhancedSlider.getValue()));
-//    if (enhancedSlider.getValue() == enhancedSlider.getMaximum()) enhancedSlider.setOrientation(SwingConstants.HORIZONTAL + SwingConstants.VERTICAL - enhancedSlider.getOrientation());
             enhancedSlider.fireStateChanged();
         }
     }
 
     private class SliderValueLabel extends JLabel {
 
-        JSlider slider;
-        int width, height;
+        private JSlider slider;
+        private int width, height;
 
         public SliderValueLabel(JSlider s) {
             slider = s;
             setBorder(BorderFactory.createEmptyBorder(0, 2, 1, 2));
             calculateSize();
             setForeground(Color.black);
-//    setBackground(Color.white);
-//    this.setOpaque(true);
         }
 
         public void setLocation(Point p) {
