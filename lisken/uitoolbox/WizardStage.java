@@ -8,6 +8,10 @@ import javax.swing.JComponent;
 import javax.swing.JRootPane;
 import javax.swing.SwingConstants;
 
+/**
+ * A <code>WizardStage</code> is an individual stage in a {@link Wizard}.
+ * @author nvcleemp
+ */
 public class WizardStage {
 
     private JComponent content;

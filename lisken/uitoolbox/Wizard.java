@@ -18,6 +18,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+/**
+ * A <code>Wizard</code> object can be used to represent the classical
+ * GUI pattern of a sequence of dialogs which guide the user to a set
+ * of parameters that need to be provided. The individual stages of a
+ * <code>Wizard</code> are represented by {@link WizardStage} objects.
+ */
 public class Wizard implements ActionListener {
 
     public static final String PREVIOUS = "Previous";
@@ -26,6 +32,7 @@ public class Wizard implements ActionListener {
     public static final String CANCEL = "Cancel";
     public static final String EXIT = "Exit";
     public static final String SHOWING = "Showing";
+
     private WizardStage stage;
     private int stageNo;
     private String title;
@@ -34,6 +41,11 @@ public class Wizard implements ActionListener {
     private Vector stageVector;
     private JFrame currentWindow;
 
+    /**
+     * Creates a new <code>Wizard</code>.
+     *
+     * @param title The title for this <code>Wizard</code>.
+     */
     public Wizard(String title) {
         this.title = title;
         windowListener = new WindowAdapter() {
@@ -117,6 +129,10 @@ public class Wizard implements ActionListener {
         activate();
     }
 
+    /**
+     * Returns the current stage of this <code>Wizard</code>.
+     * @return the current stage of this <code>Wizard</code>.
+     */
     public WizardStage getStage() {
         return stage;
     }

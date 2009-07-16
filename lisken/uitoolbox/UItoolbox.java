@@ -28,8 +28,16 @@ import javax.swing.RootPaneContainer;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.SwingUtilities;
 
+/**
+ * Provides a set of convenience methods for user interfaces.
+ */
 public class UItoolbox {
 
+    /**
+     * Registers an <code>ActionListener</code> with the root pane of a container
+     * so that the program exits upon pressing the escape key.
+     * @param container The container which should respond to the escape key.
+     */
     public static void addExitOnEscape(RootPaneContainer container) {
         container.getRootPane().registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
@@ -38,18 +46,46 @@ public class UItoolbox {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
+    /**
+     * Shows a dialog with info and the specified title.
+     *
+     * @param title The title of the dialog.
+     * @param info The info to be shown.
+     */
     public static void showTextInfo(String title, String info) {
         showTextInfo(title, info, false, null);
     }
 
+    /**
+     * Shows a dialog with info, the specified title and the specified font type.
+     *
+     * @param title The title of the dialog.
+     * @param info The info to be shown.
+     * @param monospaced The font type of the info.
+     */
     public static void showTextInfo(String title, String info, boolean monospaced) {
         showTextInfo(title, info, monospaced, null);
     }
 
+    /**
+     * Shows a dialog with info and the specified title near the given component.
+     *
+     * @param title The title of the dialog.
+     * @param info The info to be shown.
+     * @param nearComponent The component in which proximity the dialog should be shown.
+     */
     public static void showTextInfo(String title, String info, Component nearComponent) {
         showTextInfo(title, info, false, nearComponent);
     }
 
+    /**
+     * Shows a dialog with info and the specified title near the given component.
+     *
+     * @param title The title of the dialog.
+     * @param info The info to be shown.
+     * @param monospaced The font type of the info.
+     * @param nearComponent The component in which proximity the dialog should be shown.
+     */
     public static void showTextInfo(String title, String info, boolean monospaced, Component nearComponent) {
         final JDialog dialog = new JDialog((Frame) null, title, true);
         ActionListener endDialog = new ActionListener() {
@@ -87,6 +123,12 @@ public class UItoolbox {
         dialog.setVisible(true);
     }
 
+    /**
+     * Moves one component to another component.
+     *
+     * @param component The component which will be moved.
+     * @param nearComponent The component to which will be moved.
+     */
     public static void moveComponentNearComponent(Component component, Component nearComponent) {
         if (nearComponent != null) {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -102,6 +144,11 @@ public class UItoolbox {
         }
     }
 
+    /**
+     * Centers a component on the screen.
+     * 
+     * @param component The component to be centered on the screen.
+     */
     public static void centerOnScreen(Component component) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension componentSize = component.getSize();
@@ -116,10 +163,20 @@ public class UItoolbox {
                 (screenSize.height - componentSize.height) / 2);
     }
 
+    /**
+     * Sets the maximum size of a component to its preferred size.
+     *
+     * @param component The component for which the maximum size must be set.
+     */
     public static void setmaxToPref(JComponent component) {
         component.setMaximumSize(component.getPreferredSize());
     }
 
+    /**
+     * Packs the window that contains a certain component.
+     *
+     * @param c The component which parent window should be packed.
+     */
     public static void pack(Component c) {
         while (c != null) {
             if (c instanceof Window) {
@@ -130,6 +187,17 @@ public class UItoolbox {
         }
     }
 
+    /**
+     * Restricts a dimension to a certain percentage of the screen size. If the
+     * original dimension is larger than the given percentages of the screen size,
+     * then it will be truncated. The percentages need to be given as floats where
+     * 1.0f means 100%.
+     *
+     * @param originalSize The dimension that needs to be restricted.
+     * @param widthPart The percentage of the screen width.
+     * @param heightPart The percentage of the screen height.
+     * @return The restricted dimension.
+     */
     public static Dimension restrictSizeToScreenPart(Dimension originalSize, float widthPart, float heightPart) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         originalSize.width = Math.min(originalSize.width,
@@ -139,6 +207,16 @@ public class UItoolbox {
         return originalSize;
     }
 
+    /**
+     * Returns the dimension of this component restricted to a certain percentage
+     * of the screen size.
+     * 
+     * @param component The component for which the dimension needs to be restricted.
+     * @param widthPart The percentage of the screen width.
+     * @param heightPart The percentage of the screen height.
+     * @return The restricted dimension.
+     * @see #restrictSizeToScreenPart(java.awt.Dimension, float, float) 
+     */
     public static Dimension restrictSizeToScreenPart(Component component, float widthPart, float heightPart) {
         return restrictSizeToScreenPart(component.getSize(), widthPart, heightPart);
     }
@@ -188,6 +266,13 @@ public class UItoolbox {
         }
     }
 
+    /**
+     * Returns the title of a window if it's a <code>Frame</code> or a <code>Dialog</code>
+     * or <tt>null</tt> otherwise.
+     *
+     * @param window The window for which the title must be returned.
+     * @return The title of <tt>window</tt> or <tt>null</tt> if not applicable.
+     */
     public static String getTitle(Window window) {
         if (window instanceof Dialog) {
             return ((Dialog) window).getTitle();
@@ -198,6 +283,11 @@ public class UItoolbox {
         }
     }
 
+    /**
+     * Tries to focus a window.
+     *
+     * @param window The window that needs to be focussed.
+     */
     public static void focusWindow(final Window window) {
         SwingUtilities.invokeLater(new Runnable() {
 
