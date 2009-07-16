@@ -7,6 +7,15 @@ import javax.swing.ButtonModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * A <code>MinMaxEqListener</code> maintains the constraints between two
+ * <code>BoundedRangeModel</code>s where one model represents the minimum and
+ * the other the maximum of the same quantity. These constraints are the following:
+ * <ul>
+ * <li>the minimum is always smaller than or equal to the maximum;</li>
+ * <li>if equality is needed, then both values must be the same.</li>
+ * </ul>
+ */
 public class MinMaxEqListener implements ChangeListener, ActionListener {
 
     BoundedRangeModel minModel, maxModel, lastChangedModel;

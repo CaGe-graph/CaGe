@@ -12,6 +12,10 @@ import javax.swing.JDialog;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
+/**
+ * An extension of <code>JDialog</code> that can be asked whether the dialog
+ * was closed successfull or was canceled.
+ */
 public class FlaggedJDialog extends JDialog implements ActionListener {
 
     private boolean success = false;
