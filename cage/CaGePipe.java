@@ -3,6 +3,7 @@ package cage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Vector;
+
 import lisken.systoolbox.Pipe;
 
 public abstract class CaGePipe extends Pipe

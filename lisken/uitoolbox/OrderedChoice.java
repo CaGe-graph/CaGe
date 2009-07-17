@@ -26,6 +26,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import lisken.systoolbox.MutableInteger;
 
 public class OrderedChoice extends JPanel implements ListSelectionListener {

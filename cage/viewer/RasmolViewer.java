@@ -6,6 +6,7 @@ import cage.GeneratorInfo;
 import cage.ResultPanel;
 import cage.writer.AbstractChemicalWriter;
 import cage.writer.WriterFactory;
+
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+
 import lisken.systoolbox.BufferedFDInputStream;
 import lisken.systoolbox.BufferedFDOutputStream;
 import lisken.systoolbox.Pipe;

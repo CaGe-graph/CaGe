@@ -2,8 +2,8 @@ package cage.viewer.jmol;
 
 import cage.EdgeIterator;
 import cage.EmbeddableGraph;
-
 import cage.GeneratorInfo;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.util.Hashtable;

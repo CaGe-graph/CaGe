@@ -4,6 +4,7 @@ import cage.CaGeResult;
 import cage.EmbeddableGraph;
 import cage.GeneratorInfo;
 import cage.ResultPanel;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -22,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
+
 import lisken.uitoolbox.AutosizedTextArea;
 import lisken.uitoolbox.UItoolbox;
 

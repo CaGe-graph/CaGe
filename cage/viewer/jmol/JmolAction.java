@@ -2,6 +2,7 @@ package cage.viewer.jmol;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+
 import org.jmol.api.JmolViewer;
 
 /**

@@ -6,6 +6,7 @@ import javax.swing.ButtonModel;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import org.jmol.api.JmolViewer;
 
 /**

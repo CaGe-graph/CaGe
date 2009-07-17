@@ -3,6 +3,7 @@ package cage;
 
 import cage.viewer.CaGeViewer;
 import cage.writer.CaGeWriter;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -42,6 +43,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.JTextComponentFocusSelector;
@@ -49,8 +51,6 @@ import lisken.uitoolbox.NumberDocument;
 import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
-
-
 
 public class ResultPanel extends JPanel implements
  ActionListener, FocusListener, GeneratorListener, EmbedThreadListener

@@ -10,6 +10,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.colorchooser.DefaultColorSelectionModel;
+
 import org.jmol.api.JmolViewer;
 
 /**

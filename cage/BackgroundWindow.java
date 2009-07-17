@@ -1,6 +1,7 @@
 package cage;
 
 import cage.writer.CaGeWriter;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,6 +35,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.UItoolbox;
 

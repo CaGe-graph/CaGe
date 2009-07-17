@@ -2,6 +2,7 @@ package cage;
 
 import cage.writer.CaGeWriter;
 import cage.writer.WriterFactory;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.MessageFormat;
@@ -11,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import lisken.uitoolbox.JTextComponentFocusSelector;
 
 /**

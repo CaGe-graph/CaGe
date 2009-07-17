@@ -6,6 +6,7 @@ import cage.GeneratorInfo;
 import cage.ResultPanel;
 import cage.viewer.jmol.JmolMenu;
 import cage.viewer.jmol.JmolPanel;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Insets;

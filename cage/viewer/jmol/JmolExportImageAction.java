@@ -1,6 +1,7 @@
 package cage.viewer.jmol;
 
 import cage.CaGe;
+
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;

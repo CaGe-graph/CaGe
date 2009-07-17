@@ -1,6 +1,7 @@
 package cage.viewer.jmol;
 
 import java.text.MessageFormat;
+
 import org.jmol.api.JmolViewer;
 
 /**

@@ -4,6 +4,7 @@ import java.awt.Color;
 import javax.swing.ButtonModel;
 import javax.swing.JColorChooser;
 import javax.swing.colorchooser.DefaultColorSelectionModel;
+
 import org.jmol.api.JmolViewer;
 
 /**

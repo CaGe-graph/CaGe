@@ -29,10 +29,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.Wizard;
 import lisken.uitoolbox.WizardStage;
+
 import util.SysInfo;
 
 public class CaGe implements ActionListener {
