@@ -250,25 +250,24 @@ public class FoldnetThread extends Thread {
     private final Vector propertyChangeListeners = new Vector(0);
     private String runDir,  path;
     private Hashtable foldnetPageNos;
-}
 
-class FoldnetTask {
+    private class FoldnetTask {
 
-    public FoldnetTask(CaGeResult result, int maxFacesize, String filename) {
-        String prefix;
-        if (filename.startsWith(File.separator)) {
-            prefix = "";
-        } else if (filename.trim().startsWith("|")) {
-            prefix = "";
-        } else {
-            prefix = CaGe.config.get("CaGe.Generators.RunDir") + File.separator;
+        public FoldnetTask(CaGeResult result, int maxFacesize, String filename) {
+            String prefix;
+            if (filename.startsWith(File.separator)) {
+                prefix = "";
+            } else if (filename.trim().startsWith("|")) {
+                prefix = "";
+            } else {
+                prefix = CaGe.config.get("CaGe.Generators.RunDir") + File.separator;
+            }
+            this.filename = prefix + filename;
+            this.result = result;
+            this.maxFacesize = maxFacesize;
         }
-        this.filename = prefix + filename;
-        this.result = result;
-        this.maxFacesize = maxFacesize;
+        public CaGeResult result;
+        public int maxFacesize;
+        public String filename;
     }
-    public CaGeResult result;
-    public int maxFacesize;
-    public String filename;
 }
-
