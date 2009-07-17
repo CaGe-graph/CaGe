@@ -431,8 +431,8 @@ class RunnerControl
             infoText.append(dimension <= 0 ? "adj" : dimension + "D");
             infoText.append(" >\t " + (String) writeDests.nextElement() + "\n");
         }
-        Font font = window.getContentFont();
-        Border border = window.getButtonBorder();
+        Font font = BackgroundWindow.getContentFont();
+        Border border = BackgroundWindow.getButtonBorder();
         infoButton = new JButton(Integer.toString(index));
         infoButton.setHorizontalAlignment(SwingConstants.RIGHT);
         infoButton.setActionCommand("info");
@@ -454,15 +454,15 @@ class RunnerControl
         panel.add(infoButton,
                 new GridBagConstraints(0, index, 1, 1, 0.001, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
-                new Insets(window.buttonDist, 2, window.buttonDist, 2), 0, 0));
+                new Insets(BackgroundWindow.buttonDist, 2, BackgroundWindow.buttonDist, 2), 0, 0));
         panel.add(graphNoField,
                 new GridBagConstraints(1, index, 1, 1, 0.001, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                new Insets(window.fieldDist, 2, window.fieldDist, 2), 0, 0));
+                new Insets(BackgroundWindow.fieldDist, 2, BackgroundWindow.fieldDist, 2), 0, 0));
         panel.add(stopButton,
                 new GridBagConstraints(2, index, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(window.buttonDist, 2, window.buttonDist, 2), 0, 0));
+                new Insets(BackgroundWindow.buttonDist, 2, BackgroundWindow.buttonDist, 2), 0, 0));
         runner.addPropertyChangeListener(this);
         window.adjustDisplayedRunners(+1);
     }
