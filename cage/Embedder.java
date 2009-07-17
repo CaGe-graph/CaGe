@@ -50,11 +50,11 @@ public abstract class Embedder {
      * also stores the new outer face in case the graph needs to be reembedded.
      * (TODO: document this last fact better.)
      *
-     * @param graph
-     * @param x
-     * @param y
-     * @return <tt>true</tt> if the point (<tt>x</tt>, <tt>y</tt>) lies in
-     * the outer face.
+     * @param graph The graph for which the embedding needs to be considered
+     * @param x The x coordinate of the point
+     * @param y The y coordinate of the point
+     * @return <tt>false</tt> if the point (<tt>x</tt>, <tt>y</tt>) lies in
+     * the outer face, <tt>true</tt> otherwise.
      *
      */
     public boolean reembed2DRequired(EmbeddableGraph graph, float x, float y) {
