@@ -1064,42 +1064,41 @@ public class ResultPanel extends JPanel implements
         f.pack();
         f.setVisible(true);
     }
+
+    private class AdvanceListener implements ChangeListener {
+
+        private AbstractButton advanceButton;
+
+        public AdvanceListener(BoundedRangeModel m, AbstractButton b) {
+            advanceButton = b;
+            stateChanged(new ChangeEvent(m));
+            m.addChangeListener(this);
+        }
+
+        public void stateChanged(ChangeEvent e) {
+            advanceButton.setText("+" + ((BoundedRangeModel) e.getSource()).getValue());
+            advanceButton.setMnemonic(KeyEvent.VK_ADD);
+        }
+    }
+
+    private class GraphNoLabel extends JLabel {
+
+        private Dimension minimumSize = new Dimension();
+
+        public GraphNoLabel(String text) {
+            super(text);
+            setHorizontalAlignment(SwingConstants.CENTER);
+            FontMetrics metrics = getFontMetrics(getFont());
+            minimumSize.width = metrics.stringWidth(Systoolbox.multiply("0", CaGe.graphNoDigits)) + 4;
+            minimumSize.height = metrics.getHeight();
+        }
+
+        public Dimension getMinimumSize() {
+            return minimumSize;
+        }
+
+        public Dimension getPreferredSize() {
+            return minimumSize;
+        }
+    }
 }
-
-class AdvanceListener implements ChangeListener {
-
-    private AbstractButton advanceButton;
-
-    public AdvanceListener(BoundedRangeModel m, AbstractButton b) {
-        advanceButton = b;
-        stateChanged(new ChangeEvent(m));
-        m.addChangeListener(this);
-    }
-
-    public void stateChanged(ChangeEvent e) {
-        advanceButton.setText("+" + ((BoundedRangeModel) e.getSource()).getValue());
-        advanceButton.setMnemonic(KeyEvent.VK_ADD);
-    }
-}
-
-class GraphNoLabel extends JLabel {
-
-    private Dimension minimumSize = new Dimension();
-
-    public GraphNoLabel(String text) {
-        super(text);
-        setHorizontalAlignment(SwingConstants.CENTER);
-        FontMetrics metrics = getFontMetrics(getFont());
-        minimumSize.width = metrics.stringWidth(Systoolbox.multiply("0", CaGe.graphNoDigits)) + 4;
-        minimumSize.height = metrics.getHeight();
-    }
-
-    public Dimension getMinimumSize() {
-        return minimumSize;
-    }
-
-    public Dimension getPreferredSize() {
-        return minimumSize;
-    }
-}
-
