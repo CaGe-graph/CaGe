@@ -109,10 +109,10 @@ public class NativeCaGePipe extends CaGePipe {
         synchronized (this) {
             getAdvancePermission();
             if (getFlowingThread() == null) {
-                FlowingThread flowingThread = new FlowingThread();
-                Systoolbox.lowerPriority(flowingThread, priorityOffset);
-                setFlowingThread(flowingThread);
-                flowingThread.start();
+                FlowingThread newFlowingThread = new FlowingThread();
+                Systoolbox.lowerPriority(newFlowingThread, priorityOffset);
+                setFlowingThread(newFlowingThread);
+                newFlowingThread.start();
                 if (debug) {
                     System.err.println("advance thread started.");
                 }
@@ -124,13 +124,12 @@ public class NativeCaGePipe extends CaGePipe {
 
     public void yieldAndAdvanceBy(int d) {
         getAdvancePermission();
-        Thread currentThread = Thread.currentThread();
         while (wouldBlock()) {
-            currentThread.yield();
+            Thread.yield();
         }
         setAdvanceTarget(d < 0 ? d : graphNo + d);
         startAdvancing();
-        currentThread.yield();
+        Thread.yield();
     }
 
     private synchronized void getAdvancePermission() {
