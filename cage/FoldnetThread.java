@@ -247,7 +247,7 @@ public class FoldnetThread extends Thread {
     private boolean halted;
     private Pipe foldnetPipe = null;
     private int tasksGiven = 0,  tasksCompleted = 0,  tasksFailed = 0;
-    private Vector propertyChangeListeners = new Vector(0);
+    private final Vector propertyChangeListeners = new Vector(0);
     private String runDir,  path;
     private Hashtable foldnetPageNos;
 }
