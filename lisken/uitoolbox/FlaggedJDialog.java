@@ -19,7 +19,7 @@ import javax.swing.KeyStroke;
 public class FlaggedJDialog extends JDialog implements ActionListener {
 
     private boolean success = false;
-    protected AbstractButton cancelButton = null;
+    private AbstractButton cancelButton = null;
     protected Component nearComponent = null;
 
     public FlaggedJDialog(Frame owner, String title, boolean modal) {
