@@ -51,7 +51,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private GeneratorInfo generatorInfo;
     private boolean generatorInfoChanged;
     private String generatorName;
-    private Vector viewers2D, viewers3D, viewersXD;
+    private Vector viewersXD;
     private StringBuffer viewerErrors;
     private JButton defaultButton;
     private JLabel expertLabel = new JLabel();
@@ -70,7 +70,6 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JRadioButton out3DViewer = new JRadioButton();
     private JRadioButton out3DFile = new JRadioButton();
     private JRadioButton out3DPipe = new JRadioButton();
-    private JRadioButton out3DNoDest = new JRadioButton();
     private Min1ButtonGroup out3DViewerGroup = new Min1ButtonGroup("3D", false, out3DCheckBox);
     private TargetPanel out3DFilePanel = TargetPanel.creatFilePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
     private TargetPanel out3DPipePanel = TargetPanel.creatPipePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
@@ -80,16 +79,13 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private JRadioButton out2DViewer = new JRadioButton();
     private JRadioButton out2DFile = new JRadioButton();
     private JRadioButton out2DPipe = new JRadioButton();
-    private JRadioButton out2DNoDest = new JRadioButton();
     private Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
     private TargetPanel out2DFilePanel = TargetPanel.creatFilePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
     private TargetPanel out2DPipePanel = TargetPanel.creatPipePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
     
-    private JCheckBox outAdjCheckBox = new JCheckBox();
     private ButtonGroup outAdjDestGroup = new ButtonGroup();
     private JRadioButton outAdjFile = new JRadioButton();
     private JRadioButton outAdjPipe = new JRadioButton();
-    private JRadioButton outAdjNoDest = new JRadioButton();
     private TargetPanel outAdjFilePanel = TargetPanel.creatFilePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
     private TargetPanel outAdjPipePanel = TargetPanel.creatPipePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
 
@@ -238,7 +234,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DPipe.addActionListener(out3DDestListener);
         out3DPipe.addActionListener(this);
         out3DPipe.setToolTipText("send 3D embeddings into a pipe");
-        out3DNoDest.setText("None");
+        JRadioButton out3DNoDest = new JRadioButton("None");
         out3DNoDest.setActionCommand("out3DNoDest");
         out3DNoDest.addActionListener(out3DDestListener);
         out3DNoDest.setVisible(false);
@@ -248,7 +244,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         JPanel out3DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
         JPanel out3DDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10 , 5));
-        if (addViewers("3D", viewers3D, out3DViewerGroup, out3DViewerPanel) > 0) {
+        if (addViewers("3D", null, out3DViewerGroup, out3DViewerPanel) > 0) {
             out3DDestGroup.add(out3DViewer);
             out3DDestPanel.add(out3DViewer, null);
             new OnActionClicker(out3DViewer, out3DNoDest, out3DCheckBox);
@@ -299,7 +295,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out2DPipe.addActionListener(out2DDestListener);
         out2DPipe.addActionListener(this);
         out2DPipe.setToolTipText("send 2D embeddings into a pipe");
-        out2DNoDest.setText("None");
+        JRadioButton out2DNoDest = new JRadioButton("None");
         out2DNoDest.setActionCommand("out2DNoDest");
         out2DNoDest.addActionListener(out2DDestListener);
         out2DNoDest.setVisible(false);
@@ -309,7 +305,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         JPanel out2DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
         JPanel out2DDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10 , 5));
-        if (addViewers("2D", viewers2D, out2DViewerGroup, out2DViewerPanel) > 0) {
+        if (addViewers("2D", null, out2DViewerGroup, out2DViewerPanel) > 0) {
             out2DDestGroup.add(out2DViewer);
             out2DDestPanel.add(out2DViewer, null);
             new OnActionClicker(out2DViewer, out2DNoDest, out2DCheckBox);
@@ -336,12 +332,12 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
 
         //-----------Adjacency section--------------
         JPanel outAdjDestOptionsPanel = new JPanel(new CardLayout());
-        OnActionClickerLayoutSwitcher outAdjDestListener =
-                new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
-        outAdjCheckBox.setText("Adjacency information");
+        JCheckBox outAdjCheckBox = new JCheckBox("Adjacency information");
         outAdjCheckBox.setMnemonic(KeyEvent.VK_A);
         outAdjCheckBox.setToolTipText("send connection table into a file or a pipe");
         outAdjCheckBox.addActionListener(this);
+        OnActionClickerLayoutSwitcher outAdjDestListener =
+                new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
         outAdjFile.setText("File");
         outAdjFile.setMnemonic(KeyEvent.VK_L);
         outAdjFile.setActionCommand("outAdjFile");
@@ -354,7 +350,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outAdjPipe.addActionListener(outAdjDestListener);
         outAdjPipe.addActionListener(this);
         outAdjPipe.setToolTipText("send connection table into a pipe");
-        outAdjNoDest.setText("None");
+        JRadioButton outAdjNoDest = new JRadioButton("None");
         outAdjNoDest.setActionCommand("outAdjNoDest");
         outAdjNoDest.addActionListener(outAdjDestListener);
         outAdjNoDest.setVisible(false);
