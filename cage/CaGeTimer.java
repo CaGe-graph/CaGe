@@ -14,7 +14,11 @@ public class CaGeTimer extends Timer
     CaGeRunner runner;
 
     public CaGeTimer(CaGeRunner runner, int delay) {
-        super(delay, new DummyActionListener());
+        super(delay, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //dummy implementation
+            }
+        });
         listenerList = new EventListenerList();
         this.runner = runner;
         addActionListener(this);
@@ -46,12 +50,6 @@ public class CaGeTimer extends Timer
         if (e.getSource() == this) {
             runner.fireGraphNoChanged();
         }
-    }
-}
-
-class DummyActionListener implements ActionListener {
-
-    public void actionPerformed(ActionEvent e) {
     }
 }
 
