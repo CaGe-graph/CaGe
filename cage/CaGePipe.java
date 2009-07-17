@@ -69,7 +69,8 @@ public abstract class CaGePipe extends Pipe
     synchronized void setRunning(boolean running) {
         this.running = running;
     }
-    Vector propertyChangeListeners = new Vector(0);
+
+    private final Vector propertyChangeListeners = new Vector(0);
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
