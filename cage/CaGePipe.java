@@ -70,7 +70,7 @@ public abstract class CaGePipe extends Pipe
         this.running = running;
     }
 
-    private final Vector propertyChangeListeners = new Vector(0);
+    protected final Vector propertyChangeListeners = new Vector(0);
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
