@@ -53,21 +53,19 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
     static final Color limitErrorColor = new Color(0.75f, 0.0f, 0.0f);
     static final boolean enableReembed2D =
             CaGe.getCaGePropertyAsBoolean("HCgen.EnableReembed2D", false);
+
     int C = 6, H = 6, pentagons = 0;
     int minC, maxC, minH, maxH, minPent, maxPent;
     boolean COk, HOk, pentagonsOk, parityOk;
     EnhancedSlider CSlider = new EnhancedSlider();
     JButton minCButton = new JButton();
     JButton maxCButton = new JButton();
-    JPanel rangeCPanel = new JPanel();
     EnhancedSlider HSlider = new EnhancedSlider();
     JButton minHButton = new JButton();
     JButton maxHButton = new JButton();
-    JPanel rangeHPanel = new JPanel();
     EnhancedSlider pentSlider = new EnhancedSlider();
     JButton minPentButton = new JButton();
     JButton maxPentButton = new JButton();
-    JPanel rangePentPanel = new JPanel();
     EnhancedSlider HGapSlider = new EnhancedSlider();
     JCheckBox ipr = new JCheckBox();
     JCheckBox includeH = new JCheckBox();
@@ -170,11 +168,6 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
                 font.getName(),
                 font.getStyle() & ~Font.BOLD,
                 font.getSize() - 2);
-        /*
-        FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(font);
-        int extra1 = metrics.charWidth('0');
-        int extra2 = metrics.charWidth('-');
-         */
         minCButton.setText("min. 000");
         minCButton.setFont(font);
         minCButton.setActionCommand("c-");
@@ -199,13 +192,13 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         maxPentButton.setFont(font);
         maxPentButton.setActionCommand("p+");
         maxPentButton.addActionListener(this);
-        rangeCPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 0));
+        JPanel rangeCPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 0));
         rangeCPanel.add(minCButton);
         rangeCPanel.add(maxCButton);
-        rangeHPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 0));
+        JPanel rangeHPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 0));
         rangeHPanel.add(minHButton);
         rangeHPanel.add(maxHButton);
-        rangePentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 0));
+        JPanel rangePentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 0));
         rangePentPanel.add(minPentButton);
         rangePentPanel.add(maxPentButton);
         add(CLabel,
