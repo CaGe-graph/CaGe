@@ -68,7 +68,7 @@ public class ResultPanel extends JPanel implements
     private CaGeWriter[] writers;
     private CaGeTimer timer = null;
     private boolean doEmbed2D, doEmbed3D;
-    private boolean useViewers, useWriters;
+    private boolean useViewers;
     private boolean stopping;
     private boolean running;
     private int highestGeneratedGraphNo;
@@ -268,7 +268,7 @@ public class ResultPanel extends JPanel implements
         this.doEmbed2D = doEmbed2D;
         this.doEmbed3D = doEmbed3D;
         useViewers = viewerV != null && viewerV.size() > 0;
-        useWriters = writerV != null && writerV.size() > 0;
+        boolean useWriters = writerV != null && writerV.size() > 0;
         viewers = (CaGeViewer[]) createArray(useViewers, viewerV, CaGeViewer.class);
         writers = (CaGeWriter[]) createArray(useWriters, writerV, CaGeWriter.class);
         if (useViewers) {
