@@ -54,23 +54,23 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
     static final boolean enableReembed2D =
             CaGe.getCaGePropertyAsBoolean("HCgen.EnableReembed2D", false);
 
-    int C = 6, H = 6, pentagons = 0;
-    int minC, maxC, minH, maxH, minPent, maxPent;
-    boolean COk, HOk, pentagonsOk, parityOk;
-    EnhancedSlider CSlider = new EnhancedSlider();
-    JButton minCButton = new JButton();
-    JButton maxCButton = new JButton();
-    EnhancedSlider HSlider = new EnhancedSlider();
-    JButton minHButton = new JButton();
-    JButton maxHButton = new JButton();
-    EnhancedSlider pentSlider = new EnhancedSlider();
-    JButton minPentButton = new JButton();
-    JButton maxPentButton = new JButton();
-    EnhancedSlider HGapSlider = new EnhancedSlider();
-    JCheckBox ipr = new JCheckBox();
-    JCheckBox includeH = new JCheckBox();
-    JCheckBox peri = new JCheckBox();
-    JButton defaultButton;
+    private int C = 6, H = 6, pentagons = 0;
+    private int minC, maxC, minH, maxH, minPent, maxPent;
+    private boolean COk, HOk, pentagonsOk, parityOk;
+    private EnhancedSlider CSlider = new EnhancedSlider();
+    private JButton minCButton = new JButton();
+    private JButton maxCButton = new JButton();
+    private EnhancedSlider HSlider = new EnhancedSlider();
+    private JButton minHButton = new JButton();
+    private JButton maxHButton = new JButton();
+    private EnhancedSlider pentSlider = new EnhancedSlider();
+    private JButton minPentButton = new JButton();
+    private JButton maxPentButton = new JButton();
+    private EnhancedSlider HGapSlider = new EnhancedSlider();
+    private JCheckBox ipr = new JCheckBox();
+    private JCheckBox includeH = new JCheckBox();
+    private JCheckBox peri = new JCheckBox();
+    private JButton defaultButton;
 
     public FormulaHCgenPanel() {
         setLayout(new GridBagLayout());
