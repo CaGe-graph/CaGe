@@ -177,7 +177,7 @@ public class Wizard implements ActionListener {
              */
             lc.gridy = 1;
             lc.gridwidth = 1;
-            lc.fill = lc.VERTICAL;
+            lc.fill = GridBagConstraints.VERTICAL;
             lc.insets = new Insets(5, 10, 10, 10);
             addButton(buttonPanel, lc, stage.getPreviousButton(), KeyEvent.VK_LEFT);
             addButton(buttonPanel, lc, stage.getNextButton(), KeyEvent.VK_RIGHT);
