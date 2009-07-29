@@ -3,6 +3,7 @@ package lisken.uitoolbox;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -36,6 +37,7 @@ public class Wizard implements ActionListener {
     private WizardStage stage;
     private int stageNo;
     private String title;
+    private Image img;
     private WindowListener windowListener;
     private ActionListener escapeListener;
     private Vector stageVector;
@@ -47,7 +49,18 @@ public class Wizard implements ActionListener {
      * @param title The title for this <code>Wizard</code>.
      */
     public Wizard(String title) {
+        this(title, null);
+    }
+
+    /**
+     * Creates a new <code>Wizard</code>.
+     *
+     * @param title The title for this <code>Wizard</code>.
+     * @param img The icon that is used for the windows in this wizard
+     */
+    public Wizard(String title, Image img) {
         this.title = title;
+        this.img = img;
         windowListener = new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
@@ -152,6 +165,7 @@ public class Wizard implements ActionListener {
         stage = (WizardStage) stageVector.elementAt(stageNo - 1);
 
         currentWindow = new JFrame(title);
+        currentWindow.setIconImage(img);
         currentWindow.addWindowListener(windowListener);
         currentWindow.getRootPane().registerKeyboardAction(escapeListener,
                 Wizard.CANCEL,
