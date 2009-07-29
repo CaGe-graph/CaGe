@@ -72,8 +72,16 @@ cp2="${CaGe_InstallDir}collections.jar:${CaGe_InstallDir}CaGe.jar:${CaGe_Install
 # start CaGe
 
 export CaGe_InstallDir
-sh "$CaGe_InstallDir"./java \
- -D"CaGe.InstallDir=$CaGe_InstallDir_NoSlash" \
- -classpath "$cp1$cp2" \
- cage.CaGe
-
+sysname=` cd "${CaGe_InstallDir}."; sh ./java -cp sysinfo.jar util.SysInfo os.name `
+if expr $sysname = 'Mac' 2>&- >&-
+  then sh "$CaGe_InstallDir"./java \
+        -D"CaGe.InstallDir=$CaGe_InstallDir_NoSlash" \
+        -classpath "$cp1$cp2" \
+        -Xdock:name="CaGe" \
+        -Xdock:icon=img/logo.png \
+        cage.CaGe
+  else sh "$CaGe_InstallDir"./java \
+        -D"CaGe.InstallDir=$CaGe_InstallDir_NoSlash" \
+        -classpath "$cp1$cp2" \
+        cage.CaGe
+fi
