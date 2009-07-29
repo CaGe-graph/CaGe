@@ -29,7 +29,7 @@ CaGe-C.zip: clear_distribution
 
 source_distribution:
 	( \
-	 find cage lisken Images util Native Generators PreCompute Makefile -print | \
+	 find cage lisken Images util Native Generators PreCompute img Makefile -print | \
 	 egrep "(\.(java|gif|ps|c|h)$$)|((Makefile|Sysdir)$$)" | \
 	 egrep -v "test|embed\.tar|Viewers|(^hall/)|HelloWorld|\.xvpics"; \
 	 find INSTALL.sh cage.sh CaGe.ini java j .rasmolrc \
@@ -43,7 +43,7 @@ publish: distribution
 	scp CaGe-dist.zip jupiter:WWW/CaGe/CaGe.zip && rm CaGe-dist.zip
 
 distribution: CaGe.jar CaGe-C.zip sysinfo.jar
-	zip -oqX9 CaGe-dist.zip INSTALL.sh cage.sh CaGe.ini java sysinfo.jar .rasmolrc Data CaGe-C.zip CaGe.jar Jmol.jar
+	zip -oqX9 CaGe-dist.zip INSTALL.sh cage.sh CaGe.ini img/logo.png java sysinfo.jar .rasmolrc Data CaGe-C.zip CaGe.jar Jmol.jar
 	rm -f CaGe.jar CaGe-C.zip sysinfo.jar
 
 clear_distribution:

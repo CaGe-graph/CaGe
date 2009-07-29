@@ -12,6 +12,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -339,7 +340,7 @@ public class CaGe implements ActionListener {
         titlePanel.add(generatorsPanel, lc);
 
         // start a wizard with this panel
-        wizard = new Wizard(title);
+        wizard = new Wizard(title, Toolkit.getDefaultToolkit().getImage("img/logo.png"));
         wizard.nextStage(titlePanel, this, null, null, null, null, Wizard.EXIT);
     }
 
