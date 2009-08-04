@@ -11,7 +11,7 @@ int main (int argc, char *argv[])
   int append = 0;
   char option[2] = "wb";
   /* first check for the option a */
-  if (argv[i][0] == '-' && argv[i][1] == 'a') {
+  if (argv[0][0] == '-' && argv[0][1] == 'a') {
     option[0] = 'a';
     append = 1;
   }
