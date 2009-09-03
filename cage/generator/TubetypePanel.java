@@ -193,7 +193,7 @@ public class TubetypePanel extends GeneratorPanel {
         command.copyInto(generator[0]);
 
         String[][] embed2D = {{"embed"}};
-        String[][] embed3D = {{"embed", "-d3", "-it"}};
+        String[][] embed3D = {{"java", "-cp", "CaGe.jar", "cage.embedder.NanotubeEmbedder"}};
 
         ElementRule rule = new SingleElementRule("C");
 
