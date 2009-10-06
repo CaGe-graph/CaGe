@@ -76,4 +76,16 @@ public abstract class CaGeWriter implements CaGeOutlet {
             throw lastException;
         }
     }
+
+    public void flush() {
+        lastException = null;
+        if (out == null) {
+            return;
+        }
+        try {
+            out.flush();
+        } catch (IOException ex) {
+            lastException = ex;
+        }
+    }
 }
