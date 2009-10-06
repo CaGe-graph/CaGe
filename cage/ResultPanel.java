@@ -722,11 +722,17 @@ public class ResultPanel extends JPanel implements
         saveWriter.outputResult(result);
         if (saveWriter.wasIOException()) {
             showException(saveWriter.lastIOException(),
-                    "exception while " + shortVariety + "-saving");
+                    "exception while " + shortVariety + "-saving: flushing the buffer");
         } else {
-            saveButton.setEnabled(false);
-            if (previousFocusOwner != null) {
-                previousFocusOwner.requestFocus();
+            saveWriter.flush();
+            if (saveWriter.wasIOException()) {
+                showException(saveWriter.lastIOException(),
+                    "exception while " + shortVariety + "-saving: flushing the buffer");
+            } else {
+                saveButton.setEnabled(false);
+                if (previousFocusOwner != null) {
+                    previousFocusOwner.requestFocus();
+                }
             }
         }
         return saveWriter;
