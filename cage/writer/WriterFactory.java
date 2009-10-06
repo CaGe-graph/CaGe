@@ -13,7 +13,7 @@ public class WriterFactory {
     private static Hashtable writerClasses = new Hashtable();
 
     //this class shouldn't be instantiated.
-    private WriterFactory(){
+    private WriterFactory() {
     }
 
     /**
