@@ -15,7 +15,7 @@ all: generators embedders others clean
 generators: fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
-	    kekule_all cone_all quad_restrict$(SUFFIX)
+	    kekule_all cone_all quad_restrict$(SUFFIX) leapfrog$(SUFFIX)
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
@@ -102,3 +102,5 @@ cone_clear:
 quad_restrict$(SUFFIX) : plantri.c quad_restrict.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="quad_restrict.c"' '-DALLTOGETHER' plantri.c -lm
 
+leapfrog$(SUFFIX) : leapfrog.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
