@@ -2841,7 +2841,7 @@ usage(void)
   int i;
 
   for (i = 0; text[i]; i++) {
-    fprintf(stderr, text[i]);
+    fprintf(stderr, "%s", text[i]);
     fprintf(stderr, "\n");
   }
 }

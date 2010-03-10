@@ -6351,16 +6351,28 @@ else
   if (spiralcheck) { sprintf(no_spiral_filename,"No_spiral_");
 		     strcat(no_spiral_filename,logfilename+9);
 		     sprintf(strdummy,"rm %s",no_spiral_filename);
-		     if (!stat(strdummy,&buf)) system (strdummy);
+		     if (!stat(strdummy,&buf)) {
+                         if(system (strdummy)==-1){
+                             fprintf(stderr,"Could not execute system call.\n");
+                         }
+                     }
 		     sprintf(no_penta_spiral_filename,"No_pentagon_spiral_");
 		     strcat(no_penta_spiral_filename,logfilename+9);
 		     sprintf(strdummy,"rm %s",no_penta_spiral_filename);
-		     if (!stat(strdummy,&buf)) system (strdummy);
+		     if (!stat(strdummy,&buf)) {
+                         if(system (strdummy)==-1){
+                             fprintf(stderr,"Could not execute system call.\n");
+                         }
+                     }
 		      }
   if (hexspi) { sprintf(no_hexa_spiral_filename,"No_hexagon_spiral_");
 		strcat(no_hexa_spiral_filename,logfilename+9);
 		sprintf(strdummy,"rm %s",no_hexa_spiral_filename);
-		if (!stat(strdummy,&buf)) system (strdummy);
+		if (!stat(strdummy,&buf)) {
+                     if(system (strdummy)==-1){
+                         fprintf(stderr,"Could not execute system call.\n");
+                     }
+                }
 	      }
 
 if (!quiet)

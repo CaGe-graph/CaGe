@@ -104,7 +104,7 @@ finish_errfile (char **err_filename)
   int output_found = 0;
   if (*err_filename != NULL) {
       stat (*err_filename, &err_stat);
-      if (debug_native_embedder) fprintf (stderr, "embedder errfile: %s, size %d\n", *err_filename, err_stat.st_size);
+      if (debug_native_embedder) fprintf (stderr, "embedder errfile: %s, size %ld\n", *err_filename, (long)err_stat.st_size);
       if (err_stat.st_size == 0) {
 	  unlink (*err_filename);
       } else {

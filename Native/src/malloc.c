@@ -11,7 +11,7 @@ extern int debug_malloc;
 void *xmalloc (size_t size)
 {
   void *result = malloc (size);
-  if (debug_malloc) fprintf (stderr, "+ malloc (%d) = 0x%08x\n", size, result);
+  if (debug_malloc) fprintf (stderr, "+ malloc (%d) = %p\n", (int)size, result);
   if (result == NULL) {
       error_exit ("malloc failure", "lang/OutOfMemoryException");
   }
@@ -21,14 +21,14 @@ void *xmalloc (size_t size)
 void *xrealloc (void *ptr, size_t size)
 {
   void *result = realloc (ptr, size);
-  if (debug_malloc) fprintf (stderr, "o realloc (0x%08x, %d) = 0x%08x\n", ptr, size, result);
+  if (debug_malloc) fprintf (stderr, "o realloc (%p, %d) = %p\n", ptr, (int)size, result);
   if (size > 0) if (result == NULL) error_exit ("realloc failure", "lang/OutOfMemoryException");
   return result;
 }
 
 void xfree (void *ptr)
 {
-  if (debug_malloc) fprintf (stderr, "- free (0x%08x)\n", ptr);
+  if (debug_malloc) fprintf (stderr, "- free (%p)\n", ptr);
   free (ptr);
 }
 

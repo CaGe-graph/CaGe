@@ -962,7 +962,7 @@ void mache_flaechen(EDGE_DUAL ***map_d, EDGE *map[], int *flaechenzahl,
 	if(MAX_Flaechenzahl<=(*flaechenzahl)){  	  
 	  if((map_d_neu=(EDGE_DUAL**)malloc((MAX_Flaechenzahl+50)*sizeof(EDGE_DUAL*)))==NULL || (flaechen_neu=(SURFACE*)malloc((MAX_Flaechenzahl+50)*sizeof(SURFACE)))==NULL){
 	    fprintf(stderr," Speicherplatz reicht nicht aus(auf.1)\n");
-	    fprintf(stderr," MAX_Fl %d\n", (MAX_Flaechenzahl+50)*sizeof(EDGE_DUAL*));
+	    fprintf(stderr," MAX_Fl %ld\n", (MAX_Flaechenzahl+50)*sizeof(EDGE_DUAL*));
 	    
 	    exit(2);
 	  }

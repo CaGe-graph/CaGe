@@ -435,7 +435,7 @@ void write_writegraph (void *graph, void out (void *x, char *string), void *x,
   size = get_graph_size (graph);
   for (vertex = 1; vertex <= size; ++vertex)
   {
-    sprintf (buffer, "%4d", (long) vertex);
+    sprintf (buffer, "%4ld", (long) vertex);
     out (x, buffer);
     if (use_2d) {
 	out (x, "\t");

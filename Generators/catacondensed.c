@@ -524,9 +524,9 @@ fprintf(stderr,"\n");
 
 void writeedge (EDGE *edge)
 {
-fprintf(stderr,"Adress: %d\n",edge);
+fprintf(stderr,"Adress: %p\n",edge);
 fprintf(stderr,"%d->%d\n",edge->start, edge->end);
-fprintf(stderr,"next: %d prev: %d invers: %d\n",edge->next, edge->prev, edge->invers);
+fprintf(stderr,"next: %p prev: %p invers: %p\n",edge->next, edge->prev, edge->invers);
 fprintf(stderr,"dummy1: %d dummy2: %d fwdlbl: %d bwdlbl: %d\n",
 	edge->dummy1, edge->dummy2, edge->fwdlbl, edge->bwdlbl);
 }
@@ -2125,7 +2125,7 @@ boundary_edges[nv]=boundary_edge=new->next;
 new=new->invers;
 
  if (must_be_catacondensed && (valency!=1)) 
-   { fprintf(stderr,"Trying to add vertex of valency %d whith option catacondensed -- ERROR !\n");
+   { fprintf(stderr,"Trying to add vertex of valency %d with option catacondensed -- ERROR !\n", valency);
      exit(1); }
 
 switch (valency)

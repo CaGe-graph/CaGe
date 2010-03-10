@@ -17569,9 +17569,9 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
 #ifndef NOTIMES
       dummy_ct = times(&TMS);
       buffertime = TMS.tms_utime;
-      sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+      sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                      " %d vertices along type-1 Petrie paths in"
-                     " %.1f seconds, accepted %d.",
+                     " %.1f seconds, accepted %ld.",
                      graphenzahl[ARRAYPOS_LN(g,n,1)],
                      graphenzahl[ARRAYPOS_LN(g,n,1)]==1 ? (char *)"" :
                      (char *)"s",g,n,
@@ -18872,9 +18872,9 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
 #ifndef NOTIMES
       dummy_ct = times(&TMS);
       buffertime = TMS.tms_utime;
-      sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+      sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                      " %d vertices along type-2 Petrie paths "
-                     "in %.1f seconds, accepted %d.",
+                     "in %.1f seconds, accepted %ld.",
                      graphenzahl[ARRAYPOS_LN(g,n,2)],
                      graphenzahl[ARRAYPOS_LN(g,n,2)]==1 ? (char *)"" :
                      (char *)"s",g,n,
@@ -19984,9 +19984,9 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
 #ifndef NOTIMES
       dummy_ct = times(&TMS);
       buffertime = TMS.tms_utime;
-      sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+      sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                      " %d vertices along type-3 Petrie paths in"
-                     " %.1f seconds, accepted %d.",
+                     " %.1f seconds, accepted %ld.",
                      graphenzahl[ARRAYPOS_LN(g,n,3)],
                      graphenzahl[ARRAYPOS_LN(g,n,3)]==1 ? (char *)"" : 
                      (char *)"s",g,n,
@@ -20599,7 +20599,7 @@ void gehe_facestatbaum_durch(STATTREENODE *root,FLAECHENTYP *code,
         sprintf(strpuf,"%d ",code[f]);
         logfile_entry(strpuf,False,False,False);
       }
-      sprintf(strpuf,":  %d map%s\n",root->zaehler,
+      sprintf(strpuf,":  %ld map%s\n",root->zaehler,
               root->zaehler==1 ? (char *)"" : (char *)"s");
       logfile_entry(strpuf,False,False,False);
     }
@@ -22372,9 +22372,9 @@ int main(int argc,char *argv[]) {
     if (is_moeglich[ARRAYPOS_N(i,j)]) {    /* es gibt theoretisch Graphen */
       if (graphstat) {
         if (do_bauchbinde) {
-          sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+          sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                              " %d vertices along type-1 Petrie paths,"
-                             " accepted %d.",
+                             " accepted %ld.",
                   graphenzahl[ARRAYPOS_LN(i,j,1)],
                   graphenzahl[ARRAYPOS_LN(i,j,1)]==1 ? (char *)"" :
                   (char *)"s",i,j,
@@ -22383,9 +22383,9 @@ int main(int argc,char *argv[]) {
           graphenzahl[ARRAYPOS_LN(i,j,1)]=0L;
         }
         if (do_sandwich) {
-          sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+          sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                              " %d vertices along type-2 Petrie paths,"
-                             " accepted %d.",
+                             " accepted %ld.",
                   graphenzahl[ARRAYPOS_LN(i,j,2)],
                   graphenzahl[ARRAYPOS_LN(i,j,2)]==1 ? (char *)"" :
                   (char *)"s",i,j,
@@ -22394,9 +22394,9 @@ int main(int argc,char *argv[]) {
           graphenzahl[ARRAYPOS_LN(i,j,2)]=0L;
         }
         if (do_brille) {
-          sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+          sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                              " %d vertices along type-3 Petrie paths,"
-                             " accepted %d.",
+                             " accepted %ld.",
                   graphenzahl[ARRAYPOS_LN(i,j,3)],
                   graphenzahl[ARRAYPOS_LN(i,j,3)]==1 ? (char *)"" :
                   (char *)"s",i,j,
@@ -22405,7 +22405,7 @@ int main(int argc,char *argv[]) {
           graphenzahl[ARRAYPOS_LN(i,j,3)]=0L;
         }
       }
-      sprintf(strpuf,"\n%sConstructed %d non-isomorphic map%s with %d "
+      sprintf(strpuf,"\n%sConstructed %ld non-isomorphic map%s with %d "
           "vertices.\n",graphstat ? (char *)"=> " : (char *)"",
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,1)] + 
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,2)] +
@@ -22421,18 +22421,18 @@ int main(int argc,char *argv[]) {
       if (do_conn) { 
         logfile_entry((char *)"\n   (",False,False,False);
         if (conn1) {
-          sprintf(strpuf,"1-connected: %d",connzahl[ARRAYPOS_LN(i,j,1)]);
+          sprintf(strpuf,"1-connected: %ld",connzahl[ARRAYPOS_LN(i,j,1)]);
           logfile_entry(strpuf,False,False,False);        
         }
         if (conn2) {
-          sprintf(strpuf,"%s2%s-connected: %d",
+          sprintf(strpuf,"%s2%s-connected: %ld",
                   conn1 ? (char *)",  " : (char *)"",
                   genus_end>0 ? (char *)"/3" : (char *)"",
                   connzahl[ARRAYPOS_LN(i,j,2)]);
           logfile_entry(strpuf,False,False,False);        
         }
         if (genus_end==0 && conn3) {
-          sprintf(strpuf,"%s3-connected: %d",
+          sprintf(strpuf,"%s3-connected: %ld",
                   (conn1 || conn2) ? (char *)",  " : (char *)"",
                   connzahl[ARRAYPOS_LN(i,j,3)]);
           logfile_entry(strpuf,False,False,False);        
@@ -22512,7 +22512,7 @@ int main(int argc,char *argv[]) {
     logfile_entry(strpuf,False,False,False);
     sprintf(strpuf,"\nlinkage:      %6ld",nahttyp[2]);
     logfile_entry(strpuf,False,False,False);
-    sprintf(strpuf,"\nnone:         %6ld",anz_face);
+    sprintf(strpuf,"\nnone:         %6d",anz_face);
     logfile_entry(strpuf,False,False,False);
     logfile_entry((char *)"\n\nPatches sorted by genus and inner faces"
            " (row: #inner faces, column: genus):\n    |",False,False,False);
@@ -22524,7 +22524,7 @@ int main(int argc,char *argv[]) {
     for (i=1; i<=(int)f_max[genus_anf]; i++) {
       sprintf(strpuf,"\n%3d |",i);  logfile_entry(strpuf,False,False,False);
       for (j=0; j<=(int)genus_end; j++) {
-        sprintf(strpuf,"%6d",patch_anz[ARRAYPOS_F(j,i)]);
+        sprintf(strpuf,"%6ld",patch_anz[ARRAYPOS_F(j,i)]);
         logfile_entry(strpuf,False,False,False);
       }
     }
@@ -22560,9 +22560,9 @@ int main(int argc,char *argv[]) {
             dummy = times(&TMS);
             buffertime = TMS.tms_utime;
             if (graphstat) {
-              sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+              sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                              " %d vertices along type-1 Petrie paths in"
-                             " %.1f seconds, accepted %d.",
+                             " %.1f seconds, accepted %ld.",
                       graphenzahl[ARRAYPOS_LN(i,j,1)],
                       graphenzahl[ARRAYPOS_LN(i,j,1)]==1 ? (char *)"": 
                       (char *)"s",i,j,
@@ -22590,11 +22590,11 @@ int main(int argc,char *argv[]) {
             dummy = times(&TMS);
             buffertime = TMS.tms_utime; 
             if (graphstat) {
-              sprintf(strpuf,"\nConstructed %d map%s with genus %d and"
+              sprintf(strpuf,"\nConstructed %ld map%s with genus %d and"
                   " %d vertices along type-2 Petrie paths in"
-                  " %.1f seconds, accepted %d.\nConstructed %d" 
+                  " %.1f seconds, accepted %ld.\nConstructed %ld"
                   " map%s with genus %d and %d vertices along type-3 Petrie"
-                  " paths, accepted %d.",
+                  " paths, accepted %ld.",
                       graphenzahl[ARRAYPOS_LN(i,j,2)],
                       graphenzahl[ARRAYPOS_LN(i,j,2)]==1 ? (char *)"": 
                       (char *)"s",i,j,
@@ -22628,7 +22628,7 @@ int main(int argc,char *argv[]) {
         }
 
         /* Statistik: */
-        sprintf(strpuf,"\n%sConstructed %d non-isomorphic map%s with %d "
+        sprintf(strpuf,"\n%sConstructed %ld non-isomorphic map%s with %d "
           "vertices.\n",graphstat ? (char *)"=> " : (char *)"",
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,1)] + 
           non_iso_graphenzahl[ARRAYPOS_LN(i,j,2)] +
@@ -22641,18 +22641,18 @@ int main(int argc,char *argv[]) {
         if (do_conn) { 
           logfile_entry((char *)"\n   (",True,False,False);
           if (conn1) {
-            sprintf(strpuf,"1-connected: %d",connzahl[ARRAYPOS_LN(i,j,1)]);
+            sprintf(strpuf,"1-connected: %ld",connzahl[ARRAYPOS_LN(i,j,1)]);
             logfile_entry(strpuf,False,False,False);        
           }
           if (conn2) {
-            sprintf(strpuf,"%s2%s-connected: %d",
+            sprintf(strpuf,"%s2%s-connected: %ld",
                     conn1 ? (char *)",  " : (char *)"",
                     genus_end>0 ? (char *)"/3" : (char *)"",
                     connzahl[ARRAYPOS_LN(i,j,2)]);
             logfile_entry(strpuf,False,False,False);        
           }
           if (genus_end==0 && conn3) {
-            sprintf(strpuf,"%s3-connected: %d",
+            sprintf(strpuf,"%s3-connected: %ld",
                     (conn1 || conn2) ? (char *)",  " : (char *)"",
                     connzahl[ARRAYPOS_LN(i,j,3)]);
             logfile_entry(strpuf,False,False,False);        
@@ -22681,7 +22681,7 @@ int main(int argc,char *argv[]) {
   }
   
   if (pv_used || patchstat) {
-    sprintf(strpuf,"Used patches: %d\n",gute_basen);
+    sprintf(strpuf,"Used patches: %ld\n",gute_basen);
     logfile_entry(strpuf,True,True,False);
   }
 
