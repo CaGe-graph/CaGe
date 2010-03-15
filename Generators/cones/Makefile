@@ -1,4 +1,4 @@
-CFLAGS = -Wall -g
+CFLAGS = -Wall -O4
 
 TARG = cone$(SUFFIX)
 OBJS = cone.o util.o twopentagons.o
