@@ -49,16 +49,6 @@ public class TubetypePanel extends GeneratorPanel {
     private boolean adjusting = false;
 
     public TubetypePanel() {
-        setLayout(new GridLayout(1, 1));
-        JTextArea textArea = new JTextArea(
-                "We discovered a bug in the tubetype generator when compiled with a recent compiler. "
-                + "Until this issue can be resolved we\'ve disabled this generator. "
-                + "Please visit the website for updates on this issue.");
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setHighlighter(null);
-        add(new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-        /*
         setLayout(new GridBagLayout());
         tubelengthSlider.setMinimum(0);
         tubelengthSlider.setMaximum(MAX_TUBELENGTH);
@@ -171,7 +161,6 @@ public class TubetypePanel extends GeneratorPanel {
                 new GridBagConstraints(1, 7, 3, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(30, 5, 0, 0), 0, 0));
-         */
     }
 
     void adjustTubelength() {
@@ -187,7 +176,7 @@ public class TubetypePanel extends GeneratorPanel {
         Vector command = new Vector();
         String filename;
 
-        command.addElement("tubetype");
+        command.addElement("tube");
         filename = "tubetypes";
 
         command.addElement(Integer.toString(offset1Control.getValue()));

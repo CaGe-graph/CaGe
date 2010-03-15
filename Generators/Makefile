@@ -12,19 +12,19 @@ SUFFIX=
 all: generators embedders others clean
 
 
-generators: fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) \
+generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
-	    kekule_all cone_all quad_restrict$(SUFFIX) leapfrog$(SUFFIX)
+	    kekule_all cone_all tube_all quad_restrict$(SUFFIX) leapfrog$(SUFFIX)
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
 others: mkfoldnet
 
-clean: kekule_clean cone_clean
+clean: kekule_clean cone_clean tube_clean
 	rm -f *.o
 
-clear: clean kekule_clear cone_clear
+clear: clean kekule_clear cone_clear tube_clear
 	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen quad_restrict
 
 reset: clean
@@ -38,9 +38,6 @@ cpf$(SUFFIX) : CPF.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -lmalloc
 
 cgf$(SUFFIX) : CGF.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
-
-tubetype$(SUFFIX) : tubetype.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
 
 hcgen$(SUFFIX) : HCgen.c
@@ -98,6 +95,16 @@ cone_clean:
 
 cone_clear:
 	rm -f cone$(SUFFIX)
+
+tube_all:
+	SUFFIX=$(SUFFIX) $(MAKE) -C tubes
+	cp tubes/tube$(SUFFIX) .
+
+tube_clean:
+	SUFFIX=$(SUFFIX) $(MAKE) -C tubes clean
+
+tube_clear:
+	rm -f tube$(SUFFIX)
 
 quad_restrict$(SUFFIX) : plantri.c quad_restrict.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="quad_restrict.c"' '-DALLTOGETHER' plantri.c -lm
