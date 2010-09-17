@@ -233,7 +233,8 @@ public class CGFPanel extends GeneratorPanel {
         if(useCgf){
             Systoolbox.addArray(genV, new String[]{
                         "cgf", "-g", "0", "-output", "stdout", "-logfile", "stderr",
-                        "-save", "0", "-no_recover", "-topdown", "-outputmem", "0", "0"});
+                        "-save", "0", "-no_recover", "-topdown", "-memory", "1610612736",
+                        "-outputmem", "0", "0"});
             genV.addElement("-v");
             genV.addElement(Integer.toString(max));
             fileV.addElement("cgf");
