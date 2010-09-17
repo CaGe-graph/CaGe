@@ -2,15 +2,17 @@
  *  twopentagons.h
  *  
  *
- *  Created by Nico Van Cleemput on 25/09/08.
+ *  Created by Nico Van Cleemput on 25/05/09.
  *
  */
 
 #ifndef _TWOPENTAGONS_H //if not defined
 #define _TWOPENTAGONS_H
 
-#include "cone.h"
+#include "util.h"
+#include "pseudoconvex.h"
 
-int getTwoPentagonsPatch(int sside, boolean symmetric, boolean mirror, boolean onlyCount, int hexagonLayers);
+void getTwoPentagonsCones(PATCH *patch, int sside, boolean symmetric, boolean mirror, FRAGMENT *currentFragment, SHELL *currentShell);
+int getTwoPentagonsConesCount(int sside, boolean symmetric, boolean mirror);
 
 #endif // end if not defined, and end the header file
