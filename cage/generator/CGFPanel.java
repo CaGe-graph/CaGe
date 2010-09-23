@@ -203,7 +203,7 @@ public class CGFPanel extends GeneratorPanel {
     public GeneratorInfo getGeneratorInfo() {
         String[][] generator, embed2D, embed3D;
         String filename;
-        int maxFacesize;
+        int maxFacesize = 0;
 
         String c;
         Vector genV = new Vector(), fileV = new Vector();
@@ -211,24 +211,23 @@ public class CGFPanel extends GeneratorPanel {
         int min = dual ? minAtomsSlider.getValue()*2-4 : minAtomsSlider.getValue();
         int max = dual ? maxAtomsSlider.getValue()*2-4 : maxAtomsSlider.getValue();
 
-        int nrOfRestrictions = 0;
-        int maxSize = 0;
+        int nrOfFacesSmallerThan10 = 0;
         {
             Iterator it = sizeOptionsMap.values().iterator();
             while (it.hasNext()) {
                 SizeOption sizeOption = (SizeOption) it.next();
-                if (!sizeOption.isActive()) {
-                    continue;
+                if (sizeOption.getSize()<10) {
+                    nrOfFacesSmallerThan10++;
                 }
-                nrOfRestrictions++;
-                if(maxSize<sizeOption.getSize())
-                    maxSize = sizeOption.getSize();
+                if(sizeOption.getSize()>maxFacesize){
+                    maxFacesize=sizeOption.getSize();
+                }
             }
         }
 
         boolean useCgf = (min != max) || faceStats.isSelected() ||
                 conn1.isSelected() || conn2.isSelected() ||
-                (nrOfRestrictions < 5) || (maxSize>10);
+                (nrOfFacesSmallerThan10 < 5);
 
         if(useCgf){
             Systoolbox.addArray(genV, new String[]{
@@ -334,8 +333,6 @@ public class CGFPanel extends GeneratorPanel {
 
         if (dual) {
             maxFacesize = 3;
-        } else {
-            maxFacesize = maxSize;
         }
 
         ElementRule rule = new ValencyElementRule("H O C Si N S I");
