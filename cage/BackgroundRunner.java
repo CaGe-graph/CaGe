@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.Debug;
 import cage.utility.StackTrace;
 import cage.writer.CaGeWriter;
 
@@ -130,9 +131,7 @@ public class BackgroundRunner extends Thread
     }
 
     private synchronized void setHalted(boolean halted) {
-        if (CaGe.debugMode) {
-            System.err.println("halted: " + halted);
-        }
+        Debug.print("halted: " + halted);
         this.halted = halted;
     }
 
@@ -158,9 +157,7 @@ public class BackgroundRunner extends Thread
     }
 
     void handlePropertyChange(PropertyChangeEvent e) {
-        if (CaGe.debugMode) {
-            System.err.println("handling property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")");
-        }
+        Debug.print("handling property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")");
         switch (e.getPropertyName().charAt(0)) {
             case 'g':
                 graphNoChanged(((Integer) e.getNewValue()).intValue());
@@ -180,17 +177,13 @@ public class BackgroundRunner extends Thread
                 embeddingMade(result, success);
                 break;
             default:
-                if (CaGe.debugMode) {
-                    System.err.println("unimplemented property change: " + e.getPropertyName());
-                }
+                Debug.print("unimplemented property change: " + e.getPropertyName());
                 break;
         }
     }
 
     void graphNoChanged(int graphNo) {
-        if (CaGe.debugMode) {
-            System.err.println("graphNo: " + graphNo);
-        }
+        Debug.print("graphNo: " + graphNo);
         if (graphNo <= 0) {
             return;
         }
@@ -212,16 +205,12 @@ public class BackgroundRunner extends Thread
 
     void flowingChanged(boolean flowing) {
         generatorFlowing = flowing;
-        if (CaGe.debugMode) {
-            System.err.println("flowing: " + generatorFlowing);
-        }
+        Debug.print("flowing: " + generatorFlowing);
     }
 
     void runningChanged(boolean running) {
         generatorRunning = running;
-        if (CaGe.debugMode) {
-            System.err.println("running: " + generatorRunning);
-        }
+        Debug.print("running: " + generatorRunning);
         if (generatorRunning) {
             fireRunningChanged();
         } else if (embedThread != null && embedThread.isAlive()) {
@@ -267,13 +256,9 @@ public class BackgroundRunner extends Thread
     }
 
     void finish() {
-        if (CaGe.debugMode) {
-            System.err.println("finishing");
-        }
+        Debug.print("finishing");
         if (generatorRunning) {
-            if (CaGe.debugMode) {
-                System.err.println("announcing crash");
-            }
+            Debug.print("announcing crash");
             generator.removePropertyChangeListener(this);
             generator.stop();
             generatorRunning = false;
@@ -346,9 +331,7 @@ public class BackgroundRunner extends Thread
     }
 
     public void fireRunningChanged() {
-        if (CaGe.debugMode) {
-            System.err.println("announcing running change: " + generatorRunning);
-        }
+        Debug.print("announcing running change: " + generatorRunning);
         firePropertyChange(
                 new PropertyChangeEvent(
                 this, "running", null, new Boolean(generatorRunning)));

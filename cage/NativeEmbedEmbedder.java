@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.Debug;
 import lisken.systoolbox.Systoolbox;
 
 /**
@@ -73,76 +74,52 @@ class NativeEmbedEmbedder extends Embedder {
     }
 
     public void setEmbed2D(String[][] embed2D) {
-        if (CaGe.debugMode) {
-            System.err.println("{ setEmbed2D");
-        }
+        Debug.print("{ setEmbed2D");
         this.embed2DOrigCmd = embed2D;
         isConstant = false;
         compute2DEmbedders();
-        if (CaGe.debugMode) {
-            System.err.println("} setEmbed2D");
-        }
+        Debug.print("} setEmbed2D");
     }
 
     public void setEmbed3D(String[][] embed3D) {
-        if (CaGe.debugMode) {
-            System.err.println("{ setEmbed3D");
-        }
+        Debug.print("{ setEmbed3D");
         this.embed3DOrigCmd = embed3D;
         isConstant = false;
         compute3DEmbedders();
-        if (CaGe.debugMode) {
-            System.err.println("} setEmbed3D");
-        }
+        Debug.print("} setEmbed3D");
     }
 
     public void setRunDir(String runDir) {
-        if (CaGe.debugMode) {
-            System.err.println("{ setRunDir");
-        }
+        Debug.print("{ setRunDir");
         this.runDir = runDir == null ? null : runDir.getBytes();
         computeEmbedders();
-        if (CaGe.debugMode) {
-            System.err.println("} setRunDir");
-        }
+        Debug.print("} setRunDir");
     }
 
     public void setPath(String path) {
-        if (CaGe.debugMode) {
-            System.err.println("{ setPath");
-        }
+        Debug.print("{ setPath");
         this.path = path == null ? null : path.getBytes();
         computeEmbedders();
-        if (CaGe.debugMode) {
-            System.err.println("} setPath");
-        }
+        Debug.print("} setPath");
     }
 
     public void setIntensityFactor(float factor) {
-        if (CaGe.debugMode) {
-            System.err.println("{ setIntensity");
-        }
+        Debug.print("{ setIntensity");
         this.intensityFactor = factor;
         isConstant = false;
         computeEmbedders();
-        if (CaGe.debugMode) {
-            System.err.println("} setIntensity");
-        }
+        Debug.print("} setIntensity");
     }
 
     public void setMode(int mode) {
-        if (CaGe.debugMode) {
-            System.err.println("{ setMode");
-        }
+        Debug.print("{ setMode");
         this.embeddedMode = mode;
         isConstant = false;
         if (nEmbed3DEmbedded == nEmbed3DNew) {
             nEmbed3DEmbedded = 0;
         }
         computeEmbeddedEmbedders();
-        if (CaGe.debugMode) {
-            System.err.println("} setMode");
-        }
+        Debug.print("} setMode");
     }
 
     public int getMode() {
@@ -257,9 +234,7 @@ class NativeEmbedEmbedder extends Embedder {
     }
 
     static String[][] setRefine(String[][] embed) {
-        if (CaGe.debugMode) {
-            System.err.println("{ setRefine");
-        }
+        Debug.print("{ setRefine");
         String[] embedCmd = embed[0];
         boolean addInitial = true;
         for (int i = 0; i < embedCmd.length; ++i) {
@@ -267,30 +242,22 @@ class NativeEmbedEmbedder extends Embedder {
             if (arg.startsWith("-i")) {
                 if (arg.equals("-i") && i + 1 < embedCmd.length) {
                     embedCmd[++i] = "k";
-                    if (CaGe.debugMode) {
-                        System.err.println("-i k");
-                    }
+                    Debug.print("-i k");
                 } else {
                     embedCmd[i] = "-ik";
-                    if (CaGe.debugMode) {
-                        System.err.println("-ik");
-                    }
+                    Debug.print("-ik");
                 }
                 addInitial = false;
             }
         }
         if (addInitial) {
-            if (CaGe.debugMode) {
-                System.err.println("adding -ik");
-            }
+            Debug.print("adding -ik");
             String[] newEmbedCmd = new String[embedCmd.length + 1];
             System.arraycopy(embedCmd, 0, newEmbedCmd, 0, embedCmd.length);
             newEmbedCmd[embedCmd.length] = "-ik";
             embedCmd = newEmbedCmd;
         }
-        if (CaGe.debugMode) {
-            System.err.println("} setRefine");
-        }
+        Debug.print("} setRefine");
         return new String[][]{embedCmd};
     }
 

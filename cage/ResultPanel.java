@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.Debug;
 import cage.viewer.CaGeViewer;
 import cage.writer.CaGeWriter;
 
@@ -358,9 +359,7 @@ public class ResultPanel extends JPanel implements
                     previousFocusOwner.requestFocus();
                 }
             }
-            if (CaGe.debugMode) {
-                System.err.println("advanceBy(" + n + ") completed.");
-            }
+            Debug.print("advanceBy(" + n + ") completed.");
         } else {
             advance1Button.setEnabled(false);
             advanceButton.setEnabled(false);
@@ -423,9 +422,7 @@ public class ResultPanel extends JPanel implements
             clearStatus(RUN_LEVEL, false);
             setStatus("waiting for graph 1 ...", ADVANCE_LEVEL);
             advanceBy(1);
-            if (CaGe.debugMode) {
-                System.err.println("start completed.");
-            }
+            Debug.print("start completed.");
         } catch (Exception ex) {
             clearStatus(RUN_LEVEL, false);
             clearStatus(ADVANCE_LEVEL, false);
@@ -460,9 +457,7 @@ public class ResultPanel extends JPanel implements
         saveAdjWriter = save2DWriter = save3DWriter = null;
         CaGe.foldnetThread().removePropertyChangeListener(this);
         clearStatus(RUN_LEVEL);
-        if (CaGe.debugMode) {
-            System.err.println("stopped.");
-        }
+        Debug.print("stopped.");
     }
 
     public void reset() {
@@ -643,9 +638,7 @@ public class ResultPanel extends JPanel implements
         }
         previousFocusOwner = flowButton;
         setFlowing(flowing);
-        if (CaGe.debugMode) {
-            System.err.println("setFlowing completed.");
-        }
+        Debug.print("setFlowing completed.");
     }
 
     void reviewPrevious() {
@@ -773,9 +766,7 @@ public class ResultPanel extends JPanel implements
     event handling thread.
      */
     public void propertyChange(final PropertyChangeEvent e) {
-        if (CaGe.debugMode) {
-            System.err.println("property changed: " + e.getPropertyName());
-        }
+        Debug.print("property changed: " + e.getPropertyName());
         Runnable handler = new Runnable() {
 
             public void run() {
@@ -795,9 +786,7 @@ public class ResultPanel extends JPanel implements
                 SwingUtilities.invokeLater(handler);
                 break;
             default:
-                if (CaGe.debugMode) {
-                    System.err.println("unexpected property: " + e.getPropertyName());
-                }
+                Debug.print("unexpected property: " + e.getPropertyName());
                 break;
         }
     }
@@ -836,9 +825,7 @@ public class ResultPanel extends JPanel implements
                 }
                 break;
             default:
-                if (CaGe.debugMode) {
-                    System.err.println("unexpected property: " + e.getPropertyName());
-                }
+                Debug.print("unexpected property: " + e.getPropertyName());
                 break;
         }
     }
@@ -849,9 +836,7 @@ public class ResultPanel extends JPanel implements
         }
         pipeGraphNo.setText(Integer.toString(graphNo));
         boolean flowing = generator.isFlowing();
-        if (CaGe.debugMode) {
-            System.err.println("graphNo changed: " + graphNo + ", flowing=" + flowing);
-        }
+        Debug.print("graphNo changed: " + graphNo + ", flowing=" + flowing);
         if (flowing) {
             return;
         }
@@ -876,16 +861,14 @@ public class ResultPanel extends JPanel implements
             setStatus("embedding graph " + graphNo + " ...", EMBED_LEVEL);
             embedThread.embed(new CaGeResult(graph, graphNo), this,
                     doEmbed2D, doEmbed3D, false);
-            if(CaGe.debugMode) System.err.println("After embed thread");
+            Debug.print("After embed thread");
         } catch (Exception ex) {
             exceptionOccurred(ex);
         }
     }
 
     void flowingChanged(boolean flowing) {
-        if (CaGe.debugMode) {
-            System.err.println("flowing changed: " + flowing);
-        }
+        Debug.print("flowing changed: " + flowing);
         flowButton.setSelected(flowing);
         if (flowing) {
             flowButton.requestFocus();
@@ -898,9 +881,7 @@ public class ResultPanel extends JPanel implements
     }
 
     void runningChanged(boolean running) {
-        if (CaGe.debugMode) {
-            System.err.println("running changed: " + running);
-        }
+        Debug.print("running changed: " + running);
         this.running = running;
         if (running) {
             return;

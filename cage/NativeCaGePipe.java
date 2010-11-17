@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.Debug;
 import cage.utility.StackTrace;
 import lisken.systoolbox.Systoolbox;
 
@@ -68,9 +69,7 @@ public class NativeCaGePipe extends CaGePipe {
 
         synchronized boolean waitForWork() {
             try {
-                if (CaGe.debugMode) {
-                    System.err.println(Thread.currentThread().getName() + " is waiting");
-                }
+                Debug.print(Thread.currentThread().getName() + " is waiting");
                 if (!moreWork) {
                     wait();
                 }
@@ -82,9 +81,7 @@ public class NativeCaGePipe extends CaGePipe {
         }
 
         public synchronized void getToWork() {
-            if (CaGe.debugMode) {
-                System.err.println(Thread.currentThread().getName() + " is notifying " + flowingThread.getName());
-            }
+            Debug.print(Thread.currentThread().getName() + " is notifying " + flowingThread.getName());
             moreWork = true;
             this.notify();
         }
@@ -113,9 +110,7 @@ public class NativeCaGePipe extends CaGePipe {
                 Systoolbox.lowerPriority(newFlowingThread, priorityOffset);
                 setFlowingThread(newFlowingThread);
                 newFlowingThread.start();
-                if (CaGe.debugMode) {
-                    System.err.println("advance thread started.");
-                }
+                Debug.print("advance thread started.");
             }
             setAdvanceTarget(d < 0 ? d : graphNo + d);
             flowingThread.getToWork();
@@ -159,13 +154,9 @@ public class NativeCaGePipe extends CaGePipe {
         if (!running) {
             return;
         }
-        if (CaGe.debugMode) {
-            System.err.println("setFlowing: " + flowingOn);
-        }
+        Debug.print("setFlowing: " + flowingOn);
         if (isFlowing() == flowingOn) {
-            if (CaGe.debugMode) {
-                System.err.println("flowing unchanged.");
-            }
+            Debug.print("flowing unchanged.");
             return;
         }
         if (flowingOn) {

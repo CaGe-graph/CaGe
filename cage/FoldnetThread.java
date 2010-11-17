@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.Debug;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -43,17 +44,13 @@ public class FoldnetThread extends Thread {
     }
 
     private boolean getNextTask() {
-        if (CaGe.debugMode) {
-            System.err.println("Getting ...");
-        }
+        Debug.print("Getting ...");
         try {
             task = (FoldnetTask) queue.get();
         } catch (InterruptedException ex) {
             task = null;
         }
-        if (CaGe.debugMode) {
-            System.err.println(task);
-        }
+        Debug.print(task.toString());
         return task != null;
     }
 
@@ -98,16 +95,12 @@ public class FoldnetThread extends Thread {
         } catch (Exception ex) {
             setFoldnetPipe(null);
         }
-        if (CaGe.debugMode) {
-            System.err.println("foldnet pipe filled.");
-        }
+        Debug.print("foldnet pipe filled.");
         int status = -1;
         if (getFoldnetPipe() != null) {
             status = foldnetPipe.waitForExit();
         }
-        if (CaGe.debugMode) {
-            System.err.println("foldnet pipe finished: " + status);
-        }
+        Debug.print("foldnet pipe finished: " + status);
         synchronized (this) {
             setFoldnetPipe(null);
             ++tasksCompleted;
@@ -116,13 +109,9 @@ public class FoldnetThread extends Thread {
                 pageNo.setValue(pageNo.intValue() - 1);
             }
         }
-        if (CaGe.debugMode) {
-            System.err.println("firing ...");
-        }
+        Debug.print("firing ...");
         fireTasksChanged();
-        if (CaGe.debugMode) {
-            System.err.println("fired.");
-        }
+        Debug.print("fired.");
     }
 
     public void makeFoldnet(CaGeResult result, int maxFacesize, String filename) {

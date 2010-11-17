@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.Debug;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -46,17 +47,13 @@ public class EmbedThread extends Thread {
      *         EmbedTask</code>
      */
     private boolean getNextTask() {
-        if (CaGe.debugMode) {
-            System.err.println("Getting ...");
-        }
+        Debug.print("Getting ...");
         try {
             task = (EmbedTask) queue.get();
         } catch (InterruptedException ex) {
             task = null;
         }
-        if (CaGe.debugMode) {
-            System.err.println(task);
-        }
+        Debug.print(task.toString());
         return task != null;
     }
 
@@ -99,19 +96,13 @@ public class EmbedThread extends Thread {
                         getDiagnosticOutput());
             }
         }
-        if (CaGe.debugMode) {
-            System.err.println("task handled");
-        }
+        Debug.print("task handled");
         synchronized (this) {
             ++tasksCompleted;
         }
-        if (CaGe.debugMode) {
-            System.err.print("firing task change ... ");
-        }
+        Debug.print("firing task change ... ");
         fireTaskFinished();
-        if (CaGe.debugMode) {
-            System.err.println("done.");
-        }
+        Debug.print("done.");
     }
 
     void embeddingFinished() {
@@ -158,9 +149,9 @@ public class EmbedThread extends Thread {
             boolean do2D, boolean do3D, boolean redo2D) {
         synchronized (this) {
             EmbedTask newTask = new EmbedTask(result, listener, do2D, do3D, redo2D);
-            if(CaGe.debugMode) System.out.println("Created task");
+            Debug.print("Created task");
             queue.put(newTask);
-            if(CaGe.debugMode) System.out.println("Queued task");
+            Debug.print("Queued task");
             ++tasksGiven;
         }
     }
