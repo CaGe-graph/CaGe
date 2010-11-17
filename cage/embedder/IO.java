@@ -161,7 +161,7 @@ public class IO {
                 if (currentGraph[i][j] == 0)
                     break;
                 //output.format("%4d",currentGraph[i][j]);
-                output.print(MessageFormat.format(" {0,number,integer}", new Object[]{Integer.valueOf(currentGraph[i][j])}));
+                output.print(MessageFormat.format(" {0}", new Object[]{Integer.toString(currentGraph[i][j])}));
             }
             System.out.println();
         }
