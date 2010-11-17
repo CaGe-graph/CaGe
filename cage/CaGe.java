@@ -43,6 +43,7 @@ public class CaGe implements ActionListener {
     public static final String title = " CaGe - Chemical & abstract Graph environment ";
     public static final String configFile = "CaGe.ini";
     public static final boolean expertMode;
+    public static final boolean debugMode;
     public static final boolean nativesAvailable;
     public static final String osName;
     public static int graphNoDigits = 6;
@@ -66,7 +67,7 @@ public class CaGe implements ActionListener {
 
 
     static {
-        boolean nativesAvailableValue = false, expertModeValue = false;
+        boolean nativesAvailableValue = false, expertModeValue = false, debugModeValue = false;
         String osNameValue = null;
         try {
             System.runFinalizersOnExit(true);
@@ -143,6 +144,8 @@ public class CaGe implements ActionListener {
             }
              */
 
+            debugModeValue = Systoolbox.parseBoolean(config.getProperty("CaGe.DebugMode"), false);
+
             graphNoDigits =
                     Integer.parseInt(config.getProperty("CaGe.GraphNoDigits"));
 
@@ -152,6 +155,7 @@ public class CaGe implements ActionListener {
         }
         nativesAvailable = nativesAvailableValue;
         expertMode = expertModeValue;
+        debugMode = debugModeValue;
         osName = osNameValue;
 
         // construct the list with embedding type factories
