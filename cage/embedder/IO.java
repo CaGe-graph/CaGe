@@ -150,8 +150,8 @@ public class IO {
                 return;
             }
             //output.format("%4d % 8.3f % 8.3f % 8.3f", i+1, getGraphCoords()[i][0], getGraphCoords()[i][1], getGraphCoords()[i][2]);
-            output.print(MessageFormat.format("{0,number,integer} {1,number,########.###} {2,number,########.###} {3,number,########.###} ",
-                    new Object[]{Integer.valueOf(i+1),
+            output.print(MessageFormat.format("{0} {1,number,########.###} {2,number,########.###} {3,number,########.###} ",
+                    new Object[]{Integer.toString(i+1),
                         Double.valueOf(getGraphCoords()[i][0]),
                         Double.valueOf(getGraphCoords()[i][1]),
                         Double.valueOf(getGraphCoords()[i][2])}));
