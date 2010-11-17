@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
@@ -20,7 +21,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel {
 
     static final int MIN_HEXAGONS = 2;
     static final int MAX_HEXAGONS = 30;
-    EnhancedSlider hexagonsSlider = new EnhancedSlider();
+    EnhancedSlider hexagonsSlider = new EnhancedSlider(CaGe.debugMode);
     JCheckBox iprBox;
     JCheckBox showHBox;
     JCheckBox cataCondensedBox;

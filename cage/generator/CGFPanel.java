@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
@@ -49,8 +50,8 @@ public class CGFPanel extends GeneratorPanel {
 
     private final boolean dual;
 
-    private EnhancedSlider minAtomsSlider = new EnhancedSlider();
-    private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
+    private EnhancedSlider minAtomsSlider = new EnhancedSlider(CaGe.debugMode);
+    private EnhancedSlider maxAtomsSlider = new EnhancedSlider(CaGe.debugMode);
     private JCheckBox faceStats = new JCheckBox();
     private JCheckBox conn1 = new JCheckBox();
     private JCheckBox conn2 = new JCheckBox();
@@ -106,7 +107,7 @@ public class CGFPanel extends GeneratorPanel {
         final JCheckBox minEqMax = new JCheckBox("min = max", true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
         EventListener l = new MinMaxEqListener(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel(), false);
-        final EnhancedSlider facesSlider = new EnhancedSlider();
+        final EnhancedSlider facesSlider = new EnhancedSlider(CaGe.debugMode);
         Hashtable facesLabels = facesSlider.createStandardLabels(5, 10);
         facesLabels.put(new Integer(3), new JLabel("3"));
         facesLabels.put(new Integer(6), new JLabel("6"));

@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
@@ -10,7 +11,6 @@ import cage.StaticGeneratorInfo;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,8 +25,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -41,9 +39,9 @@ public class TubetypePanel extends GeneratorPanel {
     private static final int MAX_TUBELENGTH = 30;
     private static final int MAX_OFFSET = 30;
 
-    private EnhancedSlider tubelengthSlider = new EnhancedSlider();
-    private EnhancedSlider offset1Control = new EnhancedSlider();
-    private EnhancedSlider offset2Control = new EnhancedSlider();
+    private EnhancedSlider tubelengthSlider = new EnhancedSlider(CaGe.debugMode);
+    private EnhancedSlider offset1Control = new EnhancedSlider(CaGe.debugMode);
+    private EnhancedSlider offset2Control = new EnhancedSlider(CaGe.debugMode);
     private JCheckBox ipr = new JCheckBox();
     private AbstractButton defaultTubelengthButton = new JToggleButton();
     private boolean adjusting = false;

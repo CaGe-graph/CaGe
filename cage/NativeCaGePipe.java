@@ -5,7 +5,6 @@ import lisken.systoolbox.Systoolbox;
 public class NativeCaGePipe extends CaGePipe {
 
     final static int priorityOffset = 2;
-    static boolean debug = false;
     private long status;
     static private int flowThreadCount = 0;
     private FlowingThread flowingThread = null;
@@ -68,7 +67,7 @@ public class NativeCaGePipe extends CaGePipe {
 
         synchronized boolean waitForWork() {
             try {
-                if (debug) {
+                if (CaGe.debugMode) {
                     System.err.println(Thread.currentThread().getName() + " is waiting");
                 }
                 if (!moreWork) {
@@ -82,7 +81,7 @@ public class NativeCaGePipe extends CaGePipe {
         }
 
         public synchronized void getToWork() {
-            if (debug) {
+            if (CaGe.debugMode) {
                 System.err.println(Thread.currentThread().getName() + " is notifying " + flowingThread.getName());
             }
             moreWork = true;
@@ -103,7 +102,7 @@ public class NativeCaGePipe extends CaGePipe {
     }
 
     private void advanceViaThread(final int d) {
-        if (debug) {
+        if (CaGe.debugMode) {
             new Exception("debug: advanceViaThread(" + d + ") called").printStackTrace();
         }
         synchronized (this) {
@@ -113,7 +112,7 @@ public class NativeCaGePipe extends CaGePipe {
                 Systoolbox.lowerPriority(newFlowingThread, priorityOffset);
                 setFlowingThread(newFlowingThread);
                 newFlowingThread.start();
-                if (debug) {
+                if (CaGe.debugMode) {
                     System.err.println("advance thread started.");
                 }
             }
@@ -142,7 +141,7 @@ public class NativeCaGePipe extends CaGePipe {
 
     private void startAdvancing() {
         try {
-            if (debug) {
+            if (CaGe.debugMode) {
                 new Exception("debug: " + Thread.currentThread().getName() + " calls startAdvancing (target: " + getAdvanceTarget() + ")").printStackTrace();
             }
             nStartAdvancing();
@@ -159,11 +158,11 @@ public class NativeCaGePipe extends CaGePipe {
         if (!running) {
             return;
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("setFlowing: " + flowingOn);
         }
         if (isFlowing() == flowingOn) {
-            if (debug) {
+            if (CaGe.debugMode) {
                 System.err.println("flowing unchanged.");
             }
             return;

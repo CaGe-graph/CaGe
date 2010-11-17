@@ -36,7 +36,6 @@ public class RasmolViewer implements CaGeViewer {
     static private AbstractChemicalWriter pdbWriter;
     static private Boolean rasmolTrialResult = null;
     static private String runDir,  initCmd;
-    static private final boolean debug = true;
     static private final String rasmolFilename = ".rasmol.input";
     static private final File rasmolFile;
 

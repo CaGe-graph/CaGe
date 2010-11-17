@@ -8,7 +8,6 @@ import javax.swing.JTabbedPane;
 
 public class TubesConesPanel extends GeneratorPanel {
 
-    private static final boolean debug = false;
     JTabbedPane pane = new JTabbedPane();
 
     public TubesConesPanel() {

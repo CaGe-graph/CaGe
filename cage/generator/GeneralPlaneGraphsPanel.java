@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
@@ -29,7 +30,6 @@ import lisken.uitoolbox.SpinButton;
 public class GeneralPlaneGraphsPanel extends GeneratorPanel
         implements ActionListener, ChangeListener {
 
-    private static final boolean debug = false;
     public static final int MIN_VERTICES = 4;
     public static final int MAX_VERTICES = 40;
     public static final int DEFAULT_VERTICES = 4;
@@ -54,7 +54,7 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
                 new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 5, 20, 0), 0, 0));
-        verticesSlider = new EnhancedSlider();
+        verticesSlider = new EnhancedSlider(CaGe.debugMode);
         verticesSlider.setMinimum(MIN_VERTICES);
         verticesSlider.setMaximum(MAX_VERTICES);
         verticesSlider.setValue(DEFAULT_VERTICES);
@@ -279,7 +279,7 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
 
         String[][] generator = new String[1][genCmd.size()];
         genCmd.copyInto(generator[0]);
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println(Systoolbox.makeCmdLine(generator));
         }
 

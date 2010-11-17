@@ -55,7 +55,6 @@ public class ResultPanel extends JPanel implements
         ActionListener, FocusListener, GeneratorListener, EmbedThreadListener {
 
     public static final int EXCEPTION_LEVEL = 1,  RUN_LEVEL = 2,  FOLDNET_LEVEL = 3,  ADVANCE_LEVEL = 4,  EMBED_LEVEL = 5;
-    static boolean debug = false;
     private static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Foreground", 0);
     private static final int graphNoFirePeriod = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFirePeriod.Foreground", 1000);
 
@@ -359,7 +358,7 @@ public class ResultPanel extends JPanel implements
                     previousFocusOwner.requestFocus();
                 }
             }
-            if (debug) {
+            if (CaGe.debugMode) {
                 System.err.println("advanceBy(" + n + ") completed.");
             }
         } else {
@@ -424,7 +423,7 @@ public class ResultPanel extends JPanel implements
             clearStatus(RUN_LEVEL, false);
             setStatus("waiting for graph 1 ...", ADVANCE_LEVEL);
             advanceBy(1);
-            if (debug) {
+            if (CaGe.debugMode) {
                 System.err.println("start completed.");
             }
         } catch (Exception ex) {
@@ -461,7 +460,7 @@ public class ResultPanel extends JPanel implements
         saveAdjWriter = save2DWriter = save3DWriter = null;
         CaGe.foldnetThread().removePropertyChangeListener(this);
         clearStatus(RUN_LEVEL);
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("stopped.");
         }
     }
@@ -644,7 +643,7 @@ public class ResultPanel extends JPanel implements
         }
         previousFocusOwner = flowButton;
         setFlowing(flowing);
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("setFlowing completed.");
         }
     }
@@ -774,7 +773,7 @@ public class ResultPanel extends JPanel implements
     event handling thread.
      */
     public void propertyChange(final PropertyChangeEvent e) {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("property changed: " + e.getPropertyName());
         }
         Runnable handler = new Runnable() {
@@ -796,7 +795,7 @@ public class ResultPanel extends JPanel implements
                 SwingUtilities.invokeLater(handler);
                 break;
             default:
-                if (debug) {
+                if (CaGe.debugMode) {
                     System.err.println("unexpected property: " + e.getPropertyName());
                 }
                 break;
@@ -837,7 +836,7 @@ public class ResultPanel extends JPanel implements
                 }
                 break;
             default:
-                if (debug) {
+                if (CaGe.debugMode) {
                     System.err.println("unexpected property: " + e.getPropertyName());
                 }
                 break;
@@ -850,7 +849,7 @@ public class ResultPanel extends JPanel implements
         }
         pipeGraphNo.setText(Integer.toString(graphNo));
         boolean flowing = generator.isFlowing();
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("graphNo changed: " + graphNo + ", flowing=" + flowing);
         }
         if (flowing) {
@@ -877,13 +876,14 @@ public class ResultPanel extends JPanel implements
             setStatus("embedding graph " + graphNo + " ...", EMBED_LEVEL);
             embedThread.embed(new CaGeResult(graph, graphNo), this,
                     doEmbed2D, doEmbed3D, false);
+            if(CaGe.debugMode) System.err.println("After embed thread");
         } catch (Exception ex) {
             exceptionOccurred(ex);
         }
     }
 
     void flowingChanged(boolean flowing) {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("flowing changed: " + flowing);
         }
         flowButton.setSelected(flowing);
@@ -898,7 +898,7 @@ public class ResultPanel extends JPanel implements
     }
 
     void runningChanged(boolean running) {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("running changed: " + running);
         }
         this.running = running;

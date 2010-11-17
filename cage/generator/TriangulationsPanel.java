@@ -6,7 +6,6 @@ import cage.GeneratorPanel;
 
 public class TriangulationsPanel extends CombinedGeneratorPanel {
 
-    private static final boolean debug = false;
     private GeneratorPanel lastChosenPanel = null;
 
     public TriangulationsPanel() {

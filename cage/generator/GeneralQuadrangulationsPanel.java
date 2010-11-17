@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
@@ -103,7 +104,7 @@ public class GeneralQuadrangulationsPanel extends GeneratorPanel {
         this.dual = dual;
         setLayout(new GridBagLayout());
 
-        verticesSlider = new EnhancedSlider();
+        verticesSlider = new EnhancedSlider(CaGe.debugMode);
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES_2_CONNECTED);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);

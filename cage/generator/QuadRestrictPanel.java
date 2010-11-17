@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
@@ -107,7 +108,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         setLayout(new GridBagLayout());
 
         //vertices
-        verticesSlider = new EnhancedSlider();
+        verticesSlider = new EnhancedSlider(CaGe.debugMode);
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
@@ -137,7 +138,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
 
         //restrictions
         JPanel restrictionPanel = new JPanel(new GridBagLayout());
-        final EnhancedSlider restrictionSlider = new EnhancedSlider();
+        final EnhancedSlider restrictionSlider = new EnhancedSlider(CaGe.debugMode);
         restrictionSlider.setOrientation(SwingConstants.HORIZONTAL);
         restrictionSlider.setMinorTickSpacing(1);
         restrictionSlider.setSnapToTicks(true);

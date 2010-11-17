@@ -12,12 +12,11 @@ import lisken.systoolbox.Systoolbox;
 public class BackgroundRunner extends Thread
         implements CaGeRunner, PropertyChangeListener, EmbedThreadListener {
 
-    public static final boolean debug = false;
     static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Background", 10);
     static final int graphNoFirePeriod = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFirePeriod.Background", 10000);
     private static int threadCount = 0;
     private boolean halted;
-    private MessageQueue queue = new MessageQueue(false);
+    private MessageQueue queue = new MessageQueue(CaGe.debugMode);
     private PropertyChangeEvent event;
     CaGePipe generator;
     GeneratorInfo generatorInfo;
@@ -130,7 +129,7 @@ public class BackgroundRunner extends Thread
     }
 
     private synchronized void setHalted(boolean halted) {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("halted: " + halted);
         }
         this.halted = halted;
@@ -151,14 +150,14 @@ public class BackgroundRunner extends Thread
     }
 
     public void propertyChange(PropertyChangeEvent e) {
-        if (debug) {
+        if (CaGe.debugMode) {
             new Exception("queueing property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")").fillInStackTrace().printStackTrace();
         }
         queue.put(e);
     }
 
     void handlePropertyChange(PropertyChangeEvent e) {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("handling property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")");
         }
         switch (e.getPropertyName().charAt(0)) {
@@ -180,7 +179,7 @@ public class BackgroundRunner extends Thread
                 embeddingMade(result, success);
                 break;
             default:
-                if (debug) {
+                if (CaGe.debugMode) {
                     System.err.println("unimplemented property change: " + e.getPropertyName());
                 }
                 break;
@@ -188,7 +187,7 @@ public class BackgroundRunner extends Thread
     }
 
     void graphNoChanged(int graphNo) {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("graphNo: " + graphNo);
         }
         if (graphNo <= 0) {
@@ -212,14 +211,14 @@ public class BackgroundRunner extends Thread
 
     void flowingChanged(boolean flowing) {
         generatorFlowing = flowing;
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("flowing: " + generatorFlowing);
         }
     }
 
     void runningChanged(boolean running) {
         generatorRunning = running;
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("running: " + generatorRunning);
         }
         if (generatorRunning) {
@@ -267,11 +266,11 @@ public class BackgroundRunner extends Thread
     }
 
     void finish() {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("finishing");
         }
         if (generatorRunning) {
-            if (debug) {
+            if (CaGe.debugMode) {
                 System.err.println("announcing crash");
             }
             generator.removePropertyChangeListener(this);
@@ -346,7 +345,7 @@ public class BackgroundRunner extends Thread
     }
 
     public void fireRunningChanged() {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("announcing running change: " + generatorRunning);
         }
         firePropertyChange(

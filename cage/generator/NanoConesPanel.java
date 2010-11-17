@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
@@ -26,7 +27,7 @@ import lisken.uitoolbox.SpinButton;
  */
 public class NanoConesPanel extends GeneratorPanel implements ActionListener {
 
-    private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
+    private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider(CaGe.debugMode);
     private SpinButton lengthOfSide = new SpinButton(new DefaultBoundedRangeModel(0, 0, 0, Integer.MAX_VALUE));
     private SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
     private JRadioButton symmetricButton;

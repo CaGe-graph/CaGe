@@ -29,7 +29,7 @@ import javax.swing.plaf.SliderUI;
 
 public class EnhancedSlider extends JPanel implements FocusListener, Serializable {
 
-    static boolean debug = false;
+    private final boolean debug;
     private JSlider slider;
     private SliderValueLabel valueLabel;
     private int snapWhileDragging;
@@ -40,11 +40,11 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     private double sizeFactor;
     private boolean clickScrollByBlock;
 
-    public EnhancedSlider() {
-        this(SwingConstants.HORIZONTAL, 0, 100, 50);
+    public EnhancedSlider(boolean debug) {
+        this(SwingConstants.HORIZONTAL, 0, 100, 50, debug);
     }
 
-    public EnhancedSlider(int orientation, int min, int max, int value) {
+    public EnhancedSlider(int orientation, int min, int max, int value, boolean debug) {
         slider = new JSlider(orientation, min, max, value) {
 
             public void setValue(int n) {
@@ -66,6 +66,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         paintMinorTicks = true;
         sizeFactor = 1;
         clickScrollByBlock = true;
+        this.debug = debug;
     }
 
     public JLabel getValueLabel() {
@@ -494,7 +495,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
 
         public void setBounds(int x, int y, int newWidth, int newHeight) {
             if (slider == null) {
-                if (EnhancedSlider.debug) {
+                if (debug) {
                     System.err.println("  new place as requested: " + x + ", " + y);
                 }
                 super.setBounds(x, y, newWidth, newHeight);
@@ -523,19 +524,19 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             Rectangle rect = ((EnhancedSliderUI) slider.getUI()).getThumbRectangle();
             switch (slider.getOrientation()) {
                 case SwingConstants.HORIZONTAL:
-                    if (EnhancedSlider.debug) {
+                    if (debug) {
                         System.err.println("  new width: " + newWidth + ", th = " + rect.x + ", " + rect.width);
                     }
-                    if (EnhancedSlider.debug) {
+                    if (debug) {
                         System.err.println("  new place: " + (rect.x + (rect.width - newWidth) / 2) + ", " + getLocation().y);
                     }
                     super.setBounds(rect.x + (rect.width - newWidth) / 2, getLocation().y, newWidth, newHeight);
                     break;
                 case SwingConstants.VERTICAL:
-                    if (EnhancedSlider.debug) {
+                    if (debug) {
                         System.err.println("  new height: " + newHeight + ", th = " + rect.y + ", " + rect.height);
                     }
-                    if (EnhancedSlider.debug) {
+                    if (debug) {
                         System.err.println("  new place: " + getLocation().x + ", " + (rect.y + (rect.height - newHeight) / 2));
                     }
                     super.setBounds(getLocation().x, rect.y + (rect.height - newHeight) / 2, newWidth, newHeight);

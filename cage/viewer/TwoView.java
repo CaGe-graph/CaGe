@@ -51,7 +51,6 @@ import lisken.uitoolbox.UItoolbox;
 
 public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
 
-    public static boolean debug = true;
     private JFrame frame;
     private JLabel title;
     private Box titlePanel;

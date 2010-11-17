@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
@@ -49,8 +50,8 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
     JPanel FullgenAtomsPanel = new JPanel();
     JLabel minAtomsLabel = new JLabel();
     JLabel maxAtomsLabel = new JLabel();
-    EnhancedSlider minAtomsSlider = new EnhancedSlider();
-    EnhancedSlider maxAtomsSlider = new EnhancedSlider();
+    EnhancedSlider minAtomsSlider = new EnhancedSlider(CaGe.debugMode);
+    EnhancedSlider maxAtomsSlider = new EnhancedSlider(CaGe.debugMode);
     JSeparator sep1 = new JSeparator(SwingConstants.HORIZONTAL);
     JPanel FullgenExtrasPanel = new JPanel();
     JCheckBox minEqMax = new JCheckBox();

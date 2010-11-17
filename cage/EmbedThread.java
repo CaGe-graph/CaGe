@@ -9,7 +9,6 @@ import lisken.systoolbox.Systoolbox;
 
 public class EmbedThread extends Thread {
 
-    public volatile boolean debug = false;
     private static int threadCount = 0;
 
     /**
@@ -47,7 +46,7 @@ public class EmbedThread extends Thread {
      *         EmbedTask</code>
      */
     private boolean getNextTask() {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("Getting ...");
         }
         try {
@@ -55,7 +54,7 @@ public class EmbedThread extends Thread {
         } catch (InterruptedException ex) {
             task = null;
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println(task);
         }
         return task != null;
@@ -100,17 +99,17 @@ public class EmbedThread extends Thread {
                         getDiagnosticOutput());
             }
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("task handled");
         }
         synchronized (this) {
             ++tasksCompleted;
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.print("firing task change ... ");
         }
         fireTaskFinished();
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("done.");
         }
     }
@@ -159,7 +158,9 @@ public class EmbedThread extends Thread {
             boolean do2D, boolean do3D, boolean redo2D) {
         synchronized (this) {
             EmbedTask newTask = new EmbedTask(result, listener, do2D, do3D, redo2D);
+            if(CaGe.debugMode) System.out.println("Created task");
             queue.put(newTask);
+            if(CaGe.debugMode) System.out.println("Queued task");
             ++tasksGiven;
         }
     }
@@ -213,7 +214,7 @@ public class EmbedThread extends Thread {
     }
     
     private Embedder embedder;
-    private MessageQueue queue = new MessageQueue();
+    private MessageQueue queue = new MessageQueue(CaGe.debugMode);
     private EmbedTask task;
     private boolean halted;
     private int tasksGiven = 0,  tasksCompleted = 0;

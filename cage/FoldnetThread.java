@@ -17,8 +17,6 @@ import lisken.systoolbox.Systoolbox;
 
 public class FoldnetThread extends Thread {
 
-    private static final boolean debug = false;
-
     public FoldnetThread() {
         super("Foldnet-Maker");
         Systoolbox.lowerPriority(this, 3);
@@ -45,7 +43,7 @@ public class FoldnetThread extends Thread {
     }
 
     private boolean getNextTask() {
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("Getting ...");
         }
         try {
@@ -53,7 +51,7 @@ public class FoldnetThread extends Thread {
         } catch (InterruptedException ex) {
             task = null;
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println(task);
         }
         return task != null;
@@ -100,14 +98,14 @@ public class FoldnetThread extends Thread {
         } catch (Exception ex) {
             setFoldnetPipe(null);
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("foldnet pipe filled.");
         }
         int status = -1;
         if (getFoldnetPipe() != null) {
             status = foldnetPipe.waitForExit();
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("foldnet pipe finished: " + status);
         }
         synchronized (this) {
@@ -118,11 +116,11 @@ public class FoldnetThread extends Thread {
                 pageNo.setValue(pageNo.intValue() - 1);
             }
         }
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("firing ...");
         }
         fireTasksChanged();
-        if (debug) {
+        if (CaGe.debugMode) {
             System.err.println("fired.");
         }
     }
@@ -242,7 +240,7 @@ public class FoldnetThread extends Thread {
             }
         }
     }
-    private MessageQueue queue = new MessageQueue();
+    private MessageQueue queue = new MessageQueue(CaGe.debugMode);
     private FoldnetTask task;
     private boolean halted;
     private Pipe foldnetPipe = null;
