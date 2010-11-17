@@ -1,5 +1,7 @@
 package lisken.systoolbox;
 
+import cage.utility.StackTrace;
+
 public class MessageQueue {
 
     public volatile boolean debug;
@@ -30,7 +32,7 @@ public class MessageQueue {
 
     public synchronized void put(Object entry) {
         if (debug) {
-            new Exception("put: " + entry).printStackTrace();
+            new StackTrace("put: " + entry).printStackTrace();
         }
         QueueItem item = new QueueItem(entry);
         if (last != null) {

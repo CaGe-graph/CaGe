@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.StackTrace;
 import cage.writer.CaGeWriter;
 
 import java.beans.PropertyChangeEvent;
@@ -151,7 +152,7 @@ public class BackgroundRunner extends Thread
 
     public void propertyChange(PropertyChangeEvent e) {
         if (CaGe.debugMode) {
-            new Exception("queueing property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")").fillInStackTrace().printStackTrace();
+            new StackTrace("queueing property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")").printStackTrace();
         }
         queue.put(e);
     }

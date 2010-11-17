@@ -1,5 +1,6 @@
 package cage;
 
+import cage.utility.StackTrace;
 import lisken.systoolbox.Systoolbox;
 
 public class NativeCaGePipe extends CaGePipe {
@@ -103,7 +104,7 @@ public class NativeCaGePipe extends CaGePipe {
 
     private void advanceViaThread(final int d) {
         if (CaGe.debugMode) {
-            new Exception("debug: advanceViaThread(" + d + ") called").printStackTrace();
+            new StackTrace("debug: advanceViaThread(" + d + ") called").printStackTrace();
         }
         synchronized (this) {
             getAdvancePermission();
@@ -142,7 +143,7 @@ public class NativeCaGePipe extends CaGePipe {
     private void startAdvancing() {
         try {
             if (CaGe.debugMode) {
-                new Exception("debug: " + Thread.currentThread().getName() + " calls startAdvancing (target: " + getAdvanceTarget() + ")").printStackTrace();
+                new StackTrace("debug: " + Thread.currentThread().getName() + " calls startAdvancing (target: " + getAdvanceTarget() + ")").printStackTrace();
             }
             nStartAdvancing();
         } catch (Exception e) {
