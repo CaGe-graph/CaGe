@@ -108,7 +108,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         setLayout(new GridBagLayout());
 
         //vertices
-        verticesSlider = new EnhancedSlider(CaGe.debugMode);
+        verticesSlider = new EnhancedSlider();
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
@@ -138,7 +138,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
 
         //restrictions
         JPanel restrictionPanel = new JPanel(new GridBagLayout());
-        final EnhancedSlider restrictionSlider = new EnhancedSlider(CaGe.debugMode);
+        final EnhancedSlider restrictionSlider = new EnhancedSlider();
         restrictionSlider.setOrientation(SwingConstants.HORIZONTAL);
         restrictionSlider.setMinorTickSpacing(1);
         restrictionSlider.setSnapToTicks(true);

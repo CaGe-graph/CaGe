@@ -39,9 +39,9 @@ public class TubetypePanel extends GeneratorPanel {
     private static final int MAX_TUBELENGTH = 30;
     private static final int MAX_OFFSET = 30;
 
-    private EnhancedSlider tubelengthSlider = new EnhancedSlider(CaGe.debugMode);
-    private EnhancedSlider offset1Control = new EnhancedSlider(CaGe.debugMode);
-    private EnhancedSlider offset2Control = new EnhancedSlider(CaGe.debugMode);
+    private EnhancedSlider tubelengthSlider = new EnhancedSlider();
+    private EnhancedSlider offset1Control = new EnhancedSlider();
+    private EnhancedSlider offset2Control = new EnhancedSlider();
     private JCheckBox ipr = new JCheckBox();
     private AbstractButton defaultTubelengthButton = new JToggleButton();
     private boolean adjusting = false;

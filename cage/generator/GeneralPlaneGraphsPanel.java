@@ -54,7 +54,7 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
                 new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 5, 20, 0), 0, 0));
-        verticesSlider = new EnhancedSlider(CaGe.debugMode);
+        verticesSlider = new EnhancedSlider();
         verticesSlider.setMinimum(MIN_VERTICES);
         verticesSlider.setMaximum(MAX_VERTICES);
         verticesSlider.setValue(DEFAULT_VERTICES);

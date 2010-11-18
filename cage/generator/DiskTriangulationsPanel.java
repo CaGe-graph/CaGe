@@ -57,7 +57,7 @@ public class DiskTriangulationsPanel extends GeneratorPanel
 
     public DiskTriangulationsPanel() {
         setLayout(new GridBagLayout());
-        verticesSlider = new EnhancedSlider(CaGe.debugMode);
+        verticesSlider = new EnhancedSlider();
         verticesSlider.setMinimum(MIN_VERTICES);
         verticesSlider.setMaximum(MAX_VERTICES);
         verticesSlider.setValue(DEFAULT_VERTICES);
@@ -79,7 +79,7 @@ public class DiskTriangulationsPanel extends GeneratorPanel
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 20, 10), 0, 0));
-        boundarySegmentsSlider = new EnhancedSlider(CaGe.debugMode);
+        boundarySegmentsSlider = new EnhancedSlider();
         boundarySegmentsSlider.setMinimum(MIN_BOUNDARY_SEGMENTS);
         boundarySegmentsSlider.setMaximum(MAX_VERTICES);
         boundarySegmentsSlider.setValue(DEFAULT_BOUNDARY_SEGMENTS);

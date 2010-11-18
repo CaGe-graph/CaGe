@@ -52,7 +52,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
     private ButtonGroup embedTemplateGroup = new ButtonGroup();
     private boolean nonNullCmd,  embedderRequired;
     private boolean embedderIsConstant = false;
-    private EnhancedSlider embedIntensity = new EnhancedSlider(CaGe.debugMode);
+    private EnhancedSlider embedIntensity = new EnhancedSlider();
     private JCheckBox embedExpertBox = new JCheckBox();
 
     public ExternalPanel() {

@@ -27,7 +27,7 @@ import lisken.uitoolbox.SpinButton;
  */
 public class NanoConesPanel extends GeneratorPanel implements ActionListener {
 
-    private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider(CaGe.debugMode);
+    private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
     private SpinButton lengthOfSide = new SpinButton(new DefaultBoundedRangeModel(0, 0, 0, Integer.MAX_VALUE));
     private SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
     private JRadioButton symmetricButton;

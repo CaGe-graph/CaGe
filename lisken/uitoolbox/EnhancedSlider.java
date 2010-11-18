@@ -40,10 +40,14 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     private double sizeFactor;
     private boolean clickScrollByBlock;
 
+    public EnhancedSlider() {
+        this(false);
+    }
+
     public EnhancedSlider(boolean debug) {
         this(SwingConstants.HORIZONTAL, 0, 100, 50, debug);
     }
-
+    
     public EnhancedSlider(int orientation, int min, int max, int value, boolean debug) {
         slider = new JSlider(orientation, min, max, value) {
 

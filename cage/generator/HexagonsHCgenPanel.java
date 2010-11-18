@@ -21,7 +21,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel {
 
     static final int MIN_HEXAGONS = 2;
     static final int MAX_HEXAGONS = 30;
-    EnhancedSlider hexagonsSlider = new EnhancedSlider(CaGe.debugMode);
+    EnhancedSlider hexagonsSlider = new EnhancedSlider();
     JCheckBox iprBox;
     JCheckBox showHBox;
     JCheckBox cataCondensedBox;

@@ -85,7 +85,7 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
     public GeneralTriangulationsPanel(boolean dual) {
         this.dual = dual;
         setLayout(new GridBagLayout());
-        verticesSlider = new EnhancedSlider(CaGe.debugMode);
+        verticesSlider = new EnhancedSlider();
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);

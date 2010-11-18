@@ -104,7 +104,7 @@ public class GeneralQuadrangulationsPanel extends GeneratorPanel {
         this.dual = dual;
         setLayout(new GridBagLayout());
 
-        verticesSlider = new EnhancedSlider(CaGe.debugMode);
+        verticesSlider = new EnhancedSlider();
         verticesSlider.setMinimum(dual ? DUAL_MIN_VERTICES : MIN_VERTICES_2_CONNECTED);
         verticesSlider.setMaximum(dual ? DUAL_MAX_VERTICES : MAX_VERTICES);
         verticesSlider.setValue(dual ? DUAL_DEFAULT_VERTICES : DEFAULT_VERTICES);
