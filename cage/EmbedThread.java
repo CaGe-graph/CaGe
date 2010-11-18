@@ -235,6 +235,12 @@ public class EmbedThread extends Thread {
         public boolean redo2D;
         public boolean success;
         public boolean unfinished;
+
+        public String toString(){
+            return "EmbedTask(" + result + ", " + listener.getClass().getSimpleName() + ", " + do2D +
+                    ", " + do3D + ", " + redo2D + ", " + success + ", "
+                    + unfinished + ")";
+        }
     }
 }
 
