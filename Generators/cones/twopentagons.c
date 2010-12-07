@@ -33,7 +33,7 @@ void getTwoPentagonsConesShortestSide1SymmetricPatch(PATCH *patch, FRAGMENT *cur
     frag->endsWithPentagon=0;
     frag->faces=1;
 
-    is->code[0]=0;
+    is->code[0]+=0;
     is->code[1]=1;
 
     processStructure(patch, currentShell);
@@ -55,7 +55,7 @@ void getTwoPentagonsConesShortestSide0NearSymmetricPatch(PATCH *patch, FRAGMENT 
     frag->endsWithPentagon=1;
     frag->faces=1;
 
-    is->code[0]=1;
+    is->code[0]+=1;
     is->code[1]=0;
 
     processStructure(patch, currentShell);
@@ -82,7 +82,7 @@ void getTwoPentagonsConesNoMirrorSymmetricPatches(PATCH *patch, int side, FRAGME
     //first we handle the case with spiral code (0, 2*side)
     //the innerspiral stores the number of hexagons between the pentagons
     //thus this gives:
-    is->code[0] = 0;
+    is->code[0] += 0;
     is->code[1] = 2 * side - 1;
 
     //in the rest of this code the distance between the two pentagons doesn't change
@@ -137,7 +137,7 @@ void getTwoPentagonsConesMirrorsAllowedSymmetricPatches(PATCH *patch, int side, 
     //first we handle the case with spiral code (0, 2*side)
     //the innerspiral stores the number of hexagons between the pentagons
     //thus this gives:
-    is->code[0] = 0;
+    is->code[0] += 0;
     is->code[1] = 2 * side - 1;
 
     //in the rest of this code the distance between the two pentagons doesn't change
@@ -177,6 +177,7 @@ void getTwoPentagonsConesNoMirrorNearSymmetricPatches(PATCH *patch, int shortest
     //int longestSide = shortestSide + 1;
     int i;
     INNERSPIRAL *is = patch->innerspiral;
+    int startSpiral = is->code[0];
 
     FRAGMENT *fragment1 = addNewFragment(currentFragment);
     fragment1->faces = shortestSide + 1;
@@ -202,7 +203,7 @@ void getTwoPentagonsConesNoMirrorNearSymmetricPatches(PATCH *patch, int shortest
     fragment5->isEnd=1;
     //the innerspiral stores the number of hexagons between the pentagons
     //thus this gives:
-    is->code[0] = shortestSide+1;
+    is->code[0] += shortestSide+1;
     is->code[1] = 2*shortestSide;
     processStructure(patch, currentShell);
     fragment5->isEnd=0;
@@ -240,7 +241,8 @@ void getTwoPentagonsConesNoMirrorNearSymmetricPatches(PATCH *patch, int shortest
     //if we include the other pieces of this shell, the last case of this for-loop
     //will need to be handled separately
 
-    is->code[0] = 2*shortestSide + 1;
+    is->code[0] = startSpiral;
+    is->code[0] += 2*shortestSide + 1;
 
     upperbound = shortestSide - HALFFLOOR(shortestSide);
     for(i=0; i<upperbound; i++){
@@ -281,7 +283,7 @@ void getTwoPentagonsConesMirrorsAllowedNearSymmetricPatches(PATCH *patch, int sh
     fragment5->isEnd=1;
     //the innerspiral stores the number of hexagons between the pentagons
     //thus this gives:
-    is->code[0] = shortestSide+1;
+    is->code[0] += shortestSide+1;
     is->code[1] = 2*shortestSide;
     processStructure(patch, currentShell);
     fragment5->isEnd=0;

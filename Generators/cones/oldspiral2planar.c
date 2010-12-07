@@ -760,7 +760,7 @@ void initEdges(int sside, boolean symmetric, int pentagons, int hexagonLayers){
         for(i=sside+1; i<sside+1+hexagonLayers; i++){
             hexagons+=(6-pentagons)*i;
         }
-        boundary = (6-pentagons)*(2*sside+1);
+        boundary = (6-pentagons)*(2*(sside+hexagonLayers)+1);
     } else {
         switch (pentagons) {
             case 2:
@@ -780,7 +780,7 @@ void initEdges(int sside, boolean symmetric, int pentagons, int hexagonLayers){
         for(i=sside+1; i<sside+1+hexagonLayers; i++){
             hexagons+=(6-pentagons)*(i+1)-1;
         }
-        boundary = (6-pentagons)*(2*sside+3) - 2;
+        boundary = (6-pentagons)*(2*(sside+hexagonLayers)+3) - 2;
     }
     //calculate the number of directed edges, i.e. twice the number of edges
     int maxNumberOfEdges = 6*hexagons + 5*pentagons + boundary;
