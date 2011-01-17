@@ -50,7 +50,10 @@ public class FoldnetThread extends Thread {
         } catch (InterruptedException ex) {
             task = null;
         }
-        Debug.print(task.toString());
+		if(task == null)
+			Debug.print("Task was null.");
+		else
+			Debug.print(task.toString());
         return task != null;
     }
 
