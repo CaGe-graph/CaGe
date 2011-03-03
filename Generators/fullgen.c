@@ -5,6 +5,8 @@
                 - mehrere Symmetrien erlaubt 
   24.10.2000:   - added code 8 for sparse6 output
                     and made some other insignificant changes */
+/* 24.2.2011: S+12 -> S+13 in dualcode arraygroesse. Hier wird ab 1 
+   gezaehlt... */
 
 #include<sys/types.h>
 #include<unistd.h>
@@ -505,9 +507,9 @@ int dualcode( PLANMAP map )
 /* berechnet das Dual und schreibt es als planarcode auf stdout */
 
 int flaechenzahl, knotenzahl, codelaenge=1,i,j, nextnumber=2;
-FLAECHENTYP code[(S+12)*7]; /* In main wird schon abgefangen, wenn das nicht in
+FLAECHENTYP code[(S+13)*7]; /* In main wird schon abgefangen, wenn das nicht in
 			       unsigned char passt */
-KANTE *startedge[S+12];
+KANTE *startedge[S+13];
 KANTE *run, *merke;
 static int write_header=1;
 
