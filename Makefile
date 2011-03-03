@@ -30,7 +30,7 @@ CaGe-C.zip: clear_distribution
 source_distribution:
 	( \
 	 find cage lisken Images util Native Generators PreCompute img Makefile -print | \
-	 egrep "(\.(java|gif|ps|c|h)$$)|((Makefile|Sysdir)$$)" | \
+	 egrep "(\.(java|gif|png|ps|c|h)$$)|((Makefile|Sysdir)$$)" | \
 	 egrep -v "test|embed\.tar|Viewers|(^hall/)|HelloWorld|\.xvpics"; \
 	 find INSTALL.sh cage.sh CaGe.ini java j .rasmolrc \
 	  Jmol.jar -print \
