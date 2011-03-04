@@ -80,16 +80,19 @@ public class BackgroundRunner extends Thread
 
     public void start()
             throws IllegalThreadStateException {
+        Debug.print("Started BackgroundRunner");
         super.start();
         try {
             generator.start();
             embedThread.start();
         } catch (Exception ex) {
+            Debug.reportException(ex);
             abort();
         }
         try {
             generator.yieldAndAdvanceBy(1);
         } catch (Exception ex) {
+            Debug.reportException(ex);
             generator.fireExceptionOccurred(ex);
             end();
         }
