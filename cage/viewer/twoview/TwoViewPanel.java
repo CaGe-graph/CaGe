@@ -337,11 +337,11 @@ public class TwoViewPanel extends JPanel
     }
 
     public void propertyChange(PropertyChangeEvent e) {
-        final CaGeResult result = (CaGeResult) e.getNewValue();
+        final CaGeResult cageResult = (CaGeResult) e.getNewValue();
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
-                embeddingChanged(result);
+                embeddingChanged(cageResult);
             }
         });
     }
@@ -360,9 +360,9 @@ public class TwoViewPanel extends JPanel
         for (int i = 0; i < vertexFontArray.length; ++i) {
             vertexFontArray[i] = null;
         }
-        boolean showNumbers = this.showNumbers;
+        boolean showNumbersOld = this.showNumbers;
         getVertexFont();
-        showNumbers(showNumbers);
+        showNumbers(showNumbersOld);
         resetButton.setText("reset embedding");
         resetButton.setEnabled(result.reembed2DMade);
     }
