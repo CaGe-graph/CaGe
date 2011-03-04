@@ -47,7 +47,6 @@ import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
