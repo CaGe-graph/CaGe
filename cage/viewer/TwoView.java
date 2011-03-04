@@ -12,6 +12,7 @@ import cage.NativeEmbeddableGraph;
 import cage.ResultPanel;
 import cage.SavePSDialog;
 import cage.StaticGeneratorInfo;
+import cage.utility.Debug;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,7 +25,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,9 +35,11 @@ import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,6 +47,7 @@ import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
@@ -144,9 +150,46 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         savePSButton.setAlignmentY(0.5f);
         savePSButton.setActionCommand("s");
         savePSButton.addActionListener(this);
+
+        //TODO:rework other buttons and components
+
+        JToggleButton savePNGButton = new JToggleButton("Save PNG");
+        savePNGButton.setFont(titleFont);
+        savePNGButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
+        new PushButtonDecoration(savePNGButton);
+        savePNGButton.setMnemonic(KeyEvent.VK_G);
+        savePNGButton.setAlignmentY(0.5f);
+        savePNGButton.addActionListener(new ActionListener() {
+
+            JFileChooser fileChooser = 
+                    new JFileChooser(new File(
+                            CaGe.config.getProperty("CaGe.Generators.RunDir")));
+
+            public void actionPerformed(ActionEvent e) {
+                if(fileChooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION){
+                    File f = fileChooser.getSelectedFile();
+                    if(!f.getAbsolutePath().toLowerCase().endsWith(".png")){
+                        f = new File(f.getAbsolutePath() + ".png");
+                    }
+                    //TODO: maybe ask before overwriting file
+                    BufferedImage im =
+                            new BufferedImage(twoViewPanel.getWidth(),
+                                              twoViewPanel.getHeight(),
+                                              BufferedImage.TYPE_INT_ARGB);
+                    twoViewPanel.paintComponent(im.getGraphics());
+                    try {
+                        ImageIO.write(im, "PNG", f);
+                    } catch (IOException ex) {
+                        Debug.reportException(ex);
+                    }
+                }
+            }
+        });
+
         savePanel = new JPanel();
         savePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         savePanel.add(savePSButton);
+        savePanel.add(savePNGButton);
         createFrame();
         savePSDialog = new SavePSDialog("save Postscript");
         savePSDialog.setNearComponent(savePSButton);
