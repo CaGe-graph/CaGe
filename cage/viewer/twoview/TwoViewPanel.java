@@ -53,11 +53,11 @@ public class TwoViewPanel extends JPanel
     public static final int MIN_EDGE_WIDTH = 0,  MAX_EDGE_WIDTH = 9;
     public static final int DEFAULT_EDGE_WIDTH = MAX_EDGE_WIDTH / 2;
     static int MAX_VERTEX_SIZE;
-    static MediaTracker tracker;
+    static final MediaTracker tracker;
     static final int vertexSizes;
     static Image[] vertexImageArray;
     static AbstractButton[] sizeButtonArray;
-    static ButtonGroup vertexSizeGroup;
+    static final ButtonGroup vertexSizeGroup;
 
 
     static {
