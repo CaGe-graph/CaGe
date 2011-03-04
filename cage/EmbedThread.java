@@ -1,7 +1,6 @@
 package cage;
 
 import cage.utility.Debug;
-import cage.utility.StackTrace;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -49,17 +48,12 @@ public class EmbedThread extends Thread {
      */
     private boolean getNextTask() {
         Debug.print("Getting ...");
-        if(CaGe.debugMode)
-                new StackTrace("").printStackTrace();
         try {
             task = (EmbedTask) queue.get();
         } catch (InterruptedException ex) {
             task = null;
         }
-		if(task == null)
-			Debug.print("Task was null.");
-		else
-			Debug.print(task.toString());
+        Debug.print(task.toString());
         return task != null;
     }
 

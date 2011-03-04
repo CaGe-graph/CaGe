@@ -7,7 +7,6 @@ import cage.EmbedThread;
 import cage.Embedder;
 import cage.GeneratorInfo;
 import cage.ResultPanel;
-import cage.utility.Debug;
 import cage.viewer.TwoView;
 
 import java.awt.Color;
@@ -54,11 +53,11 @@ public class TwoViewPanel extends JPanel
     public static final int MIN_EDGE_WIDTH = 0,  MAX_EDGE_WIDTH = 9;
     public static final int DEFAULT_EDGE_WIDTH = MAX_EDGE_WIDTH / 2;
     static int MAX_VERTEX_SIZE;
-    static final MediaTracker tracker;
-    static final int vertexSizes;
+    static MediaTracker tracker;
+    static int vertexSizes;
     static Image[] vertexImageArray;
     static AbstractButton[] sizeButtonArray;
-    static final ButtonGroup vertexSizeGroup;
+    static ButtonGroup vertexSizeGroup;
 
 
     static {
@@ -90,7 +89,7 @@ public class TwoViewPanel extends JPanel
                 try {
                     tracker.waitForID(0);
                 } catch (InterruptedException ex) {
-                    Debug.reportException(ex);
+                    ex.printStackTrace();
                 }
                 MAX_VERTEX_SIZE = Math.max(vertexImage.getWidth(null), vertexImage.getHeight(null));
             }
@@ -238,7 +237,7 @@ public class TwoViewPanel extends JPanel
         try {
             tracker.waitForID(vertexID);
         } catch (InterruptedException ex) {
-            Debug.reportException(ex);
+            ex.printStackTrace();
         }
         vertexImage = vertexImageArray[vertexID];
         vertexSize = Math.max(vertexImage.getWidth(null), vertexImage.getHeight(null));
@@ -338,11 +337,11 @@ public class TwoViewPanel extends JPanel
     }
 
     public void propertyChange(PropertyChangeEvent e) {
-        final CaGeResult cageResult = (CaGeResult) e.getNewValue();
+        final CaGeResult result = (CaGeResult) e.getNewValue();
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
-                embeddingChanged(cageResult);
+                embeddingChanged(result);
             }
         });
     }
@@ -361,9 +360,9 @@ public class TwoViewPanel extends JPanel
         for (int i = 0; i < vertexFontArray.length; ++i) {
             vertexFontArray[i] = null;
         }
-        boolean showNumbersOld = this.showNumbers;
+        boolean showNumbers = this.showNumbers;
         getVertexFont();
-        showNumbers(showNumbersOld);
+        showNumbers(showNumbers);
         resetButton.setText("reset embedding");
         resetButton.setEnabled(result.reembed2DMade);
     }

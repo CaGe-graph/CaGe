@@ -18,10 +18,4 @@ public class Debug {
             }
         }
     }
-
-    public static void reportException(Exception e){
-        if(CaGe.debugMode){
-            e.printStackTrace();
-        }
-    }
 }

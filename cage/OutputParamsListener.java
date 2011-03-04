@@ -21,12 +21,8 @@ public class OutputParamsListener implements ActionListener {
         if (cmd.equals(Wizard.SHOWING)) {
             outputPanel.showing();
         } else if (cmd.equals(Wizard.NEXT)) {
-            final CaGeStarter starter = new CaGeStarter(outputPanel);
-            new Thread(new Runnable() {
-                public void run() {
-                    starter.start();
-                }
-            }).start();
+            CaGeStarter starter = new CaGeStarter(outputPanel);
+            starter.start();
         } else {
             CaGe.listener.actionPerformed(e);
         }
