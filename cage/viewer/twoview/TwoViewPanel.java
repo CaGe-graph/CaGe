@@ -7,6 +7,7 @@ import cage.EmbedThread;
 import cage.Embedder;
 import cage.GeneratorInfo;
 import cage.ResultPanel;
+import cage.utility.Debug;
 import cage.viewer.TwoView;
 
 import java.awt.Color;
@@ -89,7 +90,7 @@ public class TwoViewPanel extends JPanel
                 try {
                     tracker.waitForID(0);
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                    Debug.reportException(ex);
                 }
                 MAX_VERTEX_SIZE = Math.max(vertexImage.getWidth(null), vertexImage.getHeight(null));
             }
@@ -237,7 +238,7 @@ public class TwoViewPanel extends JPanel
         try {
             tracker.waitForID(vertexID);
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Debug.reportException(ex);
         }
         vertexImage = vertexImageArray[vertexID];
         vertexSize = Math.max(vertexImage.getWidth(null), vertexImage.getHeight(null));
