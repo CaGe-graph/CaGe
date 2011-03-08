@@ -62,8 +62,7 @@ public class CaGe implements ActionListener {
     private static FoldnetThread foldnetThread;
     // private static CaGeFoldnetDialog foldnetDialog;
     private static BackgroundWindow backgroundWindow;
-    private static List embeddingTypeFactories = new ArrayList();
-    //TODO: when upgrading to Java 1.5: generify this list
+    private static List<EmbeddingTypeFactory> embeddingTypeFactories = new ArrayList<EmbeddingTypeFactory>();
 
 
     static {
@@ -164,7 +163,7 @@ public class CaGe implements ActionListener {
             try {
                 Object o = Class.forName(embeddingTypeFactoryVector.get(i).toString()).newInstance();
                 if(o instanceof EmbeddingTypeFactory)
-                    embeddingTypeFactories.add(o);
+                    embeddingTypeFactories.add((EmbeddingTypeFactory)o);
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             } catch (InstantiationException ex) {
@@ -380,7 +379,7 @@ public class CaGe implements ActionListener {
      * number of <code>EmbeddingTypeFactory</code> instances.
      */
     public static EmbeddingTypeFactory getEmbeddingTypeFactory(int i){
-        return (EmbeddingTypeFactory)embeddingTypeFactories.get(i);
+        return embeddingTypeFactories.get(i);
     }
 
     public static void exit() {
