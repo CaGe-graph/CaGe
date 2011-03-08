@@ -383,6 +383,7 @@ public class TwoViewPanel extends JPanel
 
     public void setEdgeBrightness(float brightness) {
         edgeColor = new Color(brightness, brightness, brightness);
+        specialEdgeColor = new Color((brightness + 0.25f)/2, 0.4f + (brightness + 0.25f)/2, (brightness + 0.25f)/2);
         repaint();
     }
 
@@ -440,7 +441,7 @@ public class TwoViewPanel extends JPanel
     }
     Graphics graphics;
     Color edgeColor = new Color(0.75f, 0.75f, 0.75f);
-    Color specialEdgeColor = new Color(0.0f, 0.5f, 0.0f);
+    Color specialEdgeColor = new Color(0.5f, 0.9f, 0.5f);
     Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
 
     public void paintComponent(Graphics graphics) {
