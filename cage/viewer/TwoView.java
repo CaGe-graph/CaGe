@@ -83,7 +83,8 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         title.setForeground(Color.black);
         title.setFont(titleFont);
         title.setAlignmentY(0.5f);
-        Box titlePanel1 = new Box(BoxLayout.X_AXIS);
+        JPanel titlePanel1 = new JPanel();
+        titlePanel1.setLayout(new BoxLayout(titlePanel1, BoxLayout.X_AXIS));
         titlePanel1.add(title);
         titlePanel1.add(Box.createHorizontalStrut(20));
         titlePanel1.add(Box.createHorizontalGlue());
