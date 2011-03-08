@@ -8,62 +8,52 @@ package cage;
  */
 public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
 
-    private static final Type[] TYPES;
-
-    static {
-        TYPES = new Type[3];
-        TYPES[0] = new Type("rather flat") {
-
-            private String[][] embed2D = {{"embed"}};
-            private String[][] embed3D = {{"embed", "-d3", "-ip"}};
-
-            public Embedder getEmbedder() {
-                return EmbedFactory.createEmbedder(true, embed2D, embed3D);
-            }
-        };
-        TYPES[1] = new Type("rather spherical") {
-
-            private String[][] embed2D = {{"embed"}};
-            private String[][] embed3D = {{"embed", "-d3", "-is"}};
-
-            public Embedder getEmbedder() {
-                return EmbedFactory.createEmbedder(true, embed2D, embed3D);
-            }
-        };
-        TYPES[2] = new Type("rather tubular") {
-
-            private String[][] embed2D = {{"embed"}};
-            private String[][] embed3D = {{"embed", "-d3", "-it"}};
-
-            public Embedder getEmbedder() {
-                return EmbedFactory.createEmbedder(true, embed2D, embed3D);
-            }
-        };
-    }
-
     public String[] getEmbeddingTypes() {
-        String[] types = new String[TYPES.length];
+        String[] types = new String[Type.values().length];
         for (int i = 0; i < types.length; i++) {
-            types[i] = TYPES[i].getTypeName();
+            types[i] = Type.values()[i].getTypeName();
         }
         return types;
     }
 
     public Embedder getEmbedderFor(String type) {
         int i = 0;
-        while(i < TYPES.length && !TYPES[i].getTypeName().equals(type)) i++;
-        if(i==TYPES.length)
+        while(i < Type.values().length && !Type.values()[i].getTypeName().equals(type)) i++;
+        if(i==Type.values().length)
             return null;
         else
-            return TYPES[i].getEmbedder();
+            return Type.values()[i].getEmbedder();
     }
 
+    private static enum Type {
+        RATHER_FLAT("rather flat"){
+            private String[][] embed2D = {{"embed"}};
+            private String[][] embed3D = {{"embed", "-d3", "-ip"}};
 
-    //TODO: when upgrading to Java 1.5 this should use enums
-    private static abstract class Type {
+            public Embedder getEmbedder(){
+                return EmbedFactory.createEmbedder(true, embed2D, embed3D);
+            }
+        },
+        RATHER_SPHERICAL("rather spherical"){
+            private String[][] embed2D = {{"embed"}};
+            private String[][] embed3D = {{"embed", "-d3", "-is"}};
+
+            public Embedder getEmbedder(){
+                return EmbedFactory.createEmbedder(true, embed2D, embed3D);
+            }
+        },
+        RATHER_TUBULAR("rather tubular"){
+            private String[][] embed2D = {{"embed"}};
+            private String[][] embed3D = {{"embed", "-d3", "-it"}};
+
+            public Embedder getEmbedder(){
+                return EmbedFactory.createEmbedder(true, embed2D, embed3D);
+            }
+        };
+
         private String typeName;
 
-        public Type(String typeName) {
+        Type(String typeName) {
             this.typeName = typeName;
         }
 
