@@ -25,10 +25,10 @@ public class JmolColorChangeListener implements ChangeListener{
     }
 
     protected static String colorToString(Color c){
-        Integer[] colors = {Integer.valueOf(c.getRed()),
-                            Integer.valueOf(c.getGreen()),
-                            Integer.valueOf(c.getBlue())};
-        String colorString = MessageFormat.format("[{0},{1},{2}]", colors);
+        String colorString = MessageFormat.format("[{0},{1},{2}]",
+                            c.getRed(),
+                            c.getGreen(),
+                            c.getBlue());
         return colorString;
     }
 

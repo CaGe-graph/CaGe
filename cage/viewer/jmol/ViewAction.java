@@ -32,7 +32,7 @@ public class ViewAction extends JmolAction {
      */
     public ViewAction(String name, JmolViewer viewer, String view) {
         super(name, viewer);
-        command = MessageFormat.format("if not(showBoundBox);if not(showUnitcell);boundbox on;{0};boundbox off;endif;else;{0};endif;", new String[]{view});
+        command = MessageFormat.format("if not(showBoundBox);if not(showUnitcell);boundbox on;{0};boundbox off;endif;else;{0};endif;", view);
     }
 
     public String getCommand() {

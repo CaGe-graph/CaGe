@@ -105,8 +105,7 @@ public class TargetPanel extends JPanel {
      * @return The name of the target
      */
     public String getTargetName(){
-        String[] args = {fileName.getText()};
-        return MessageFormat.format(targetTemplate, args);
+        return MessageFormat.format(targetTemplate, fileName.getText());
     }
 
     public void setTargetName(String fileName) {

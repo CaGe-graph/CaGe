@@ -225,7 +225,7 @@ public class JmolMenu {
         for (int i = 0; i < spinFrequency.length; i++) {
             JRadioButtonMenuItem spinXItem = new JRadioButtonMenuItem(
                     new DefaultJmolAction(Integer.toString(spinFrequency[i]), viewer,
-                    MessageFormat.format("set spin X {0}", new Integer[]{Integer.valueOf(spinFrequency[i])})));
+                    MessageFormat.format("set spin X {0}", spinFrequency[i])));
             spinXItem.setSelected(i==0);
             spinXGroup.add(spinXItem);
             spinXMenu.add(spinXItem);
@@ -237,7 +237,7 @@ public class JmolMenu {
         for (int i = 0; i < spinFrequency.length; i++) {
             JRadioButtonMenuItem spinYItem = new JRadioButtonMenuItem(
                     new DefaultJmolAction(Integer.toString(spinFrequency[i]), viewer,
-                    MessageFormat.format("set spin Y {0}", new Integer[]{Integer.valueOf(spinFrequency[i])})));
+                    MessageFormat.format("set spin Y {0}", spinFrequency[i])));
             spinYItem.setSelected(i==2);
             spinYGroup.add(spinYItem);
             spinYMenu.add(spinYItem);
@@ -249,7 +249,7 @@ public class JmolMenu {
         for (int i = 0; i < spinFrequency.length; i++) {
             JRadioButtonMenuItem spinZItem = new JRadioButtonMenuItem(
                     new DefaultJmolAction(Integer.toString(spinFrequency[i]), viewer,
-                    MessageFormat.format("set spin Z {0}", new Integer[]{Integer.valueOf(spinFrequency[i])})));
+                    MessageFormat.format("set spin Z {0}", spinFrequency[i])));
             spinZItem.setSelected(i==0);
             spinZGroup.add(spinZItem);
             spinZMenu.add(spinZItem);
@@ -262,7 +262,7 @@ public class JmolMenu {
         for (int i = 0; i < spinFrequency.length; i++) {
             JRadioButtonMenuItem spinFpsItem = new JRadioButtonMenuItem(
                     new DefaultJmolAction(Integer.toString(spinFrequency[i]), viewer,
-                    MessageFormat.format("set spin Fps {0}", new Integer[]{Integer.valueOf(spinFrequency[i])})));
+                    MessageFormat.format("set spin Fps {0}", spinFrequency[i])));
             spinFpsItem.setSelected(i==3);
             spinFpsGroup.add(spinFpsItem);
             spinFpsMenu.add(spinFpsItem);

@@ -61,13 +61,13 @@ public class AboutJmolPanel extends JPanel {
                     return viewer.getJavaVersion();
                 } else if(rowIndex==5){
                     return MessageFormat.format("{0} MB",
-                        new Long[]{Long.valueOf(convertToMegabytes(Runtime.getRuntime().totalMemory()))});
+                        convertToMegabytes(Runtime.getRuntime().totalMemory()));
                 } else if(rowIndex==6){
                     return MessageFormat.format("{0} MB",
-                        new Long[]{Long.valueOf(convertToMegabytes(Runtime.getRuntime().freeMemory()))});
+                        convertToMegabytes(Runtime.getRuntime().freeMemory()));
                 } else if(rowIndex==7){
                     return MessageFormat.format("{0} MB",
-                        new Long[]{Long.valueOf(convertToMegabytes(Runtime.getRuntime().maxMemory()))});
+                        convertToMegabytes(Runtime.getRuntime().maxMemory()));
                 } else if(rowIndex==8){
                     return Integer.valueOf(Runtime.getRuntime().availableProcessors());
                 } else {
