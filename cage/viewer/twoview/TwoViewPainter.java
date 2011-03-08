@@ -20,9 +20,10 @@ public class TwoViewPainter {
     int horSign, verSign;
     double scale, delta, horOffset, verOffset;
 
-    boolean isPartOfPentagon[][];
-    boolean highlightPentagons = false;
-    boolean pentagonsAlreadyDetermined = false;
+    boolean isPartOfHighlightedFace[][];
+    boolean highlightFaces = false;
+    int highlightedFacesSize = 5;
+    boolean highlightedFacesAlreadyDetermined = false;
 
     public TwoViewPainter(TwoViewDevice device) {
         this.device = device;
@@ -45,24 +46,30 @@ public class TwoViewPainter {
         }
         viewportChanged();
 
-        isPartOfPentagon = new boolean[graphSize+1][graphSize+1];
-        pentagonsAlreadyDetermined = false;
+        isPartOfHighlightedFace = new boolean[graphSize+1][graphSize+1];
+        highlightedFacesAlreadyDetermined = false;
     }
 
-    public void setHighlightPentagons(boolean highlightPentagons) {
-        this.highlightPentagons = highlightPentagons;
+    public void setHighlightFaces(boolean highlightFaces) {
+        this.highlightFaces = highlightFaces;
+    }
+
+    public void setHighlightedFacesSize(int highlightedFacesSize) {
+        this.highlightedFacesSize = highlightedFacesSize;
+        highlightedFacesAlreadyDetermined = false;
+        isPartOfHighlightedFace = new boolean[graphSize+1][graphSize+1];
     }
 
     /**
      * @param embedding a list with the ordered list of neighbours of each vertex
      * @return true if edge v1 v2 is part of a pentagon
      */
-    private boolean edgeIsPartOfPentagon(int v1, int v2, List<List<Integer>> embedding) {
+    private boolean edgeIsPartOfFaceWithGivenSize(int v1, int v2, List<List<Integer>> embedding) {
         int v1_temp = v1;
         int v2_temp = v2;
 
         //First investigating the face at one of the edge
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < highlightedFacesSize; i++) {
             List<Integer> neighbours = embedding.get(v2_temp);
             int previous_index = neighbours.indexOf(v1_temp);
             if(previous_index == -1) {
@@ -70,13 +77,21 @@ public class TwoViewPainter {
             }
             v1_temp = v2_temp;
             v2_temp = neighbours.get((previous_index - 1 + neighbours.size()) % neighbours.size());
+            if(v1_temp == v1 && v2_temp == v2 && i < highlightedFacesSize-1) {
+                //prevent faces that have a size that is a divisor of the requested
+                //size to be highlighted
+                v1_temp = -1;
+                break;
+            }
         }
         if(v1_temp == v1 && v2_temp == v2) {
             return true;
         }
 
+        v1_temp = v1;
+        v2_temp = v2;
         //Investigating the face to the other side of the edge
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < highlightedFacesSize; i++) {
             List<Integer> neighbours = embedding.get(v2_temp);
             int previous_index = neighbours.indexOf(v1_temp);
             if(previous_index == -1) {
@@ -84,12 +99,18 @@ public class TwoViewPainter {
             }
             v1_temp = v2_temp;
             v2_temp = neighbours.get((previous_index + 1) % neighbours.size());
+            if(v1_temp == v1 && v2_temp == v2 && i < highlightedFacesSize-1) {
+                //prevent faces that have a size that is a divisor of the requested
+                //size to be highlighted
+                v1_temp = -1;
+                break;
+            }
         }
 
         return v1_temp == v1 && v2_temp == v2;
     }
 
-    private void determinePentagons() {
+    private void determineHighlightedFaces() {
         //The neighbours of each vertex
         List<List<Integer>> embedding = new ArrayList<List<Integer>>();
 
@@ -110,14 +131,19 @@ public class TwoViewPainter {
                 int j = it.nextEdge();
 
                 //Algorithm is not really efficient, but it is certainly not a bottleneck
-                if(edgeIsPartOfPentagon(i, j, embedding)) {
-                    isPartOfPentagon[i][j] = true;
-                    isPartOfPentagon[j][i] = true;
+                if(edgeIsPartOfFaceWithGivenSize(i, j, embedding)) {
+                    isPartOfHighlightedFace[i][j] = true;
+                    isPartOfHighlightedFace[j][i] = true;
                 }
+                //TODO: why does this not work? Fixed by recreating array when face size changes
+                //else {
+                //    isPartOfHighlightedFace[i][j] = false;
+                //    isPartOfHighlightedFace[j][i] = false;
+                //}
             }
         }
 
-        pentagonsAlreadyDetermined = true;
+        highlightedFacesAlreadyDetermined = true;
 
     }
 
@@ -198,8 +224,8 @@ public class TwoViewPainter {
     }
 
     public void paintGraph() {
-        if(highlightPentagons && !pentagonsAlreadyDetermined)
-            determinePentagons();
+        if(highlightFaces && !highlightedFacesAlreadyDetermined)
+            determineHighlightedFaces();
 
         device.beginGraph();
         device.beginEdges();
@@ -212,7 +238,7 @@ public class TwoViewPainter {
                 }
 
                 device.paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
-                        highlightPentagons && isPartOfPentagon[i][j]);
+                        highlightFaces && isPartOfHighlightedFace[i][j]);
             }
         }
         device.beginVertices();

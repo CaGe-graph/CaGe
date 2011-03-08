@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -37,9 +39,11 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import lisken.systoolbox.Systoolbox;
@@ -108,7 +112,8 @@ public class TwoViewPanel extends JPanel
     ActionListener sizeButtonListener;
     AbstractButton showNumbersButton;
 
-    AbstractButton showPentagonsButton;
+    AbstractButton highlightFacesButton;
+    JFormattedTextField highlightedFacesSizeField;
 
     AbstractButton resetButton;
     ResultPanel resultPanel;
@@ -156,16 +161,44 @@ public class TwoViewPanel extends JPanel
         });
         titlePanel1.add(showNumbersButton);
 
-        showPentagonsButton = new JCheckBox("Highlight pentagons", false);
-        showPentagonsButton.setFont(titleFont);
-        showPentagonsButton.setAlignmentY(0.5f);
-        showPentagonsButton.addActionListener(new ActionListener() {
+        highlightFacesButton = new JCheckBox("Highlight faces of size: ", false);
+        highlightFacesButton.setFont(titleFont);
+        highlightFacesButton.setAlignmentY(0.5f);
+        highlightFacesButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                showPentagons(showPentagonsButton.isSelected());
+                highlightFaces(highlightFacesButton.isSelected());
+                highlightedFacesSizeField.setEnabled(highlightFacesButton.isSelected());
             }
         });
-        titlePanel1.add(showPentagonsButton);
+        titlePanel1.add(highlightFacesButton);
+
+        highlightedFacesSizeField = new JFormattedTextField(5);
+        highlightedFacesSizeField.setEnabled(highlightFacesButton.isSelected());
+        highlightedFacesSizeField.setColumns(4);
+        highlightedFacesSizeField.setAlignmentY(0.5f);
+        highlightedFacesSizeField.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setHighlightedFaces((Integer)highlightedFacesSizeField.getValue());
+                    }
+                });
+            }
+        });
+        highlightedFacesSizeField.addFocusListener(new FocusAdapter() {
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setHighlightedFaces((Integer)highlightedFacesSizeField.getValue());
+                    }
+                });
+            }
+        });
+        titlePanel1.add(highlightedFacesSizeField);
 
         resetButton = new JButton("reset embedding");
         resetButton.setFont(titleFont);
@@ -323,8 +356,14 @@ public class TwoViewPanel extends JPanel
     }
 
 
-    public void showPentagons(boolean showPentagons) {
-        painter.setHighlightPentagons(showPentagons);
+    public void highlightFaces(boolean highlightFaces) {
+        painter.setHighlightFaces(highlightFaces);
+
+        repaint();
+    }
+
+    public void setHighlightedFaces(int highlightedFacesSize) {
+        painter.setHighlightedFacesSize(highlightedFacesSize);
 
         repaint();
     }
