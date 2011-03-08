@@ -9,7 +9,7 @@ public interface TwoViewDevice {
 
     public void beginEdges();
 
-    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2);
+    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour);
 
     public void beginVertices();
 

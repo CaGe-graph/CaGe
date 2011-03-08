@@ -107,6 +107,9 @@ public class TwoViewPanel extends JPanel
     Font vertexFont;
     ActionListener sizeButtonListener;
     AbstractButton showNumbersButton;
+
+    AbstractButton showPentagonsButton;
+
     AbstractButton resetButton;
     ResultPanel resultPanel;
     TwoViewPainter painter;
@@ -152,6 +155,18 @@ public class TwoViewPanel extends JPanel
             }
         });
         titlePanel1.add(showNumbersButton);
+
+        showPentagonsButton = new JCheckBox("Highlight pentagons", false);
+        showPentagonsButton.setFont(titleFont);
+        showPentagonsButton.setAlignmentY(0.5f);
+        showPentagonsButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                showPentagons(showPentagonsButton.isSelected());
+            }
+        });
+        titlePanel1.add(showPentagonsButton);
+
         resetButton = new JButton("reset embedding");
         resetButton.setFont(titleFont);
         resetButton.setBorder(//BorderFactory.createCompoundBorder(
@@ -307,6 +322,13 @@ public class TwoViewPanel extends JPanel
         return showNumbers;
     }
 
+
+    public void showPentagons(boolean showPentagons) {
+        painter.setHighlightPentagons(showPentagons);
+
+        repaint();
+    }
+
     public void setEdgeWidth(int edgeWidth) {
         this.edgeWidth = edgeWidth;
         repaint();
@@ -379,6 +401,7 @@ public class TwoViewPanel extends JPanel
     }
     Graphics graphics;
     Color edgeColor = new Color(0.75f, 0.75f, 0.75f);
+    Color specialEdgeColor = new Color(0.0f, 0.5f, 0.0f);
     Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
 
     public void paintComponent(Graphics graphics) {
@@ -405,7 +428,9 @@ public class TwoViewPanel extends JPanel
         graphics.setColor(edgeColor);
     }
 
-    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2) {
+    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
+        if(useSpecialColour)
+            graphics.setColor(specialEdgeColor);
         int xp1, yp1, xp2, yp2;
         xp1 = (int) Math.floor(x1);
         yp1 = (int) Math.floor(y1);
@@ -432,6 +457,10 @@ public class TwoViewPanel extends JPanel
             // System.err.println(i + " -> " + j + ": " + px[0] + "," + py[0] + " - " + px[1] + "," + py[1] + " - " + px[2] + "," + py[2] + " - " + px[3] + "," + py[3] + " (" + (float) dx + ", " + (float) dy + ")");
             graphics.fillPolygon(px, py, 4);
         }
+
+        //Reset colour
+        if(useSpecialColour)
+            graphics.setColor(edgeColor);
     }
 
     public void beginVertices() {

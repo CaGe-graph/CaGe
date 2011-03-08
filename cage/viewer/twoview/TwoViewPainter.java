@@ -2,6 +2,8 @@ package cage.viewer.twoview;
 
 import cage.EdgeIterator;
 import cage.EmbeddableGraph;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +19,10 @@ public class TwoViewPainter {
     double horMin, horMax, verMin, verMax;
     int horSign, verSign;
     double scale, delta, horOffset, verOffset;
+
+    boolean isPartOfPentagon[][];
+    boolean highlightPentagons = false;
+    boolean pentagonsAlreadyDetermined = false;
 
     public TwoViewPainter(TwoViewDevice device) {
         this.device = device;
@@ -38,6 +44,81 @@ public class TwoViewPainter {
             yMax = Math.max(yMax, coordinate[i][1]);
         }
         viewportChanged();
+
+        isPartOfPentagon = new boolean[graphSize+1][graphSize+1];
+        pentagonsAlreadyDetermined = false;
+    }
+
+    public void setHighlightPentagons(boolean highlightPentagons) {
+        this.highlightPentagons = highlightPentagons;
+    }
+
+    /**
+     * @param embedding a list with the ordered list of neighbours of each vertex
+     * @return true if edge v1 v2 is part of a pentagon
+     */
+    private boolean edgeIsPartOfPentagon(int v1, int v2, List<List<Integer>> embedding) {
+        int v1_temp = v1;
+        int v2_temp = v2;
+
+        //First investigating the face at one of the edge
+        for(int i = 0; i < 5; i++) {
+            List<Integer> neighbours = embedding.get(v2_temp);
+            int previous_index = neighbours.indexOf(v1_temp);
+            if(previous_index == -1) {
+                throw new RuntimeException("Vertex " + v1_temp + " not found in list of neighbours of " + v2_temp);
+            }
+            v1_temp = v2_temp;
+            v2_temp = neighbours.get((previous_index - 1 + neighbours.size()) % neighbours.size());
+        }
+        if(v1_temp == v1 && v2_temp == v2) {
+            return true;
+        }
+
+        //Investigating the face to the other side of the edge
+        for(int i = 0; i < 5; i++) {
+            List<Integer> neighbours = embedding.get(v2_temp);
+            int previous_index = neighbours.indexOf(v1_temp);
+            if(previous_index == -1) {
+                throw new RuntimeException("Vertex " + v1_temp + " not found in list of neighbours of " + v2_temp);
+            }
+            v1_temp = v2_temp;
+            v2_temp = neighbours.get((previous_index + 1) % neighbours.size());
+        }
+
+        return v1_temp == v1 && v2_temp == v2;
+    }
+
+    private void determinePentagons() {
+        //The neighbours of each vertex
+        List<List<Integer>> embedding = new ArrayList<List<Integer>>();
+
+        //For i = 0
+        embedding.add(new ArrayList<Integer>());
+        for (int i = 1; i <= graphSize; i++) {
+            EdgeIterator it = graph.getEdgeIterator(i);
+            List<Integer> neighbours = new ArrayList<Integer>();
+            while(it.hasNext()) {
+                neighbours.add(it.nextEdge());
+            }
+            embedding.add(neighbours);
+        }
+
+        for (int i = graphSize; i > 0; --i) {
+            EdgeIterator it = graph.getEdgeIterator(i);
+            while(it.hasNext()) {
+                int j = it.nextEdge();
+
+                //Algorithm is not really efficient, but it is certainly not a bottleneck
+                if(edgeIsPartOfPentagon(i, j, embedding)) {
+                    isPartOfPentagon[i][j] = true;
+                    isPartOfPentagon[j][i] = true;
+                }
+            }
+        }
+
+        pentagonsAlreadyDetermined = true;
+
     }
 
     public void setPaintArea(double horMin, double horMax, double verMin, double verMax) {
@@ -117,6 +198,9 @@ public class TwoViewPainter {
     }
 
     public void paintGraph() {
+        if(highlightPentagons && !pentagonsAlreadyDetermined)
+            determinePentagons();
+
         device.beginGraph();
         device.beginEdges();
         for (int i = graphSize; i > 0; --i) {
@@ -126,12 +210,15 @@ public class TwoViewPainter {
                 if (j >= i) {
                     continue; // draw only edges to vertices that aren't drawn yet
                 }
-                device.paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j);
+
+                device.paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
+                        highlightPentagons && isPartOfPentagon[i][j]);
             }
         }
         device.beginVertices();
         for (int i = graphSize; i > 0; --i) {
             device.paintVertex(p[i].x, p[i].y, i);
         }
+        
     }
 }

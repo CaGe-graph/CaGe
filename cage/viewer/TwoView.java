@@ -160,7 +160,7 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         savePNGButton.setAlignmentY(0.5f);
         savePNGButton.addActionListener(new ActionListener() {
 
-            JFileChooser fileChooser = 
+            JFileChooser fileChooser =
                     new JFileChooser(new File(
                             CaGe.config.getProperty("CaGe.Generators.RunDir")));
 
@@ -486,7 +486,7 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         savePS("\n\nbegin_edges\n\n");
     }
 
-    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2) {
+    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         savePS("v" + v1 + " " + "v" + v2 + " edge\n");
     }
 
