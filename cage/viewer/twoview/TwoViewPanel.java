@@ -245,12 +245,14 @@ public class TwoViewPanel extends JPanel
         edgeWidth = DEFAULT_EDGE_WIDTH;
         addComponentListener(new ComponentAdapter() {
 
+            @Override
             public void componentResized(ComponentEvent e) {
                 viewportChanged();
             }
         });
         addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (reembed2DDisabled || e.getModifiers() != InputEvent.BUTTON1_MASK) {
                     return;
@@ -443,6 +445,7 @@ public class TwoViewPanel extends JPanel
     Color specialEdgeColor = new Color(0.5f, 0.9f, 0.5f);
     Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
 
+    @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         if (result.graph == null) {
