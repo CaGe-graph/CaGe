@@ -19,12 +19,12 @@ public class NativeCMLWriter extends AbstractChemicalWriter {
 
     public String encodeResult(CaGeResult result) {
         return new String(nEncodeGraph(
-                (NativeEmbeddableGraph) result.graph, elementRule, dimension));
+                (NativeEmbeddableGraph) result.getGraph(), elementRule, dimension));
     }
 
     public void outputResult(CaGeResult result) {
         out(nEncodeGraph(
-                (NativeEmbeddableGraph) result.graph, elementRule, dimension));
+                (NativeEmbeddableGraph) result.getGraph(), elementRule, dimension));
     }
 }
 

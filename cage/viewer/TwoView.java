@@ -220,7 +220,7 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
             savePostScript();
         }
         savePSButton.getModel().setPressed(false);
-        savePSButton.setSelected(result.saved2DPS > 0);
+        savePSButton.setSelected(result.getSaved2DPS() > 0);
     }
 
     public void setEdgeBrightness(float edgeBrightness) {
@@ -264,8 +264,8 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
     public void outputResult(CaGeResult result) {
         CaGeResult previousResult = this.result;
         this.result = result;
-        EmbeddableGraph graph = result.graph;
-        int graphNo = result.graphNo;
+        EmbeddableGraph graph = result.getGraph();
+        int graphNo = result.getGraphNo();
         String graphComment = graph.getComment();
         if (graphComment == null) {
             graphComment = "";
@@ -276,17 +276,17 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         graphComment = "Graph " + graphNo + " - " + graph.getSize() + " vertices" + graphComment;
         title.setText(graphComment);
         savePSDialog.setInfo(graphComment);
-        savePSButton.setSelected(result.saved2DPS > 0);
+        savePSButton.setSelected(result.getSaved2DPS() > 0);
         String filename = (String) psFilenames.get(new MutableInteger(graphNo));
         if (filename == null && previousResult != null) {
             String previousFilename, previousNumber;
             int p;
             previousFilename =
-                    (String) psFilenames.get(new MutableInteger(previousResult.graphNo));
+                    (String) psFilenames.get(new MutableInteger(previousResult.getGraphNo()));
             if (previousFilename == null) {
                 previousFilename = savePSDialog.getFilename();
             }
-            previousNumber = "-" + previousResult.graphNo;
+            previousNumber = "-" + previousResult.getGraphNo();
             if (previousFilename.toLowerCase().endsWith(".ps")) {
                 p = previousFilename.length() - 3;
             } else if (previousFilename.toLowerCase().endsWith(".eps")) {
@@ -385,9 +385,9 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
                 42.520 + vertexRadius, 553.391 - vertexRadius,
                 42.520 + vertexRadius, 658.493 - vertexRadius);
         // A4 page, 1.5 cm margin each side, another 5 cm clear on top
-        painter.setGraph(result.graph);
+        painter.setGraph(result.getGraph());
         psPageNo.setValue(psPageNo.intValue() + 1);
-        savePS("\n%%Page: " + result.graphNo + " " + psPageNo.intValue() + "\n");
+        savePS("\n%%Page: " + result.getGraphNo() + " " + psPageNo.intValue() + "\n");
         FloatingPoint[] box = painter.getBoundingBox();
         savePS("%%BoundingBox: " + (float) (box[0].x - vertexRadius) + " " + (float) (box[0].y - vertexRadius) + " " + (float) (box[1].x + vertexRadius) + " " + (float) (box[1].y + vertexRadius) + "\n");
         savePS("\ngsave\n\n\n\n");
@@ -415,8 +415,8 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
                     Systoolbox.getStackTrace(ex));
         }
         savePSStream = null;
-        result.saved2DPS += 1;
-        psFilenames.put(new MutableInteger(result.graphNo), psFilename);
+        result.incrementSaved2DPS();
+        psFilenames.put(new MutableInteger(result.getGraphNo()), psFilename);
     }
 
     /*
@@ -494,7 +494,7 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
     public void beginVertices() {
         savePS("\n\nbegin_vertices\n\n");
         if (twoViewPanel.getShowNumbers()) {
-            savePS("(" + result.graph.getSize() + ") set_size\n\n");
+            savePS("(" + result.getGraph().getSize() + ") set_size\n\n");
         }
     }
 

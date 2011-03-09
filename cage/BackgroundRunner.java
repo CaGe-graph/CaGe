@@ -234,7 +234,7 @@ public class BackgroundRunner extends Thread
                     end();
                 }
             }
-            graphNo = result.graphNo;
+            graphNo = result.getGraphNo();
             if (graphNo == 1 ||
                     (graphNoFireInterval > 0 && graphNo % graphNoFireInterval == 0)) {
                 fireGraphNoChanged();

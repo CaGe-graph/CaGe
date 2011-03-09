@@ -17,7 +17,7 @@ public class CMLWriter extends AbstractChemicalWriter {
     }
 
     public String encodeResult(CaGeResult result) {
-        EmbeddableGraph graph = result.graph;
+        EmbeddableGraph graph = result.getGraph();
         StringBuffer buffer = new StringBuffer();
         String sep;
         int i, k, n = graph.getSize();

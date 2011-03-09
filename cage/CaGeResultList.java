@@ -38,8 +38,8 @@ public class CaGeResultList {
 
     public void addResult(CaGeResult result) {
         cursor = results.size();
-        if (result.graphNo > highestGraphNo) {
-            highestGraphNo = result.graphNo;
+        if (result.getGraphNo() > highestGraphNo) {
+            highestGraphNo = result.getGraphNo();
             highestGraphNoIndex = cursor;
         }
         this.result = result;
@@ -47,11 +47,11 @@ public class CaGeResultList {
     }
 
     public EmbeddableGraph getGraph() {
-        return result == null ? null : result.graph;
+        return result == null ? null : result.getGraph();
     }
 
     public int getGraphNo() {
-        return result == null ? 0 : result.graphNo;
+        return result == null ? 0 : result.getGraphNo();
     }
 
     public CaGeResult getResult() {
@@ -67,7 +67,7 @@ public class CaGeResultList {
         int n;
         n = results.size();
         for (found = 0; found < n; ++found) {
-            if (((CaGeResult) results.elementAt(found)).graphNo == no) {
+            if (((CaGeResult) results.elementAt(found)).getGraphNo() == no) {
                 return true;
             }
         }
@@ -99,7 +99,7 @@ public class CaGeResultList {
 
     public int nextGraphNo() {
         try {
-            return ((CaGeResult) results.elementAt(nextIndex())).graphNo;
+            return ((CaGeResult) results.elementAt(nextIndex())).getGraphNo();
         } catch (Exception e) {
             throw new NoSuchElementException();
         }
@@ -125,7 +125,7 @@ public class CaGeResultList {
 
     public int previousGraphNo() {
         try {
-            return ((CaGeResult) results.elementAt(previousIndex())).graphNo;
+            return ((CaGeResult) results.elementAt(previousIndex())).getGraphNo();
         } catch (Exception e) {
             throw new NoSuchElementException();
         }

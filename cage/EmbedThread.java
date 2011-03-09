@@ -65,12 +65,12 @@ public class EmbedThread extends Thread {
 
     private void processTask() {
         task.success = !(task.do2D || task.do3D || task.redo2D);
-        EmbeddableGraph graph = task.result.graph;
-        int graphNo = task.result.graphNo;
+        EmbeddableGraph graph = task.result.getGraph();
+        int graphNo = task.result.getGraphNo();
         if (task.do2D && !task.redo2D) {
             try {
                 embedder.embed2D(graph);
-                task.result.reembed2DMade = false;
+                task.result.setReembed2DMade(false);
                 task.success = true;
                 checkDiagnosticOutput();
             } catch (Exception ex) {
@@ -93,7 +93,7 @@ public class EmbedThread extends Thread {
         if (task.redo2D) {
             try {
                 embedder.reembed2D(graph);
-                task.result.reembed2DMade = true;
+                task.result.setReembed2DMade(true);
                 task.success = true;
                 checkDiagnosticOutput();
             } catch (Exception ex) {

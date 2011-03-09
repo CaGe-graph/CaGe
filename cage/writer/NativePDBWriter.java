@@ -23,7 +23,7 @@ public class NativePDBWriter extends AbstractChemicalWriter {
         byte[] encoding;
         lastException = null;
         try {
-            encoding = nEncodeGraph((NativeEmbeddableGraph) result.graph,
+            encoding = nEncodeGraph((NativeEmbeddableGraph) result.getGraph(),
                     elementRule, dimension);
         } catch (IOException ex) {
             lastException = ex;
@@ -36,7 +36,7 @@ public class NativePDBWriter extends AbstractChemicalWriter {
         byte[] encoding;
         lastException = null;
         try {
-            encoding = nEncodeGraph((NativeEmbeddableGraph) result.graph,
+            encoding = nEncodeGraph((NativeEmbeddableGraph) result.getGraph(),
                     elementRule, dimension);
             out(encoding);
         } catch (IOException ex) {

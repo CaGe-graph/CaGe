@@ -507,20 +507,20 @@ public class ResultPanel extends JPanel implements
 
     private void updateView() {
         CaGeResult result = results.getResult();
-        EmbeddableGraph graph = result.graph;
+        EmbeddableGraph graph = result.getGraph();
         boolean has2D = graph.has2DCoordinates();
         boolean has3D = graph.has3DCoordinates();
         outputResult(viewers, result, has2D, has3D);
         outputResult(writers, result, has2D, has3D);
-        int graphNo = result.graphNo;
+        int graphNo = result.getGraphNo();
         viewGraphNo.setText(Integer.toString(graphNo));
         if (viewGraphNo.hasFocus()) {
             viewGraphNo.selectAll();
         }
-        saveAdjButton.setEnabled(!result.savedAdj);
-        save2DButton.setEnabled(!result.saved2D);
-        save3DButton.setEnabled(!result.saved3D);
-        foldnetButton.setEnabled(!result.foldnetMade);
+        saveAdjButton.setEnabled(!result.isSavedAdj());
+        save2DButton.setEnabled(!result.isSaved2D());
+        save3DButton.setEnabled(!result.isSaved3D());
+        foldnetButton.setEnabled(!result.isFoldnetMade());
         reviewCurrLabel.setText(Integer.toString(graphNo));
         if (results.hasNext()) {
             reviewNextLabel.setText(Integer.toString(results.nextGraphNo()));
@@ -558,7 +558,7 @@ public class ResultPanel extends JPanel implements
         if (source == viewGraphNo) {
             CaGeResult result = results.getResult();
             if (result != null) {
-                viewGraphNo.setText(Integer.toString(results.getResult().graphNo));
+                viewGraphNo.setText(Integer.toString(results.getResult().getGraphNo()));
             }
         }
     }
@@ -663,21 +663,21 @@ public class ResultPanel extends JPanel implements
         CaGeResult result = results.getResult();
         saveAdjWriter = saveResult(result, saveAdjWriter, saveAdjButton,
                 "Adjacency", "save adjacency info");
-        result.savedAdj = !saveAdjButton.isEnabled();
+        result.setSavedAdj(!saveAdjButton.isEnabled());
     }
 
     void save2D() {
         CaGeResult result = results.getResult();
         save2DWriter = saveResult(result, save2DWriter, save2DButton,
                 "2D", "save 2D embedding");
-        result.saved2D = !save2DButton.isEnabled();
+        result.setSaved2D(!save2DButton.isEnabled());
     }
 
     void save3D() {
         CaGeResult result = results.getResult();
         save3DWriter = saveResult(result, save3DWriter, save3DButton,
                 "3D", "save 3D embedding");
-        result.saved3D = !save3DButton.isEnabled();
+        result.setSaved3D(!save3DButton.isEnabled());
     }
 
     CaGeWriter saveResult(CaGeResult result, CaGeWriter saveWriter,
@@ -748,7 +748,7 @@ public class ResultPanel extends JPanel implements
                 clearStatus(FOLDNET_LEVEL, false);
                 foldnetThread.addPropertyChangeListener(this);
             }
-            results.getResult().foldnetMade = true;
+            results.getResult().setFoldnetMade(true);
             foldnetButton.setEnabled(false);
         } else {
             foldnetDialog.setFilename(oldFilename);
@@ -1011,7 +1011,7 @@ public class ResultPanel extends JPanel implements
 
     public void embeddingModified(CaGeViewer modifyingViewer, CaGeResult result) {
         int modifiedDimension = modifyingViewer.getDimension();
-        EmbeddableGraph graph = result.graph;
+        EmbeddableGraph graph = result.getGraph();
         boolean modifiedOk = modifiedDimension == 2 ? graph.has2DCoordinates() : graph.has3DCoordinates();
         if (!modifiedOk) {
             return;
@@ -1019,9 +1019,9 @@ public class ResultPanel extends JPanel implements
         AbstractButton saveButton = modifiedDimension == 2 ? save2DButton : save3DButton;
         saveButton.setEnabled(true);
         if (modifiedDimension == 2) {
-            result.saved2D = false;
+            result.setSaved2D(false);
         } else {
-            result.saved3D = false;
+            result.setSaved3D(false);
         }
         if (viewers == null) {
             return;

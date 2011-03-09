@@ -36,8 +36,8 @@ public class TextViewer implements CaGeViewer {
     private JScrollPane scrollPane;
 
     public void outputResult(CaGeResult result) {
-        EmbeddableGraph graph = result.graph;
-        int graphNo = result.graphNo;
+        EmbeddableGraph graph = result.getGraph();
+        int graphNo = result.getGraphNo();
         title.setText(
                 "Graph " + graphNo + " - " + graph.getSize() + " vertices (in writegraph format)");
         String headerText = "   n" + (graph.has2DCoordinates() ? "\t\t x(2D)\t y(2D)" : "") + (graph.has3DCoordinates() ? "\t\t x(3D)\t y(3D)\t z(3D)" : "") + "\t\t  adj";

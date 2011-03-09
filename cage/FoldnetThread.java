@@ -65,7 +65,7 @@ public class FoldnetThread extends Thread {
         }
         boolean append = pageNo.intValue() > 0;
         pageNo.setValue(pageNo.intValue() + 1);
-        String command = "mkfoldnet" + (task.maxFacesize > 0 ? " -s " + task.maxFacesize : "") + (append ? " -n" : "") + " -p " + task.result.graphNo + " " + pageNo.intValue();
+        String command = "mkfoldnet" + (task.maxFacesize > 0 ? " -s " + task.maxFacesize : "") + (append ? " -n" : "") + " -p " + task.result.getGraphNo() + " " + pageNo.intValue();
         try {
             if (task.filename.trim().charAt(0) == '|') {
                 command += task.filename;
@@ -76,7 +76,7 @@ public class FoldnetThread extends Thread {
             foldnetPipe.setRunDir(runDir);
             foldnetPipe.setPath(path);
             foldnetPipe.start();
-            EmbeddableGraph graph = task.result.graph;
+            EmbeddableGraph graph = task.result.getGraph();
             BufferedFDOutputStream foldnetData = foldnetPipe.getOutputStream();
             String graphEncoding = "";
             float[][] coordinate = graph.get3DCoordinates();

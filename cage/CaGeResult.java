@@ -2,14 +2,14 @@ package cage;
 
 public class CaGeResult {
 
-    public EmbeddableGraph graph;
-    public int graphNo;
-    public boolean savedAdj = false;
-    public boolean saved2D = false;
-    public boolean saved3D = false;
-    public int saved2DPS = 0;
-    public boolean reembed2DMade = false;
-    public boolean foldnetMade = false;
+    private EmbeddableGraph graph;
+    private int graphNo;
+    private boolean savedAdj = false;
+    private boolean saved2D = false;
+    private boolean saved3D = false;
+    private int saved2DPS = 0;
+    private boolean reembed2DMade = false;
+    private boolean foldnetMade = false;
 
     public CaGeResult(EmbeddableGraph graph, int graphNo) {
         this.graph = graph;
@@ -54,6 +54,10 @@ public class CaGeResult {
 
     public void setSaved2DPS(int saved2DPS) {
         this.saved2DPS = saved2DPS;
+    }
+
+    public void incrementSaved2DPS() {
+        this.saved2DPS++;
     }
 
     public boolean isSaved3D() {

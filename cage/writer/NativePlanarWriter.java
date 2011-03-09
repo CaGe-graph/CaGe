@@ -25,7 +25,7 @@ public class NativePlanarWriter extends CaGeWriter {
     }
 
     public void outputResult(CaGeResult result) {
-        out(nEncodeGraph((NativeEmbeddableGraph) result.graph));
+        out(nEncodeGraph((NativeEmbeddableGraph) result.getGraph()));
     }
 }
 
