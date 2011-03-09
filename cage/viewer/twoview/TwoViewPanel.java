@@ -258,7 +258,7 @@ public class TwoViewPanel extends JPanel
                     return;
                 }
                 FloatingPoint point = painter.getCoordinate(e.getX(), e.getY());
-                if (embedder.reembed2DRequired(result.graph, (float) point.x, (float) point.y)) {
+                if (embedder.reembed2DRequired(result.getGraph(), (float) point.x, (float) point.y)) {
                     resetButton.setEnabled(false);
                     resetButton.requestFocus();
                     resetButton.setText("re-embedding ...");
@@ -419,8 +419,8 @@ public class TwoViewPanel extends JPanel
     }
 
     void graphChanged() {
-        graphSize = result.graph.getSize();
-        painter.setGraph(result.graph);
+        graphSize = result.getGraph().getSize();
+        painter.setGraph(result.getGraph());
         for (int i = 0; i < vertexFontArray.length; ++i) {
             vertexFontArray[i] = null;
         }
@@ -428,7 +428,7 @@ public class TwoViewPanel extends JPanel
         getVertexFont();
         showNumbers(showNumbersOld);
         resetButton.setText("reset embedding");
-        resetButton.setEnabled(result.reembed2DMade);
+        resetButton.setEnabled(result.isReembed2DMade());
     }
 
     void viewportChanged() {
@@ -448,7 +448,7 @@ public class TwoViewPanel extends JPanel
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        if (result.graph == null) {
+        if (result.getGraph() == null) {
             return;
         }
         this.graphics = graphics;
