@@ -19,6 +19,7 @@ public class NativePlanarWriter extends CaGeWriter {
 
     native byte[] header();
 
+    @Override
     public void setOutputStream(OutputStream out) {
         super.setOutputStream(out);
         out(header());

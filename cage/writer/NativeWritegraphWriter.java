@@ -19,6 +19,7 @@ public class NativeWritegraphWriter extends CaGeWriter {
 
     native byte[] header(int dimension);
 
+    @Override
     public void setOutputStream(OutputStream out) {
         super.setOutputStream(out);
         out(header(dimension));

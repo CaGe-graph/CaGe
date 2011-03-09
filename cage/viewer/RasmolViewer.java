@@ -282,6 +282,7 @@ class RasmolWatcher extends WindowAdapter implements ActionListener {
         rasmolDialog = null;
     }
 
+    @Override
     public void windowClosing(WindowEvent e) {
         responseField.setText("");
         actionPerformed(new ActionEvent(responseField, 0, "", 0));

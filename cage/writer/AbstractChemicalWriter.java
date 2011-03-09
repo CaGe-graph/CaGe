@@ -8,6 +8,7 @@ public abstract class AbstractChemicalWriter extends CaGeWriter {
 
     ElementRule elementRule;
 
+    @Override
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         super.setGeneratorInfo(generatorInfo);
         elementRule = generatorInfo.getElementRule();

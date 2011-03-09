@@ -43,6 +43,7 @@ public class CaGeJmolViewer implements CaGeViewer{
         frame.add(jmolPanel, BorderLayout.CENTER);
         frame.setJMenuBar(JmolMenu.getJMenuBar(jmolPanel, jmolPanel.getViewer(), frame));
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 setVisible(false);
             }

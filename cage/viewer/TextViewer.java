@@ -72,11 +72,13 @@ public class TextViewer implements CaGeViewer {
         title = new JLabel();
         header = new JTextArea() {
 
+            @Override
             public Dimension getPreferredSize() {
                 return new Dimension(text.getPreferredSize().width + 10,
                         super.getPreferredSize().height + 2);
             }
 
+            @Override
             public void paintComponent(Graphics g) {
                 Color oldColor = g.getColor();
                 g.setColor(getBackground());
@@ -94,10 +96,12 @@ public class TextViewer implements CaGeViewer {
         header.setEnabled(false);
         Border underlineBorder = new AbstractBorder() {
 
+            @Override
             public boolean isBorderOpaque() {
                 return false;
             }
 
+            @Override
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
                 Color oldColor = g.getColor();
                 g.setColor(Color.black);
