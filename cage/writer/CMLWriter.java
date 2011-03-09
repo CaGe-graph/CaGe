@@ -18,44 +18,44 @@ public class CMLWriter extends AbstractChemicalWriter {
 
     public String encodeResult(CaGeResult result) {
         EmbeddableGraph graph = result.getGraph();
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder builder = new StringBuilder();
         String sep;
         int i, k, n = graph.getSize();
         float[][] coordinate =
                 dimension == 2 ? graph.get2DCoordinates() : graph.get3DCoordinates();
-        buffer.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
-        buffer.append("<!DOCTYPE molecule SYSTEM \"cml.dtd\" []>\n");
-        buffer.append("<molecule convention=\"MathGraph\">\n");
-        buffer.append("  <atomArray>\n");
-        buffer.append("    <stringArray builtin=\"id\">");
+        builder.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
+        builder.append("<!DOCTYPE molecule SYSTEM \"cml.dtd\" []>\n");
+        builder.append("<molecule convention=\"MathGraph\">\n");
+        builder.append("  <atomArray>\n");
+        builder.append("    <stringArray builtin=\"id\">");
         sep = "";
         for (i = 1; i <= n; ++i) {
-            buffer.append(sep + "a" + i);
+            builder.append(sep).append("a").append(i);
             sep = " ";
         }
-        buffer.append("</stringArray>\n");
-        buffer.append("    <stringArray builtin=\"elementType\">");
+        builder.append("</stringArray>\n");
+        builder.append("    <stringArray builtin=\"elementType\">");
         sep = "";
         for (i = 1; i <= n; ++i) {
             String element = elementRule.getElement(graph, i);
             if (element == null) {
                 element = "X";
             }
-            buffer.append(sep + element);
+            builder.append(sep).append(element);
             sep = " ";
         }
-        buffer.append("</stringArray>\n");
+        builder.append("</stringArray>\n");
         for (k = 0; k < dimension; ++k) {
-            buffer.append("    <floatArray builtin=\"" + "xyz".substring(k, k + 1) + dimension + "\">");
+            builder.append("    <floatArray builtin=\"").append("xyz".substring(k, k + 1)).append(dimension).append("\">");
             sep = "";
             for (i = 0; i < n; ++i) {
-                buffer.append(sep + coordinate[i][k]);
+                builder.append(sep).append(coordinate[i][k]);
                 sep = " ";
             }
-            buffer.append("</floatArray>\n");
+            builder.append("</floatArray>\n");
         }
-        buffer.append("  </atomArray>\n");
-        buffer.append("  <bondArray>\n");
+        builder.append("  </atomArray>\n");
+        builder.append("  <bondArray>\n");
         StringBuffer from = new StringBuffer();
         StringBuffer to = new StringBuffer();
         sep = "";
@@ -67,18 +67,18 @@ public class CMLWriter extends AbstractChemicalWriter {
                     if (j <= i) {
                         continue;
                     }
-                    from.append(sep + "a" + i);
-                    to.append(sep + "a" + j);
+                    from.append(sep).append("a").append(i);
+                    to.append(sep).append("a").append(j);
                     sep = " ";
                 }
             } catch (NoSuchElementException e) {
             }
         }
-        buffer.append("    <stringArray builtin=\"atomRef\">" + from + "</stringArray>\n");
-        buffer.append("    <stringArray builtin=\"atomRef\">" + to + "</stringArray>\n");
-        buffer.append("  </bondArray>\n");
-        buffer.append("</molecule>\n");
-        return buffer.toString();
+        builder.append("    <stringArray builtin=\"atomRef\">").append(from).append("</stringArray>\n");
+        builder.append("    <stringArray builtin=\"atomRef\">").append(to).append("</stringArray>\n");
+        builder.append("  </bondArray>\n");
+        builder.append("</molecule>\n");
+        return builder.toString();
     }
 
     public void outputResult(CaGeResult result) {
