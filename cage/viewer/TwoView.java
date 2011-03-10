@@ -2,8 +2,6 @@ package cage.viewer;
 
 import cage.viewer.twoview.TwoViewPanel;
 import cage.viewer.twoview.TwoViewPainter;
-import cage.viewer.twoview.FloatingPoint;
-import cage.viewer.twoview.TwoViewDevice;
 import cage.CaGe;
 import cage.CaGeResult;
 import cage.EmbeddableGraph;
@@ -13,6 +11,9 @@ import cage.ResultPanel;
 import cage.SavePSDialog;
 import cage.StaticGeneratorInfo;
 import cage.utility.Debug;
+import cage.viewer.twoview.PostScriptTwoViewDevice;
+import cage.viewer.twoview.TwoViewListener;
+import cage.viewer.twoview.TwoViewModel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,12 +27,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -49,31 +47,31 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
-import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
-public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
+public class TwoView implements ActionListener, CaGeViewer {
 
     private JFrame frame;
     private JLabel title;
     private Box titlePanel;
     private JPanel savePanel;
     private TwoViewPanel twoViewPanel;
-    private TwoViewPainter painter;
     private GeneratorInfo generatorInfo;
     private ResultPanel resultPanel;
     private CaGeResult result;
-    private float edgeBrightness = 0.75f;
     private JSlider edgeBrightnessSlider;
     private JToggleButton savePSButton;
     private SavePSDialog savePSDialog;
-    private OutputStream savePSStream = null;
     private Hashtable psFilenames = new Hashtable();
-    private Hashtable psPageNos = new Hashtable();
+    private PostScriptTwoViewDevice psTwoViewDevice;
+    private TwoViewModel model;
 
     public TwoView() {
+        model = new TwoViewModel();
+        psTwoViewDevice = new PostScriptTwoViewDevice(model);
+
         title = new JLabel("TwoView diagrams");
         Font titleFont = title.getFont();
         titleFont = new Font(
@@ -89,13 +87,11 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         titlePanel1.add(Box.createHorizontalStrut(20));
         titlePanel1.add(Box.createHorizontalGlue());
         edgeBrightnessSlider =
-                new JSlider(0, 15, (int) Math.round(20 * edgeBrightness));
+                new JSlider(0, 15, (int) Math.round(20 * model.getEdgeBrightness()));
         edgeBrightnessSlider.setPreferredSize(new Dimension(20, edgeBrightnessSlider.getPreferredSize().height));
         edgeBrightnessSlider.addChangeListener(new ChangeListener() {
-
             public void stateChanged(ChangeEvent e) {
-                edgeBrightness = getEdgeBrightness();
-                twoViewPanel.setEdgeBrightness(edgeBrightness);
+                model.setEdgeBrightness(edgeBrightnessSlider.getValue() / 20.0f);
             }
         });
         JLabel edgeBrightnessLabel = new JLabel("edge brightness:");
@@ -107,9 +103,8 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
                 TwoViewPanel.MIN_EDGE_WIDTH, TwoViewPanel.MAX_EDGE_WIDTH);
         edgeWidthButton.setMaximumSize(edgeWidthButton.getPreferredSize());
         edgeWidthButton.addChangeListener(new ChangeListener() {
-
             public void stateChanged(ChangeEvent e) {
-                twoViewPanel.setEdgeWidth(edgeWidthButton.getValue());
+                model.setEdgeWidth(edgeWidthButton.getValue());
             }
         });
         JLabel edgeWidthLabel = new JLabel("width:");
@@ -120,7 +115,7 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         titlePanel2.setLayout(new BoxLayout(titlePanel2, BoxLayout.X_AXIS));
         titlePanel2.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         // the next line adds several buttons to titlePanel1, one to titlePanel2
-        twoViewPanel = new TwoViewPanel(this, titlePanel1, titlePanel2, titleFont);
+        twoViewPanel = new TwoViewPanel(this, model, titlePanel1, titlePanel2, titleFont);
         titlePanel2.add(Box.createHorizontalStrut(5));
         titlePanel2.add(Box.createVerticalStrut(20));
         titlePanel2.add(Box.createHorizontalGlue());
@@ -133,7 +128,7 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         titlePanel2.add(edgeWidthButton);
         titlePanel2.add(Box.createHorizontalStrut(5));
         try {
-            setEdgeBrightness(Float.valueOf(
+            model.setEdgeBrightness(Float.valueOf(
                     CaGe.config.getProperty("TwoView.EdgeBrightness")).floatValue());
             edgeWidthButton.setValue(Integer.parseInt(
                     CaGe.config.getProperty("TwoView.EdgeWidth")));
@@ -193,6 +188,26 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         createFrame();
         savePSDialog = new SavePSDialog("save Postscript");
         savePSDialog.setNearComponent(savePSButton);
+
+        model.addTwoViewListener(new TwoViewListener() {
+
+            public void edgeBrightnessChanged() {
+                twoViewPanel.setEdgeBrightness(model.getEdgeBrightness());
+            }
+
+            public void edgeWidthChanged() {
+                twoViewPanel.setEdgeWidth(model.getEdgeWidth());
+            }
+
+            public void vertexNumbersShownChanged() {
+            }
+
+            public void vertexSizeChanged() {
+            }
+
+            public void resultChanged() {
+            }
+        });
     }
 
     private void createFrame() {
@@ -217,18 +232,13 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
         savePSButton.getModel().setPressed(true);
         savePSDialog.setVisible(true);
         if (savePSDialog.getSuccess()) {
-            savePostScript();
+            psTwoViewDevice.savePostScript(
+                    savePSDialog.getFilename(),
+                    savePSDialog.includeInfo() ? savePSDialog.getInfo() : null);
+            psFilenames.put(new MutableInteger(result.getGraphNo()), savePSDialog.getFilename());
         }
         savePSButton.getModel().setPressed(false);
         savePSButton.setSelected(result.getSaved2DPS() > 0);
-    }
-
-    public void setEdgeBrightness(float edgeBrightness) {
-        edgeBrightnessSlider.setValue((int) Math.round(edgeBrightness * 20.0f));
-    }
-
-    public float getEdgeBrightness() {
-        return edgeBrightnessSlider.getValue() / 20.0f;
     }
 
     public void setDimension(int dimension) {
@@ -264,6 +274,7 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
     public void outputResult(CaGeResult result) {
         CaGeResult previousResult = this.result;
         this.result = result;
+        model.setResult(result);
         EmbeddableGraph graph = result.getGraph();
         int graphNo = result.getGraphNo();
         String graphComment = graph.getComment();
@@ -317,192 +328,9 @@ public class TwoView implements ActionListener, CaGeViewer, TwoViewDevice {
 
     public void stop() {
         twoViewPanel.stop();
-        Enumeration unfinishedFiles = psPageNos.keys();
-        while (unfinishedFiles.hasMoreElements()) {
-            String psFilename = (String) unfinishedFiles.nextElement();
-            try {
-                savePSStream = Systoolbox.createOutputStream(
-                        psFilename, CaGe.config.getProperty("CaGe.Generators.RunDir"), true);
-                savePS("\n\n%%Pages: " + ((MutableInteger) psPageNos.get(psFilename)).intValue() + "\n");
-                savePS("%%EOF\n\n");
-                savePSStream.close();
-            } catch (Exception ex) {
-                UItoolbox.showTextInfo("Error finishing file '" + psFilename + "'",
-                        Systoolbox.getStackTrace(ex));
-            }
-        }
-        savePSStream = null;
+        psTwoViewDevice.finishPostScriptFiles();
         psFilenames = new Hashtable();
-        psPageNos = new Hashtable();
         setVisible(false);
-    }
-
-    public void savePostScript() {
-        String psFilename = savePSDialog.getFilename();
-        MutableInteger psPageNo = (MutableInteger) psPageNos.get(psFilename);
-        boolean append = (psPageNo != null);
-        try {
-            savePSStream = Systoolbox.createOutputStream(
-                    psFilename, CaGe.config.getProperty("CaGe.Generators.RunDir"), append);
-        } catch (Exception ex) {
-            UItoolbox.showTextInfo(append ? "Error opening file" : "Error creating file",
-                    Systoolbox.getStackTrace(ex));
-            savePSStream = null;
-            return;
-        }
-        if (savePSStream == null) {
-            return;
-        }
-        if (!append) {
-            try {
-                InputStream prolog = new BufferedInputStream(ClassLoader.getSystemResource("cage/viewer/TwoViewProlog.ps").openStream());
-                int c;
-                while ((c = prolog.read()) >= 0) {
-                    savePSStream.write(c);
-                }
-                prolog.close();
-            } catch (IOException ex1) {
-                UItoolbox.showTextInfo("Error reading prolog",
-                        Systoolbox.getStackTrace(ex1));
-                try {
-                    savePSStream.close();
-                } catch (IOException ex2) {
-                } finally {
-                    savePSStream = null;
-                }
-            }
-            psPageNo = new MutableInteger(0);
-        }
-        if (savePSStream == null) {
-            return;
-        }
-
-        float factor = 1;
-        float edgeWidth = twoViewPanel.getEdgeWidth() * factor * 2;
-        float vertexRadius = twoViewPanel.getVertexSize() * factor;
-        painter = new TwoViewPainter(this);
-        painter.setPaintArea(
-                42.520 + vertexRadius, 553.391 - vertexRadius,
-                42.520 + vertexRadius, 658.493 - vertexRadius);
-        // A4 page, 1.5 cm margin each side, another 5 cm clear on top
-        painter.setGraph(result.getGraph());
-        psPageNo.setValue(psPageNo.intValue() + 1);
-        savePS("\n%%Page: " + result.getGraphNo() + " " + psPageNo.intValue() + "\n");
-        FloatingPoint[] box = painter.getBoundingBox();
-        savePS("%%BoundingBox: " + (float) (box[0].x - vertexRadius) + " " + (float) (box[0].y - vertexRadius) + " " + (float) (box[1].x + vertexRadius) + " " + (float) (box[1].y + vertexRadius) + "\n");
-        savePS("\ngsave\n\n\n\n");
-        if (savePSDialog.includeInfo()) {
-            String info = Systoolbox.replace(savePSDialog.getInfo(),
-                    " - ", " \\320 ");
-            savePS("/Helvetica findfont 20 scalefont setfont\n");
-            savePS("297.9554 672.6665 (" + info + ") center_text\n");
-        }
-        savePS("/edge_width " + edgeWidth + " def\n");
-        savePS("/edge_gray " + edgeBrightness + " def\n\n");
-        savePS("/vertex_radius " + vertexRadius + " def\n");
-        savePS("/vertex_linewidth " + (vertexRadius / 6) + " def\n");
-        savePS("/vertex_color_1 { " + CaGe.config.getProperty("TwoView.VertexColor1") + " } bind def\n");
-        savePS("/vertex_color_2 { " + CaGe.config.getProperty("TwoView.VertexColor2") + " } bind def\n");
-        savePS("/vertex_number_color { " + CaGe.config.getProperty("TwoView.VertexNumberColor") + " } bind def\n\n");
-
-        painter.paintGraph();
-        savePS("\n\n\ngrestore\n\nshowpage\n");
-        try {
-            savePSStream.close();
-            psPageNos.put(psFilename, psPageNo);
-        } catch (IOException ex) {
-            UItoolbox.showTextInfo("Error closing file",
-                    Systoolbox.getStackTrace(ex));
-        }
-        savePSStream = null;
-        result.incrementSaved2DPS();
-        psFilenames.put(new MutableInteger(result.getGraphNo()), psFilename);
-    }
-
-    /*
-    public String getPSFilename()
-    {
-    final FlaggedJDialog dialog = new FlaggedJDialog(this, "Filename Dialog", true);
-    Container content = dialog.getContentPane();
-    content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-    JPanel filePanel = new JPanel();
-    JTextField psFilenameField = new JTextField(20);
-    psFilenameField.setText(generatorInfo.getFilename() + "-2d.ps");
-    filePanel.add(new JLabel("collect PS graphs in:"));
-    filePanel.add(Box.createHorizontalStrut(5));
-    filePanel.add(psFilenameField);
-    filePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    content.add(filePanel);
-    JPanel buttonPanel = new JPanel();
-    JButton okButton = new JButton("Ok");
-    JButton cancelButton = new JButton("Cancel");
-    buttonPanel.add(okButton);
-    buttonPanel.add(cancelButton);
-    content.add(buttonPanel);
-    dialog.setDefaultButton(okButton);
-    dialog.setCancelButton(cancelButton);
-    dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    dialog.pack();
-    new JTextComponentFocusSelector(psFilenameField);
-    psFilenameField.requestFocus();
-    dialog.show();
-    return dialog.getSuccess() ? psFilenameField.getText() : null;
-    }
-     */
-
-    /**
-     * If there is a PS stream, this method writes <tt>portion</tt> to
-     * that stream and otherwise returns. If this method fails to write to the
-     * streams it will try to close the stream and set it to <tt>null</tt>.
-     *
-     * @param portion The text that should be written to the PS stream.
-     */
-    private void savePS(String portion) {
-        if (savePSStream == null) {
-            return;
-        }
-        try {
-            savePSStream.write(portion.getBytes());
-        } catch (IOException ex1) {
-            UItoolbox.showTextInfo("Error saving PostScript",
-                    Systoolbox.getStackTrace(ex1));
-            try {
-                savePSStream.close();
-            } catch (IOException ex2) {
-            } finally {
-                savePSStream = null;
-            }
-        }
-    }
-
-    public void beginGraph() {
-        int graphSize = painter.getGraphSize();
-        for (int i = 1; i <= graphSize; ++i) {
-            FloatingPoint p = painter.getCoordinatePoint(i);
-            savePS("/v" + i + " { " + p.x + " " + p.y + " } bind def\n");
-        }
-    }
-
-    public void beginEdges() {
-        savePS("\n\nbegin_edges\n\n");
-    }
-
-    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
-        savePS("v" + v1 + " " + "v" + v2 + " edge\n");
-    }
-
-    public void beginVertices() {
-        savePS("\n\nbegin_vertices\n\n");
-        if (twoViewPanel.getShowNumbers()) {
-            savePS("(" + result.getGraph().getSize() + ") set_size\n\n");
-        }
-    }
-
-    public void paintVertex(double x, double y, int number) {
-        savePS("v" + number + " vertex\n");
-        if (twoViewPanel.getShowNumbers()) {
-            savePS("v" + number + " (" + number + ") vertex_number\n");
-        }
     }
 
     public static void main(String[] argv) throws Exception {

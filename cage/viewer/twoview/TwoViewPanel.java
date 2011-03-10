@@ -119,9 +119,12 @@ public class TwoViewPanel extends JPanel
     TwoViewPainter painter;
     TwoView twoView;
 
-    public TwoViewPanel(TwoView twoView,
+    private TwoViewModel model;
+
+    public TwoViewPanel(TwoView twoView, TwoViewModel model,
             Container titlePanel1, Container titlePanel2, Font titleFont) {
         this.twoView = twoView;
+        this.model = model;
         try {
             setPreferredSize(new Dimension(
                     Integer.parseInt(CaGe.config.getProperty("TwoView.Width")),
@@ -291,6 +294,10 @@ public class TwoViewPanel extends JPanel
         }
         vertexImage = vertexImageArray[vertexID];
         vertexSize = Math.max(vertexImage.getWidth(null), vertexImage.getHeight(null));
+        
+        //TODO: cleaner separation of MVC
+        model.setVertexSize(vertexSize);
+
         getVertexFont();
     }
 
@@ -314,6 +321,8 @@ public class TwoViewPanel extends JPanel
         }
         if (showNumbers && vertexFont.getSize() <= 0) {
             showNumbersButton.setSelected(showNumbers = false);
+            //TODO: cleaner separation of MVC
+            model.setShowNumbers(showNumbers);
         }
     }
 
@@ -349,6 +358,10 @@ public class TwoViewPanel extends JPanel
                 getVertexImage();
             }
         }
+        
+        //TODO: move the logic above to the model
+        model.setShowNumbers(this.showNumbers);
+
         repaint();
     }
 
