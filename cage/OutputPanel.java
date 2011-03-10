@@ -658,6 +658,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         JFrame f = new JFrame("Output Dialog");
         f.addWindowListener(new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }

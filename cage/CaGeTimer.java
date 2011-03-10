@@ -25,11 +25,13 @@ public class CaGeTimer extends Timer
         runner.addPropertyChangeListener(this);
     }
 
+    @Override
     public void start() {
         running = true;
         super.start();
     }
 
+    @Override
     public void stop() {
         super.stop();
         running = false;

@@ -78,6 +78,7 @@ public class BackgroundRunner extends Thread
         return writeDests;
     }
 
+    @Override
     public void start()
             throws IllegalThreadStateException {
         Debug.print("Started BackgroundRunner");
@@ -122,6 +123,7 @@ public class BackgroundRunner extends Thread
         end();
     }
 
+    @Override
     public void run() {
         while (getNextEvent()) {
             if (halted()) {

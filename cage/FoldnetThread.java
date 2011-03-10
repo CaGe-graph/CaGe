@@ -32,6 +32,7 @@ public class FoldnetThread extends Thread {
         this.path = path;
     }
 
+    @Override
     public void run() {
         setHalted(false);
         while (getNextTask()) {

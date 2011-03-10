@@ -38,6 +38,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
         pane.addTab(title, panel);
     }
 
+    @Override
     public void setCancelButton(JButton cancelButton) {
         super.setCancelButton(cancelButton);
         for (int i = 0; i < pane.getTabCount(); ++i) {
@@ -45,6 +46,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
         }
     }
 
+    @Override
     public void setExitButton(JButton exitButton) {
         super.setExitButton(exitButton);
         for (int i = 0; i < pane.getTabCount(); ++i) {
@@ -52,6 +54,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
         }
     }
 
+    @Override
     public void setFinishButton(JButton finishButton) {
         super.setFinishButton(finishButton);
         for (int i = 0; i < pane.getTabCount(); ++i) {
@@ -59,6 +62,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
         }
     }
 
+    @Override
     public void setNextButton(JButton nextButton) {
         super.setNextButton(nextButton);
         for (int i = 0; i < pane.getTabCount(); ++i) {
@@ -66,6 +70,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
         }
     }
 
+    @Override
     public void setPreviousButton(JButton previousButton) {
         super.setPreviousButton(previousButton);
         for (int i = 0; i < pane.getTabCount(); ++i) {

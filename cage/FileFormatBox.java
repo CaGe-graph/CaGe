@@ -82,6 +82,7 @@ public class FileFormatBox extends JComboBox implements ActionListener {
         oldExtension = extension;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String currentName = filenameField.getText();
         if (currentName.trim().startsWith("|")) {

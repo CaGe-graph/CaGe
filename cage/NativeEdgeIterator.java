@@ -69,6 +69,7 @@ public class NativeEdgeIterator implements EdgeIterator {
      * super.finalize()</code>.
      * @throws java.lang.Throwable
      */
+    @Override
     protected void finalize() throws Throwable {
         nFinalize(nIter);
         super.finalize();

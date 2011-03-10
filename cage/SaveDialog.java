@@ -160,6 +160,7 @@ public class SaveDialog extends FlaggedJDialog {
         return fileFormatBox.getCaGeWriter();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JTextField) {
             getDefaultButton().doClick();
@@ -199,6 +200,7 @@ public class SaveDialog extends FlaggedJDialog {
         return includeInfoBox.isSelected();
     }
 
+    @Override
     public void setVisible(boolean visible) {
         if (visible) {
             saveFilenameField.requestFocus();

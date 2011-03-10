@@ -26,6 +26,7 @@ public class EmbedThread extends Thread {
         Systoolbox.lowerPriority(this, priorityOffset);
     }
 
+    @Override
     public void run() {
         setHalted(false);
         while (getNextTask()) {
@@ -242,6 +243,7 @@ public class EmbedThread extends Thread {
         public boolean success;
         public boolean unfinished;
 
+        @Override
         public String toString(){
             return "EmbedTask(" + result + ", " + listener.getClass().getSimpleName() + ", " + do2D +
                     ", " + do3D + ", " + redo2D + ", " + success + ", "
