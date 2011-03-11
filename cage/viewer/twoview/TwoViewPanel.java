@@ -102,11 +102,7 @@ public class TwoViewPanel extends JPanel
     Image vertexImage;
     Font[] vertexFontArray;
     Font vertexFont;
-    ActionListener sizeButtonListener;
     AbstractButton showNumbersButton;
-
-    AbstractButton highlightFacesButton;
-    JFormattedTextField highlightedFacesSizeField;
 
     ResultPanel resultPanel;
     TwoViewPainter painter;
@@ -124,7 +120,7 @@ public class TwoViewPanel extends JPanel
                     Integer.parseInt(CaGe.config.getProperty("TwoView.Height"))));
         } catch (Exception ex) {
         }
-        sizeButtonListener = new ActionListener() {
+        ActionListener sizeButtonListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 getVertexID();
@@ -156,7 +152,9 @@ public class TwoViewPanel extends JPanel
         });
         titlePanel1.add(showNumbersButton);
 
-        highlightFacesButton = new JCheckBox("Highlight faces of size: ", false);
+        final JCheckBox highlightFacesButton = new JCheckBox("Highlight faces of size: ", false);
+        final JFormattedTextField highlightedFacesSizeField = new JFormattedTextField(5);
+        
         highlightFacesButton.setFont(titleFont);
         highlightFacesButton.setAlignmentY(0.5f);
         highlightFacesButton.addActionListener(new ActionListener() {
@@ -168,7 +166,6 @@ public class TwoViewPanel extends JPanel
         });
         titlePanel1.add(highlightFacesButton);
 
-        highlightedFacesSizeField = new JFormattedTextField(5);
         highlightedFacesSizeField.setEnabled(highlightFacesButton.isSelected());
         highlightedFacesSizeField.setColumns(4);
         highlightedFacesSizeField.setAlignmentY(0.5f);
