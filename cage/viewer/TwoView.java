@@ -166,7 +166,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         titlePanel2.setLayout(new BoxLayout(titlePanel2, BoxLayout.X_AXIS));
         titlePanel2.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         // the next line adds several buttons to titlePanel1, one to titlePanel2
-        twoViewPanel = new TwoViewPanel(this, model, titlePanel1, titlePanel2, titleFont);
+        twoViewPanel = new TwoViewPanel(this, model, titlePanel1, titleFont);
         titlePanel2.add(resetButton);
         titlePanel2.add(Box.createHorizontalStrut(5));
         titlePanel2.add(Box.createVerticalStrut(20));

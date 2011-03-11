@@ -115,7 +115,7 @@ public class TwoViewPanel extends JPanel
     private TwoViewModel model;
 
     public TwoViewPanel(TwoView twoView, TwoViewModel model,
-            Container titlePanel1, Container titlePanel2, Font titleFont) {
+            Container titlePanel1, Font titleFont) {
         this.twoView = twoView;
         this.model = model;
         try {
