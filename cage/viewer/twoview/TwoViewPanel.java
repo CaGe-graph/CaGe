@@ -96,7 +96,7 @@ public class TwoViewPanel extends JPanel
     }
     
     private boolean showNumbers = false;
-    private int graphSize, vertexID, vertexSize, edgeWidth;
+    private int graphSize, vertexID, edgeWidth;
     private CaGeResult result = null;
     private Embedder embedder = null;
     private boolean reembed2DDisabled = false;
@@ -261,10 +261,11 @@ public class TwoViewPanel extends JPanel
             Debug.reportException(ex);
         }
         vertexImage = vertexImageArray[vertexID];
-        vertexSize = Math.max(vertexImage.getWidth(null), vertexImage.getHeight(null));
         
         //TODO: cleaner separation of MVC
-        model.setVertexSize(vertexSize);
+        model.setVertexSize(
+                Math.max(vertexImage.getWidth(null), vertexImage.getHeight(null))
+                );
 
         getVertexFont();
     }
@@ -275,7 +276,7 @@ public class TwoViewPanel extends JPanel
             FontMetrics fm = getFontMetrics(vertexFont);
             int w = fm.stringWidth(Integer.toString(graphSize)), h = fm.getAscent();
             int fontSize;
-            double factor = vertexSize * 0.85 / Math.sqrt(w * w + h * h);
+            double factor = model.getVertexSize() * 0.85 / Math.sqrt(w * w + h * h);
             if (h * factor < 7.5) {
                 fontSize = 0;
             } else {
@@ -356,10 +357,6 @@ public class TwoViewPanel extends JPanel
 
     public int getEdgeWidth() {
         return edgeWidth;
-    }
-
-    public int getVertexSize() {
-        return vertexSize;
     }
 
     public void setEdgeBrightness(float brightness) {
@@ -484,7 +481,7 @@ public class TwoViewPanel extends JPanel
             graphics.setColor(edgeColor);
             graphics.fillOval(xp - (edgeWidth - 1) / 2, yp - (edgeWidth - 1) / 2, edgeWidth, edgeWidth);
         }
-        graphics.drawImage(vertexImage, xp - vertexSize / 2, yp - vertexSize / 2, null);
+        graphics.drawImage(vertexImage, xp - model.getVertexSize() / 2, yp - model.getVertexSize() / 2, null);
         if (showNumbers && vertexFont.getSize() > 0) {
             String numberString = Integer.toString(number);
             graphics.setColor(numbersColor);
