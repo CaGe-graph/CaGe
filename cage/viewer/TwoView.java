@@ -1,7 +1,6 @@
 package cage.viewer;
 
 import cage.viewer.twoview.TwoViewPanel;
-import cage.viewer.twoview.TwoViewPainter;
 import cage.CaGe;
 import cage.CaGeResult;
 import cage.EmbeddableGraph;
@@ -12,7 +11,7 @@ import cage.SavePSDialog;
 import cage.StaticGeneratorInfo;
 import cage.utility.Debug;
 import cage.viewer.twoview.PostScriptTwoViewDevice;
-import cage.viewer.twoview.TwoViewListener;
+import cage.viewer.twoview.TwoViewAdapter;
 import cage.viewer.twoview.TwoViewModel;
 
 import java.awt.BorderLayout;
@@ -30,19 +29,20 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -111,11 +111,63 @@ public class TwoView implements ActionListener, CaGeViewer {
         edgeWidthLabel.setFont(titleFont);
         edgeWidthLabel.setLabelFor(edgeWidthButton);
         edgeWidthLabel.setDisplayedMnemonic(KeyEvent.VK_W);
+
+        final JButton resetButton = new JButton("reset embedding");
+        resetButton.setFont(titleFont);
+        resetButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
+        new PushButtonDecoration(resetButton);
+        resetButton.setMnemonic(KeyEvent.VK_R);
+        resetButton.setAlignmentY(0.5f);
+        resetButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                resetButton.setText("re-embedding ...");
+                resetButton.setEnabled(false);
+                twoViewPanel.requestFocus();
+                twoViewPanel.resetEmbedding();
+            }
+        });
+        model.addTwoViewListener(new TwoViewAdapter(){
+            @Override
+            public void generatorInfoChanged() {
+                resetButton.setVisible(model.getGeneratorInfo().isReembed2DEnabled());
+            }
+
+            @Override
+            public void prepareReembedding() {
+                resetButton.setEnabled(false);
+                resetButton.requestFocus();
+                resetButton.setText("re-embedding ...");
+            }
+
+            @Override
+            public void reembeddingFinished(final CaGeResult caGeResult) {
+                resetButton.setText("reset embedding");
+                resetButton.setEnabled(result.isReembed2DMade());
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    public void run() {
+                        twoViewPanel.embeddingChanged(caGeResult);
+                    }
+                });
+            }
+
+            @Override
+            public void startReembedding() {
+            }
+
+            @Override
+            public void resultChanged() {
+                resetButton.setText("reset embedding");
+                resetButton.setEnabled(result.isReembed2DMade());
+            }
+        });
+
         JPanel titlePanel2 = new JPanel();
         titlePanel2.setLayout(new BoxLayout(titlePanel2, BoxLayout.X_AXIS));
         titlePanel2.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         // the next line adds several buttons to titlePanel1, one to titlePanel2
         twoViewPanel = new TwoViewPanel(this, model, titlePanel1, titlePanel2, titleFont);
+        titlePanel2.add(resetButton);
         titlePanel2.add(Box.createHorizontalStrut(5));
         titlePanel2.add(Box.createVerticalStrut(20));
         titlePanel2.add(Box.createHorizontalGlue());
@@ -189,23 +241,16 @@ public class TwoView implements ActionListener, CaGeViewer {
         savePSDialog = new SavePSDialog("save Postscript");
         savePSDialog.setNearComponent(savePSButton);
 
-        model.addTwoViewListener(new TwoViewListener() {
+        model.addTwoViewListener(new TwoViewAdapter() {
 
+            @Override
             public void edgeBrightnessChanged() {
                 twoViewPanel.setEdgeBrightness(model.getEdgeBrightness());
             }
 
+            @Override
             public void edgeWidthChanged() {
                 twoViewPanel.setEdgeWidth(model.getEdgeWidth());
-            }
-
-            public void vertexNumbersShownChanged() {
-            }
-
-            public void vertexSizeChanged() {
-            }
-
-            public void resultChanged() {
             }
         });
     }

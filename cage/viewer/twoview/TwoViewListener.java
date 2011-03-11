@@ -5,6 +5,8 @@
 
 package cage.viewer.twoview;
 
+import cage.CaGeResult;
+
 /**
  *
  * @author nvcleemp
@@ -18,5 +20,10 @@ public interface TwoViewListener {
     public void vertexSizeChanged();
 
     public void resultChanged();
+    public void generatorInfoChanged();
+
+    public void prepareReembedding();
+    public void startReembedding();
+    public void reembeddingFinished(CaGeResult caGeResult);
 
 }

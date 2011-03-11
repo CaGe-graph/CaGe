@@ -6,6 +6,10 @@
 package cage.viewer.twoview;
 
 import cage.CaGeResult;
+import cage.EmbedThread;
+import cage.GeneratorInfo;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +19,22 @@ import java.util.List;
  */
 public class TwoViewModel {
 
+    private PropertyChangeListener listener = new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent evt) {
+            fireReembeddingFinished((CaGeResult) evt.getNewValue());
+            embedderRunning = false;
+        }
+    };
+
     private boolean showNumbers = false;
     private int edgeWidth;
     private int vertexSize;
     private float edgeBrightness = 0.75f;
+    
+    private boolean embedderRunning = false;
 
     private CaGeResult result;
+    private GeneratorInfo generatorInfo;
 
     public boolean getShowNumbers() {
         return showNumbers;
@@ -75,6 +89,33 @@ public class TwoViewModel {
         fireResultChanged();
     }
 
+    public GeneratorInfo getGeneratorInfo() {
+        return generatorInfo;
+    }
+
+    public void setGeneratorInfo(GeneratorInfo generatorInfo) {
+        this.generatorInfo = generatorInfo;
+        fireGeneratorInfoChanged();
+    }
+
+    public void reembedGraph(EmbedThread embedThread){
+        if (embedThread != null) {
+            embedderRunning = true;
+            firePrepareReembedding();
+            fireStartReembedding();
+            embedThread.embed(result, listener, false, false, true);
+        }
+    }
+
+    public void resetEmbedding(EmbedThread embedThread){
+        if (embedThread != null && !embedderRunning) {
+            embedderRunning = true;
+            firePrepareReembedding();
+            fireStartReembedding();
+            embedThread.embed(result, listener, true, false, false);
+        }
+    }
+
     private List<TwoViewListener> listeners = new ArrayList<TwoViewListener>();
 
     public void addTwoViewListener(TwoViewListener listener){
@@ -112,6 +153,30 @@ public class TwoViewModel {
     private void fireResultChanged(){
         for (TwoViewListener l : listeners) {
             l.resultChanged();
+        }
+    }
+
+    private void fireGeneratorInfoChanged(){
+        for (TwoViewListener l : listeners) {
+            l.generatorInfoChanged();
+        }
+    }
+
+    private void firePrepareReembedding(){
+        for (TwoViewListener l : listeners) {
+            l.prepareReembedding();
+        }
+    }
+
+    private void fireStartReembedding(){
+        for (TwoViewListener l : listeners) {
+            l.startReembedding();
+        }
+    }
+
+    private void fireReembeddingFinished(CaGeResult caGeResult){
+        for (TwoViewListener l : listeners) {
+            l.reembeddingFinished(caGeResult);
         }
     }
 

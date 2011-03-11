@@ -3,7 +3,6 @@ package cage.viewer.twoview;
 
 import cage.CaGe;
 import cage.CaGeResult;
-import cage.EmbedThread;
 import cage.Embedder;
 import cage.GeneratorInfo;
 import cage.ResultPanel;
@@ -30,14 +29,10 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -46,13 +41,12 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 
 import lisken.systoolbox.Systoolbox;
-import lisken.uitoolbox.PushButtonDecoration;
 
 /**
  *
  */
 public class TwoViewPanel extends JPanel
-        implements PropertyChangeListener, TwoViewDevice {
+        implements TwoViewDevice {
 
     public static final int MIN_EDGE_WIDTH = 0,  MAX_EDGE_WIDTH = 9;
     public static final int DEFAULT_EDGE_WIDTH = MAX_EDGE_WIDTH / 2;
@@ -114,7 +108,6 @@ public class TwoViewPanel extends JPanel
     AbstractButton highlightFacesButton;
     JFormattedTextField highlightedFacesSizeField;
 
-    AbstractButton resetButton;
     ResultPanel resultPanel;
     TwoViewPainter painter;
     TwoView twoView;
@@ -202,24 +195,6 @@ public class TwoViewPanel extends JPanel
         });
         titlePanel1.add(highlightedFacesSizeField);
 
-        resetButton = new JButton("reset embedding");
-        resetButton.setFont(titleFont);
-        resetButton.setBorder(//BorderFactory.createCompoundBorder(
-                //BorderFactory.createEtchedBorder(),
-                BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        new PushButtonDecoration(resetButton);
-        resetButton.setMnemonic(KeyEvent.VK_R);
-        resetButton.setAlignmentY(0.5f);
-        resetButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                resetButton.setText("re-embedding ...");
-                resetButton.setEnabled(false);
-                requestFocus();
-                resetEmbedding();
-            }
-        });
-        titlePanel2.add(resetButton);
         vertexFontArray = new Font[vertexSizes];
         try {
             vertexID = Integer.parseInt(
@@ -262,13 +237,8 @@ public class TwoViewPanel extends JPanel
                 }
                 FloatingPoint point = painter.getCoordinate(e.getX(), e.getY());
                 if (embedder.reembed2DRequired(result.getGraph(), (float) point.x, (float) point.y)) {
-                    resetButton.setEnabled(false);
-                    resetButton.requestFocus();
-                    resetButton.setText("re-embedding ...");
-                    EmbedThread embedThread = resultPanel.getEmbedThread();
-                    if (embedThread != null) {
-                        embedThread.embed(result, TwoViewPanel.this, false, false, true);
-                    }
+                    //TODO: reembed2DRequired at the same time stores the coordinates
+                    TwoViewPanel.this.model.reembedGraph(resultPanel.getEmbedThread());
                 }
             }
         });
@@ -335,7 +305,6 @@ public class TwoViewPanel extends JPanel
 
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         boolean reembed2DEnabled = generatorInfo.isReembed2DEnabled();
-        resetButton.setVisible(reembed2DEnabled);
         reembed2DDisabled = !reembed2DEnabled;
         embedder = generatorInfo.getEmbedder();
     }
@@ -407,20 +376,7 @@ public class TwoViewPanel extends JPanel
     }
 
     public void resetEmbedding() {
-        EmbedThread embedThread = resultPanel.getEmbedThread();
-        if (embedThread != null) {
-            embedThread.embed(result, this, true, false, false);
-        }
-    }
-
-    public void propertyChange(PropertyChangeEvent e) {
-        final CaGeResult cageResult = (CaGeResult) e.getNewValue();
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                embeddingChanged(cageResult);
-            }
-        });
+        model.resetEmbedding(resultPanel.getEmbedThread());
     }
 
     public void embeddingChanged(CaGeResult result) {
@@ -440,8 +396,6 @@ public class TwoViewPanel extends JPanel
         boolean showNumbersOld = this.showNumbers;
         getVertexFont();
         showNumbers(showNumbersOld);
-        resetButton.setText("reset embedding");
-        resetButton.setEnabled(result.isReembed2DMade());
     }
 
     void viewportChanged() {
