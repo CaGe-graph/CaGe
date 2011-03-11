@@ -94,19 +94,20 @@ public class TwoViewPanel extends JPanel
         }
         tracker.checkAll(true);
     }
-    boolean showNumbers = false;
-    int graphSize, vertexID, vertexSize, edgeWidth;
-    CaGeResult result = null;
-    Embedder embedder = null;
-    boolean reembed2DDisabled = false;
-    Image vertexImage;
-    Font[] vertexFontArray;
-    Font vertexFont;
-    AbstractButton showNumbersButton;
+    
+    private boolean showNumbers = false;
+    private int graphSize, vertexID, vertexSize, edgeWidth;
+    private CaGeResult result = null;
+    private Embedder embedder = null;
+    private boolean reembed2DDisabled = false;
+    private Image vertexImage;
+    private Font[] vertexFontArray;
+    private Font vertexFont;
+    private AbstractButton showNumbersButton;
 
-    ResultPanel resultPanel;
-    TwoViewPainter painter;
-    TwoView twoView;
+    private ResultPanel resultPanel;
+    private TwoViewPainter painter;
+    private TwoView twoView;
 
     private TwoViewModel model;
 
