@@ -96,7 +96,7 @@ public class TwoViewPanel extends JPanel
     }
     
     private boolean showNumbers = false;
-    private int graphSize, vertexID, edgeWidth;
+    private int graphSize, vertexID;
     private CaGeResult result = null;
     private Embedder embedder = null;
     private boolean reembed2DDisabled = false;
@@ -218,7 +218,7 @@ public class TwoViewPanel extends JPanel
             }
         } catch (Exception ex) {
         }
-        edgeWidth = DEFAULT_EDGE_WIDTH;
+        model.setEdgeWidth(DEFAULT_EDGE_WIDTH); //TODO: move to model
         addComponentListener(new ComponentAdapter() {
 
             @Override
@@ -241,6 +241,14 @@ public class TwoViewPanel extends JPanel
             }
         });
         painter = new TwoViewPainter(this);
+
+        this.model.addTwoViewListener(new TwoViewAdapter() {
+
+            @Override
+            public void edgeWidthChanged() {
+                repaint();
+            }
+        });
     }
 
     void getVertexID() {
@@ -350,15 +358,6 @@ public class TwoViewPanel extends JPanel
         repaint();
     }
 
-    public void setEdgeWidth(int edgeWidth) {
-        this.edgeWidth = edgeWidth;
-        repaint();
-    }
-
-    public int getEdgeWidth() {
-        return edgeWidth;
-    }
-
     public void setEdgeBrightness(float brightness) {
         edgeColor = new Color(brightness, brightness, brightness);
         specialEdgeColor = new Color((brightness + 0.25f)/2, 0.4f + (brightness + 0.25f)/2, (brightness + 0.25f)/2);
@@ -426,7 +425,7 @@ public class TwoViewPanel extends JPanel
     }
 
     public void beginEdges() {
-        if (edgeWidth <= 0) {
+        if (model.getEdgeWidth() <= 0) {
             return;
         }
         graphics.setColor(edgeColor);
@@ -440,12 +439,12 @@ public class TwoViewPanel extends JPanel
         yp1 = (int) Math.floor(y1);
         xp2 = (int) Math.floor(x2);
         yp2 = (int) Math.floor(y2);
-        if (edgeWidth <= 0) {
+        if (model.getEdgeWidth() <= 0) {
             return;
-        } else if (edgeWidth == 1) {
+        } else if (model.getEdgeWidth() == 1) {
             graphics.drawLine(xp1, yp1, xp2, yp2);
         } else {
-            double w = edgeWidth + 0.2;
+            double w = model.getEdgeWidth() + 0.2;
             double dx = yp1 - yp2, dy = xp2 - xp1;
             double d = Math.sqrt(dx * dx + dy * dy);
             dx /= d;
@@ -477,9 +476,9 @@ public class TwoViewPanel extends JPanel
 
     public void paintVertex(double x, double y, int number) {
         int xp = (int) Math.floor(x), yp = (int) Math.floor(y);
-        if (edgeWidth > 0) {
+        if (model.getEdgeWidth() > 0) {
             graphics.setColor(edgeColor);
-            graphics.fillOval(xp - (edgeWidth - 1) / 2, yp - (edgeWidth - 1) / 2, edgeWidth, edgeWidth);
+            graphics.fillOval(xp - (model.getEdgeWidth() - 1) / 2, yp - (model.getEdgeWidth() - 1) / 2, model.getEdgeWidth(), model.getEdgeWidth());
         }
         graphics.drawImage(vertexImage, xp - model.getVertexSize() / 2, yp - model.getVertexSize() / 2, null);
         if (showNumbers && vertexFont.getSize() > 0) {

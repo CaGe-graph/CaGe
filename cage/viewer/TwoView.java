@@ -247,11 +247,7 @@ public class TwoView implements ActionListener, CaGeViewer {
             public void edgeBrightnessChanged() {
                 twoViewPanel.setEdgeBrightness(model.getEdgeBrightness());
             }
-
-            @Override
-            public void edgeWidthChanged() {
-                twoViewPanel.setEdgeWidth(model.getEdgeWidth());
-            }
+            
         });
     }
 
