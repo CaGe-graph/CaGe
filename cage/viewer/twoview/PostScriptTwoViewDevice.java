@@ -25,7 +25,7 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
 
     public PostScriptTwoViewDevice(TwoViewModel model) {
         this.model = model;
-        painter = new TwoViewPainter(this);
+        painter = new TwoViewPainter(this, model);
     }
 
     /*
@@ -82,7 +82,7 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         float vertexRadius = model.getVertexSize() * factor;
 
         //create a new painter, set it to A4 and give it the current graph
-        painter = new TwoViewPainter(this);
+        painter = new TwoViewPainter(this, model);
         painter.setPaintArea(
                 42.520 + vertexRadius, 553.391 - vertexRadius,
                 42.520 + vertexRadius, 658.493 - vertexRadius);

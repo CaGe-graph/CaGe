@@ -30,6 +30,9 @@ public class TwoViewModel {
     private int edgeWidth;
     private int vertexSize;
     private float edgeBrightness = 0.75f;
+
+    private boolean highlightFaces = false;
+    private int highlightedFaces = 5;
     
     private boolean embedderRunning = false;
 
@@ -77,6 +80,28 @@ public class TwoViewModel {
         if(this.edgeBrightness != edgeBrightness){
             this.edgeBrightness = edgeBrightness;
             fireEdgeBrightnessChanged();
+        }
+    }
+
+    public boolean highlightFaces() {
+        return highlightFaces;
+    }
+
+    public void setHighlightFaces(boolean highlightFaces) {
+        if(this.highlightFaces!=highlightFaces){
+            this.highlightFaces = highlightFaces;
+            fireHighlightedFacesChanged();
+        }
+    }
+
+    public int getHighlightedFacesSize() {
+        return highlightedFaces;
+    }
+
+    public void setHighlightedFacesSize(int highlightedFaces) {
+        if(this.highlightedFaces!=highlightedFaces && highlightedFaces > 2){
+            this.highlightedFaces = highlightedFaces;
+            fireHighlightedFacesChanged();
         }
     }
 
@@ -147,6 +172,12 @@ public class TwoViewModel {
     private void fireVertexNumbersShownChanged(){
         for (TwoViewListener l : listeners) {
             l.vertexNumbersShownChanged();
+        }
+    }
+
+    private void fireHighlightedFacesChanged(){
+        for (TwoViewListener l : listeners) {
+            l.highlightedFacesChanged();
         }
     }
 

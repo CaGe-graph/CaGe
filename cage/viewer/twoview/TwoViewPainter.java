@@ -21,12 +21,20 @@ public class TwoViewPainter {
     double scale, delta, horOffset, verOffset;
 
     boolean isPartOfHighlightedFace[][];
-    boolean highlightFaces = false;
-    int highlightedFacesSize = 5;
     boolean highlightedFacesAlreadyDetermined = false;
 
-    public TwoViewPainter(TwoViewDevice device) {
+    private TwoViewModel model;
+
+    public TwoViewPainter(TwoViewDevice device, TwoViewModel model) {
         this.device = device;
+        this.model = model;
+        this.model.addTwoViewListener(new TwoViewAdapter() {
+            @Override
+            public void highlightedFacesChanged() {
+                highlightedFacesAlreadyDetermined = false;
+                isPartOfHighlightedFace = new boolean[graphSize+1][graphSize+1];
+            }
+        });
     }
 
     public void setGraph(EmbeddableGraph graph) {
@@ -50,16 +58,6 @@ public class TwoViewPainter {
         highlightedFacesAlreadyDetermined = false;
     }
 
-    public void setHighlightFaces(boolean highlightFaces) {
-        this.highlightFaces = highlightFaces;
-    }
-
-    public void setHighlightedFacesSize(int highlightedFacesSize) {
-        this.highlightedFacesSize = highlightedFacesSize;
-        highlightedFacesAlreadyDetermined = false;
-        isPartOfHighlightedFace = new boolean[graphSize+1][graphSize+1];
-    }
-
     /**
      * @param embedding a list with the ordered list of neighbours of each vertex
      * @return true if edge v1 v2 is part of a pentagon
@@ -69,7 +67,7 @@ public class TwoViewPainter {
         int v2_temp = v2;
 
         //First investigating the face at one of the edge
-        for(int i = 0; i < highlightedFacesSize; i++) {
+        for(int i = 0; i < model.getHighlightedFacesSize(); i++) {
             List<Integer> neighbours = embedding.get(v2_temp);
             int previous_index = neighbours.indexOf(v1_temp);
             if(previous_index == -1) {
@@ -77,7 +75,7 @@ public class TwoViewPainter {
             }
             v1_temp = v2_temp;
             v2_temp = neighbours.get((previous_index - 1 + neighbours.size()) % neighbours.size());
-            if(v1_temp == v1 && v2_temp == v2 && i < highlightedFacesSize-1) {
+            if(v1_temp == v1 && v2_temp == v2 && i < model.getHighlightedFacesSize()-1) {
                 //prevent faces that have a size that is a divisor of the requested
                 //size to be highlighted
                 v1_temp = -1;
@@ -91,7 +89,7 @@ public class TwoViewPainter {
         v1_temp = v1;
         v2_temp = v2;
         //Investigating the face to the other side of the edge
-        for(int i = 0; i < highlightedFacesSize; i++) {
+        for(int i = 0; i < model.getHighlightedFacesSize(); i++) {
             List<Integer> neighbours = embedding.get(v2_temp);
             int previous_index = neighbours.indexOf(v1_temp);
             if(previous_index == -1) {
@@ -99,7 +97,7 @@ public class TwoViewPainter {
             }
             v1_temp = v2_temp;
             v2_temp = neighbours.get((previous_index + 1) % neighbours.size());
-            if(v1_temp == v1 && v2_temp == v2 && i < highlightedFacesSize-1) {
+            if(v1_temp == v1 && v2_temp == v2 && i < model.getHighlightedFacesSize()-1) {
                 //prevent faces that have a size that is a divisor of the requested
                 //size to be highlighted
                 v1_temp = -1;
@@ -224,7 +222,7 @@ public class TwoViewPainter {
     }
 
     public void paintGraph() {
-        if(highlightFaces && !highlightedFacesAlreadyDetermined)
+        if(model.highlightFaces() && !highlightedFacesAlreadyDetermined)
             determineHighlightedFaces();
 
         device.beginGraph();
@@ -238,7 +236,7 @@ public class TwoViewPainter {
                 }
 
                 device.paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
-                        highlightFaces && isPartOfHighlightedFace[i][j]);
+                        model.highlightFaces() && isPartOfHighlightedFace[i][j]);
             }
         }
         device.beginVertices();

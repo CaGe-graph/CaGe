@@ -161,8 +161,7 @@ public class TwoViewPanel extends JPanel
         highlightFacesButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                highlightFaces(highlightFacesButton.isSelected());
-                highlightedFacesSizeField.setEnabled(highlightFacesButton.isSelected());
+                TwoViewPanel.this.model.setHighlightFaces(highlightFacesButton.isSelected());
             }
         });
         titlePanel1.add(highlightFacesButton);
@@ -175,7 +174,7 @@ public class TwoViewPanel extends JPanel
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        setHighlightedFaces((Integer)highlightedFacesSizeField.getValue());
+                        TwoViewPanel.this.model.setHighlightedFacesSize((Integer)highlightedFacesSizeField.getValue());
                     }
                 });
             }
@@ -186,7 +185,7 @@ public class TwoViewPanel extends JPanel
             public void focusLost(FocusEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        setHighlightedFaces((Integer)highlightedFacesSizeField.getValue());
+                        TwoViewPanel.this.model.setHighlightedFacesSize((Integer)highlightedFacesSizeField.getValue());
                     }
                 });
             }
@@ -240,12 +239,20 @@ public class TwoViewPanel extends JPanel
                 }
             }
         });
-        painter = new TwoViewPainter(this);
+        painter = new TwoViewPainter(this, model);
 
         this.model.addTwoViewListener(new TwoViewAdapter() {
 
             @Override
             public void edgeWidthChanged() {
+                repaint();
+            }
+
+            @Override
+            public void highlightedFacesChanged() {
+                highlightFacesButton.setSelected(TwoViewPanel.this.model.highlightFaces());
+                highlightedFacesSizeField.setEnabled(TwoViewPanel.this.model.highlightFaces());
+                highlightedFacesSizeField.setValue(TwoViewPanel.this.model.getHighlightedFacesSize());
                 repaint();
             }
         });
@@ -344,20 +351,7 @@ public class TwoViewPanel extends JPanel
     public boolean getShowNumbers() {
         return showNumbers;
     }
-
-
-    public void highlightFaces(boolean highlightFaces) {
-        painter.setHighlightFaces(highlightFaces);
-
-        repaint();
-    }
-
-    public void setHighlightedFaces(int highlightedFacesSize) {
-        painter.setHighlightedFacesSize(highlightedFacesSize);
-
-        repaint();
-    }
-
+    
     public void setEdgeBrightness(float brightness) {
         edgeColor = new Color(brightness, brightness, brightness);
         specialEdgeColor = new Color((brightness + 0.25f)/2, 0.4f + (brightness + 0.25f)/2, (brightness + 0.25f)/2);
