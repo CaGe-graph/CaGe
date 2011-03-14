@@ -6,7 +6,9 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lisken.systoolbox.Systoolbox;
@@ -106,8 +108,13 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         }
 
         //write the current settings for the drawing
+        final float brightness = model.getEdgeBrightness();
         savePS("/edge_width " + edgeWidth + " def\n");
-        savePS("/edge_gray " + model.getEdgeBrightness() + " def\n\n");
+        savePS("/edge_gray " + brightness + " def\n\n");
+        savePS("/edge_color { " +
+                (brightness + 0.25f)/2 + " " +
+                (0.4f + (brightness + 0.25f)/2) + " " +
+                (brightness + 0.25f)/2 + " } bind def\n");
         savePS("/vertex_radius " + vertexRadius + " def\n");
         savePS("/vertex_linewidth " + (vertexRadius / 6) + " def\n");
         savePS("/vertex_color_1 { " + CaGe.config.getProperty("TwoView.VertexColor1") + " } bind def\n");
@@ -163,11 +170,24 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         savePS("\n\nbegin_edges\n\n");
     }
 
+    private List<String> coloredEdges = new ArrayList<String>();
+
     public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
-        savePS("v" + v1 + " " + "v" + v2 + " edge\n");
+        if(useSpecialColour){
+            coloredEdges.add("v" + v1 + " " + "v" + v2 + " edge\n");
+        } else {
+            savePS("v" + v1 + " " + "v" + v2 + " edge\n");
+        }
     }
 
     public void beginVertices() {
+        //first we finish the edges by painting the colored edges
+        savePS("\n\nbegin_colored_edges\n\n");
+        for (String string : coloredEdges) {
+            savePS(string);
+        }
+        coloredEdges.clear();
+        //then we start the vertices
         savePS("\n\nbegin_vertices\n\n");
         if (model.getShowNumbers()) {
             savePS("(" + painter.getGraphSize() + ") set_size\n\n");
