@@ -141,6 +141,7 @@ public class TwoViewPanel extends JPanel {
 
     void graphChanged() {
         painter.setGraph(model.getResult().getGraph());
+        repaint();
     }
 
     void viewportChanged() {
