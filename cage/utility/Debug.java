@@ -19,7 +19,8 @@ public class Debug {
         }
     }
 
-    public static void reportException(Exception e){
+    @SuppressWarnings("CallToThreadDumpStack")
+    public static void reportException(Throwable e){
         if(CaGe.debugMode){
             e.printStackTrace();
         }
