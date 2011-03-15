@@ -1,6 +1,7 @@
 package cage.viewer;
 
 import cage.CaGe;
+import cage.utility.Debug;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -19,6 +20,7 @@ public class ViewerFactory {
             result.setDimension(dimension);
             return result;
         } catch (Exception ex) {
+            Debug.reportException(ex);
             result = null;
         }
         try {
@@ -28,6 +30,7 @@ public class ViewerFactory {
             result.setDimension(dimension);
             viewers.put(viewerName, result);
         } catch (Throwable ex) {
+            Debug.reportException(ex);
             if (ex instanceof ExceptionInInitializerError) {
                 lastErrorMessage =
                         ((ExceptionInInitializerError) ex).getException().getMessage();
@@ -66,8 +69,10 @@ public class ViewerFactory {
             availabilityMethod = viewerClass.getMethod(
                     "isAvailable", new Class[]{Integer.TYPE});
         } catch (NoSuchMethodException ex1) {
+            Debug.reportException(ex1);
             return;
         } catch (SecurityException ex2) {
+            Debug.reportException(ex2);
             return;
         }
         if (!availabilityMethod.getReturnType().equals(Boolean.TYPE)) {
@@ -96,6 +101,7 @@ public class ViewerFactory {
             checkAvailability(getViewerClass(viewerName), dimension);
             return true;
         } catch (Exception ex) {
+            Debug.reportException(ex);
             return false;
         }
     }
