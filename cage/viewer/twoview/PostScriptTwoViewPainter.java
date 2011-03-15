@@ -18,12 +18,12 @@ import lisken.uitoolbox.UItoolbox;
  *
  * @author nvcleemp
  */
-public class PostScriptTwoViewDevice extends TwoViewPainter {
+public class PostScriptTwoViewPainter extends TwoViewPainter {
 
     private OutputStream savePostScriptStream;
     private Map<String, Integer> pageNumbers = new HashMap<String, Integer>();
 
-    public PostScriptTwoViewDevice(TwoViewModel model) {
+    public PostScriptTwoViewPainter(TwoViewModel model) {
         super(model);
     }
 

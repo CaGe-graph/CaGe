@@ -10,7 +10,7 @@ import cage.ResultPanel;
 import cage.SavePSDialog;
 import cage.StaticGeneratorInfo;
 import cage.utility.Debug;
-import cage.viewer.twoview.PostScriptTwoViewDevice;
+import cage.viewer.twoview.PostScriptTwoViewPainter;
 import cage.viewer.twoview.TwoViewAdapter;
 import cage.viewer.twoview.TwoViewModel;
 
@@ -72,12 +72,12 @@ public class TwoView implements ActionListener, CaGeViewer {
     private JToggleButton savePSButton;
     private SavePSDialog savePSDialog;
     private Hashtable psFilenames = new Hashtable();
-    private PostScriptTwoViewDevice psTwoViewDevice;
+    private PostScriptTwoViewPainter psTwoViewPainter;
     private TwoViewModel model;
 
     public TwoView() {
         model = new TwoViewModel();
-        psTwoViewDevice = new PostScriptTwoViewDevice(model);
+        psTwoViewPainter = new PostScriptTwoViewPainter(model);
 
         title = new JLabel("TwoView diagrams");
         Font titleFont = title.getFont();
@@ -374,7 +374,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         savePSButton.getModel().setPressed(true);
         savePSDialog.setVisible(true);
         if (savePSDialog.getSuccess()) {
-            psTwoViewDevice.savePostScript(
+            psTwoViewPainter.savePostScript(
                     savePSDialog.getFilename(),
                     savePSDialog.includeInfo() ? savePSDialog.getInfo() : null);
             psFilenames.put(new MutableInteger(result.getGraphNo()), savePSDialog.getFilename());
@@ -469,7 +469,7 @@ public class TwoView implements ActionListener, CaGeViewer {
     }
 
     public void stop() {
-        psTwoViewDevice.finishPostScriptFiles();
+        psTwoViewPainter.finishPostScriptFiles();
         psFilenames = new Hashtable();
         setVisible(false);
     }

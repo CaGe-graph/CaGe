@@ -14,12 +14,12 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 /**
- * An implementation of {@code TwoViewDevice} that prints the graph to a
+ * An implementation of {@code TwoViewPainter} that prints the graph to a
  * {@code Graphics} object.
  * 
  * @author nvcleemp
  */
-public class GraphicsTwoViewDevice extends TwoViewPainter {
+public class GraphicsTwoViewPainter extends TwoViewPainter {
 
     private Graphics graphics;
 
@@ -65,7 +65,7 @@ public class GraphicsTwoViewDevice extends TwoViewPainter {
         }
     };
 
-    public GraphicsTwoViewDevice(TwoViewModel model) {
+    public GraphicsTwoViewPainter(TwoViewModel model) {
         super(model);
         initializeImages();
         initializeVertexFonts();

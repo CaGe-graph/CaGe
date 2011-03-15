@@ -30,14 +30,14 @@ public class TwoViewPanel extends JPanel {
 
     private ResultPanel resultPanel;
     private TwoView twoView;
-    private GraphicsTwoViewDevice twoViewDevice;
+    private GraphicsTwoViewPainter twoViewPainter;
 
     private TwoViewModel model;
 
     public TwoViewPanel(TwoView twoView, TwoViewModel model) {
         this.twoView = twoView;
         this.model = model;
-        this.twoViewDevice = new GraphicsTwoViewDevice(model);
+        this.twoViewPainter = new GraphicsTwoViewPainter(model);
 
         try {
             setPreferredSize(new Dimension(
@@ -63,7 +63,7 @@ public class TwoViewPanel extends JPanel {
                 if (reembed2DDisabled || e.getModifiers() != InputEvent.BUTTON1_MASK) {
                     return;
                 }
-                FloatingPoint point = twoViewDevice.getCoordinate(e.getX(), e.getY());
+                FloatingPoint point = twoViewPainter.getCoordinate(e.getX(), e.getY());
                 if (embedder.reembed2DRequired(TwoViewPanel.this.model.getResult().getGraph(), (float) point.x, (float) point.y)) {
                     //TODO: reembed2DRequired at the same time stores the coordinates
                     //      At least document this side effect somewhere
@@ -134,17 +134,17 @@ public class TwoViewPanel extends JPanel {
     }
 
     void graphChanged() {
-        twoViewDevice.setGraph(model.getResult().getGraph());
+        twoViewPainter.setGraph(model.getResult().getGraph());
         repaint();
     }
 
     void viewportChanged() {
         Insets insets = getInsets();
-        twoViewDevice.setPaintArea(
-                insets.left + (twoViewDevice.getMaxVertexSize() - 1) / 2,
-                getWidth() - insets.right - twoViewDevice.getMaxVertexSize() / 2,
-                getHeight() - insets.bottom - (twoViewDevice.getMaxVertexSize() - 1) / 2,
-                insets.top + twoViewDevice.getMaxVertexSize() / 2);
+        twoViewPainter.setPaintArea(
+                insets.left + (twoViewPainter.getMaxVertexSize() - 1) / 2,
+                getWidth() - insets.right - twoViewPainter.getMaxVertexSize() / 2,
+                getHeight() - insets.bottom - (twoViewPainter.getMaxVertexSize() - 1) / 2,
+                insets.top + twoViewPainter.getMaxVertexSize() / 2);
         repaint();
     }
 
@@ -156,7 +156,7 @@ public class TwoViewPanel extends JPanel {
         }
         g = g.create();
         g.setFont(getFont());
-        twoViewDevice.setGraphics(g);
-        twoViewDevice.paintGraph();
+        twoViewPainter.setGraphics(g);
+        twoViewPainter.paintGraph();
     }
 }
