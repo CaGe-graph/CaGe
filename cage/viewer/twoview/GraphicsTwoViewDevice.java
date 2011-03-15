@@ -19,11 +19,10 @@ import javax.swing.SwingUtilities;
  * 
  * @author nvcleemp
  */
-public class GraphicsTwoViewDevice implements TwoViewDevice{
+public class GraphicsTwoViewDevice extends TwoViewPainter {
 
     private Graphics graphics;
 
-    private TwoViewModel model;
     private Color edgeColor;
     private Color specialEdgeColor;
     private Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
@@ -67,7 +66,7 @@ public class GraphicsTwoViewDevice implements TwoViewDevice{
     };
 
     public GraphicsTwoViewDevice(TwoViewModel model) {
-        this.model = model;
+        super(model);
         initializeImages();
         initializeVertexFonts();
         calculateColors();
@@ -212,21 +211,21 @@ public class GraphicsTwoViewDevice implements TwoViewDevice{
         }
     }
 
-    //---Begin implementation TwoViewDevice---
+    //---Begin implementation TwoViewPainter---
 
-    public void beginGraph() {
+    protected void beginGraph() {
         if(graphics==null)
             throw new IllegalStateException("Graphics hasn't been set yet!");
     }
 
-    public void beginEdges() {
+    protected void beginEdges() {
         if (model.getEdgeWidth() <= 0) {
             return;
         }
         graphics.setColor(edgeColor);
     }
 
-    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
+    protected void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         if(useSpecialColour)
             graphics.setColor(specialEdgeColor);
         int xp1, yp1, xp2, yp2;
@@ -263,13 +262,13 @@ public class GraphicsTwoViewDevice implements TwoViewDevice{
             graphics.setColor(edgeColor);
     }
 
-    public void beginVertices() {
+    protected void beginVertices() {
         if (model.getShowNumbers() && vertexFontArray[model.getVertexSizeID()].getSize() > 0) {
             graphics.setFont(vertexFontArray[model.getVertexSizeID()]);
         }
     }
 
-    public void paintVertex(double x, double y, int number) {
+    protected void paintVertex(double x, double y, int number) {
         int xp = (int) Math.floor(x), yp = (int) Math.floor(y);
         if (model.getEdgeWidth() > 0) {
             graphics.setColor(edgeColor);

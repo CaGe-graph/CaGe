@@ -8,25 +8,23 @@ import java.util.List;
 /**
  *
  */
-public class TwoViewPainter {
+public abstract class TwoViewPainter {
 
-    TwoViewDevice device;
-    EmbeddableGraph graph;
-    int graphSize;
-    float coordinate[][];
-    FloatingPoint p[];
-    double xMin, xMax, yMin, yMax;
-    double horMin, horMax, verMin, verMax;
-    int horSign, verSign;
-    double scale, delta, horOffset, verOffset;
+    private EmbeddableGraph graph;
+    private int graphSize;
+    private float coordinate[][];
+    private FloatingPoint p[];
+    private double xMin, xMax, yMin, yMax;
+    private double horMin, horMax, verMin, verMax;
+    private int horSign, verSign;
+    private double scale, delta, horOffset, verOffset;
 
-    boolean isPartOfHighlightedFace[][];
-    boolean highlightedFacesAlreadyDetermined = false;
+    private boolean isPartOfHighlightedFace[][];
+    private boolean highlightedFacesAlreadyDetermined = false;
 
-    private TwoViewModel model;
+    protected TwoViewModel model;
 
-    public TwoViewPainter(TwoViewDevice device, TwoViewModel model) {
-        this.device = device;
+    public TwoViewPainter(TwoViewModel model) {
         this.model = model;
         this.model.addTwoViewListener(new TwoViewAdapter() {
             @Override
@@ -225,8 +223,8 @@ public class TwoViewPainter {
         if(model.highlightFaces() && !highlightedFacesAlreadyDetermined)
             determineHighlightedFaces();
 
-        device.beginGraph();
-        device.beginEdges();
+        beginGraph();
+        beginEdges();
         for (int i = graphSize; i > 0; --i) {
             EdgeIterator it = graph.getEdgeIterator(i);
             while (it.hasNext()) {
@@ -235,14 +233,24 @@ public class TwoViewPainter {
                     continue; // draw only edges to vertices that aren't drawn yet
                 }
 
-                device.paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
+                paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
                         model.highlightFaces() && isPartOfHighlightedFace[i][j]);
             }
         }
-        device.beginVertices();
+        beginVertices();
         for (int i = graphSize; i > 0; --i) {
-            device.paintVertex(p[i].x, p[i].y, i);
+            paintVertex(p[i].x, p[i].y, i);
         }
         
     }
+
+    protected abstract void beginGraph();
+
+    protected abstract void beginEdges();
+
+    protected abstract void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour);
+
+    protected abstract void beginVertices();
+
+    protected abstract void paintVertex(double x, double y, int number);
 }

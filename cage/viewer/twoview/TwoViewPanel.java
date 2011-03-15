@@ -29,7 +29,6 @@ public class TwoViewPanel extends JPanel {
     private boolean reembed2DDisabled = false;
 
     private ResultPanel resultPanel;
-    private TwoViewPainter painter;
     private TwoView twoView;
     private GraphicsTwoViewDevice twoViewDevice;
 
@@ -48,8 +47,6 @@ public class TwoViewPanel extends JPanel {
             Debug.reportException(ex);
         }
 
-        painter = new TwoViewPainter(twoViewDevice, model);
-
 
         //listeners
         addComponentListener(new ComponentAdapter() {
@@ -66,7 +63,7 @@ public class TwoViewPanel extends JPanel {
                 if (reembed2DDisabled || e.getModifiers() != InputEvent.BUTTON1_MASK) {
                     return;
                 }
-                FloatingPoint point = painter.getCoordinate(e.getX(), e.getY());
+                FloatingPoint point = twoViewDevice.getCoordinate(e.getX(), e.getY());
                 if (embedder.reembed2DRequired(TwoViewPanel.this.model.getResult().getGraph(), (float) point.x, (float) point.y)) {
                     //TODO: reembed2DRequired at the same time stores the coordinates
                     //      At least document this side effect somewhere
@@ -137,13 +134,13 @@ public class TwoViewPanel extends JPanel {
     }
 
     void graphChanged() {
-        painter.setGraph(model.getResult().getGraph());
+        twoViewDevice.setGraph(model.getResult().getGraph());
         repaint();
     }
 
     void viewportChanged() {
         Insets insets = getInsets();
-        painter.setPaintArea(
+        twoViewDevice.setPaintArea(
                 insets.left + (twoViewDevice.getMaxVertexSize() - 1) / 2,
                 getWidth() - insets.right - twoViewDevice.getMaxVertexSize() / 2,
                 getHeight() - insets.bottom - (twoViewDevice.getMaxVertexSize() - 1) / 2,
@@ -160,6 +157,6 @@ public class TwoViewPanel extends JPanel {
         g = g.create();
         g.setFont(getFont());
         twoViewDevice.setGraphics(g);
-        painter.paintGraph();
+        twoViewDevice.paintGraph();
     }
 }

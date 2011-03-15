@@ -18,16 +18,13 @@ import lisken.uitoolbox.UItoolbox;
  *
  * @author nvcleemp
  */
-public class PostScriptTwoViewDevice implements TwoViewDevice {
+public class PostScriptTwoViewDevice extends TwoViewPainter {
 
-    private TwoViewPainter painter;
-    private TwoViewModel model;
     private OutputStream savePostScriptStream;
     private Map<String, Integer> pageNumbers = new HashMap<String, Integer>();
 
     public PostScriptTwoViewDevice(TwoViewModel model) {
-        this.model = model;
-        painter = new TwoViewPainter(this, model);
+        super(model);
     }
 
     /*
@@ -83,20 +80,19 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         float edgeWidth = model.getEdgeWidth() * factor * 2;
         float vertexRadius = model.getVertexSize() * factor;
 
-        //create a new painter, set it to A4 and give it the current graph
-        painter = new TwoViewPainter(this, model);
-        painter.setPaintArea(
+        //set paint area to A4 and set the current graph
+        setPaintArea(
                 42.520 + vertexRadius, 553.391 - vertexRadius,
                 42.520 + vertexRadius, 658.493 - vertexRadius);
         // A4 page, 1.5 cm margin each side, another 5 cm clear on top
-        painter.setGraph(model.getResult().getGraph());
+        setGraph(model.getResult().getGraph());
 
         //move one page ahead
         pageNumber = pageNumber == null ? 1 : pageNumber + 1;
 
         //write page number and bounding box as comment in PostScript file
         savePS("\n%%Page: " + model.getResult().getGraphNo() + " " + pageNumber.intValue() + "\n");
-        FloatingPoint[] box = painter.getBoundingBox();
+        FloatingPoint[] box = getBoundingBox();
         savePS("%%BoundingBox: " + (float) (box[0].x - vertexRadius) + " " + (float) (box[0].y - vertexRadius) + " " + (float) (box[1].x + vertexRadius) + " " + (float) (box[1].y + vertexRadius) + "\n");
 
         savePS("\ngsave\n\n\n\n");
@@ -122,7 +118,7 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         savePS("/vertex_number_color { " + CaGe.config.getProperty("TwoView.VertexNumberColor") + " } bind def\n\n");
 
         //output the graph
-        painter.paintGraph();
+        paintGraph();
 
         //finalize this page
         savePS("\n\n\ngrestore\n\nshowpage\n");
@@ -158,21 +154,20 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         savePostScriptStream = null;
     }
 
-    public void beginGraph() {
-        int graphSize = painter.getGraphSize();
-        for (int i = 1; i <= graphSize; ++i) {
-            FloatingPoint p = painter.getCoordinatePoint(i);
+    protected void beginGraph() {
+        for (int i = 1; i <= getGraphSize(); ++i) {
+            FloatingPoint p = getCoordinatePoint(i);
             savePS("/v" + i + " { " + p.x + " " + p.y + " } bind def\n");
         }
     }
 
-    public void beginEdges() {
+    protected void beginEdges() {
         savePS("\n\nbegin_edges\n\n");
     }
 
     private List<String> coloredEdges = new ArrayList<String>();
 
-    public void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
+    protected void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         if(useSpecialColour){
             coloredEdges.add("v" + v1 + " " + "v" + v2 + " edge\n");
         } else {
@@ -180,7 +175,7 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         }
     }
 
-    public void beginVertices() {
+    protected void beginVertices() {
         //first we finish the edges by painting the colored edges
         savePS("\n\nbegin_colored_edges\n\n");
         for (String string : coloredEdges) {
@@ -190,11 +185,11 @@ public class PostScriptTwoViewDevice implements TwoViewDevice {
         //then we start the vertices
         savePS("\n\nbegin_vertices\n\n");
         if (model.getShowNumbers()) {
-            savePS("(" + painter.getGraphSize() + ") set_size\n\n");
+            savePS("(" + getGraphSize() + ") set_size\n\n");
         }
     }
 
-    public void paintVertex(double x, double y, int number) {
+    protected void paintVertex(double x, double y, int number) {
         savePS("v" + number + " vertex\n");
         if (model.getShowNumbers()) {
             savePS("v" + number + " (" + number + ") vertex_number\n");
