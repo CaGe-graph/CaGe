@@ -99,6 +99,16 @@ public class TwoViewPanel extends JPanel {
             public void highlightedFacesChanged() {
                 repaint();
             }
+
+            @Override
+            public void reembeddingFinished(CaGeResult caGeResult) {
+                repaint();
+            }
+
+            @Override
+            public void resultChanged() {
+                repaint();
+            }
         });
     }
 
