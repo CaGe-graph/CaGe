@@ -5,19 +5,28 @@
 
 package cage.viewer.twoview;
 
+import cage.CaGe;
 import cage.CaGeResult;
 import cage.EmbedThread;
 import cage.GeneratorInfo;
+import cage.utility.Debug;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import lisken.systoolbox.Systoolbox;
 
 /**
  *
  * @author nvcleemp
  */
 public class TwoViewModel {
+
+    public static final int MIN_EDGE_WIDTH = 0;
+    public static final int MAX_EDGE_WIDTH = 9;
+    public static final int DEFAULT_EDGE_WIDTH = MAX_EDGE_WIDTH / 2;
 
     private PropertyChangeListener listener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
@@ -26,9 +35,11 @@ public class TwoViewModel {
         }
     };
 
-    private boolean showNumbers = false;
+    private boolean showNumbers;
     private int edgeWidth;
-    private int vertexSize;
+    private int vertexSize; //the size of the image
+    private int vertexSizeID; //the number of the corresponding checkbox
+    private final int vertexSizesCount;
     private float edgeBrightness = 0.75f;
 
     private boolean highlightFaces = false;
@@ -38,6 +49,42 @@ public class TwoViewModel {
 
     private CaGeResult result;
     private GeneratorInfo generatorInfo;
+
+    public TwoViewModel() {
+        //initialize vertex sizes from the configuration file
+        try {
+            vertexSizesCount = Integer.parseInt(CaGe.config.getProperty("TwoView.MaxVertexSize"));
+        } catch (NumberFormatException numberFormatException) {
+            Debug.reportException(numberFormatException);
+            throw new RuntimeException("Couldn't read TwoView.MaxVertexSize from configuration");
+        }
+
+        try {
+            vertexSizeID = Integer.parseInt(CaGe.config.getProperty("TwoView.VertexSize"))-1;
+            if (vertexSizeID < 0) {
+                vertexSizeID = 0;
+            }
+            if (vertexSizeID >= vertexSizesCount) {
+                vertexSizeID = vertexSizesCount-1;
+            }
+        } catch (NumberFormatException numberFormatException) {
+            Debug.reportException(numberFormatException);
+            vertexSizeID = 1;
+        }
+
+        //initialize edge width
+        edgeWidth = DEFAULT_EDGE_WIDTH;
+
+        //initialize show numbers
+        try {
+            showNumbers = Systoolbox.parseBoolean(
+                                CaGe.config.getProperty("TwoView.ShowNumbers"),
+                                false);
+        } catch (Exception e) {
+            Debug.reportException(e);
+            showNumbers = false;
+        }
+    }
 
     public boolean getShowNumbers() {
         return showNumbers;
@@ -70,6 +117,21 @@ public class TwoViewModel {
             this.vertexSize = vertexSize;
             fireVertexSizeChanged();
         }
+    }
+
+    public int getVertexSizeID() {
+        return vertexSizeID;
+    }
+
+    public void setVertexSizeID(int vertexSizeID) {
+        if(this.vertexSizeID != vertexSizeID){
+            this.vertexSizeID = vertexSizeID;
+            fireVertexSizeIDChanged();
+        }
+    }
+
+    public int getVertexSizesCount() {
+        return vertexSizesCount;
     }
 
     public float getEdgeBrightness() {
@@ -166,6 +228,12 @@ public class TwoViewModel {
     private void fireVertexSizeChanged(){
         for (TwoViewListener l : listeners) {
             l.vertexSizeChanged();
+        }
+    }
+
+    private void fireVertexSizeIDChanged(){
+        for (TwoViewListener l : listeners) {
+            l.vertexSizeIDChanged();
         }
     }
 

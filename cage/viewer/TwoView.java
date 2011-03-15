@@ -99,8 +99,8 @@ public class TwoView implements ActionListener, CaGeViewer {
         edgeBrightnessLabel.setLabelFor(edgeBrightnessSlider);
         edgeBrightnessLabel.setDisplayedMnemonic(KeyEvent.VK_B);
         final SpinButton edgeWidthButton = new SpinButton(
-                TwoViewPanel.DEFAULT_EDGE_WIDTH,
-                TwoViewPanel.MIN_EDGE_WIDTH, TwoViewPanel.MAX_EDGE_WIDTH);
+                TwoViewModel.DEFAULT_EDGE_WIDTH,
+                TwoViewModel.MIN_EDGE_WIDTH, TwoViewModel.MAX_EDGE_WIDTH);
         edgeWidthButton.setMaximumSize(edgeWidthButton.getPreferredSize());
         edgeWidthButton.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
@@ -240,15 +240,6 @@ public class TwoView implements ActionListener, CaGeViewer {
         createFrame();
         savePSDialog = new SavePSDialog("save Postscript");
         savePSDialog.setNearComponent(savePSButton);
-
-        model.addTwoViewListener(new TwoViewAdapter() {
-
-            @Override
-            public void edgeBrightnessChanged() {
-                twoViewPanel.setEdgeBrightness(model.getEdgeBrightness());
-            }
-            
-        });
     }
 
     private void createFrame() {
@@ -368,7 +359,6 @@ public class TwoView implements ActionListener, CaGeViewer {
     }
 
     public void stop() {
-        twoViewPanel.stop();
         psTwoViewDevice.finishPostScriptFiles();
         psFilenames = new Hashtable();
         setVisible(false);

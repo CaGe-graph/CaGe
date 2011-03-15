@@ -8,7 +8,7 @@ package cage.viewer.twoview;
 import cage.CaGeResult;
 
 /**
- *
+ * Empty implementation of {@code TwoViewListener}.
  * @author nvcleemp
  */
 public abstract class TwoViewAdapter implements TwoViewListener{
@@ -23,6 +23,9 @@ public abstract class TwoViewAdapter implements TwoViewListener{
     }
 
     public void vertexSizeChanged() {
+    }
+
+    public void vertexSizeIDChanged() {
     }
 
     public void highlightedFacesChanged() {
