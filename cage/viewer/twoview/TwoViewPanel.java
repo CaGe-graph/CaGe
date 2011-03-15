@@ -6,6 +6,7 @@ import cage.CaGeResult;
 import cage.Embedder;
 import cage.GeneratorInfo;
 import cage.ResultPanel;
+import cage.utility.Debug;
 import cage.viewer.TwoView;
 
 import java.awt.Dimension;
@@ -44,6 +45,7 @@ public class TwoViewPanel extends JPanel {
                     Integer.parseInt(CaGe.config.getProperty("TwoView.Width")),
                     Integer.parseInt(CaGe.config.getProperty("TwoView.Height"))));
         } catch (Exception ex) {
+            Debug.reportException(ex);
         }
 
         painter = new TwoViewPainter(twoViewDevice, model);
