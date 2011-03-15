@@ -22,6 +22,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -32,14 +34,19 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Properties;
 import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
@@ -86,6 +93,91 @@ public class TwoView implements ActionListener, CaGeViewer {
         titlePanel1.add(title);
         titlePanel1.add(Box.createHorizontalStrut(20));
         titlePanel1.add(Box.createHorizontalGlue());
+        JLabel sizeLabel = new JLabel("vertex size:");
+        sizeLabel.setFont(titleFont);
+        titlePanel1.add(sizeLabel);
+        titlePanel1.add(Box.createHorizontalStrut(5));
+
+        final JRadioButton[] sizeButtonArray = new JRadioButton[model.getVertexSizesCount()];
+        final ButtonGroup vertexSizeGroup = new ButtonGroup();
+        for (int i = 0; i < model.getVertexSizesCount();i++) {
+            JRadioButton sizeButton = new JRadioButton(Integer.toString(i + 1));
+            sizeButton.setActionCommand(" " + i);
+            sizeButton.setAlignmentY(0.5f);
+            if (i < 10) {
+                sizeButton.setMnemonic(KeyEvent.VK_1 + i % 10);
+            }
+            vertexSizeGroup.add(sizeButton);
+            sizeButtonArray[i] = sizeButton;
+        }
+        sizeButtonArray[model.getVertexSizeID()].setSelected(true);
+        ActionListener sizeButtonListener = new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                model.setVertexSizeID(Integer.parseInt(e.getActionCommand().substring(1)));
+            }
+        };
+
+        for (int i = 0; i < model.getVertexSizesCount(); ++i) {
+            AbstractButton sizeButton = sizeButtonArray[i];
+            sizeButton.setFont(titleFont);
+            titlePanel1.add(Box.createHorizontalStrut(5));
+            titlePanel1.add(sizeButton);
+            sizeButton.addActionListener(sizeButtonListener);
+        }
+        titlePanel1.add(Box.createHorizontalStrut(10));
+
+        final JCheckBox showNumbersButton = new JCheckBox("Numbers", model.getShowNumbers());
+        showNumbersButton.setFont(titleFont);
+        showNumbersButton.setMnemonic(KeyEvent.VK_N);
+        showNumbersButton.setAlignmentY(0.5f);
+        showNumbersButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                model.setShowNumbers(showNumbersButton.isSelected());
+            }
+        });
+        titlePanel1.add(showNumbersButton);
+
+        final JCheckBox highlightFacesButton = new JCheckBox("Highlight faces of size: ", false);
+        final JFormattedTextField highlightedFacesSizeField = new JFormattedTextField(5);
+
+        highlightFacesButton.setFont(titleFont);
+        highlightFacesButton.setAlignmentY(0.5f);
+        highlightFacesButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                model.setHighlightFaces(highlightFacesButton.isSelected());
+            }
+        });
+        titlePanel1.add(highlightFacesButton);
+
+        highlightedFacesSizeField.setEnabled(highlightFacesButton.isSelected());
+        highlightedFacesSizeField.setColumns(4);
+        highlightedFacesSizeField.setAlignmentY(0.5f);
+        highlightedFacesSizeField.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        model.setHighlightedFacesSize((Integer)highlightedFacesSizeField.getValue());
+                    }
+                });
+            }
+        });
+        highlightedFacesSizeField.addFocusListener(new FocusAdapter() {
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        model.setHighlightedFacesSize((Integer)highlightedFacesSizeField.getValue());
+                    }
+                });
+            }
+        });
+        titlePanel1.add(highlightedFacesSizeField);
+
         edgeBrightnessSlider =
                 new JSlider(0, 15, (int) Math.round(20 * model.getEdgeBrightness()));
         edgeBrightnessSlider.setPreferredSize(new Dimension(20, edgeBrightnessSlider.getPreferredSize().height));
@@ -127,6 +219,24 @@ public class TwoView implements ActionListener, CaGeViewer {
             }
         });
         model.addTwoViewListener(new TwoViewAdapter(){
+
+            @Override
+            public void vertexNumbersShownChanged() {
+                showNumbersButton.setSelected(model.getShowNumbers());
+            }
+
+            @Override
+            public void vertexSizeIDChanged() {
+                sizeButtonArray[model.getVertexSizeID()].setSelected(true);
+            }
+
+            @Override
+            public void highlightedFacesChanged() {
+                highlightFacesButton.setSelected(model.highlightFaces());
+                highlightedFacesSizeField.setEnabled(model.highlightFaces());
+                highlightedFacesSizeField.setValue(model.getHighlightedFacesSize());
+            }
+
             @Override
             public void generatorInfoChanged() {
                 resetButton.setVisible(model.getGeneratorInfo().isReembed2DEnabled());
@@ -166,7 +276,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         titlePanel2.setLayout(new BoxLayout(titlePanel2, BoxLayout.X_AXIS));
         titlePanel2.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         // the next line adds several buttons to titlePanel1, one to titlePanel2
-        twoViewPanel = new TwoViewPanel(this, model, titlePanel1, titleFont);
+        twoViewPanel = new TwoViewPanel(this, model);
         titlePanel2.add(resetButton);
         titlePanel2.add(Box.createHorizontalStrut(5));
         titlePanel2.add(Box.createVerticalStrut(20));
