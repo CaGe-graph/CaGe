@@ -30,7 +30,14 @@ public class TwoViewModel {
 
     private PropertyChangeListener listener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
-            fireReembeddingFinished((CaGeResult) evt.getNewValue());
+            final CaGeResult cageResult = (CaGeResult) evt.getNewValue();
+            if(cageResult.equals(result)){
+                /*
+                 * only fire when the graph is still the same graph that has
+                 * been re-embedded.
+                 */
+                fireReembeddingFinished(cageResult);
+            }
             embedderRunning = false;
         }
     };

@@ -130,9 +130,6 @@ public class TwoViewPanel extends JPanel {
     }
 
     public void embeddingChanged(CaGeResult result) {
-        if (result != model.getResult()) {
-            return;
-        }
         resultPanel.embeddingModified(this.twoView, result);
         graphChanged();
     }
