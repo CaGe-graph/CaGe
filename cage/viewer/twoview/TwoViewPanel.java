@@ -24,7 +24,6 @@ import javax.swing.JPanel;
  */
 public class TwoViewPanel extends JPanel {
     
-    private CaGeResult result = null;
     private Embedder embedder = null;
     private boolean reembed2DDisabled = false;
 
@@ -66,7 +65,7 @@ public class TwoViewPanel extends JPanel {
                     return;
                 }
                 FloatingPoint point = painter.getCoordinate(e.getX(), e.getY());
-                if (embedder.reembed2DRequired(result.getGraph(), (float) point.x, (float) point.y)) {
+                if (embedder.reembed2DRequired(TwoViewPanel.this.model.getResult().getGraph(), (float) point.x, (float) point.y)) {
                     //TODO: reembed2DRequired at the same time stores the coordinates
                     //      At least document this side effect somewhere
                     TwoViewPanel.this.model.reembedGraph(resultPanel.getEmbedThread());
@@ -123,7 +122,6 @@ public class TwoViewPanel extends JPanel {
     }
 
     public void showResult(CaGeResult result) {
-        this.result = result;
         graphChanged();
     }
 
@@ -132,7 +130,7 @@ public class TwoViewPanel extends JPanel {
     }
 
     public void embeddingChanged(CaGeResult result) {
-        if (result != this.result) {
+        if (result != model.getResult()) {
             return;
         }
         resultPanel.embeddingModified(this.twoView, result);
