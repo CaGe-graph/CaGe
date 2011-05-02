@@ -33,7 +33,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
@@ -76,6 +78,7 @@ public class TwoView implements ActionListener, CaGeViewer {
     private Hashtable psFilenames = new Hashtable();
     private PostScriptTwoViewPainter psTwoViewPainter;
     private TwoViewModel model;
+    private List<JToggleButton> saveButtons = new ArrayList<JToggleButton>();
 
     public TwoView() {
         model = new TwoViewModel();
@@ -310,15 +313,11 @@ public class TwoView implements ActionListener, CaGeViewer {
         savePSButton.setActionCommand("s");
         savePSButton.addActionListener(this);
 
+        saveButtons.add(savePSButton);
+
         //TODO:rework other buttons and components
 
-        JToggleButton savePNGButton = new JToggleButton("Save PNG");
-        savePNGButton.setFont(titleFont);
-        savePNGButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        new PushButtonDecoration(savePNGButton);
-        savePNGButton.setMnemonic(KeyEvent.VK_G);
-        savePNGButton.setAlignmentY(0.5f);
-        savePNGButton.addActionListener(new ActionListener() {
+        addSaveButton("Save PNG", titleFont, new ActionListener() {
 
             JFileChooser fileChooser =
                     new JFileChooser(new File(
@@ -343,15 +342,9 @@ public class TwoView implements ActionListener, CaGeViewer {
                     }
                 }
             }
-        });
+        }, KeyEvent.VK_G);
 
-        JToggleButton saveSvgButton = new JToggleButton("Save SVG");
-        saveSvgButton.setFont(titleFont);
-        saveSvgButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        new PushButtonDecoration(saveSvgButton);
-        saveSvgButton.setMnemonic(KeyEvent.VK_V);
-        saveSvgButton.setAlignmentY(0.5f);
-        saveSvgButton.addActionListener(new ActionListener() {
+        addSaveButton("Save SVG", titleFont, new ActionListener() {
 
             SvgTwoViewPainter svgTwoViewPainter = new SvgTwoViewPainter(model);
 
@@ -377,13 +370,13 @@ public class TwoView implements ActionListener, CaGeViewer {
                     }
                 }
             }
-        });
+        }, KeyEvent.VK_V);
 
         savePanel = new JPanel();
         savePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        savePanel.add(savePSButton);
-        savePanel.add(savePNGButton);
-        savePanel.add(saveSvgButton);
+        for (JToggleButton button : saveButtons) {
+            savePanel.add(button);
+        }
         createFrame();
         savePSDialog = new SavePSDialog("save Postscript");
         savePSDialog.setNearComponent(savePSButton);
@@ -400,6 +393,17 @@ public class TwoView implements ActionListener, CaGeViewer {
         content.add(twoViewPanel, BorderLayout.CENTER);
         content.add(savePanel, BorderLayout.SOUTH);
         frame.pack();
+    }
+
+    private void addSaveButton(String caption, Font font, ActionListener listener, int mnemonic){
+        JToggleButton saveButton = new JToggleButton(caption);
+        saveButton.setFont(font);
+        saveButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
+        new PushButtonDecoration(saveButton);
+        saveButton.setMnemonic(mnemonic);
+        saveButton.setAlignmentY(0.5f);
+        saveButton.addActionListener(listener);
+        saveButtons.add(saveButton);
     }
 
     public void actionPerformed(ActionEvent e) {
