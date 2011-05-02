@@ -45,7 +45,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -59,6 +58,7 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
 import lisken.uitoolbox.PushButtonDecoration;
+import lisken.uitoolbox.SaveActionListener;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
@@ -317,60 +317,41 @@ public class TwoView implements ActionListener, CaGeViewer {
 
         //TODO:rework other buttons and components
 
-        addSaveButton("Save PNG", titleFont, new ActionListener() {
+        addSaveButton("Save PNG", titleFont,
+            new SaveActionListener(frame, new File(CaGe.config.getProperty("CaGe.Generators.RunDir")), ".png") {
 
-            JFileChooser fileChooser =
-                    new JFileChooser(new File(
-                            CaGe.config.getProperty("CaGe.Generators.RunDir")));
-
-            public void actionPerformed(ActionEvent e) {
-                if(fileChooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION){
-                    File f = fileChooser.getSelectedFile();
-                    if(!f.getAbsolutePath().toLowerCase().endsWith(".png")){
-                        f = new File(f.getAbsolutePath() + ".png");
-                    }
-                    //TODO: maybe ask before overwriting file
-                    BufferedImage im =
-                            new BufferedImage(twoViewPanel.getWidth(),
-                                              twoViewPanel.getHeight(),
-                                              BufferedImage.TYPE_INT_ARGB);
+                @Override
+                protected void save(File file) {
+                    BufferedImage im =new BufferedImage(
+                        twoViewPanel.getWidth(), twoViewPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
                     twoViewPanel.paintComponent(im.getGraphics());
                     try {
-                        ImageIO.write(im, "PNG", f);
+                        ImageIO.write(im, "PNG", file);
                     } catch (IOException ex) {
                         Debug.reportException(ex);
                     }
                 }
-            }
-        }, KeyEvent.VK_G);
+            }, KeyEvent.VK_G);
 
-        addSaveButton("Save SVG", titleFont, new ActionListener() {
+        addSaveButton("Save SVG", titleFont,
+            new SaveActionListener(frame, new File(CaGe.config.getProperty("CaGe.Generators.RunDir")), ".svg") {
 
-            SvgTwoViewPainter svgTwoViewPainter = new SvgTwoViewPainter(model);
+                SvgTwoViewPainter svgTwoViewPainter = new SvgTwoViewPainter(model);
 
-            JFileChooser fileChooser =
-                    new JFileChooser(new File(
-                            CaGe.config.getProperty("CaGe.Generators.RunDir")));
-
-            public void actionPerformed(ActionEvent e) {
-                if(fileChooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION){
-                        File f = fileChooser.getSelectedFile();
-                        if (!f.getAbsolutePath().toLowerCase().endsWith(".svg")) {
-                            f = new File(f.getAbsolutePath() + ".svg");
-                        }
-                        svgTwoViewPainter.setGraph(model.getResult().getGraph());
-                        svgTwoViewPainter.setSvgDimension(twoViewPanel.getSize());
-                        svgTwoViewPainter.paintGraph();
+                @Override
+                protected void save(File file) {
+                    svgTwoViewPainter.setGraph(model.getResult().getGraph());
+                    svgTwoViewPainter.setSvgDimension(twoViewPanel.getSize());
+                    svgTwoViewPainter.paintGraph();
                     try {
-                        FileWriter writer = new FileWriter(f);
+                        FileWriter writer = new FileWriter(file);
                         writer.write(svgTwoViewPainter.getSvgContent());
                         writer.close();
                     } catch (IOException ex) {
                         Debug.reportException(ex);
                     }
                 }
-            }
-        }, KeyEvent.VK_V);
+            }, KeyEvent.VK_V);
 
         savePanel = new JPanel();
         savePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
