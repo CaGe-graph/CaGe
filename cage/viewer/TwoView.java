@@ -58,7 +58,7 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
 import lisken.uitoolbox.PushButtonDecoration;
-import lisken.uitoolbox.SaveActionListener;
+import cage.utility.SaveActionListener;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
