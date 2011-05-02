@@ -11,6 +11,7 @@ import cage.SavePSDialog;
 import cage.StaticGeneratorInfo;
 import cage.utility.Debug;
 import cage.viewer.twoview.PostScriptTwoViewPainter;
+import cage.viewer.twoview.SvgTwoViewPainter;
 import cage.viewer.twoview.TwoViewAdapter;
 import cage.viewer.twoview.TwoViewModel;
 
@@ -30,6 +31,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -343,10 +345,45 @@ public class TwoView implements ActionListener, CaGeViewer {
             }
         });
 
+        JToggleButton saveSvgButton = new JToggleButton("Save SVG");
+        saveSvgButton.setFont(titleFont);
+        saveSvgButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
+        new PushButtonDecoration(saveSvgButton);
+        saveSvgButton.setMnemonic(KeyEvent.VK_V);
+        saveSvgButton.setAlignmentY(0.5f);
+        saveSvgButton.addActionListener(new ActionListener() {
+
+            SvgTwoViewPainter svgTwoViewPainter = new SvgTwoViewPainter(model);
+
+            JFileChooser fileChooser =
+                    new JFileChooser(new File(
+                            CaGe.config.getProperty("CaGe.Generators.RunDir")));
+
+            public void actionPerformed(ActionEvent e) {
+                if(fileChooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION){
+                        File f = fileChooser.getSelectedFile();
+                        if (!f.getAbsolutePath().toLowerCase().endsWith(".svg")) {
+                            f = new File(f.getAbsolutePath() + ".svg");
+                        }
+                        svgTwoViewPainter.setGraph(model.getResult().getGraph());
+                        svgTwoViewPainter.setSvgDimension(twoViewPanel.getSize());
+                        svgTwoViewPainter.paintGraph();
+                    try {
+                        FileWriter writer = new FileWriter(f);
+                        writer.write(svgTwoViewPainter.getSvgContent());
+                        writer.close();
+                    } catch (IOException ex) {
+                        Debug.reportException(ex);
+                    }
+                }
+            }
+        });
+
         savePanel = new JPanel();
         savePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         savePanel.add(savePSButton);
         savePanel.add(savePNGButton);
+        savePanel.add(saveSvgButton);
         createFrame();
         savePSDialog = new SavePSDialog("save Postscript");
         savePSDialog.setNearComponent(savePSButton);
