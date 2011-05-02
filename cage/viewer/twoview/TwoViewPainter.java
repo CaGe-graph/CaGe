@@ -252,6 +252,7 @@ public abstract class TwoViewPainter {
         for (int i = graphSize; i > 0; --i) {
             paintVertex(p[i].x, p[i].y, i);
         }
+        endGraph();
         
     }
 
@@ -264,4 +265,6 @@ public abstract class TwoViewPainter {
     protected abstract void beginVertices();
 
     protected abstract void paintVertex(double x, double y, int number);
+
+    protected abstract void endGraph();
 }

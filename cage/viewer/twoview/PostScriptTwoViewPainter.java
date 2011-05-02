@@ -196,6 +196,11 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         }
     }
 
+    @Override
+    protected void endGraph() {
+        //do nothing
+    }
+
     /**
      * If there is a PS stream, this method writes <tt>portion</tt> to
      * that stream and otherwise returns. If this method fails to write to the

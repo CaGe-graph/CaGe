@@ -282,4 +282,9 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
             graphics.drawString(numberString, xp - (int) Math.floor(width * 0.52), yp + (int) Math.floor(graphics.getFontMetrics().getAscent() * 0.47));
         }
     }
+
+    @Override
+    protected void endGraph() {
+        //do nothing
+    }
 }
