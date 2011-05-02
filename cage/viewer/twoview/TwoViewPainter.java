@@ -211,11 +211,22 @@ public abstract class TwoViewPainter {
         return box;
     }
 
-    public int getGraphSize() {
+    /**
+     * Returns the size of the current graph.
+     *
+     * @return the size of the current graph
+     */
+    protected int getGraphSize() {
         return graphSize;
     }
 
-    public FloatingPoint getCoordinatePoint(int n) {
+    /**
+     * Returns the coordinates of vertex <i>n</i>. The first vertex has
+     * number 1.
+     *
+     * @return the coordinates of vertex <i>n</i>
+     */
+    protected FloatingPoint getCoordinatePoint(int n) {
         return p[n];
     }
 

@@ -133,12 +133,15 @@ public class TwoViewPanel extends JPanel {
         graphChanged();
     }
 
-    void graphChanged() {
+    private void graphChanged() {
         twoViewPainter.setGraph(model.getResult().getGraph());
         repaint();
     }
 
-    void viewportChanged() {
+    /**
+     * This method is called each time this component is resized.
+     */
+    private void viewportChanged() {
         Insets insets = getInsets();
         twoViewPainter.setPaintArea(
                 insets.left + (twoViewPainter.getMaxVertexSize() - 1) / 2,
