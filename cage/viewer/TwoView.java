@@ -59,6 +59,7 @@ import javax.swing.event.ChangeListener;
 import lisken.systoolbox.MutableInteger;
 import lisken.uitoolbox.PushButtonDecoration;
 import cage.utility.SaveActionListener;
+import cage.viewer.twoview.TikzTwoViewPainter;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
@@ -352,6 +353,26 @@ public class TwoView implements ActionListener, CaGeViewer {
                     }
                 }
             }, KeyEvent.VK_V);
+
+        addSaveButton("Save TikZ", titleFont,
+            new SaveActionListener(frame, new File(CaGe.config.getProperty("CaGe.Generators.RunDir")), ".tikz") {
+
+                TikzTwoViewPainter tikzTwoViewPainter = new TikzTwoViewPainter(model);
+
+                @Override
+                protected void save(File file) {
+                    tikzTwoViewPainter.setGraph(model.getResult().getGraph());
+                    //TODO: throws nullpointer exception because paint area is not initialized
+                    tikzTwoViewPainter.paintGraph();
+                    try {
+                        FileWriter writer = new FileWriter(file);
+                        writer.write(tikzTwoViewPainter.getTikzContent());
+                        writer.close();
+                    } catch (IOException ex) {
+                        Debug.reportException(ex);
+                    }
+                }
+            }, KeyEvent.VK_T);
 
         savePanel = new JPanel();
         savePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
