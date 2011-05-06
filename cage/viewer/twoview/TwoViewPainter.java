@@ -235,6 +235,11 @@ public abstract class TwoViewPainter {
             determineHighlightedFaces();
 
         beginGraph();
+
+        if(p==null){
+            throw new IllegalStateException("Vertex coordinates have not been initialized.");
+        }
+
         beginEdges();
         for (int i = graphSize; i > 0; --i) {
             EdgeIterator it = graph.getEdgeIterator(i);
