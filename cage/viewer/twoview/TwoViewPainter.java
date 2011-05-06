@@ -230,6 +230,10 @@ public abstract class TwoViewPainter {
         return p[n];
     }
 
+    protected boolean startWithEdges(){
+        return true;
+    }
+
     public void paintGraph() {
         if(model.highlightFaces() && !highlightedFacesAlreadyDetermined)
             determineHighlightedFaces();
@@ -240,22 +244,42 @@ public abstract class TwoViewPainter {
             throw new IllegalStateException("Vertex coordinates have not been initialized.");
         }
 
-        beginEdges();
-        for (int i = graphSize; i > 0; --i) {
-            EdgeIterator it = graph.getEdgeIterator(i);
-            while (it.hasNext()) {
-                int j = it.nextEdge();
-                if (j >= i) {
-                    continue; // draw only edges to vertices that aren't drawn yet
-                }
+        if(startWithEdges()){
+            beginEdges();
+            for (int i = graphSize; i > 0; --i) {
+                EdgeIterator it = graph.getEdgeIterator(i);
+                while (it.hasNext()) {
+                    int j = it.nextEdge();
+                    if (j >= i) {
+                        continue; // draw only edges to vertices that aren't drawn yet
+                    }
 
-                paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
-                        model.highlightFaces() && isPartOfHighlightedFace[i][j]);
+                    paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
+                            model.highlightFaces() && isPartOfHighlightedFace[i][j]);
+                }
             }
-        }
-        beginVertices();
-        for (int i = graphSize; i > 0; --i) {
-            paintVertex(p[i].x, p[i].y, i);
+            beginVertices();
+            for (int i = graphSize; i > 0; --i) {
+                paintVertex(p[i].x, p[i].y, i);
+            }
+        } else {
+            beginVertices();
+            for (int i = graphSize; i > 0; --i) {
+                paintVertex(p[i].x, p[i].y, i);
+            }
+            beginEdges();
+            for (int i = graphSize; i > 0; --i) {
+                EdgeIterator it = graph.getEdgeIterator(i);
+                while (it.hasNext()) {
+                    int j = it.nextEdge();
+                    if (j >= i) {
+                        continue; // draw only edges to vertices that aren't drawn yet
+                    }
+
+                    paintEdge(p[i].x, p[i].y, p[j].x, p[j].y, i, j,
+                            model.highlightFaces() && isPartOfHighlightedFace[i][j]);
+                }
+            }
         }
         endGraph();
         
