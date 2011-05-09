@@ -275,6 +275,9 @@ public class TwoView implements ActionListener, CaGeViewer {
             public void resultChanged() {
                 resetButton.setText("reset embedding");
                 resetButton.setEnabled(result.isReembed2DMade());
+
+                title.setText(model.getGraphComment());
+                savePSDialog.setInfo(model.getGraphComment());
             }
         });
 
@@ -462,17 +465,8 @@ public class TwoView implements ActionListener, CaGeViewer {
         model.setResult(result);
         EmbeddableGraph graph = result.getGraph();
         int graphNo = result.getGraphNo();
-        String graphComment = graph.getComment();
-        if (graphComment == null) {
-            graphComment = "";
-        }
-        if (graphComment.length() > 0) {
-            graphComment = " - " + graphComment;
-        }
-        graphComment = "Graph " + graphNo + " - " + graph.getSize() + " vertices" + graphComment;
-        title.setText(graphComment);
-        savePSDialog.setInfo(graphComment);
         savePSButton.setSelected(result.getSaved2DPS() > 0);
+
         String filename = (String) psFilenames.get(new MutableInteger(graphNo));
         if (filename == null && previousResult != null) {
             String previousFilename, previousNumber;
@@ -501,6 +495,7 @@ public class TwoView implements ActionListener, CaGeViewer {
             filename = generatorInfo.getFilename() + "-2d-" + graphNo + ".ps";
         }
         savePSDialog.setFilename(filename);
+
         twoViewPanel.showResult(result);
         createFrame();
         if (!frame.isVisible()) {

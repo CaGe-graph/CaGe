@@ -57,6 +57,8 @@ public class TwoViewModel {
     private CaGeResult result;
     private GeneratorInfo generatorInfo;
 
+    private String graphComment = "";
+
     public TwoViewModel() {
         //initialize vertex sizes from the configuration file
         try {
@@ -180,6 +182,14 @@ public class TwoViewModel {
 
     public void setResult(CaGeResult result) {
         this.result = result;
+        graphComment = result.getGraph().getComment();
+        if (graphComment == null) {
+            graphComment = "";
+        }
+        if (graphComment.length() > 0) {
+            graphComment = " - " + graphComment;
+        }
+        graphComment = "Graph " + result.getGraphNo() + " - " + result.getGraph().getSize() + " vertices" + graphComment;
         fireResultChanged();
     }
 
@@ -190,6 +200,10 @@ public class TwoViewModel {
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         this.generatorInfo = generatorInfo;
         fireGeneratorInfoChanged();
+    }
+
+    public String getGraphComment() {
+        return graphComment;
     }
 
     public void reembedGraph(EmbedThread embedThread){
