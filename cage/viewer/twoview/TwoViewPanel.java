@@ -138,6 +138,17 @@ public class TwoViewPanel extends JPanel {
         repaint();
     }
 
+    public void setRotation(int rotation) {
+        if(Math.abs(rotation)<=180){
+            twoViewPainter.setRotation(rotation);
+            repaint();
+        }
+    }
+
+    public int getRotation() {
+        return twoViewPainter.getRotation();
+    }
+
     /**
      * This method is called each time this component is resized.
      */

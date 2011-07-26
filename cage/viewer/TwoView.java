@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -80,6 +81,7 @@ public class TwoView implements ActionListener, CaGeViewer {
     private PostScriptTwoViewPainter psTwoViewPainter;
     private TwoViewModel model;
     private List<JToggleButton> saveButtons = new ArrayList<JToggleButton>();
+    private JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL, -180, 180, 0);
 
     public TwoView() {
         model = new TwoViewModel();
@@ -346,6 +348,7 @@ public class TwoView implements ActionListener, CaGeViewer {
                 protected void save(File file) {
                     svgTwoViewPainter.setGraph(model.getResult().getGraph());
                     svgTwoViewPainter.setSvgDimension(twoViewPanel.getSize());
+                    svgTwoViewPainter.setRotation(twoViewPanel.getRotation());
                     svgTwoViewPainter.paintGraph();
                     try {
                         FileWriter writer = new FileWriter(file);
@@ -366,6 +369,7 @@ public class TwoView implements ActionListener, CaGeViewer {
                 protected void save(File file) {
                     tikzTwoViewPainter.setGraph(model.getResult().getGraph());
                     //TODO: throws nullpointer exception because paint area is not initialized
+                    tikzTwoViewPainter.setRotation(twoViewPanel.getRotation());
                     tikzTwoViewPainter.paintGraph();
                     try {
                         FileWriter writer = new FileWriter(file);
@@ -382,6 +386,14 @@ public class TwoView implements ActionListener, CaGeViewer {
         for (JToggleButton button : saveButtons) {
             savePanel.add(button);
         }
+        
+        rotationSlider.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+                twoViewPanel.setRotation(rotationSlider.getValue());
+            }
+        });
+        
         createFrame();
         savePSDialog = new SavePSDialog("save Postscript");
         savePSDialog.setNearComponent(savePSButton);
@@ -392,11 +404,14 @@ public class TwoView implements ActionListener, CaGeViewer {
             return;
         }
         frame = new JFrame("CaGe - TwoView");
+        JPanel southPanel = new JPanel(new GridLayout(0, 1));
+        southPanel.add(rotationSlider);
+        southPanel.add(savePanel);
         JPanel content = (JPanel) frame.getContentPane();
         content.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         content.add(titlePanel, BorderLayout.NORTH);
         content.add(twoViewPanel, BorderLayout.CENTER);
-        content.add(savePanel, BorderLayout.SOUTH);
+        content.add(southPanel, BorderLayout.SOUTH);
         frame.pack();
     }
 
@@ -420,6 +435,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         savePSButton.getModel().setPressed(true);
         savePSDialog.setVisible(true);
         if (savePSDialog.getSuccess()) {
+            psTwoViewPainter.setRotation(twoViewPanel.getRotation());
             psTwoViewPainter.savePostScript(
                     savePSDialog.getFilename(),
                     savePSDialog.includeInfo() ? savePSDialog.getInfo() : null);

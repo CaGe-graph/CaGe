@@ -18,6 +18,7 @@ public abstract class TwoViewPainter {
     private double horMin, horMax, verMin, verMax;
     private int horSign, verSign;
     private double scale, delta, horOffset, verOffset;
+    private int rotation = 0;
 
     private boolean isPartOfHighlightedFace[][];
     private boolean highlightedFacesAlreadyDetermined = false;
@@ -167,6 +168,17 @@ public abstract class TwoViewPainter {
         viewportChanged();
     }
 
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        if(Math.abs(rotation)<=180){
+            this.rotation = rotation;
+            viewportChanged(); //TODO: this is needed to calculate coordinates (this should go in another method)
+        }
+    }
+
     void viewportChanged() {
         if (horSign != 0 && verSign != 0) {
             double horRng = horMax - horMin;
@@ -190,17 +202,37 @@ public abstract class TwoViewPainter {
         }
     }
 
+    /**
+     * Translates the coordinates of a vertex in 'graph space' to a coordinate
+     * in 'component space'.
+     * @param x
+     * @param y
+     * @return 
+     */
     public FloatingPoint getPoint(double x, double y) {
+        double angle = rotation*Math.PI/180;
+        double rotatedX = x*Math.cos(angle)-y*Math.sin(angle);
+        double rotatedY = x*Math.sin(angle)+y*Math.cos(angle);
         FloatingPoint point = new FloatingPoint();
-        point.x = Math.round((x * scale * horSign - horOffset - horMin) / delta) * delta + horMin;
-        point.y = Math.round((y * scale * verSign - verOffset - verMin) / delta) * delta + verMin;
+        point.x = Math.round((rotatedX * scale * horSign - horOffset - horMin) / delta) * delta + horMin;
+        point.y = Math.round((rotatedY * scale * verSign - verOffset - verMin) / delta) * delta + verMin;
         return point;
     }
 
+    /**
+     * Translates a set of coordinates in 'component space' to a set of
+     * coordinates in 'graph space'.
+     * @param px
+     * @param py
+     * @return 
+     */
     public FloatingPoint getCoordinate(double px, double py) {
         FloatingPoint point = new FloatingPoint();
-        point.x = (px + horOffset) / scale * horSign;
-        point.y = (py + verOffset) / scale * verSign;
+        double rotatedPx = (px + horOffset) / scale * horSign;
+        double rotatedPy = (py + verOffset) / scale * verSign;
+        double angle = -rotation*Math.PI/180;
+        point.x = rotatedPx*Math.cos(angle)-rotatedPy*Math.sin(angle);
+        point.y = rotatedPx*Math.sin(angle)+rotatedPy*Math.cos(angle);
         return point;
     }
 
