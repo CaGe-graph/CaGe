@@ -207,7 +207,7 @@ public abstract class TwoViewPainter {
      * in 'component space'.
      * @param x
      * @param y
-     * @return 
+     * @return the transformed coordinates
      */
     public FloatingPoint getPoint(double x, double y) {
         double angle = rotation*Math.PI/180;
@@ -224,7 +224,7 @@ public abstract class TwoViewPainter {
      * coordinates in 'graph space'.
      * @param px
      * @param py
-     * @return 
+     * @return the transformed coordinates
      */
     public FloatingPoint getCoordinate(double px, double py) {
         FloatingPoint point = new FloatingPoint();
