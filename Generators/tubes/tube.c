@@ -878,7 +878,7 @@ if ((number_cgr=(VERTEX *)malloc(maxlabel*sizeof(VERTEX)))==NULL)
    { fprintf(stderr,"Cannot allocate memory for numbers.\n"); exit(0); }
 
   init_new_paths(maxnv_cap);
-  outputtube_edge =  make_tube(maxnv_cap+1,outputtube_length); /**Anfangsknoten korrekt?*/
+  outputtube_edge =  make_tube(maxnv_cap+1,outputtube_length-1); /**Anfangsknoten korrekt?*/
   isomorphism_tube = make_tube(maxnv_cap+1, l+m);
 }
 /********************* main *********************************/
