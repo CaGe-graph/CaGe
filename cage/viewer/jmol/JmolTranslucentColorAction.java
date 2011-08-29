@@ -1,8 +1,8 @@
 package cage.viewer.jmol;
 
+import cage.utility.CaGeColorChooser;
 import java.awt.Color;
 import javax.swing.ButtonModel;
-import javax.swing.JColorChooser;
 import javax.swing.colorchooser.DefaultColorSelectionModel;
 
 import org.jmol.api.JmolViewer;
@@ -17,7 +17,7 @@ public class JmolTranslucentColorAction extends JmolColorAction{
         super(name, previewModel);
         colorModel = new DefaultColorSelectionModel(startColor);
         colorModel.addChangeListener(new JmolTranslucentColorChangeListener(viewer, component, colorModel, translucencyModel));
-        chooser = new JColorChooser(colorModel);
+        chooser = new CaGeColorChooser(colorModel);
         
     }
 

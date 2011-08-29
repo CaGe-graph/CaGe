@@ -1,5 +1,7 @@
 package cage.viewer.jmol;
 
+import cage.utility.CaGeColorChooser;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -29,7 +31,7 @@ public class JmolColorAction extends AbstractAction{
         this.previewModel = previewModel;
         colorModel = new DefaultColorSelectionModel(startColor);
         colorModel.addChangeListener(new JmolColorChangeListener(viewer, component, colorModel));
-        chooser = new JColorChooser(colorModel);
+        chooser = new CaGeColorChooser(colorModel);
     }
 
     public JmolColorAction(String name, ButtonModel previewModel) {
