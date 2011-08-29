@@ -55,10 +55,15 @@ public class JmolColorAction extends AbstractAction{
         } else {
             //if preview is disabled we open a general chooser and set the color
             //afterwards.
-            Color c = JColorChooser.showDialog(parentComponent, getValue(AbstractAction.NAME).toString(), colorModel.getSelectedColor());
-            if(c!=null){
-                colorModel.setSelectedColor(c);
-            }
+            final JColorChooser newColorChooser = new CaGeColorChooser(colorModel.getSelectedColor());
+            JDialog d = JColorChooser.createDialog(parentComponent,
+                    getValue(AbstractAction.NAME).toString(), true, newColorChooser,
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            colorModel.setSelectedColor(newColorChooser.getColor());
+                        }
+                    }, null);
+            d.setVisible(true);
         }
     }
 }
