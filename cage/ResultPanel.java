@@ -16,6 +16,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -53,7 +54,7 @@ import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
 public class ResultPanel extends JPanel implements
-        FocusListener, GeneratorListener, EmbedThreadListener {
+        GeneratorListener, EmbedThreadListener {
 
     public static final int EXCEPTION_LEVEL = 1,  RUN_LEVEL = 2,  FOLDNET_LEVEL = 3,  ADVANCE_LEVEL = 4,  EMBED_LEVEL = 5;
     private static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Foreground", 0);
@@ -131,6 +132,19 @@ public class ResultPanel extends JPanel implements
             }
         }
     };
+    
+    private FocusListener focusListener = new FocusAdapter() {
+
+        public void focusLost(FocusEvent e) {
+            Object source = e.getSource();
+            if (source == viewGraphNo) {
+                CaGeResult result = results.getResult();
+                if (result != null) {
+                    viewGraphNo.setText(Integer.toString(results.getResult().getGraphNo()));
+                }
+            }
+        }
+    };
 
     public ResultPanel(CaGePipe gen, GeneratorInfo info,
             boolean doEmbed2D, boolean doEmbed3D,
@@ -158,7 +172,7 @@ public class ResultPanel extends JPanel implements
         viewGraphNo = new JTextField(CaGe.graphNoDigits);
         viewGraphNo.setHorizontalAlignment(SwingConstants.RIGHT);
         viewGraphNo.setDocument(new NumberDocument(false));
-        viewGraphNo.addFocusListener(this);
+        viewGraphNo.addFocusListener(focusListener);
         viewGraphNo.setText("0");
         viewGraphNo.setToolTipText("number of the graph currently showing -- can be edited");
         JLabel viewGraphNoLabel = new JLabel("view/goto:");
@@ -592,20 +606,6 @@ public class ResultPanel extends JPanel implements
             }
         }
     }
-
-    public void focusGained(FocusEvent e) {
-    }
-
-    public void focusLost(FocusEvent e) {
-        Object source = e.getSource();
-        if (source == viewGraphNo) {
-            CaGeResult result = results.getResult();
-            if (result != null) {
-                viewGraphNo.setText(Integer.toString(results.getResult().getGraphNo()));
-            }
-        }
-    }
-
 
     void viewGraphNoChanged() {
         int pipeNo, viewNo;
