@@ -53,7 +53,7 @@ import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
 public class ResultPanel extends JPanel implements
-        ActionListener, FocusListener, GeneratorListener, EmbedThreadListener {
+        FocusListener, GeneratorListener, EmbedThreadListener {
 
     public static final int EXCEPTION_LEVEL = 1,  RUN_LEVEL = 2,  FOLDNET_LEVEL = 3,  ADVANCE_LEVEL = 4,  EMBED_LEVEL = 5;
     private static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Foreground", 0);
@@ -88,6 +88,49 @@ public class ResultPanel extends JPanel implements
     private CaGeWriter saveAdjWriter, save2DWriter, save3DWriter;
     private AbstractButton foldnetButton;
     private SavePSDialog foldnetDialog;
+    
+    private ActionListener actionListener = new ActionListener() {
+        
+        public void actionPerformed(ActionEvent e) {
+            String cmd = e.getActionCommand();
+            switch (cmd.charAt(0)) {
+                case 'v':
+                    viewGraphNoChanged();
+                    break;
+                case 'a':
+                    advanceBy(1);
+                    break;
+                case 'A':
+                    advanceBy(advanceDist.getValue());
+                    break;
+                case 'f':
+                    changeFlow();
+                    break;
+                case 'p':
+                    reviewPrevious();
+                    break;
+                case 'n':
+                    reviewNext();
+                    break;
+                case 's':
+                    switch (cmd.charAt(1)) {
+                        case 'A':
+                            saveAdjacency();
+                            break;
+                        case '2':
+                            save2D();
+                            break;
+                        case '3':
+                            save3D();
+                            break;
+                        case 'F':
+                            saveFoldnet();
+                            break;
+                    }
+                    break;
+            }
+        }
+    };
 
     public ResultPanel(CaGePipe gen, GeneratorInfo info,
             boolean doEmbed2D, boolean doEmbed3D,
@@ -309,27 +352,27 @@ public class ResultPanel extends JPanel implements
         }
 
         viewGraphNo.setActionCommand("viewGraphNo");
-        viewGraphNo.addActionListener(this);
+        viewGraphNo.addActionListener(actionListener);
         advance1Button.setActionCommand("advance1");
-        advance1Button.addActionListener(this);
+        advance1Button.addActionListener(actionListener);
         advanceButton.setActionCommand("Advance");
-        advanceButton.addActionListener(this);
+        advanceButton.addActionListener(actionListener);
         flowButton.setActionCommand("flow");
-        flowButton.addActionListener(this);
+        flowButton.addActionListener(actionListener);
         reviewPrevButton.setActionCommand("previous");
-        reviewPrevButton.addActionListener(this);
+        reviewPrevButton.addActionListener(actionListener);
         reviewPrevButton.setEnabled(false);
         reviewNextButton.setActionCommand("next");
-        reviewNextButton.addActionListener(this);
+        reviewNextButton.addActionListener(actionListener);
         reviewNextButton.setEnabled(false);
         saveAdjButton.setActionCommand("sAdjacency");
-        saveAdjButton.addActionListener(this);
+        saveAdjButton.addActionListener(actionListener);
         save2DButton.setActionCommand("s2D");
-        save2DButton.addActionListener(this);
+        save2DButton.addActionListener(actionListener);
         save3DButton.setActionCommand("s3D");
-        save3DButton.addActionListener(this);
+        save3DButton.addActionListener(actionListener);
         foldnetButton.setActionCommand("sFoldnet");
-        foldnetButton.addActionListener(this);
+        foldnetButton.addActionListener(actionListener);
     }
 
     Object[] createArray(boolean hasElements, Vector vector, Class type) {
@@ -563,45 +606,6 @@ public class ResultPanel extends JPanel implements
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
-        String cmd = e.getActionCommand();
-        switch (cmd.charAt(0)) {
-            case 'v':
-                viewGraphNoChanged();
-                break;
-            case 'a':
-                advanceBy(1);
-                break;
-            case 'A':
-                advanceBy(advanceDist.getValue());
-                break;
-            case 'f':
-                changeFlow();
-                break;
-            case 'p':
-                reviewPrevious();
-                break;
-            case 'n':
-                reviewNext();
-                break;
-            case 's':
-                switch (cmd.charAt(1)) {
-                    case 'A':
-                        saveAdjacency();
-                        break;
-                    case '2':
-                        save2D();
-                        break;
-                    case '3':
-                        save3D();
-                        break;
-                    case 'F':
-                        saveFoldnet();
-                        break;
-                }
-                break;
-        }
-    }
 
     void viewGraphNoChanged() {
         int pipeNo, viewNo;
