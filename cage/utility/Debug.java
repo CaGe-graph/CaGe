@@ -1,6 +1,8 @@
 package cage.utility;
 
 import cage.CaGe;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Static class to facilitate CaGe Debug Mode.
@@ -21,6 +23,7 @@ public class Debug {
 
     @SuppressWarnings("CallToThreadDumpStack")
     public static void reportException(Throwable e){
+        Logger.getLogger(Debug.class.getName()).log(Level.INFO, "Exception reported", e);
         if(CaGe.debugMode){
             e.printStackTrace();
         }
