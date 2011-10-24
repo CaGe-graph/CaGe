@@ -43,15 +43,7 @@ public abstract class TwoViewPainter {
         if (graphSize <= 0) {
             return;
         }
-        xMin = xMax = coordinate[0][0];
-        yMin = yMax = coordinate[0][1];
-        for (int i = 0; i < graphSize; ++i) {
-            xMin = Math.min(xMin, coordinate[i][0]);
-            xMax = Math.max(xMax, coordinate[i][0]);
-            yMin = Math.min(yMin, coordinate[i][1]);
-            yMax = Math.max(yMax, coordinate[i][1]);
-        }
-        viewportChanged();
+        calculateBoundingBox();
 
         isPartOfHighlightedFace = new boolean[graphSize+1][graphSize+1];
         highlightedFacesAlreadyDetermined = false;
@@ -175,8 +167,28 @@ public abstract class TwoViewPainter {
     public void setRotation(int rotation) {
         if(Math.abs(rotation)<=180){
             this.rotation = rotation;
-            viewportChanged(); //TODO: this is needed to calculate coordinates (this should go in another method)
+            rotationChanged();
         }
+    }
+    
+    void rotationChanged() {
+        calculateBoundingBox();
+    }
+    
+    void calculateBoundingBox(){
+        double angle = rotation*Math.PI/180;
+        xMin = xMax = coordinate[0][0]*Math.cos(angle)-coordinate[0][1]*Math.sin(angle);
+        yMin = yMax = coordinate[0][0]*Math.sin(angle)+coordinate[0][1]*Math.cos(angle);
+        for (int i = 0; i < graphSize; ++i) {
+            double rotatedX = coordinate[i][0]*Math.cos(angle)-coordinate[i][1]*Math.sin(angle);
+            double rotatedY = coordinate[i][0]*Math.sin(angle)+coordinate[i][1]*Math.cos(angle);
+            xMin = Math.min(xMin, rotatedX);
+            xMax = Math.max(xMax, rotatedX);
+            yMin = Math.min(yMin, rotatedY);
+            yMax = Math.max(yMax, rotatedY);
+        }
+        //viewportChanged needs to be called since xMin, xMax, yMin or yMax might have changed
+        viewportChanged();
     }
 
     void viewportChanged() {
