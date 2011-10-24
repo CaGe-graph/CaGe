@@ -312,8 +312,8 @@ public class ResultPanel extends JPanel implements
         this.doEmbed3D = doEmbed3D;
         useViewers = viewerV != null && viewerV.size() > 0;
         boolean useWriters = writerV != null && writerV.size() > 0;
-        viewers = (CaGeViewer[]) createArray(useViewers, viewerV, CaGeViewer.class);
-        writers = (CaGeWriter[]) createArray(useWriters, writerV, CaGeWriter.class);
+        viewers = createArray(useViewers, viewerV, CaGeViewer.class);
+        writers = createArray(useWriters, writerV, CaGeWriter.class);
         if (useViewers) {
             for (int i = 0; i < viewers.length; ++i) {
                 viewers[i].setResultPanel(this);
@@ -375,9 +375,9 @@ public class ResultPanel extends JPanel implements
         foldnetButton.addActionListener(actionListener);
     }
 
-    Object[] createArray(boolean hasElements, Vector vector, Class type) {
+    static <T> T[] createArray(boolean hasElements, Vector vector, Class<T> type) {
         if (hasElements) {
-            Object[] array = (Object[]) Array.newInstance(type, vector.size());
+            T[] array = (T[]) Array.newInstance(type, vector.size());
             vector.copyInto(array);
             return array;
         } else {
