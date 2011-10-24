@@ -1057,7 +1057,7 @@ public class ResultPanel extends JPanel implements
         f.setVisible(true);
     }
 
-    private class AdvanceListener implements ChangeListener {
+    private final class AdvanceListener implements ChangeListener {
 
         private AbstractButton advanceButton;
 
