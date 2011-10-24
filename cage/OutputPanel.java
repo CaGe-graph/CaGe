@@ -46,7 +46,7 @@ import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 import lisken.uitoolbox.UItoolbox;
 
-public class OutputPanel extends JPanel implements ActionListener, DocumentListener {
+public class OutputPanel extends JPanel implements DocumentListener {
 
     private GeneratorInfo generatorInfo;
     private boolean generatorInfoChanged;
@@ -92,6 +92,26 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
     private ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
     private ComponentLogicalGroup embedControlsGroup = new ComponentLogicalGroup();
     private ComponentLogicalGroup generatorControlsGroup = new ComponentLogicalGroup();
+    
+    private ActionListener uiActionListener = new ActionListener() {
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof javax.swing.text.JTextComponent || e.getSource() instanceof TargetPanel) {
+            if (defaultButton != null) {
+                defaultButton.doClick();
+            }
+        } else {
+            checkOutputOptions();
+        }
+    }
+    };
+    
+    private ActionListener outputOptionsListener = new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            checkOutputOptions();
+        }
+    };
 
     public OutputPanel() {
         this(null);
@@ -129,7 +149,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         expertPanel.add(generatorLabel, new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         generatorCmdLine.setColumns(10);
         generatorCmdLine.setActionCommand("generator");
-        generatorCmdLine.addActionListener(this);
+        generatorCmdLine.addActionListener(uiActionListener);
         generatorCmdLine.getDocument().addDocumentListener(this);
         generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
@@ -143,7 +163,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         expertPanel.add(embed2DLabel, new GridBagConstraints(0, 1, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         embed2DCmdLine.setColumns(10);
         embed2DCmdLine.setActionCommand("e2");
-        embed2DCmdLine.addActionListener(this);
+        embed2DCmdLine.addActionListener(uiActionListener);
         embed2DCmdLine.getDocument().addDocumentListener(this);
         new JTextComponentFocusSelector(embed2DCmdLine);
         embedControlsGroup.addComponent(embed2DCmdLine);
@@ -157,7 +177,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         expertPanel.add(embed3DLabel, new GridBagConstraints(0, 2, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(3, 0, 3, 5), 0, 0));
         embed3DCmdLine.setColumns(10);
         embed3DCmdLine.setActionCommand("e3");
-        embed3DCmdLine.addActionListener(this);
+        embed3DCmdLine.addActionListener(uiActionListener);
         embed3DCmdLine.getDocument().addDocumentListener(this);
         new JTextComponentFocusSelector(embed3DCmdLine);
         embedControlsGroup.addComponent(embed3DCmdLine);
@@ -176,7 +196,7 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         outPreFilterCheckBox.setMnemonic(KeyEvent.VK_P);
         outPreFilterCheckBox.setToolTipText(FilterHint);
         outPreFilterCheckBox.setActionCommand("outPreFilterCheckBox");
-        outPreFilterCheckBox.addActionListener(this);
+        outPreFilterCheckBox.addActionListener(outputOptionsListener);
         outPreFilterCommand.setColumns(30);
         new JTextComponentFocusSelector(outPreFilterCommand);
         outPreFilterCommand.setToolTipText(FilterHint);
@@ -215,31 +235,31 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out3DCheckBox.setText("3D representation");
         out3DCheckBox.setMnemonic(KeyEvent.VK_3);
         out3DCheckBox.setToolTipText(ShortcutHint);
-        out3DCheckBox.addActionListener(this);
+        out3DCheckBox.addActionListener(outputOptionsListener);
         out3DViewer.setText("Viewer");
         out3DViewer.setMnemonic(KeyEvent.VK_V);
         out3DViewer.setActionCommand("out3DViewer");
         out3DViewer.addActionListener(out3DDestListener);
-        out3DViewer.addActionListener(this);
+        out3DViewer.addActionListener(outputOptionsListener);
         out3DViewer.setToolTipText("send 3D embeddings to some of the installed viewers");
         out3DFile.setText("File");
         out3DFile.setMnemonic(KeyEvent.VK_F);
         out3DFile.setActionCommand("out3DFile");
         out3DFile.addActionListener(out3DDestListener);
-        out3DFile.addActionListener(this);
+        out3DFile.addActionListener(outputOptionsListener);
         out3DFile.setToolTipText("send 3D embeddings into a file");
         out3DPipe.setText("Pipe");
         out3DPipe.setMnemonic(KeyEvent.VK_P);
         out3DPipe.setActionCommand("out3DPipe");
         out3DPipe.addActionListener(out3DDestListener);
-        out3DPipe.addActionListener(this);
+        out3DPipe.addActionListener(outputOptionsListener);
         out3DPipe.setToolTipText("send 3D embeddings into a pipe");
         JRadioButton out3DNoDest = new JRadioButton("None");
         out3DNoDest.setActionCommand("out3DNoDest");
         out3DNoDest.addActionListener(out3DDestListener);
         out3DNoDest.setVisible(false);
 
-        out3DFilePanel.addActionListener(this);
+        out3DFilePanel.addActionListener(uiActionListener);
 
         JPanel out3DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
@@ -276,31 +296,31 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         out2DCheckBox.setText("2D representation");
         out2DCheckBox.setMnemonic(KeyEvent.VK_2);
         out2DCheckBox.setToolTipText(ShortcutHint);
-        out2DCheckBox.addActionListener(this);
+        out2DCheckBox.addActionListener(outputOptionsListener);
         out2DViewer.setText("Viewer");
         out2DViewer.setMnemonic(KeyEvent.VK_E);
         out2DViewer.setActionCommand("out2DViewer");
         out2DViewer.addActionListener(out2DDestListener);
-        out2DViewer.addActionListener(this);
+        out2DViewer.addActionListener(outputOptionsListener);
         out2DViewer.setToolTipText("send 2D embeddings to some of the installed viewers");
         out2DFile.setText("File");
         out2DFile.setMnemonic(KeyEvent.VK_I);
         out2DFile.setActionCommand("out2DFile");
         out2DFile.addActionListener(out2DDestListener);
-        out2DFile.addActionListener(this);
+        out2DFile.addActionListener(outputOptionsListener);
         out2DFile.setToolTipText("send 2D embeddings into a file");
         out2DPipe.setText("Pipe");
         out2DPipe.setMnemonic(KeyEvent.VK_P);
         out2DPipe.setActionCommand("out2DPipe");
         out2DPipe.addActionListener(out2DDestListener);
-        out2DPipe.addActionListener(this);
+        out2DPipe.addActionListener(outputOptionsListener);
         out2DPipe.setToolTipText("send 2D embeddings into a pipe");
         JRadioButton out2DNoDest = new JRadioButton("None");
         out2DNoDest.setActionCommand("out2DNoDest");
         out2DNoDest.addActionListener(out2DDestListener);
         out2DNoDest.setVisible(false);
 
-        out2DFilePanel.addActionListener(this);
+        out2DFilePanel.addActionListener(uiActionListener);
 
         JPanel out2DViewerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
@@ -335,27 +355,27 @@ public class OutputPanel extends JPanel implements ActionListener, DocumentListe
         JCheckBox outAdjCheckBox = new JCheckBox("Adjacency information");
         outAdjCheckBox.setMnemonic(KeyEvent.VK_A);
         outAdjCheckBox.setToolTipText("send connection table into a file or a pipe");
-        outAdjCheckBox.addActionListener(this);
+        outAdjCheckBox.addActionListener(outputOptionsListener);
         OnActionClickerLayoutSwitcher outAdjDestListener =
                 new OnActionClickerLayoutSwitcher(outAdjCheckBox, outAdjDestOptionsPanel);
         outAdjFile.setText("File");
         outAdjFile.setMnemonic(KeyEvent.VK_L);
         outAdjFile.setActionCommand("outAdjFile");
         outAdjFile.addActionListener(outAdjDestListener);
-        outAdjFile.addActionListener(this);
+        outAdjFile.addActionListener(outputOptionsListener);
         outAdjFile.setToolTipText("send connection table into a file");
         outAdjPipe.setText("Pipe");
         outAdjPipe.setMnemonic(KeyEvent.VK_P);
         outAdjPipe.setActionCommand("outAdjPipe");
         outAdjPipe.addActionListener(outAdjDestListener);
-        outAdjPipe.addActionListener(this);
+        outAdjPipe.addActionListener(outputOptionsListener);
         outAdjPipe.setToolTipText("send connection table into a pipe");
         JRadioButton outAdjNoDest = new JRadioButton("None");
         outAdjNoDest.setActionCommand("outAdjNoDest");
         outAdjNoDest.addActionListener(outAdjDestListener);
         outAdjNoDest.setVisible(false);
 
-        outAdjFilePanel.addActionListener(this);
+        outAdjFilePanel.addActionListener(uiActionListener);
 
         JPanel outAdjDestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10 , 5));
         new OnActionClicker(outAdjFile, outAdjNoDest, outAdjCheckBox);
