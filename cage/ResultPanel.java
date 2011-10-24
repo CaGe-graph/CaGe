@@ -54,8 +54,7 @@ import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
-public class ResultPanel extends JPanel implements
-        EmbedThreadListener {
+public class ResultPanel extends JPanel {
 
     public static final int EXCEPTION_LEVEL = 1,  RUN_LEVEL = 2,  FOLDNET_LEVEL = 3,  ADVANCE_LEVEL = 4,  EMBED_LEVEL = 5;
     private static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Foreground", 0);
@@ -163,6 +162,21 @@ public class ResultPanel extends JPanel implements
 
         public void propertyChange(PropertyChangeEvent evt) {
             handlePropertyChange(evt);
+        }
+    };
+    
+    private EmbedThreadListener embedThreadListener = new EmbedThreadListener() {
+
+        public void showEmbeddingException(final Exception ex, final String context, final String diagnosticOutput) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    showException(ex, context, true, diagnosticOutput);
+                }
+            });
+        }
+
+        public void embeddingFinished() {
         }
     };
 
@@ -494,7 +508,7 @@ public class ResultPanel extends JPanel implements
             generator.setGraphNoFireInterval(graphNoFireInterval);
             generator.start();
             embedThread = new EmbedThread(embedder, 1);
-            embedThread.setEmbedThreadListener(this);
+            embedThread.setEmbedThreadListener(embedThreadListener);
             embedThread.start();
             clearStatus(RUN_LEVEL, false);
             setStatus("waiting for graph 1 ...", ADVANCE_LEVEL);
@@ -962,15 +976,6 @@ public class ResultPanel extends JPanel implements
         showException(ex, null, false, null);
     }
 
-    public void showEmbeddingException(final Exception ex, final String context, final String diagnosticOutput) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                showException(ex, context, true, diagnosticOutput);
-            }
-        });
-    }
-
     public void showException(final Exception ex, final String context,
             final boolean isEmbeddingException, final String embedDiagnostics) {
         setStatus(context == null ? "Exception occurred" : context,
@@ -1018,9 +1023,6 @@ public class ResultPanel extends JPanel implements
         statusPanel.add(separator);
         statusPanel.add(exceptionButton);
         UItoolbox.pack(this);
-    }
-
-    public void embeddingFinished() {
     }
 
     public void setStopListener(ActionListener stopListener) {
