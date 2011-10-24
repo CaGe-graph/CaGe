@@ -1,7 +1,9 @@
 package cage.viewer.twoview;
 
 /**
- *
+ * An implementation of {@code TwoViewPainter} that creates a TikZ picture 
+ * containing the graph.
+ * 
  * @author nvcleemp
  */
 public class TikzTwoViewPainter extends TwoViewPainter {

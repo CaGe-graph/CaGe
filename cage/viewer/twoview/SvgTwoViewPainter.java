@@ -3,7 +3,10 @@ package cage.viewer.twoview;
 import java.awt.Dimension;
 
 /**
- *
+ * An implementation of {@code TwoViewPainter} that creates a SVG document 
+ * containing the graph. At the moment this SVG is kept as simple as possible
+ * without much formatting options.
+ * 
  * @author nvcleemp
  */
 public class SvgTwoViewPainter extends TwoViewPainter {
