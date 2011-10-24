@@ -135,6 +135,7 @@ public class ResultPanel extends JPanel {
     
     private FocusListener focusListener = new FocusAdapter() {
 
+        @Override
         public void focusLost(FocusEvent e) {
             Object source = e.getSource();
             if (source == viewGraphNo) {
@@ -180,6 +181,7 @@ public class ResultPanel extends JPanel {
         }
     };
 
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public ResultPanel(CaGePipe gen, GeneratorInfo info,
             boolean doEmbed2D, boolean doEmbed3D,
             Vector viewerV, Vector writerV) {
@@ -1068,6 +1070,7 @@ public class ResultPanel extends JPanel {
         f.setContentPane(r);
         f.addWindowListener(new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
@@ -1105,10 +1108,12 @@ public class ResultPanel extends JPanel {
             minimumSize.height = metrics.getHeight();
         }
 
+        @Override
         public Dimension getMinimumSize() {
             return minimumSize;
         }
 
+        @Override
         public Dimension getPreferredSize() {
             return minimumSize;
         }
