@@ -46,7 +46,7 @@ import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.JTextComponentFocusSelector;
 import lisken.uitoolbox.UItoolbox;
 
-public class OutputPanel extends JPanel implements DocumentListener {
+public class OutputPanel extends JPanel {
 
     private GeneratorInfo generatorInfo;
     private boolean generatorInfoChanged;
@@ -95,21 +95,32 @@ public class OutputPanel extends JPanel implements DocumentListener {
     
     private ActionListener uiActionListener = new ActionListener() {
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() instanceof javax.swing.text.JTextComponent || e.getSource() instanceof TargetPanel) {
+        public void actionPerformed(ActionEvent e) {
             if (defaultButton != null) {
                 defaultButton.doClick();
             }
-        } else {
-            checkOutputOptions();
         }
-    }
     };
     
     private ActionListener outputOptionsListener = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
             checkOutputOptions();
+        }
+    };
+    
+    private DocumentListener documentListener = new DocumentListener() {
+
+        public void insertUpdate(DocumentEvent e) {
+            setGeneratorInfoChanged();
+        }
+
+        public void removeUpdate(DocumentEvent e) {
+            setGeneratorInfoChanged();
+        }
+
+        public void changedUpdate(DocumentEvent e) {
+            setGeneratorInfoChanged();
         }
     };
 
@@ -150,7 +161,7 @@ public class OutputPanel extends JPanel implements DocumentListener {
         generatorCmdLine.setColumns(10);
         generatorCmdLine.setActionCommand("generator");
         generatorCmdLine.addActionListener(uiActionListener);
-        generatorCmdLine.getDocument().addDocumentListener(this);
+        generatorCmdLine.getDocument().addDocumentListener(documentListener);
         generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
         expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
@@ -164,7 +175,7 @@ public class OutputPanel extends JPanel implements DocumentListener {
         embed2DCmdLine.setColumns(10);
         embed2DCmdLine.setActionCommand("e2");
         embed2DCmdLine.addActionListener(uiActionListener);
-        embed2DCmdLine.getDocument().addDocumentListener(this);
+        embed2DCmdLine.getDocument().addDocumentListener(documentListener);
         new JTextComponentFocusSelector(embed2DCmdLine);
         embedControlsGroup.addComponent(embed2DCmdLine);
         expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
@@ -178,7 +189,7 @@ public class OutputPanel extends JPanel implements DocumentListener {
         embed3DCmdLine.setColumns(10);
         embed3DCmdLine.setActionCommand("e3");
         embed3DCmdLine.addActionListener(uiActionListener);
-        embed3DCmdLine.getDocument().addDocumentListener(this);
+        embed3DCmdLine.getDocument().addDocumentListener(documentListener);
         new JTextComponentFocusSelector(embed3DCmdLine);
         embedControlsGroup.addComponent(embed3DCmdLine);
         expertPanel.add(embed3DCmdLine, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
@@ -476,18 +487,6 @@ public class OutputPanel extends JPanel implements DocumentListener {
         } else {
             checkOutputOptions();
         }
-    }
-
-    public void insertUpdate(DocumentEvent e) {
-        setGeneratorInfoChanged();
-    }
-
-    public void removeUpdate(DocumentEvent e) {
-        setGeneratorInfoChanged();
-    }
-
-    public void changedUpdate(DocumentEvent e) {
-        setGeneratorInfoChanged();
     }
 
     public void setGeneratorInfoChanged() {
