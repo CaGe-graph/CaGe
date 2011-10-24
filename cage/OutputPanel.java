@@ -517,7 +517,7 @@ public class OutputPanel extends JPanel {
         return viewersDim;
     }
 
-    int addViewers(String dimName, Vector viewersDim,
+    final int addViewers(String dimName, Vector viewersDim,
             GenericButtonGroup buttonGroup, JComponent component) {
         int dimension = dimName.charAt(0) - '0';
         viewersDim = createViewerNames(dimName, viewersDim);
