@@ -128,6 +128,7 @@ public class OutputPanel extends JPanel {
         this(null);
     }
 
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public OutputPanel(String gn) {
         generatorName = gn;
         generatorInfoChanged = true;
