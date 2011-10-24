@@ -991,7 +991,7 @@ public class ResultPanel extends JPanel {
         exceptionButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                StringBuffer message = new StringBuffer(Systoolbox.getStackTrace(ex));
+                StringBuilder message = new StringBuilder(Systoolbox.getStackTrace(ex));
                 if (context != null) {
                     message.append("\nContext was '");
                     message.append(context);
