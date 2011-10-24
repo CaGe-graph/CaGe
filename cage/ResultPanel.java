@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Array;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
@@ -54,7 +55,7 @@ import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
 public class ResultPanel extends JPanel implements
-        GeneratorListener, EmbedThreadListener {
+        EmbedThreadListener {
 
     public static final int EXCEPTION_LEVEL = 1,  RUN_LEVEL = 2,  FOLDNET_LEVEL = 3,  ADVANCE_LEVEL = 4,  EMBED_LEVEL = 5;
     private static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Foreground", 0);
@@ -143,6 +144,25 @@ public class ResultPanel extends JPanel implements
                     viewGraphNo.setText(Integer.toString(results.getResult().getGraphNo()));
                 }
             }
+        }
+    };
+    
+    private GeneratorListener generatorListener = new GeneratorListener() {
+
+        public void showException(Exception ex, String context) {
+            ResultPanel.this.showException(ex, context, false, null);
+        }
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            handlePropertyChange(evt);
+        }
+
+    };
+    
+    private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            handlePropertyChange(evt);
         }
     };
 
@@ -360,7 +380,7 @@ public class ResultPanel extends JPanel implements
 
         results = new CaGeResultList();
         highestGeneratedGraphNo = 0;
-        generator.addPropertyChangeListener(this);
+        generator.addPropertyChangeListener(generatorListener);
         if (graphNoFirePeriod > 0) {
             timer = new CaGeTimer(generator, graphNoFirePeriod);
         }
@@ -483,7 +503,7 @@ public class ResultPanel extends JPanel implements
         } catch (Exception ex) {
             clearStatus(RUN_LEVEL, false);
             clearStatus(ADVANCE_LEVEL, false);
-            showException(ex, "Exception at start");
+            showException(ex, "Exception at start", false, null);
         }
     }
 
@@ -512,7 +532,7 @@ public class ResultPanel extends JPanel implements
             save3DWriter.stop();
         }
         saveAdjWriter = save2DWriter = save3DWriter = null;
-        CaGe.foldnetThread().removePropertyChangeListener(this);
+        CaGe.foldnetThread().removePropertyChangeListener(propertyChangeListener);
         clearStatus(RUN_LEVEL);
         Debug.print("stopped.");
     }
@@ -530,7 +550,7 @@ public class ResultPanel extends JPanel implements
             save3DWriter.stop();
         }
         saveAdjWriter = save2DWriter = save3DWriter = null;
-        CaGe.foldnetThread().removePropertyChangeListener(this);
+        CaGe.foldnetThread().removePropertyChangeListener(propertyChangeListener);
         foldnetButton.setEnabled(false);
         pipeGraphNo.setText("0");
         pipeGraphNo.setEnabled(false);
@@ -704,7 +724,8 @@ public class ResultPanel extends JPanel implements
                             saveDialog.getFilename(),
                             CaGe.config.getProperty("CaGe.Generators.RunDir")));
                 } catch (Exception ex) {
-                    showException(ex, "exception at " + shortVariety + "-save setup");
+                    showException(ex, "exception at " + shortVariety + "-save setup",
+                            false, null);
                     saveWriter = null;
                 }
             }
@@ -718,12 +739,14 @@ public class ResultPanel extends JPanel implements
         saveWriter.outputResult(result);
         if (saveWriter.wasIOException()) {
             showException(saveWriter.lastIOException(),
-                    "exception while " + shortVariety + "-saving: flushing the buffer");
+                    "exception while " + shortVariety + "-saving: flushing the buffer",
+                    false, null);
         } else {
             saveWriter.flush();
             if (saveWriter.wasIOException()) {
                 showException(saveWriter.lastIOException(),
-                    "exception while " + shortVariety + "-saving: flushing the buffer");
+                    "exception while " + shortVariety + "-saving: flushing the buffer",
+                    false, null);
             } else {
                 saveButton.setEnabled(false);
                 if (previousFocusOwner != null) {
@@ -743,14 +766,14 @@ public class ResultPanel extends JPanel implements
         if (foldnetDialog.getSuccess()) {
             FoldnetThread foldnetThread = CaGe.foldnetThread();
             synchronized (foldnetThread) {
-                foldnetThread.removePropertyChangeListener(this);
+                foldnetThread.removePropertyChangeListener(propertyChangeListener);
                 foldnetThread.makeFoldnet(results.getResult(),
                         generatorInfo.getMaxFacesize(), foldnetDialog.getFilename());
                 int left = foldnetThread.tasksLeft();
                 setStatus("Folding net enqueued - " + left + " left to make.",
                         FOLDNET_LEVEL);
                 clearStatus(FOLDNET_LEVEL, false);
-                foldnetThread.addPropertyChangeListener(this);
+                foldnetThread.addPropertyChangeListener(propertyChangeListener);
             }
             results.getResult().setFoldnetMade(true);
             foldnetButton.setEnabled(false);
@@ -763,18 +786,17 @@ public class ResultPanel extends JPanel implements
             viewGraphNo.requestFocus();
         }
     }
-
-
+    
     /*
     Handling of property changes is dispatched to the
     event handling thread.
      */
-    public void propertyChange(final PropertyChangeEvent e) {
+    private void handlePropertyChange(final PropertyChangeEvent e) {
         Debug.print("property changed: " + e.getPropertyName());
         Runnable handler = new Runnable() {
 
             public void run() {
-                handlePropertyChange(e);
+                handlePropertyChangeEDT(e);
             }
         };
         switch (e.getPropertyName().charAt(0)) {
@@ -794,11 +816,11 @@ public class ResultPanel extends JPanel implements
                 break;
         }
     }
-
+        
     /*
-    Contains code to handle property changes in the event thread.
+     * Contains code to handle property changes in the event thread.
      */
-    void handlePropertyChange(PropertyChangeEvent e) {
+    private void handlePropertyChangeEDT(PropertyChangeEvent e) {
         switch (e.getPropertyName().charAt(0)) {
             case 'g':
                 graphNoChanged(((Integer) e.getNewValue()).intValue());
@@ -816,7 +838,7 @@ public class ResultPanel extends JPanel implements
                 }
                 break;
             case 'e':
-                showException((Exception) e.getNewValue(), (String) e.getOldValue());
+                showException((Exception) e.getNewValue(), (String) e.getOldValue(), false, null);
                 break;
             case 't':
                 int left = CaGe.foldnetThread().tasksLeft();
@@ -863,7 +885,7 @@ public class ResultPanel extends JPanel implements
         try {
             EmbeddableGraph graph = generator.getGraph();
             setStatus("embedding graph " + graphNo + " ...", EMBED_LEVEL);
-            embedThread.embed(new CaGeResult(graph, graphNo), this,
+            embedThread.embed(new CaGeResult(graph, graphNo), propertyChangeListener,
                     doEmbed2D, doEmbed3D, false);
             Debug.print("After embed thread");
         } catch (Exception ex) {
@@ -937,11 +959,7 @@ public class ResultPanel extends JPanel implements
     }
 
     void exceptionOccurred(Exception ex) {
-        showException(ex, null);
-    }
-
-    public void showException(Exception ex, String context) {
-        showException(ex, context, false, null);
+        showException(ex, null, false, null);
     }
 
     public void showEmbeddingException(final Exception ex, final String context, final String diagnosticOutput) {
@@ -953,7 +971,7 @@ public class ResultPanel extends JPanel implements
         });
     }
 
-    void showException(final Exception ex, final String context,
+    public void showException(final Exception ex, final String context,
             final boolean isEmbeddingException, final String embedDiagnostics) {
         setStatus(context == null ? "Exception occurred" : context,
                 EXCEPTION_LEVEL);

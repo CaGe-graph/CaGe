@@ -132,7 +132,7 @@ public class RasmolViewer implements CaGeViewer {
             rasmolInput.write(initCmd);
             rasmolInput.flush();
         } catch (Exception ex) {
-            resultPanel.showException(ex, "exception with Rasmol communication");
+            resultPanel.showException(ex, "exception with Rasmol communication", false, null);
         }
     }
 
