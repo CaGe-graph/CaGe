@@ -21,7 +21,7 @@ import lisken.uitoolbox.UItoolbox;
  *
  * @author nvcleemp
  */
-public class RunnerControl implements PropertyChangeListener, ActionListener {
+public class RunnerControl implements PropertyChangeListener {
 
     private BackgroundRunner runner;
     private boolean running;
@@ -37,30 +37,51 @@ public class RunnerControl implements PropertyChangeListener, ActionListener {
         this.runner = runner;
         this.window = window;
         this.panel = panel;
+        
         running = runner.isAlive();
         if (running) {
             window.adjustActiveRunners(+1);
         }
         Font font = BackgroundWindow.getContentFont();
         Border border = BackgroundWindow.getButtonBorder();
+        
+        //info button
         infoButton = new JButton(Integer.toString(index));
         infoButton.setHorizontalAlignment(SwingConstants.RIGHT);
-        infoButton.setActionCommand("info");
-        infoButton.addActionListener(this);
+        infoButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                UItoolbox.showTextInfo("task info", RunnerControl.this.runner.getInfoText(), infoButton);
+                infoButton.setForeground(Color.black);
+                removeIfFinished();
+            }
+        });
         infoButton.setFont(font);
         infoButton.setBorder(border);
+        
+        //textfield with graph number
         graphNoField = new JTextField(CaGe.graphNoDigits);
         graphNoField.setFont(font);
         graphNoField.setEnabled(false);
         graphNoField.setHorizontalAlignment(SwingConstants.RIGHT);
         graphNoField.setText("0");
+        
+        //stop button
         stopButton = new JButton(running ? "stop" : "dead");
         stopButton.setEnabled(running);
-        stopButton.setActionCommand("stop");
-        stopButton.addActionListener(this);
+        stopButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                stopButtonUsed = true;
+                RunnerControl.this.window.setStopButtonUsed();
+                stop();
+                // stopButton.setEnabled(false);
+            }
+        });
         stopButton.setFont(font);
         stopButton.setBorder(border);
         stopButtonUsed = false;
+        
         panel.add(infoButton,
                 new GridBagConstraints(0, index, 1, 1, 0.001, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
@@ -75,22 +96,6 @@ public class RunnerControl implements PropertyChangeListener, ActionListener {
                 new Insets(BackgroundWindow.buttonDist, 2, BackgroundWindow.buttonDist, 2), 0, 0));
         runner.addPropertyChangeListener(this);
         window.adjustDisplayedRunners(+1);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand().charAt(0)) {
-            case 'i':
-                UItoolbox.showTextInfo("task info", runner.getInfoText(), infoButton);
-                infoButton.setForeground(Color.black);
-                removeIfFinished();
-                break;
-            case 's':
-                stopButtonUsed = true;
-                window.setStopButtonUsed();
-                stop();
-                // stopButton.setEnabled(false);
-                break;
-        }
     }
 
     public void stop() {
