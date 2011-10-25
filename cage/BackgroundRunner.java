@@ -28,7 +28,7 @@ public class BackgroundRunner extends Thread implements CaGeRunner {
     boolean doEmbed2D, doEmbed3D;
     CaGeWriter[] writer;
     Vector writers, writeDests;
-    Vector propertyChangeListeners;
+    final Vector propertyChangeListeners;
     EmbedThread embedThread;
     CaGeTimer timer = null;
     
