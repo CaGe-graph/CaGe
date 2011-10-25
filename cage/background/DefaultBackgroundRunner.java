@@ -3,7 +3,6 @@ package cage.background;
 import cage.CaGe;
 import cage.CaGePipe;
 import cage.CaGeResult;
-import cage.CaGeRunner;
 import cage.CaGeTimer;
 import cage.EmbedThread;
 import cage.EmbedThreadListener;
@@ -21,7 +20,7 @@ import java.util.Vector;
 import lisken.systoolbox.MessageQueue;
 import lisken.systoolbox.Systoolbox;
 
-public class DefaultBackgroundRunner extends Thread implements CaGeRunner {
+public class DefaultBackgroundRunner extends Thread implements BackgroundRunner {
 
     static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Background", 10);
     static final int graphNoFirePeriod = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFirePeriod.Background", 10000);

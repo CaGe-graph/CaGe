@@ -1,5 +1,6 @@
 package cage;
 
+import cage.background.BackgroundRunner;
 import cage.background.DefaultBackgroundRunner;
 import cage.writer.CaGeWriter;
 
@@ -51,7 +52,7 @@ public class CaGeStarter implements ActionListener {
                         CaGe.expertMode ? Wizard.PREVIOUS : null,
                         null, "Stop", Wizard.CANCEL, Wizard.EXIT, false);
             } else if (nWriters > 0) {
-                DefaultBackgroundRunner backgroundRunner = new DefaultBackgroundRunner(
+                BackgroundRunner backgroundRunner = new DefaultBackgroundRunner(
                         generatorPipe, generatorInfo,
                         outputPanel.requests2D(), outputPanel.requests3D(),
                         writers, writeDests);

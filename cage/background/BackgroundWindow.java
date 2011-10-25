@@ -250,7 +250,7 @@ public class BackgroundWindow extends JFrame
         }
     }
 
-    public void addRunner(DefaultBackgroundRunner runner) {
+    public void addRunner(BackgroundRunner runner) {
         runners += 1;
         runnerControls.addElement(
                 new RunnerControl(runner, this, runners, runnersPanel));
