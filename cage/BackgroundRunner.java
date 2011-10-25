@@ -12,7 +12,7 @@ import java.util.Vector;
 import lisken.systoolbox.MessageQueue;
 import lisken.systoolbox.Systoolbox;
 
-public class BackgroundRunner extends Thread implements CaGeRunner, PropertyChangeListener {
+public class BackgroundRunner extends Thread implements CaGeRunner {
 
     static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Background", 10);
     static final int graphNoFirePeriod = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFirePeriod.Background", 10000);
@@ -53,6 +53,17 @@ public class BackgroundRunner extends Thread implements CaGeRunner, PropertyChan
             }
         }
     };
+    
+    private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
+
+        @SuppressWarnings("CallToThreadDumpStack")
+        public void propertyChange(PropertyChangeEvent e) {
+            if (CaGe.debugMode) {
+                new StackTrace("queueing property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")").printStackTrace();
+            }
+            queue.put(e);
+        }
+    };
 
     public BackgroundRunner(CaGePipe generator, GeneratorInfo generatorInfo,
             boolean doEmbed2D, boolean doEmbed3D,
@@ -68,7 +79,7 @@ public class BackgroundRunner extends Thread implements CaGeRunner, PropertyChan
         graphNo = 0;
         writer = new CaGeWriter[writers.size()];
         writers.copyInto(writer);
-        generator.addPropertyChangeListener(this);
+        generator.addPropertyChangeListener(propertyChangeListener);
         propertyChangeListeners = new Vector();
         embedThread = new EmbedThread(generatorInfo.getEmbedder(), 3);
         embedThread.setEmbedThreadListener(embedThreadListener);
@@ -194,13 +205,6 @@ public class BackgroundRunner extends Thread implements CaGeRunner, PropertyChan
         return event != null;
     }
 
-    public void propertyChange(PropertyChangeEvent e) {
-        if (CaGe.debugMode) {
-            new StackTrace("queueing property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")").printStackTrace();
-        }
-        queue.put(e);
-    }
-
     void handlePropertyChange(PropertyChangeEvent e) {
         Debug.print("handling property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")");
         switch (e.getPropertyName().charAt(0)) {
@@ -244,7 +248,7 @@ public class BackgroundRunner extends Thread implements CaGeRunner, PropertyChan
             EmbeddableGraph graph = generator.getGraph();
             embedThread.embed(
                     new CaGeResult(graph, graphNo),
-                    this, doEmbed2D, doEmbed3D, false);
+                    propertyChangeListener, doEmbed2D, doEmbed3D, false);
         } catch (Exception ex) {
             generator.fireExceptionOccurred(ex);
         }
@@ -300,7 +304,7 @@ public class BackgroundRunner extends Thread implements CaGeRunner, PropertyChan
         Debug.print("finishing");
         if (generatorRunning) {
             Debug.print("announcing crash");
-            generator.removePropertyChangeListener(this);
+            generator.removePropertyChangeListener(propertyChangeListener);
             generator.stop();
             generatorRunning = false;
             firePropertyChange(
