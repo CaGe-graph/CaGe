@@ -50,7 +50,7 @@ public class WizardStage {
         }
     }
 
-    JButton createButton(String buttonText, String actionCmd, String IconPath, int textPosition) {
+    final JButton createButton(String buttonText, String actionCmd, String IconPath, int textPosition) {
         if (buttonText == null) {
             return null;
         }
