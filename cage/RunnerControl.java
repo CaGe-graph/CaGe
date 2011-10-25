@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+
 import lisken.uitoolbox.UItoolbox;
 
 /**
@@ -22,14 +23,14 @@ import lisken.uitoolbox.UItoolbox;
  */
 public class RunnerControl implements PropertyChangeListener, ActionListener {
 
-    BackgroundRunner runner;
-    boolean running;
-    BackgroundWindow window;
-    JPanel panel;
-    JButton infoButton;
-    JTextField graphNoField;
-    JButton stopButton;
-    boolean stopButtonUsed;
+    private BackgroundRunner runner;
+    private boolean running;
+    private BackgroundWindow window;
+    private JPanel panel;
+    private JButton infoButton;
+    private JTextField graphNoField;
+    private JButton stopButton;
+    private boolean stopButtonUsed;
 
     public RunnerControl(BackgroundRunner runner,
             BackgroundWindow window, int index, JPanel panel) {
