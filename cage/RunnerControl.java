@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cage;
 
-import cage.writer.CaGeWriter;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -14,26 +8,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Enumeration;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.UItoolbox;
 
 /**
  *
  * @author nvcleemp
  */
-public class RunnerControl
-        implements PropertyChangeListener, ActionListener {
+public class RunnerControl implements PropertyChangeListener, ActionListener {
 
     BackgroundRunner runner;
     boolean running;
-    StringBuffer infoText;
     BackgroundWindow window;
     JPanel panel;
     JButton infoButton;
@@ -46,24 +36,9 @@ public class RunnerControl
         this.runner = runner;
         this.window = window;
         this.panel = panel;
-        GeneratorInfo generatorInfo = runner.getGeneratorInfo();
         running = runner.isAlive();
         if (running) {
             window.adjustActiveRunners(+1);
-        }
-        infoText = new StringBuffer();
-        infoText.append("generator:\t " + generatorInfo.getGeneratorName() + "\n");
-        if (CaGe.expertMode) {
-            infoText.append("  command:\t " + Systoolbox.makeCmdLine(generatorInfo.getGenerator()) + "\n");
-        }
-        infoText.append("\noutput:\n");
-        Enumeration writers = runner.getWriters().elements();
-        Enumeration writeDests = runner.getWriteDestinations().elements();
-        while (writeDests.hasMoreElements()) {
-            int dimension = ((CaGeWriter) writers.nextElement()).getDimension();
-            infoText.append("  ");
-            infoText.append(dimension <= 0 ? "adj" : dimension + "D");
-            infoText.append(" >\t " + (String) writeDests.nextElement() + "\n");
         }
         Font font = BackgroundWindow.getContentFont();
         Border border = BackgroundWindow.getButtonBorder();
@@ -104,7 +79,7 @@ public class RunnerControl
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand().charAt(0)) {
             case 'i':
-                UItoolbox.showTextInfo("task info", infoText.toString(), infoButton);
+                UItoolbox.showTextInfo("task info", runner.getInfoText(), infoButton);
                 infoButton.setForeground(Color.black);
                 removeIfFinished();
                 break;
@@ -176,8 +151,6 @@ public class RunnerControl
     }
 
     void exceptionOccurred(Exception e) {
-        infoText.append("\nException occurred:\n");
-        infoText.append(Systoolbox.getStackTrace(e));
         infoButton.setForeground(Color.red);
     }
 

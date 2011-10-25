@@ -6,6 +6,7 @@ import cage.writer.CaGeWriter;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Enumeration;
 import java.util.Vector;
 
 import lisken.systoolbox.MessageQueue;
@@ -20,6 +21,7 @@ public class BackgroundRunner extends Thread
     private boolean halted;
     private MessageQueue queue = new MessageQueue(CaGe.debugMode);
     private PropertyChangeEvent event;
+    private StringBuffer infoText = new StringBuffer();
     CaGePipe generator;
     GeneratorInfo generatorInfo;
     boolean generatorFlowing, generatorRunning;
@@ -76,6 +78,23 @@ public class BackgroundRunner extends Thread
 
     public Vector getWriteDestinations() {
         return writeDests;
+    }
+    
+    public String getInfoText() {
+        infoText.append("generator:\t ").append(generatorInfo.getGeneratorName()).append("\n");
+        if (CaGe.expertMode) {
+            infoText.append("  command:\t ").append(Systoolbox.makeCmdLine(generatorInfo.getGenerator())).append("\n");
+        }
+        infoText.append("\noutput:\n");
+        Enumeration writersEnumeration = writers.elements();
+        Enumeration writeDestsEnumeration = writeDests.elements();
+        while (writeDestsEnumeration.hasMoreElements()) {
+            int dimension = ((CaGeWriter) writersEnumeration.nextElement()).getDimension();
+            infoText.append("  ");
+            infoText.append(dimension <= 0 ? "adj" : dimension + "D");
+            infoText.append(" >\t ").append((String) writeDestsEnumeration.nextElement()).append("\n");
+        }
+        return infoText.toString();
     }
 
     @Override
@@ -174,6 +193,8 @@ public class BackgroundRunner extends Thread
                 runningChanged(((Boolean) e.getNewValue()).booleanValue());
                 break;
             case 'e':
+                infoText.append("\nException occurred:\n");
+                infoText.append(Systoolbox.getStackTrace((Exception) e.getNewValue()));
                 firePropertyChange(e);
                 break;
             case 'c':
