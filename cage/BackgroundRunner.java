@@ -12,8 +12,7 @@ import java.util.Vector;
 import lisken.systoolbox.MessageQueue;
 import lisken.systoolbox.Systoolbox;
 
-public class BackgroundRunner extends Thread
-        implements CaGeRunner, PropertyChangeListener, EmbedThreadListener {
+public class BackgroundRunner extends Thread implements CaGeRunner, PropertyChangeListener {
 
     static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Background", 10);
     static final int graphNoFirePeriod = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFirePeriod.Background", 10000);
@@ -32,6 +31,28 @@ public class BackgroundRunner extends Thread
     Vector propertyChangeListeners;
     EmbedThread embedThread;
     CaGeTimer timer = null;
+    
+    private EmbedThreadListener embedThreadListener = new EmbedThreadListener() {
+
+        public void showEmbeddingException(Exception ex, String context, String embedDiagnostics) {
+            String diagnostics = embedDiagnostics == null ? "" : embedDiagnostics;
+            int p = diagnostics.length() - 1;
+            if (p > 0 && diagnostics.charAt(p) == '\n') {
+                diagnostics = diagnostics.substring(0, p);
+            }
+            Exception e = new Exception(
+                    "embedding exception:\n  context: '" + context + "'" +
+                    (embedDiagnostics != null && embedDiagnostics.length() > 0 ? "\n  diagnostic output: '" + embedDiagnostics + "'" : "\n  diagnostic output: <none>") +
+                    "\n  exception:\t" + ex.toString());
+            fireExceptionOccurred((Exception) e.fillInStackTrace());
+        }
+
+        public void embeddingFinished() {
+            if (!generatorRunning) {
+                end();
+            }
+        }
+    };
 
     public BackgroundRunner(CaGePipe generator, GeneratorInfo generatorInfo,
             boolean doEmbed2D, boolean doEmbed3D,
@@ -50,7 +71,7 @@ public class BackgroundRunner extends Thread
         generator.addPropertyChangeListener(this);
         propertyChangeListeners = new Vector();
         embedThread = new EmbedThread(generatorInfo.getEmbedder(), 3);
-        embedThread.setEmbedThreadListener(this);
+        embedThread.setEmbedThreadListener(embedThreadListener);
         if (graphNoFirePeriod > 0) {
             timer = new CaGeTimer(this, graphNoFirePeriod);
         }
@@ -275,12 +296,6 @@ public class BackgroundRunner extends Thread
         }
     }
 
-    public void embeddingFinished() {
-        if (!generatorRunning) {
-            end();
-        }
-    }
-
     void finish() {
         Debug.print("finishing");
         if (generatorRunning) {
@@ -304,19 +319,6 @@ public class BackgroundRunner extends Thread
             }
         }
         fireRunningChanged();
-    }
-
-    public void showEmbeddingException(Exception ex, String context, String embedDiagnostics) {
-        String diagnostics = embedDiagnostics == null ? "" : embedDiagnostics;
-        int p = diagnostics.length() - 1;
-        if (p > 0 && diagnostics.charAt(p) == '\n') {
-            diagnostics = diagnostics.substring(0, p);
-        }
-        Exception e = new Exception(
-                "embedding exception:\n  context: '" + context + "'" +
-                (embedDiagnostics != null && embedDiagnostics.length() > 0 ? "\n  diagnostic output: '" + embedDiagnostics + "'" : "\n  diagnostic output: <none>") +
-                "\n  exception:\t" + ex.toString());
-        fireExceptionOccurred((Exception) e.fillInStackTrace());
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
