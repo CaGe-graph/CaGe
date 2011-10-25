@@ -39,25 +39,24 @@ public class CaGeStarter implements ActionListener {
      */
     public void start() {
         if (checkOutputOptions()) {
-            return;
-        }
-        CaGe.getWizardWindow().setVisible(false);
-        prepareGeneratorAndEmbedder();
-        if (nViewers > 0) {
-            resultPanel = new ResultPanel(
-                    generatorPipe, generatorInfo,
-                    outputPanel.requests2D(), outputPanel.requests3D(),
-                    viewers, writers);
-            CaGe.wizard().nextStage(resultPanel, this,
-                    CaGe.expertMode ? Wizard.PREVIOUS : null,
-                    null, "Stop", Wizard.CANCEL, Wizard.EXIT, false);
-        } else if (nWriters > 0) {
-            BackgroundRunner backgroundRunner = new BackgroundRunner(
-                    generatorPipe, generatorInfo,
-                    outputPanel.requests2D(), outputPanel.requests3D(),
-                    writers, writeDests);
-            CaGe.wizard().toStage(1, true);
-            CaGe.backgroundWindow().addRunner(backgroundRunner);
+            CaGe.getWizardWindow().setVisible(false);
+            prepareGeneratorAndEmbedder();
+            if (nViewers > 0) {
+                resultPanel = new ResultPanel(
+                        generatorPipe, generatorInfo,
+                        outputPanel.requests2D(), outputPanel.requests3D(),
+                        viewers, writers);
+                CaGe.wizard().nextStage(resultPanel, this,
+                        CaGe.expertMode ? Wizard.PREVIOUS : null,
+                        null, "Stop", Wizard.CANCEL, Wizard.EXIT, false);
+            } else if (nWriters > 0) {
+                BackgroundRunner backgroundRunner = new BackgroundRunner(
+                        generatorPipe, generatorInfo,
+                        outputPanel.requests2D(), outputPanel.requests3D(),
+                        writers, writeDests);
+                CaGe.wizard().toStage(1, true);
+                CaGe.backgroundWindow().addRunner(backgroundRunner);
+            }
         }
     }
 
