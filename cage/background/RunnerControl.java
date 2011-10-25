@@ -25,7 +25,7 @@ import lisken.uitoolbox.UItoolbox;
  */
 public class RunnerControl implements PropertyChangeListener {
 
-    private BackgroundRunner runner;
+    private DefaultBackgroundRunner runner;
     private boolean running;
     private BackgroundWindow window;
     private JPanel panel;
@@ -34,7 +34,7 @@ public class RunnerControl implements PropertyChangeListener {
     private JButton stopButton;
     private boolean stopButtonUsed;
 
-    public RunnerControl(BackgroundRunner runner,
+    public RunnerControl(DefaultBackgroundRunner runner,
             BackgroundWindow window, int index, JPanel panel) {
         this.runner = runner;
         this.window = window;

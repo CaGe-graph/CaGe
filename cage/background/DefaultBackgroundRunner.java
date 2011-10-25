@@ -21,7 +21,7 @@ import java.util.Vector;
 import lisken.systoolbox.MessageQueue;
 import lisken.systoolbox.Systoolbox;
 
-public class BackgroundRunner extends Thread implements CaGeRunner {
+public class DefaultBackgroundRunner extends Thread implements CaGeRunner {
 
     static final int graphNoFireInterval = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFireInterval.Background", 10);
     static final int graphNoFirePeriod = CaGe.getCaGePropertyAsInt("CaGe.GraphNoFirePeriod.Background", 10000);
@@ -74,7 +74,7 @@ public class BackgroundRunner extends Thread implements CaGeRunner {
         }
     };
 
-    public BackgroundRunner(CaGePipe generator, GeneratorInfo generatorInfo,
+    public DefaultBackgroundRunner(CaGePipe generator, GeneratorInfo generatorInfo,
             boolean doEmbed2D, boolean doEmbed3D,
             Vector writers, Vector writeDests) {
         super("BackgroundRunner " + ++threadCount);
