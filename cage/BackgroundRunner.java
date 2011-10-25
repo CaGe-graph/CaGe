@@ -366,7 +366,7 @@ public class BackgroundRunner extends Thread implements CaGeRunner {
         Debug.print("announcing running change: " + generatorRunning);
         firePropertyChange(
                 new PropertyChangeEvent(
-                this, "running", null, new Boolean(generatorRunning)));
+                this, "running", null, generatorRunning));
     }
 
     public void fireExceptionOccurred(Exception e) {
