@@ -13,22 +13,30 @@ import lisken.uitoolbox.UItoolbox;
 import lisken.uitoolbox.Wizard;
 
 /**
- *
+ * Class that is responsible for starting the generation once the configuration is complete.
  */
 public class CaGeStarter implements ActionListener {
 
-    OutputPanel outputPanel;
-    GeneratorInfo generatorInfo;
-    Vector viewers, writers, writeDests;
-    int nViewers, nWriters;
-    CaGePipe generatorPipe = null;
-    ResultPanel resultPanel = null;
-    boolean stopped;
+    private OutputPanel outputPanel;
+    private GeneratorInfo generatorInfo;
+    private Vector viewers, writers, writeDests;
+    private int nViewers, nWriters;
+    private CaGePipe generatorPipe = null;
+    private ResultPanel resultPanel = null;
+    private boolean stopped;
 
+    /**
+     * Creates a new CageStarter that takes its configuration from the given OutputPanel.
+     * 
+     * @param outputPanel The OutputPanel used to configure this run.
+     */
     public CaGeStarter(OutputPanel outputPanel) {
         this.outputPanel = outputPanel;
     }
 
+    /**
+     * Tries to start the generation
+     */
     public void start() {
         if (checkOutputOptions()) {
             return;
@@ -53,7 +61,12 @@ public class CaGeStarter implements ActionListener {
         }
     }
 
-    boolean checkOutputOptions() {
+    /**
+     * Check the output options to see if the generation can be started.
+     * 
+     * @return true if the generation can be started and false otherwise.
+     */
+    private boolean checkOutputOptions() {
         generatorInfo = outputPanel.getGeneratorInfo();
         viewers = outputPanel.getViewers();
         writers = outputPanel.getWriters();
@@ -68,7 +81,7 @@ public class CaGeStarter implements ActionListener {
                     ex.toString() + "\n" +
                     "\nPlease change your choices in the output options window.",
                     CaGe.getWizardStage().getNextButton());
-            return true;
+            return false;
         }
         nViewers = viewers == null ? 0 : viewers.size();
         nWriters = writers == null ? 0 : writers.size();
@@ -79,12 +92,12 @@ public class CaGeStarter implements ActionListener {
                     "Please change your choices in the output options window.\n" +
                     (viewerErrors == null ? "" : "\nErrors during attempted instantiation:\n\n" + viewerErrors),
                     CaGe.getWizardStage().getNextButton());
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
-    void prepareGeneratorAndEmbedder() {
+    private void prepareGeneratorAndEmbedder() {
         String runDir, path;
         runDir = CaGe.config.getProperty("CaGe.Generators.RunDir");
         path = CaGe.config.getProperty("CaGe.Generators.Path");
@@ -148,8 +161,7 @@ public class CaGeStarter implements ActionListener {
         }
     }
 
-    void setWriterOutputStreams()
-            throws Exception {
+    private void setWriterOutputStreams() throws Exception {
         ExceptionGroup exceptionGroup = new ExceptionGroup();
         int n = Math.min(writers.size(), writeDests.size());
         for (int i = 0; i < n; ++i) {
@@ -162,7 +174,7 @@ public class CaGeStarter implements ActionListener {
         }
     }
 
-    void resetWriterOutputStreams() {
+    private void resetWriterOutputStreams() {
         try {
             setWriterOutputStreams();
         } catch (Exception ex) {
@@ -170,7 +182,7 @@ public class CaGeStarter implements ActionListener {
         }
     }
 
-    void setWriterOutputStream(CaGeWriter writer, String dest, ExceptionGroup exceptionGroup) {
+    private void setWriterOutputStream(CaGeWriter writer, String dest, ExceptionGroup exceptionGroup) {
         try {
             writer.setOutputStream(Systoolbox.createOutputStream(dest,
                     CaGe.config.getProperty("CaGe.Generators.RunDir")));
