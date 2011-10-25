@@ -1,5 +1,6 @@
 package cage;
 
+import cage.background.BackgroundRunner;
 import cage.writer.CaGeWriter;
 
 import java.awt.event.ActionEvent;

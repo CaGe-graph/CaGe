@@ -8,6 +8,8 @@ package cage;
  * @author Sebastian Lisken
  * @version
  */
+import cage.background.BackgroundWindow;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
