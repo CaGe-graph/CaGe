@@ -45,14 +45,14 @@ public class MessageQueue {
         notifyAll();
     }
     private QueueItem first = null,  last = null;
-}
+    
+    private static class QueueItem {
 
-class QueueItem {
-
-    public QueueItem(Object entry) {
-        this.entry = entry;
+        public QueueItem(Object entry) {
+            this.entry = entry;
+        }
+        public QueueItem next = null;
+        public Object entry;
     }
-    public QueueItem next = null;
-    public Object entry;
 }
 
