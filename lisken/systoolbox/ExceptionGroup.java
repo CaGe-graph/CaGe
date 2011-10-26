@@ -17,14 +17,14 @@ public class ExceptionGroup extends Exception {
     @Override
     public String getMessage() {
         if (exceptionV.size() > 0) {
-            StringBuffer messages = new StringBuffer();
+            StringBuilder messages = new StringBuilder();
             Enumeration exceptions = exceptionV.elements();
             int e = 0;
             while (exceptions.hasMoreElements()) {
                 if (e++ > 0) {
                     messages.append(", ");
                 }
-                messages.append(e + ". ");
+                messages.append(e).append(". ");
                 messages.append(((Exception) exceptions.nextElement()).getMessage());
             }
             return messages.toString();
@@ -36,14 +36,14 @@ public class ExceptionGroup extends Exception {
     @Override
     public String toString() {
         if (exceptionV.size() > 0) {
-            StringBuffer encodings = new StringBuffer();
+            StringBuilder encodings = new StringBuilder();
             Enumeration exceptions = exceptionV.elements();
             int e = 0;
             while (exceptions.hasMoreElements()) {
                 if (e++ > 0) {
                     encodings.append("\n\n");
                 }
-                encodings.append(e + ". ");
+                encodings.append(e).append(". ");
                 encodings.append(((Exception) exceptions.nextElement()).toString());
             }
             return encodings.toString();
