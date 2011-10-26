@@ -8,7 +8,7 @@ import java.util.Vector;
 public class ExceptionGroup extends Exception {
 
     private static final String EMPTY_MSG = "empty ExceptionGroup";
-    Vector exceptionV = new Vector();
+    private Vector exceptionV = new Vector();
 
     public void add(Exception ex) {
         exceptionV.addElement(ex);
