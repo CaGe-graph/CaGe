@@ -257,7 +257,7 @@ public class BackgroundWindow extends JFrame
         runner.start();
     }
 
-    JTextField addFoldnetsView(String name, JPanel panel, int y, Font font) {
+    private JTextField addFoldnetsView(String name, JPanel panel, int y, Font font) {
         JTextField foldnetsField = new JTextField(3);
         foldnetsField.setFont(font);
         foldnetsField.setEnabled(false);
