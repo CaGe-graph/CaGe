@@ -94,7 +94,6 @@ public class ExceptionGroup extends Exception {
         if (exceptionV == null) {
             return null;
         }
-        Enumeration exceptions = exceptionV.elements();
         for (int i = 0; i < exceptionV.size(); ++i) {
             exceptionV.setElementAt(
                     ((Exception) exceptionV.elementAt(i)).fillInStackTrace(),
