@@ -77,7 +77,7 @@ public class BackgroundWindow extends JFrame
     }
     int runners, activeRunners, displayedRunners;
     JPanel runnersPanel;
-    Vector runnerControls;
+    Vector<RunnerControl> runnerControls;
     FoldnetThread foldnetThread;
     JPanel foldnetsPanel;
     JTextField foldnetsLeft;
@@ -102,9 +102,9 @@ public class BackgroundWindow extends JFrame
                     return;
                 }
                 setVisible(false);
-                Enumeration controls = runnerControls.elements();
+                Enumeration<RunnerControl> controls = runnerControls.elements();
                 while (controls.hasMoreElements()) {
-                    ((RunnerControl) controls.nextElement()).removeIfFinished();
+                    controls.nextElement().removeIfFinished();
                 }
             }
         });
@@ -165,7 +165,7 @@ public class BackgroundWindow extends JFrame
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(10, 10, 10, 10), 0, 0));
-        runnerControls = new Vector(0);
+        runnerControls = new Vector<RunnerControl>(0);
         stopButtonUsed = false;
         exitPanel = new JPanel();
         exitPanel.setLayout(new BoxLayout(exitPanel, BoxLayout.Y_AXIS));
@@ -385,9 +385,9 @@ public class BackgroundWindow extends JFrame
     }
 
     void finishAndExit() {
-        Enumeration controls = runnerControls.elements();
+        Enumeration<RunnerControl> controls = runnerControls.elements();
         while (controls.hasMoreElements()) {
-            ((RunnerControl) controls.nextElement()).stop();
+            controls.nextElement().stop();
         }
         foldnetThread.exit();
         exitPhase = 2;
