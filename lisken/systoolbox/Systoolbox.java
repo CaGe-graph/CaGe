@@ -163,7 +163,7 @@ public class Systoolbox {
         return stringToVector(string, new SeparatorIndicator());
     }
 
-    public static Vector stringToVector(String string, SeparatorIndicator s) {
+    private static Vector stringToVector(String string, SeparatorIndicator s) {
         if (string == null) {
             return null;
         }
@@ -189,7 +189,7 @@ public class Systoolbox {
         return stringToArray(string, new SeparatorIndicator());
     }
 
-    public static String[] stringToArray(String string, SeparatorIndicator s) {
+    private static String[] stringToArray(String string, SeparatorIndicator s) {
         Vector v;
         String[] result;
         v = stringToVector(string, s);
@@ -373,11 +373,11 @@ public class Systoolbox {
             thread.setPriority(Thread.MIN_PRIORITY);
         }
     }
-}
 
-class SeparatorIndicator {
+    private static class SeparatorIndicator {
 
-    public boolean isSeparator(char c) {
-        return Character.isWhitespace(c);
+        public boolean isSeparator(char c) {
+            return Character.isWhitespace(c);
+        }
     }
 }
