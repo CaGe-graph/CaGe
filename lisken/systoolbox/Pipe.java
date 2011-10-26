@@ -92,7 +92,7 @@ public class Pipe {
         startPipe(cmds, i_fd, o_fd, i_name, o_name, o_append, e_name);
     }
 
-    void setInFile(String inFilename)
+    final void setInFile(String inFilename)
             throws Exception {
         if (inFilename != null) {
             if (!new File(inFilename).canRead()) {
@@ -105,7 +105,7 @@ public class Pipe {
         }
     }
 
-    void setOutFile(String outFilename, boolean append)
+    final void setOutFile(String outFilename, boolean append)
             throws Exception {
         if (outFilename != null) {
             File outFile = new File(outFilename);
@@ -121,7 +121,7 @@ public class Pipe {
         }
     }
 
-    void setErrFile(String errFilename)
+    final void setErrFile(String errFilename)
             throws Exception {
         if (errFilename != null) {
             if (!Systoolbox.canCreat(new File(errFilename))) {
