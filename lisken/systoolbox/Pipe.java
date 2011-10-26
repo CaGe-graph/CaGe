@@ -164,7 +164,7 @@ public class Pipe {
     public int yieldUntilExit() {
         int status;
         while ((status = checkForExit()) == -1) {
-            Thread.currentThread().yield();
+            Thread.yield();
         }
         return status;
     }
