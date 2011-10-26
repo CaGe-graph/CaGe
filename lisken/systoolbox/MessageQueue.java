@@ -14,6 +14,7 @@ public class MessageQueue {
         this.debug = debug;
     }
 
+    @SuppressWarnings("CallToThreadDumpStack")
     public synchronized Object get() throws InterruptedException {
         QueueItem item;
         while ((item = first) == null) {
@@ -30,6 +31,7 @@ public class MessageQueue {
         return item.entry;
     }
 
+    @SuppressWarnings("CallToThreadDumpStack")
     public synchronized void put(Object entry) {
         if (debug) {
             new StackTrace("put: " + entry).printStackTrace();

@@ -14,6 +14,7 @@ public class ExceptionGroup extends Exception {
         exceptionV.addElement(ex);
     }
 
+    @Override
     public String getMessage() {
         if (exceptionV.size() > 0) {
             StringBuffer messages = new StringBuffer();
@@ -32,6 +33,7 @@ public class ExceptionGroup extends Exception {
         }
     }
 
+    @Override
     public String toString() {
         if (exceptionV.size() > 0) {
             StringBuffer encodings = new StringBuffer();
@@ -50,10 +52,12 @@ public class ExceptionGroup extends Exception {
         }
     }
 
+    @Override
     public void printStackTrace() {
         printStackTrace(System.err);
     }
 
+    @Override
     public void printStackTrace(PrintStream s) {
         if (exceptionV.size() > 0) {
             Enumeration exceptions = exceptionV.elements();
@@ -69,6 +73,7 @@ public class ExceptionGroup extends Exception {
         }
     }
 
+    @Override
     public void printStackTrace(PrintWriter s) {
         if (exceptionV.size() > 0) {
             Enumeration exceptions = exceptionV.elements();
@@ -84,6 +89,7 @@ public class ExceptionGroup extends Exception {
         }
     }
 
+    @Override
     public Throwable fillInStackTrace() {
         if (exceptionV == null) {
             return null;

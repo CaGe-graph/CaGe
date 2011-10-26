@@ -50,10 +50,12 @@ public class BufferedFDInputStream extends InputStream {
         return nNextByte(file);
     }
 
+    @Override
     public int available() {
         return nextByte() < 0 ? 0 : 1;
     }
 
+    @Override
     public void close() {
         nClose(file);
         file = 0;
@@ -63,12 +65,14 @@ public class BufferedFDInputStream extends InputStream {
         return fd;
     }
 
-    protected void finalize()
-            throws Throwable {
+    @Override
+    @SuppressWarnings("FinalizeDeclaration")
+    protected void finalize() throws Throwable {
         close();
         super.finalize();
     }
 
+    @Override
     public String toString() {
         return "BufferedFDInputStream[" + fd + "]";
     }

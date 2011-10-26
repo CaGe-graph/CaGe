@@ -49,10 +49,12 @@ public class BufferedFDOutputStream extends OutputStream {
         write(s.getBytes());
     }
 
+    @Override
     public void flush() {
         nFlush(file);
     }
 
+    @Override
     public void close() {
         nClose(file);
         file = 0;
@@ -62,12 +64,14 @@ public class BufferedFDOutputStream extends OutputStream {
         return fd;
     }
 
-    protected void finalize()
-            throws Throwable {
+    @Override
+    @SuppressWarnings("FinalizeDeclaration")
+    protected void finalize() throws Throwable {
         close();
         super.finalize();
     }
 
+    @Override
     public String toString() {
         return "BufferedFDOutputStream[" + fd + "]";
     }
