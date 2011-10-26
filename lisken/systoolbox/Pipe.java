@@ -217,6 +217,8 @@ public class Pipe {
         System.err.println("rev exit status: " + pipe2.waitForExit() + "\n");
     }
 
+    @Override
+    @SuppressWarnings("FinalizeDeclaration")
     protected void finalize() throws Throwable {
         finalizePipe();
         super.finalize();
