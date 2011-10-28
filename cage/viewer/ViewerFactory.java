@@ -64,6 +64,8 @@ public class ViewerFactory {
      */
     private static void checkAvailability(Class viewerClass, int dimension)
             throws Exception {
+        //TODO: this looks like the misuse of an Exception. This method should return a boolean
+        //also: is there no way to get rid of this reflection?
         Method availabilityMethod = null;
         try {
             availabilityMethod = viewerClass.getMethod(
