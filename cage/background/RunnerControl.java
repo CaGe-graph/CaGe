@@ -53,8 +53,10 @@ public class RunnerControl implements PropertyChangeListener {
         infoButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                UItoolbox.showTextInfo("task info", RunnerControl.this.runner.getInfoText(), infoButton);
-                infoButton.setForeground(Color.black);
+                if(RunnerControl.this.runner!=null){
+                    UItoolbox.showTextInfo("task info", RunnerControl.this.runner.getInfoText(), infoButton);
+                    infoButton.setForeground(Color.black);
+                }
                 removeIfFinished();
             }
         });
