@@ -20,6 +20,8 @@ generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
 others: mkfoldnet
+	
+tools: short_spiral_to_pl$(SUFFIX)
 
 clean: kekule_clean cone_clean tube_clean
 	rm -f *.o
@@ -110,4 +112,7 @@ quad_restrict$(SUFFIX) : plantri.c quad_restrict.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="quad_restrict.c"' '-DALLTOGETHER' plantri.c -lm
 
 leapfrog$(SUFFIX) : leapfrog.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
+
+short_spiral_to_pl$(SUFFIX) : short_spiral_to_pl.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
