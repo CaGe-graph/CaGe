@@ -2,6 +2,7 @@ package cage;
 
 import cage.background.BackgroundRunner;
 import cage.background.DefaultBackgroundRunner;
+import cage.background.TwoViewBatchBackgroundRunner;
 import cage.writer.CaGeWriter;
 
 import java.awt.event.ActionEvent;
@@ -59,6 +60,14 @@ public class CaGeStarter implements ActionListener {
                 CaGe.wizard().toStage(1, true);
                 CaGe.backgroundWindow().addRunner(backgroundRunner);
             }
+            if(outputPanel.isBatchProcessorSelected()){
+                BackgroundRunner backgroundRunner = 
+                        new TwoViewBatchBackgroundRunner(
+                                generatorPipe, generatorInfo, 
+                                outputPanel.getBatchConfiguration());
+                CaGe.wizard().toStage(1, true);
+                CaGe.backgroundWindow().addRunner(backgroundRunner);
+            }
         }
     }
 
@@ -86,7 +95,7 @@ public class CaGeStarter implements ActionListener {
         }
         nViewers = viewers == null ? 0 : viewers.size();
         nWriters = writers == null ? 0 : writers.size();
-        if (nViewers <= 0 && nWriters <= 0) {
+        if (nViewers <= 0 && nWriters <= 0 && !outputPanel.isBatchProcessorSelected()) {
             String viewerErrors = outputPanel.getViewerErrors();
             UItoolbox.showTextInfo("output failure",
                     "Failed to instantiate any of the selected viewers or graph formatters.\n" +

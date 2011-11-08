@@ -5,9 +5,12 @@ import cage.utility.GenericButtonGroup;
 import cage.utility.Min1ButtonGroup;
 import cage.utility.OnActionClicker;
 import cage.utility.OnActionClickerLayoutSwitcher;
+import cage.utility.SingleActionDocumentLister;
 import cage.utility.SyncButtonGroup;
 import cage.viewer.CaGeViewer;
 import cage.viewer.ViewerFactory;
+import cage.viewer.twoview.BatchTwoViewConfigurationPanel;
+import cage.viewer.twoview.BatchTwoViewModel;
 import cage.writer.CaGeWriter;
 
 import java.awt.CardLayout;
@@ -21,7 +24,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -39,8 +44,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.JTextComponentFocusSelector;
@@ -49,7 +52,6 @@ import lisken.uitoolbox.UItoolbox;
 public class OutputPanel extends JPanel {
 
     private GeneratorInfo generatorInfo;
-    private boolean generatorInfoChanged;
     private String generatorName;
     private Vector viewersXD;
     private StringBuffer viewerErrors;
@@ -79,6 +81,7 @@ public class OutputPanel extends JPanel {
     private JRadioButton out2DViewer = new JRadioButton();
     private JRadioButton out2DFile = new JRadioButton();
     private JRadioButton out2DPipe = new JRadioButton();
+    private JRadioButton out2DBatch = new JRadioButton();
     private Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
     private TargetPanel out2DFilePanel = TargetPanel.creatFilePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
     private TargetPanel out2DPipePanel = TargetPanel.creatPipePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
@@ -92,6 +95,8 @@ public class OutputPanel extends JPanel {
     private ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
     private ComponentLogicalGroup embedControlsGroup = new ComponentLogicalGroup();
     private ComponentLogicalGroup generatorControlsGroup = new ComponentLogicalGroup();
+    
+    private final BatchTwoViewModel batchTwoViewModel = new BatchTwoViewModel();
     
     private ActionListener uiActionListener = new ActionListener() {
 
@@ -108,21 +113,6 @@ public class OutputPanel extends JPanel {
             checkOutputOptions();
         }
     };
-    
-    private DocumentListener documentListener = new DocumentListener() {
-
-        public void insertUpdate(DocumentEvent e) {
-            setGeneratorInfoChanged();
-        }
-
-        public void removeUpdate(DocumentEvent e) {
-            setGeneratorInfoChanged();
-        }
-
-        public void changedUpdate(DocumentEvent e) {
-            setGeneratorInfoChanged();
-        }
-    };
 
     public OutputPanel() {
         this(null);
@@ -131,7 +121,6 @@ public class OutputPanel extends JPanel {
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public OutputPanel(String gn) {
         generatorName = gn;
-        generatorInfoChanged = true;
 
         final String FilterHint = "pipe embedded graphs through an external filter command";
         final String ShortcutHint = "hint: just choose 'Viewer' or 'File/Pipe' on the right";
@@ -162,7 +151,19 @@ public class OutputPanel extends JPanel {
         generatorCmdLine.setColumns(10);
         generatorCmdLine.setActionCommand("generator");
         generatorCmdLine.addActionListener(uiActionListener);
-        generatorCmdLine.getDocument().addDocumentListener(documentListener);
+        generatorCmdLine.getDocument().addDocumentListener(new SingleActionDocumentLister() {
+
+            @Override
+            public void update() {
+                Embedder embedder = generatorInfo.getEmbedder();
+                if (generatorCmdLine.isVisible()) {
+                    String cmdLineGenerator = generatorCmdLine.getText();
+                    generatorInfo.setGenerator(Systoolbox.parseCmdLine(cmdLineGenerator));
+                }
+                generatorInfo.setEmbedder(embedder);
+                fireGeneratorInfoChanged();
+            }
+        });
         generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
         expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
@@ -176,7 +177,19 @@ public class OutputPanel extends JPanel {
         embed2DCmdLine.setColumns(10);
         embed2DCmdLine.setActionCommand("e2");
         embed2DCmdLine.addActionListener(uiActionListener);
-        embed2DCmdLine.getDocument().addDocumentListener(documentListener);
+        embed2DCmdLine.getDocument().addDocumentListener(new SingleActionDocumentLister() {
+
+            @Override
+            public void update() {
+                Embedder embedder = generatorInfo.getEmbedder();
+                if (embed2DCmdLine.isVisible()) {
+                    String cmdLine2D = embed2DCmdLine.getText();
+                    embedder.setEmbed2D(Systoolbox.parseCmdLine(cmdLine2D));
+                }
+                generatorInfo.setEmbedder(embedder);
+                fireGeneratorInfoChanged();
+            }
+        });
         new JTextComponentFocusSelector(embed2DCmdLine);
         embedControlsGroup.addComponent(embed2DCmdLine);
         expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
@@ -190,7 +203,19 @@ public class OutputPanel extends JPanel {
         embed3DCmdLine.setColumns(10);
         embed3DCmdLine.setActionCommand("e3");
         embed3DCmdLine.addActionListener(uiActionListener);
-        embed3DCmdLine.getDocument().addDocumentListener(documentListener);
+        embed3DCmdLine.getDocument().addDocumentListener(new SingleActionDocumentLister() {
+
+            @Override
+            public void update() {
+                Embedder embedder = generatorInfo.getEmbedder();
+                if (embed3DCmdLine.isVisible()) {
+                    String cmdLine3D = embed3DCmdLine.getText();
+                    embedder.setEmbed3D(Systoolbox.parseCmdLine(cmdLine3D));
+                }
+                generatorInfo.setEmbedder(embedder);
+                fireGeneratorInfoChanged();
+            }
+        });
         new JTextComponentFocusSelector(embed3DCmdLine);
         embedControlsGroup.addComponent(embed3DCmdLine);
         expertPanel.add(embed3DCmdLine, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
@@ -212,21 +237,11 @@ public class OutputPanel extends JPanel {
         outPreFilterCommand.setColumns(30);
         new JTextComponentFocusSelector(outPreFilterCommand);
         outPreFilterCommand.setToolTipText(FilterHint);
-        outPreFilterCommand.getDocument().addDocumentListener(new DocumentListener() {
+        outPreFilterCommand.getDocument().addDocumentListener(new SingleActionDocumentLister() {
 
-            public void insertUpdate(DocumentEvent e) {
-                verifyCheckBox();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                verifyCheckBox();
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-                verifyCheckBox();
-            }
-
-            private void verifyCheckBox(){
+            @Override
+            public void update() {
+                //verify check box
                 if(outPreFilterCommand.getText().trim().length()==0)
                     outPreFilterCheckBox.setSelected(false);
                 else
@@ -327,6 +342,12 @@ public class OutputPanel extends JPanel {
         out2DPipe.addActionListener(out2DDestListener);
         out2DPipe.addActionListener(outputOptionsListener);
         out2DPipe.setToolTipText("send 2D embeddings into a pipe");
+        out2DBatch.setText("Batch");
+        out2DBatch.setMnemonic(KeyEvent.VK_B);
+        out2DBatch.setActionCommand("out2DBatch");
+        out2DBatch.addActionListener(out2DDestListener);
+        out2DBatch.addActionListener(outputOptionsListener);
+        out2DBatch.setToolTipText("send 2D embeddings to TwoView painter");
         JRadioButton out2DNoDest = new JRadioButton("None");
         out2DNoDest.setActionCommand("out2DNoDest");
         out2DNoDest.addActionListener(out2DDestListener);
@@ -344,16 +365,31 @@ public class OutputPanel extends JPanel {
         } else {
             new OnActionClicker(out2DFile, out2DNoDest, out2DCheckBox);
         }
+        
+        final BatchTwoViewConfigurationPanel out2DBatchPanel =
+                new BatchTwoViewConfigurationPanel(batchTwoViewModel);
+        addOutputSettingsListener(new OutputSettingsListener() {
+
+            public void generatorInfoChanged(GeneratorInfo generatorInfo) {
+                batchTwoViewModel.setFileNameTemplate(
+                        generatorInfo.getFilename() + "%d" +
+                        batchTwoViewModel.getSaver().getExtension());
+            }
+        });
+        
         out2DDestGroup.add(out2DFile);
         out2DDestGroup.add(out2DPipe);
+        out2DDestGroup.add(out2DBatch);
         out2DDestGroup.add(out2DNoDest);
 
         out2DDestOptionsPanel.add(new JPanel(), "out2DNoDest");
         out2DDestOptionsPanel.add(out2DViewerPanel, "out2DViewer");
         out2DDestOptionsPanel.add(out2DFilePanel, "out2DFile");
         out2DDestOptionsPanel.add(out2DPipePanel, "out2DPipe");
+        out2DDestOptionsPanel.add(out2DBatchPanel, "out2DBatch");
         out2DDestPanel.add(out2DFile, null);
         out2DDestPanel.add(out2DPipe, null);
+        out2DDestPanel.add(out2DBatch, null);
         out2DDestPanel.add(out2DNoDest, null);
 
         this.add(out2DCheckBox, new GridBagConstraints(0, 7, 1, 1, 0.1, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
@@ -409,7 +445,6 @@ public class OutputPanel extends JPanel {
 
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         this.generatorInfo = generatorInfo;
-        setGeneratorInfoChanged();
         Embedder embedder = generatorInfo.getEmbedder();
         boolean generalExpertMode = CaGe.expertMode;
         boolean showExpertControls = generatorInfo.expertModeContains(GeneratorInfo.GENERATOR_EXPERT | GeneratorInfo.EMBED_EXPERT, generalExpertMode);
@@ -421,6 +456,7 @@ public class OutputPanel extends JPanel {
             expertLabelText += "generator";
         }
         generatorControlsGroup.setVisible(showGeneratorControls);
+        System.out.println(embedder);
         if (showEmbedControls) {
             if (embed2DCmdLine.getText().length() == 0 || !embedder.isConstant()) {
                 embed2DCmdLine.setText(Systoolbox.makeCmdLine(embedder.getEmbed2DNew()));
@@ -452,26 +488,10 @@ public class OutputPanel extends JPanel {
         out2DFilePanel.setTargetName(filename);
         out3DFilePanel.setTargetName(filename);
         outAdjFilePanel.setTargetName(filename);
+        fireGeneratorInfoChanged();
     }
 
     public GeneratorInfo getGeneratorInfo() {
-        if (generatorInfoChanged) {
-            Embedder embedder = generatorInfo.getEmbedder();
-            if (generatorCmdLine.isVisible()) {
-                String cmdLineGenerator = generatorCmdLine.getText();
-                generatorInfo.setGenerator(Systoolbox.parseCmdLine(cmdLineGenerator));
-            }
-            if (embed2DCmdLine.isVisible()) {
-                String cmdLine2D = embed2DCmdLine.getText();
-                embedder.setEmbed2D(Systoolbox.parseCmdLine(cmdLine2D));
-            }
-            if (embed3DCmdLine.isVisible()) {
-                String cmdLine3D = embed3DCmdLine.getText();
-                embedder.setEmbed3D(Systoolbox.parseCmdLine(cmdLine3D));
-            }
-            generatorInfo.setEmbedder(embedder);
-            generatorInfoChanged = false;
-        }
         return generatorInfo;
     }
 
@@ -490,10 +510,6 @@ public class OutputPanel extends JPanel {
         }
     }
 
-    public void setGeneratorInfoChanged() {
-        generatorInfoChanged = true;
-    }
-
     void checkOutputOptions() {
         boolean someViewer, someFile;
         someViewer = out2DViewer.isSelected() || out3DViewer.isSelected();
@@ -503,7 +519,8 @@ public class OutputPanel extends JPanel {
                 out3DFile.isSelected() ||
                 outAdjPipe.isSelected() ||
                 out2DPipe.isSelected() ||
-                out3DPipe.isSelected();
+                out3DPipe.isSelected() ||
+                out2DBatch.isSelected();
         defaultButton.setEnabled(someViewer ^ someFile);
         defaultButton.setToolTipText(
                 defaultButton.isEnabled() ? "start generation process (Return)" : someFile | someViewer ? "don't mix viewer and file output" : "choose some output options and press Return");
@@ -666,7 +683,31 @@ public class OutputPanel extends JPanel {
         }
         return writeDests;
     }
+    
+    public boolean isBatchProcessorSelected(){
+        return out2DBatch.isSelected();
+    }
+    
+    public BatchTwoViewModel getBatchConfiguration(){
+        return batchTwoViewModel;
+    }
+    
+    private List<OutputSettingsListener> outputSettingsListeners = new ArrayList<OutputSettingsListener>();
+    
+    public final void addOutputSettingsListener(OutputSettingsListener l){
+        outputSettingsListeners.add(l);
+    }
+    
+    public final void removeOutputSettingsListener(OutputSettingsListener l){
+        outputSettingsListeners.remove(l);
+    }
 
+    private void fireGeneratorInfoChanged(){
+        for (OutputSettingsListener l : outputSettingsListeners) {
+            l.generatorInfoChanged(generatorInfo);
+        }
+    }
+    
     public static void main(String[] args) {
         try {
             //com.sun.java.swing.UIManager.setLookAndFeel(new com.sun.java.swing.plaf.windows.WindowsLookAndFeel());
