@@ -1,6 +1,5 @@
 package cage.generator;
 
-import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
@@ -41,7 +40,7 @@ import lisken.uitoolbox.MinMaxEqListener;
 import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.UItoolbox;
 
-public class FullgenPanel extends GeneratorPanel implements ActionListener {
+public class FullgenPanel extends GeneratorPanel {
 
     public static final int minAtoms = 20;
     public static final int maxAtoms = 250;
@@ -83,6 +82,45 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
     boolean[] selectedSymmetry = new boolean[symmetries];
     final int symmRows = 4;
     int cases = 0, selectedSymmetries = 0;
+    
+    private ActionListener actionListener = new ActionListener() {
+
+
+        public void actionPerformed(ActionEvent e) {
+            String actionCommand = e.getActionCommand();
+            switch (actionCommand.charAt(0)) {
+                /* --- "select cases" disabled ---
+                case 'c':
+                selectCases();
+                break;
+                case 'd':
+                selectCasesButton.setSelected(actionCommand.charAt(1) != '0');
+                break;
+                 */
+                case 'D':
+                    embedderIsConstant = false;
+                    break;
+                case 'F':
+                    symmetryFilter();
+                    break;
+                case 'a':
+                    boolean selected = actionCommand.charAt(1) == '+';
+                    for (int i = 0; i < symmetries; ++i) {
+                        symmetryButton[i].setSelected(selected);
+                    }
+                    selectedSymmetries = selected ? symmetries : 0;
+                    symmetriesOkButton.setEnabled(selectedSymmetries > 0);
+                    symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
+                    break;
+                case 's':
+                    AbstractButton sb = (AbstractButton) e.getSource();
+                    selectedSymmetries += sb.isSelected() ? +1 : -1;
+                    symmetriesOkButton.setEnabled(selectedSymmetries > 0);
+                    symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
+                    break;
+            }
+        }
+    };
 
     public FullgenPanel() {
         minAtomsLabel.setText("minimum number of Atoms");
@@ -123,7 +161,7 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
         dual.setText("output Dual graph (triangulation)");
         dual.setMnemonic(KeyEvent.VK_D);
         dual.setActionCommand("Dual");
-        dual.addActionListener(this);
+        dual.addActionListener(actionListener);
         spiralStats.setText("Spiral Statistics");
         spiralStats.setMnemonic(KeyEvent.VK_P);
         symmStats.setText("Symmetry Statistics");
@@ -134,7 +172,7 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
         symmetryFilterButton.setBorder(BorderFactory.createCompoundBorder(
                 symmetryFilterButton.getBorder(),
                 BorderFactory.createEmptyBorder(5, 0, 5, 0)));
-        symmetryFilterButton.addActionListener(this);
+        symmetryFilterButton.addActionListener(actionListener);
         /* --- "select cases" disabled ---
         selectCasesButton.setText("Select Cases");
         selectCasesButton.setMnemonic(KeyEvent.VK_C);
@@ -220,7 +258,7 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
             symmetryButton[k].setSelected(true);
             selectedSymmetry[k] = true;
             symmetryButton[k].setActionCommand("s");
-            symmetryButton[k].addActionListener(this);
+            symmetryButton[k].addActionListener(actionListener);
             symmetryButtonPanel.add(symmetryButton[k]);
         }
         selectedSymmetries = symmetries;
@@ -229,12 +267,12 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
         symmetriesAllButton.setText("Set all");
         symmetriesAllButton.setMnemonic(KeyEvent.VK_S);
         symmetriesAllButton.setActionCommand("a+");
-        symmetriesAllButton.addActionListener(this);
+        symmetriesAllButton.addActionListener(actionListener);
         symmetriesFinishPanel.add(symmetriesAllButton);
         JButton symmetriesNoneButton = new JButton("Clear all");
         symmetriesNoneButton.setMnemonic(KeyEvent.VK_C);
         symmetriesNoneButton.setActionCommand("a-");
-        symmetriesNoneButton.addActionListener(this);
+        symmetriesNoneButton.addActionListener(actionListener);
         symmetriesFinishPanel.add(Box.createHorizontalStrut(5));
         symmetriesFinishPanel.add(symmetriesNoneButton);
         symmetriesOkButton.setText("Ok");
@@ -281,41 +319,6 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
     casesDialog.setCancelButton(casesCancelButton);
     casesDialog.pack();
      */
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        String actionCommand = e.getActionCommand();
-        switch (actionCommand.charAt(0)) {
-            /* --- "select cases" disabled ---
-            case 'c':
-            selectCases();
-            break;
-            case 'd':
-            selectCasesButton.setSelected(actionCommand.charAt(1) != '0');
-            break;
-             */
-            case 'D':
-                embedderIsConstant = false;
-                break;
-            case 'F':
-                symmetryFilter();
-                break;
-            case 'a':
-                boolean selected = actionCommand.charAt(1) == '+';
-                for (int i = 0; i < symmetries; ++i) {
-                    symmetryButton[i].setSelected(selected);
-                }
-                selectedSymmetries = selected ? symmetries : 0;
-                symmetriesOkButton.setEnabled(selectedSymmetries > 0);
-                symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
-                break;
-            case 's':
-                AbstractButton sb = (AbstractButton) e.getSource();
-                selectedSymmetries += sb.isSelected() ? +1 : -1;
-                symmetriesOkButton.setEnabled(selectedSymmetries > 0);
-                symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
-                break;
-        }
     }
 
     /* --- "select cases" disabled ---
@@ -442,6 +445,7 @@ public class FullgenPanel extends GeneratorPanel implements ActionListener {
         final JFrame f = new JFrame("Fullgen Dialog");
         f.addWindowListener(new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 f.setVisible(false);
                 GeneratorInfo info = p.getGeneratorInfo();
