@@ -56,7 +56,7 @@ public class MinMaxEqListener {
         init(minM, maxM, equalityButton, veto);
     }
 
-    void init(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton,
+    private void init(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton,
             boolean veto) {
         minModel = minM;
         maxModel = maxM;
@@ -71,7 +71,7 @@ public class MinMaxEqListener {
         mayVeto = veto;
     }
 
-    void enforceConstraints(BoundedRangeModel changedModel, boolean mayVetoThis) {
+    private void enforceConstraints(BoundedRangeModel changedModel, boolean mayVetoThis) {
         BoundedRangeModel modelToChange = otherModel(changedModel);
         if (modelToChange == null) {
             return;
@@ -92,7 +92,7 @@ public class MinMaxEqListener {
         }
     }
 
-    BoundedRangeModel otherModel(BoundedRangeModel aModel) {
+    private BoundedRangeModel otherModel(BoundedRangeModel aModel) {
         if (aModel == minModel) {
             return maxModel;
         } else if (aModel == maxModel) {
