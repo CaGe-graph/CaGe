@@ -71,11 +71,6 @@ public class MinMaxEqListener {
         mayVeto = veto;
     }
 
-    public void actionPerformed(ActionEvent e) {
-        equality = ((ButtonModel) e.getSource()).isSelected();
-        enforceConstraints(lastChangedModel, false);
-    }
-
     void enforceConstraints(BoundedRangeModel changedModel, boolean mayVetoThis) {
         BoundedRangeModel modelToChange = otherModel(changedModel);
         if (modelToChange == null) {
