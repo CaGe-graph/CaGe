@@ -16,10 +16,26 @@ import javax.swing.event.ChangeListener;
  * <li>if equality is needed, then both values must be the same.</li>
  * </ul>
  */
-public class MinMaxEqListener implements ChangeListener, ActionListener {
+public class MinMaxEqListener {
 
     private BoundedRangeModel minModel, maxModel, lastChangedModel;
     private boolean equality, mayVeto;
+    
+    private ChangeListener changeListener = new ChangeListener() {
+
+        public void stateChanged(ChangeEvent e) {
+            BoundedRangeModel m = (BoundedRangeModel) e.getSource();
+            enforceConstraints(m, mayVeto);
+        }
+    };
+    
+    private ActionListener actionListener = new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            equality = ((ButtonModel) e.getSource()).isSelected();
+            enforceConstraints(lastChangedModel, false);
+        }
+    };
 
     public MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality) {
         this(minM, maxM, staticEquality, false);
@@ -45,11 +61,11 @@ public class MinMaxEqListener implements ChangeListener, ActionListener {
         minModel = minM;
         maxModel = maxM;
         lastChangedModel = maxModel;
-        minModel.addChangeListener(this);
-        maxModel.addChangeListener(this);
+        minModel.addChangeListener(changeListener);
+        maxModel.addChangeListener(changeListener);
         if (equalityButton != null) {
             equality = equalityButton.isSelected();
-            equalityButton.addActionListener(this);
+            equalityButton.addActionListener(actionListener);
         }
         enforceConstraints(maxModel, false);
         mayVeto = veto;
@@ -58,11 +74,6 @@ public class MinMaxEqListener implements ChangeListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         equality = ((ButtonModel) e.getSource()).isSelected();
         enforceConstraints(lastChangedModel, false);
-    }
-
-    public void stateChanged(ChangeEvent e) {
-        BoundedRangeModel m = (BoundedRangeModel) e.getSource();
-        enforceConstraints(m, mayVeto);
     }
 
     void enforceConstraints(BoundedRangeModel changedModel, boolean mayVetoThis) {
