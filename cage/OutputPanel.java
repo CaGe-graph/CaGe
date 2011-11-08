@@ -371,8 +371,14 @@ public class OutputPanel extends JPanel {
         addOutputSettingsListener(new OutputSettingsListener() {
 
             public void generatorInfoChanged(GeneratorInfo generatorInfo) {
+                String numberFormat;
+                if(generatorInfo.getFilename().endsWith("_")) {
+                    numberFormat = "%d";
+                } else {
+                    numberFormat = "_%d";
+                }
                 batchTwoViewModel.setFileNameTemplate(
-                        generatorInfo.getFilename() + "%d" +
+                        generatorInfo.getFilename() + numberFormat +
                         batchTwoViewModel.getSaver().getExtension());
             }
         });
