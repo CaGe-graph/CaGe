@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -359,21 +359,21 @@ public class FullgenPanel extends GeneratorPanel {
 
     public GeneratorInfo getGeneratorInfo() {
         String filename = "";
-        Vector command = new Vector();
+        ArrayList<String> command = new ArrayList<String>();
 
         int min = minAtomsSlider.getValue();
         int max = maxAtomsSlider.getValue();
 
-        command.addElement("fullgen");
-        command.addElement(Integer.toString(max));
+        command.add("fullgen");
+        command.add(Integer.toString(max));
         filename += "full_" + max;
         if (max != min) {
-            command.addElement("start");
-            command.addElement(Integer.toString(min));
+            command.add("start");
+            command.add(Integer.toString(min));
             filename += "_start_" + min;
         }
         if (ipr.isSelected()) {
-            command.addElement("ipr");
+            command.add("ipr");
             filename += "_ipr";
         }
         /* --- "select cases" disabled ---
@@ -384,31 +384,31 @@ public class FullgenPanel extends GeneratorPanel {
         }
          */
         if (spiralStats.isSelected()) {
-            command.addElement("spistat");
+            command.add("spistat");
         }
         if (symmStats.isSelected()) {
-            command.addElement("symstat");
+            command.add("symstat");
         }
         if (selectedSymmetries < symmetries) {
             for (int k = 0; k < symmetries; ++k) {
                 if (selectedSymmetry[k]) {
-                    command.addElement("symm");
-                    command.addElement(symmetry[k]);
+                    command.add("symm");
+                    command.add(symmetry[k]);
                     filename += "_" + symmetry[k];
                 }
             }
         }
-        command.addElement("code");
+        command.add("code");
         if (dual.isSelected()) {
-            command.addElement("7");
+            command.add("7");
         } else {
-            command.addElement("1");
+            command.add("1");
         }
-        command.addElement("stdout");
-        command.addElement("logerr");
+        command.add("stdout");
+        command.add("logerr");
 
         String[][] generator = new String[1][command.size()];
-        command.copyInto(generator[0]);
+        generator[0] = command.toArray(generator[0]);
 
         String[][] embed2D = {{"embed"}};
         String[][] embed3D;
