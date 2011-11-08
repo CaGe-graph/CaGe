@@ -14,6 +14,11 @@ public class MessageQueue {
         this.debug = debug;
     }
 
+    /**
+     * Waits until there is an item in the queue and returns its entry.
+     * @return The entry of the first item in the queue.
+     * @throws InterruptedException 
+     */
     @SuppressWarnings("CallToThreadDumpStack")
     public synchronized Object get() throws InterruptedException {
         QueueItem item;
@@ -31,6 +36,10 @@ public class MessageQueue {
         return item.entry;
     }
 
+    /**
+     * Puts a new item on the queue with the given entry.
+     * @param entry The entry to put in the queue.
+     */
     @SuppressWarnings("CallToThreadDumpStack")
     public synchronized void put(Object entry) {
         if (debug) {

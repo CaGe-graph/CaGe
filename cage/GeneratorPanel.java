@@ -111,5 +111,9 @@ public abstract class GeneratorPanel extends JPanel implements WizardAwareCompon
 
     public abstract GeneratorInfo getGeneratorInfo();
 
+    /**
+     * Method called when this panel will be shown. This happens after
+     * the stage of the wizard containing this panel is activated.
+     */
     public abstract void showing();
 }
