@@ -106,7 +106,7 @@ public class CGFPanel extends GeneratorPanel {
         maxAtomsSlider.setClickScrollByBlock(false);
         final JCheckBox minEqMax = new JCheckBox("min = max", true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
-        new MinMaxEqListener(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel(), false);
+        MinMaxEqListener.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
         final EnhancedSlider facesSlider = new EnhancedSlider();
         Hashtable facesLabels = facesSlider.createStandardLabels(5, 10);
         facesLabels.put(new Integer(3), new JLabel("3"));

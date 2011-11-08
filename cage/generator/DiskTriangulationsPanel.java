@@ -92,7 +92,7 @@ public class DiskTriangulationsPanel extends GeneratorPanel
         boundarySegmentsSlider.setSizeFactor(6);
         boundarySegmentsSlider.setEnabled(false);
         boundarySegmentsSlider.getValueLabel().setForeground(getBackground());
-        new MinMaxEqListener(boundarySegmentsSlider.getModel(), verticesSlider.getModel(), false);
+        MinMaxEqListener.keepConsistent(boundarySegmentsSlider.getModel(), verticesSlider.getModel());
         add(boundarySegmentsSlider,
                 new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,

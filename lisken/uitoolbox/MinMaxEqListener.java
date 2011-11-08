@@ -37,21 +37,21 @@ public class MinMaxEqListener {
         }
     };
 
-    public MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality) {
+    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality) {
         this(minM, maxM, staticEquality, false);
     }
 
-    public MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality,
+    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality,
             boolean veto) {
         equality = staticEquality;
         init(minM, maxM, null, veto);
     }
 
-    public MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton) {
+    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton) {
         this(minM, maxM, equalityButton, false);
     }
 
-    public MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton,
+    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton,
             boolean veto) {
         init(minM, maxM, equalityButton, veto);
     }
@@ -99,6 +99,54 @@ public class MinMaxEqListener {
             return minModel;
         }
         return null;
+    }
+    
+    /**
+     * Make sure that the value in minModel is always smaller than or equal to the value
+     * in maxModel.
+     * 
+     * @param minModel The BoundedRangeModel containing the minimum value
+     * @param maxModel The BoundedRangeModel containing the maximum value
+     */
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public static void keepConsistent(BoundedRangeModel minModel, BoundedRangeModel maxModel){
+        new MinMaxEqListener(minModel, maxModel, false);
+    }
+    
+    /**
+     * Make sure that the value in minModel is always smaller than or equal to the value
+     * in maxModel.
+     * 
+     * @param minModel The BoundedRangeModel containing the minimum value
+     * @param maxModel The BoundedRangeModel containing the maximum value
+     */
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public static void keepConsistentOrReject(BoundedRangeModel minModel, BoundedRangeModel maxModel){
+        new MinMaxEqListener(minModel, maxModel, false, true);
+    }
+    
+    /**
+     * Make sure that the value in minModel is always equal to the value in maxModel.
+     * 
+     * @param minModel The BoundedRangeModel containing the minimum value
+     * @param maxModel The BoundedRangeModel containing the maximum value
+     */
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public static void keepEqual(BoundedRangeModel minModel, BoundedRangeModel maxModel){
+        new MinMaxEqListener(minModel, maxModel, true);
+    }
+    
+    /**
+     * Make sure that the value in minModel is always smaller than or equal to the value
+     * in maxModel and keeps both values equal if the ButtonModel is selected.
+     * 
+     * @param minModel The BoundedRangeModel containing the minimum value
+     * @param maxModel The BoundedRangeModel containing the maximum value
+     * @param equalityButton The ButtonModel that decided whether the values need to be equal
+     */
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public static void keepConsistentOrEqual(BoundedRangeModel minModel, BoundedRangeModel maxModel, ButtonModel equalityButton){
+        new MinMaxEqListener(minModel, maxModel, equalityButton);
     }
 }
 

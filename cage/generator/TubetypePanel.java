@@ -107,7 +107,7 @@ public class TubetypePanel extends GeneratorPanel {
         };
         offset1Control.addChangeListener(offsetListener);
         offset2Control.addChangeListener(offsetListener);
-        new MinMaxEqListener(offset2Control.getModel(), offset1Control.getModel(), false);
+        MinMaxEqListener.keepConsistent(offset2Control.getModel(), offset1Control.getModel());
         JLabel tubelengthLabel = new JLabel("Tube length:");
         tubelengthLabel.setDisplayedMnemonic(KeyEvent.VK_T);
         tubelengthLabel.setLabelFor(tubelengthSlider.slider());

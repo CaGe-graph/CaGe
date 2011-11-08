@@ -73,7 +73,7 @@ public class SizeOption implements ChangeListener, ActionListener {
             minNotEqMax.setSelected(false);
             minNrOfSizeButton.addChangeListener(this);
             maxNrOfSizeButton.addChangeListener(this);
-            new MinMaxEqListener(minNrOfSizeButton.getModel(), maxNrOfSizeButton.getModel(), minNotEqMax, false);
+            MinMaxEqListener.keepConsistentOrEqual(minNrOfSizeButton.getModel(), maxNrOfSizeButton.getModel(), minNotEqMax);
         }
         GridBagConstraints lc = new GridBagConstraints();
         lc.gridx = 0;
