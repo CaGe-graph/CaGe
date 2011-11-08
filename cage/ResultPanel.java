@@ -230,19 +230,19 @@ public class ResultPanel extends JPanel {
         foldnetButton = new JButton("folding net");
         foldnetButton.setMnemonic(KeyEvent.VK_N);
         foldnetButton.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        new PushButtonDecoration(foldnetButton);
+        PushButtonDecoration.decorate(foldnetButton);
         saveAdjButton = new JButton("adj");
         saveAdjButton.setMnemonic(KeyEvent.VK_A);
         saveAdjButton.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        new PushButtonDecoration(saveAdjButton);
+        PushButtonDecoration.decorate(saveAdjButton);
         save2DButton = new JButton("2D");
         save2DButton.setMnemonic(KeyEvent.VK_2);
         save2DButton.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        new PushButtonDecoration(save2DButton);
+        PushButtonDecoration.decorate(save2DButton);
         save3DButton = new JButton("3D");
         save3DButton.setMnemonic(KeyEvent.VK_3);
         save3DButton.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        new PushButtonDecoration(save3DButton);
+        PushButtonDecoration.decorate(save3DButton);
         JPanel savePanel = new JPanel();
         savePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 0));
         savePanel.add(saveAdjButton);
@@ -263,18 +263,18 @@ public class ResultPanel extends JPanel {
         advance1Button = new JButton("+1");
         advance1Button.setMnemonic(KeyEvent.VK_1);
         advance1Button.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        new PushButtonDecoration(advance1Button);
+        PushButtonDecoration.decorate(advance1Button);
         advanceDist = new SpinButton(10, 2, Integer.parseInt(
                 Systoolbox.multiply("9", CaGe.graphNoDigits - 1) + "8"));
 //    advanceDist.setMajorAdjust(1);
         advanceButton = new JButton();
         advanceButton.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        new PushButtonDecoration(advanceButton);
+        PushButtonDecoration.decorate(advanceButton);
         new AdvanceListener(advanceDist.getModel(), advanceButton);
         flowButton = new JToggleButton("flow");
         flowButton.setMnemonic(KeyEvent.VK_F);
         flowButton.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        new PushButtonDecoration(flowButton, true);
+        PushButtonDecoration.decorate(flowButton, true);
         add(advance1Button,
                 new GridBagConstraints(1, 3, 1, 1, 0.001, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,

@@ -12,11 +12,11 @@ public class PushButtonDecoration implements ChangeListener {
     private boolean isToggle;
     private Border upBorder,  downBorder,  otherBorder;
 
-    public PushButtonDecoration(AbstractButton b) {
+    private PushButtonDecoration(AbstractButton b) {
         this(b, false);
     }
 
-    public PushButtonDecoration(AbstractButton b, boolean isT) {
+    private PushButtonDecoration(AbstractButton b, boolean isT) {
         button = b;
         isToggle = isT;
         otherBorder = button.getBorder();
@@ -39,5 +39,15 @@ public class PushButtonDecoration implements ChangeListener {
 
     public void stateChanged(ChangeEvent e) {
         updateBorder();
+    }
+    
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public static void decorate(AbstractButton b){
+        new PushButtonDecoration(b);
+    }
+    
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public static void decorate(AbstractButton b, boolean isToggle){
+        new PushButtonDecoration(b, isToggle);
     }
 }

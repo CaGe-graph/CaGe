@@ -254,7 +254,7 @@ public class FullgenPanel extends GeneratorPanel {
             int k = (i % symmCols) * symmRows + (i / symmCols);
             symmetryButton[k] = new JToggleButton(symmetry[k]);
             symmetryButton[k].setBorder(BorderFactory.createEmptyBorder(3, 7, 3, 7));
-            new PushButtonDecoration(symmetryButton[k], true);
+            PushButtonDecoration.decorate(symmetryButton[k], true);
             symmetryButton[k].setSelected(true);
             selectedSymmetry[k] = true;
             symmetryButton[k].setActionCommand("s");

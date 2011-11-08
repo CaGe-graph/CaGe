@@ -336,7 +336,7 @@ public class CaGe implements ActionListener {
                 generatorButton[i].setMnemonic(KeyEvent.VK_0 + (i + 1) % 10);
             }
             generatorButton[i].addActionListener(generatorChoiceListener);
-            new PushButtonDecoration(generatorButton[i]);
+            PushButtonDecoration.decorate(generatorButton[i]);
             generatorsPanel.add(generatorButton[i]);
         }
         lc.anchor = GridBagConstraints.CENTER;

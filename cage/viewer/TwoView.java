@@ -215,7 +215,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         final JButton resetButton = new JButton("reset embedding");
         resetButton.setFont(titleFont);
         resetButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        new PushButtonDecoration(resetButton);
+        PushButtonDecoration.decorate(resetButton);
         resetButton.setMnemonic(KeyEvent.VK_R);
         resetButton.setAlignmentY(0.5f);
         resetButton.addActionListener(new ActionListener() {
@@ -313,7 +313,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         savePSButton = new JToggleButton("save PS");
         savePSButton.setFont(titleFont);
         savePSButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        new PushButtonDecoration(savePSButton);
+        PushButtonDecoration.decorate(savePSButton);
         savePSButton.setMnemonic(KeyEvent.VK_P);
         savePSButton.setAlignmentY(0.5f);
         savePSButton.setActionCommand("s");
@@ -419,7 +419,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         JToggleButton saveButton = new JToggleButton(caption);
         saveButton.setFont(font);
         saveButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        new PushButtonDecoration(saveButton);
+        PushButtonDecoration.decorate(saveButton);
         saveButton.setMnemonic(mnemonic);
         saveButton.setAlignmentY(0.5f);
         saveButton.addActionListener(listener);
