@@ -18,8 +18,8 @@ import javax.swing.event.ChangeListener;
  */
 public class MinMaxEqListener implements ChangeListener, ActionListener {
 
-    BoundedRangeModel minModel, maxModel, lastChangedModel;
-    boolean equality, mayVeto;
+    private BoundedRangeModel minModel, maxModel, lastChangedModel;
+    private boolean equality, mayVeto;
 
     public MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality) {
         this(minM, maxM, staticEquality, false);
