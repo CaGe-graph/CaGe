@@ -31,7 +31,7 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.MinMaxEqListener;
+import lisken.uitoolbox.MinMaxRestrictor;
 import lisken.uitoolbox.UItoolbox;
 
 public class TubetypePanel extends GeneratorPanel {
@@ -107,7 +107,7 @@ public class TubetypePanel extends GeneratorPanel {
         };
         offset1Control.addChangeListener(offsetListener);
         offset2Control.addChangeListener(offsetListener);
-        MinMaxEqListener.keepConsistent(offset2Control.getModel(), offset1Control.getModel());
+        MinMaxRestrictor.keepConsistent(offset2Control.getModel(), offset1Control.getModel());
         JLabel tubelengthLabel = new JLabel("Tube length:");
         tubelengthLabel.setDisplayedMnemonic(KeyEvent.VK_T);
         tubelengthLabel.setLabelFor(tubelengthSlider.slider());

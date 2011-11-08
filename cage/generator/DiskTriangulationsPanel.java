@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.MinMaxEqListener;
+import lisken.uitoolbox.MinMaxRestrictor;
 
 /**
  * Panel for the configuration of plantri to generate triangulations of the
@@ -92,7 +92,7 @@ public class DiskTriangulationsPanel extends GeneratorPanel
         boundarySegmentsSlider.setSizeFactor(6);
         boundarySegmentsSlider.setEnabled(false);
         boundarySegmentsSlider.getValueLabel().setForeground(getBackground());
-        MinMaxEqListener.keepConsistent(boundarySegmentsSlider.getModel(), verticesSlider.getModel());
+        MinMaxRestrictor.keepConsistent(boundarySegmentsSlider.getModel(), verticesSlider.getModel());
         add(boundarySegmentsSlider,
                 new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,

@@ -36,7 +36,7 @@ import javax.swing.SwingConstants;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.FlaggedJDialog;
-import lisken.uitoolbox.MinMaxEqListener;
+import lisken.uitoolbox.MinMaxRestrictor;
 import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.UItoolbox;
 
@@ -154,7 +154,7 @@ public class FullgenPanel extends GeneratorPanel {
         minEqMax.setText("min = max");
         minEqMax.setSelected(true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
-        MinMaxEqListener.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
+        MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
         FullgenAtomsPanel.setLayout(new GridBagLayout());
         ipr.setText("Isolated Pentagons (ipr)");
         ipr.setMnemonic(KeyEvent.VK_I);

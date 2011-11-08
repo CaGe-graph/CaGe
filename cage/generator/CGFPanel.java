@@ -35,7 +35,7 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.MinMaxEqListener;
+import lisken.uitoolbox.MinMaxRestrictor;
 import lisken.uitoolbox.UItoolbox;
 
 public class CGFPanel extends GeneratorPanel {
@@ -106,7 +106,7 @@ public class CGFPanel extends GeneratorPanel {
         maxAtomsSlider.setClickScrollByBlock(false);
         final JCheckBox minEqMax = new JCheckBox("min = max", true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
-        MinMaxEqListener.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
+        MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
         final EnhancedSlider facesSlider = new EnhancedSlider();
         Hashtable facesLabels = facesSlider.createStandardLabels(5, 10);
         facesLabels.put(new Integer(3), new JLabel("3"));

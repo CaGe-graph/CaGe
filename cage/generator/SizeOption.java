@@ -13,7 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
-import lisken.uitoolbox.MinMaxEqListener;
+import lisken.uitoolbox.MinMaxRestrictor;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
@@ -73,7 +73,7 @@ public class SizeOption implements ChangeListener, ActionListener {
             minNotEqMax.setSelected(false);
             minNrOfSizeButton.addChangeListener(this);
             maxNrOfSizeButton.addChangeListener(this);
-            MinMaxEqListener.keepConsistentOrEqual(minNrOfSizeButton.getModel(), maxNrOfSizeButton.getModel(), minNotEqMax);
+            MinMaxRestrictor.keepConsistentOrEqual(minNrOfSizeButton.getModel(), maxNrOfSizeButton.getModel(), minNotEqMax);
         }
         GridBagConstraints lc = new GridBagConstraints();
         lc.gridx = 0;

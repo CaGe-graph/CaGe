@@ -8,7 +8,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * A <code>MinMaxEqListener</code> maintains the constraints between two
+ * A <code>MinMaxRestrictor</code> maintains the constraints between two
  * <code>BoundedRangeModel</code>s where one model represents the minimum and
  * the other the maximum of the same quantity. These constraints are the following:
  * <ul>
@@ -16,7 +16,7 @@ import javax.swing.event.ChangeListener;
  * <li>if equality is needed, then both values must be the same.</li>
  * </ul>
  */
-public class MinMaxEqListener {
+public class MinMaxRestrictor {
 
     private BoundedRangeModel minModel, maxModel, lastChangedModel;
     private boolean equality, mayVeto;
@@ -37,21 +37,21 @@ public class MinMaxEqListener {
         }
     };
 
-    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality) {
+    private MinMaxRestrictor(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality) {
         this(minM, maxM, staticEquality, false);
     }
 
-    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality,
+    private MinMaxRestrictor(BoundedRangeModel minM, BoundedRangeModel maxM, boolean staticEquality,
             boolean veto) {
         equality = staticEquality;
         init(minM, maxM, null, veto);
     }
 
-    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton) {
+    private MinMaxRestrictor(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton) {
         this(minM, maxM, equalityButton, false);
     }
 
-    private MinMaxEqListener(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton,
+    private MinMaxRestrictor(BoundedRangeModel minM, BoundedRangeModel maxM, ButtonModel equalityButton,
             boolean veto) {
         init(minM, maxM, equalityButton, veto);
     }
@@ -110,7 +110,7 @@ public class MinMaxEqListener {
      */
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public static void keepConsistent(BoundedRangeModel minModel, BoundedRangeModel maxModel){
-        new MinMaxEqListener(minModel, maxModel, false);
+        new MinMaxRestrictor(minModel, maxModel, false);
     }
     
     /**
@@ -122,7 +122,7 @@ public class MinMaxEqListener {
      */
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public static void keepConsistentOrReject(BoundedRangeModel minModel, BoundedRangeModel maxModel){
-        new MinMaxEqListener(minModel, maxModel, false, true);
+        new MinMaxRestrictor(minModel, maxModel, false, true);
     }
     
     /**
@@ -133,7 +133,7 @@ public class MinMaxEqListener {
      */
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public static void keepEqual(BoundedRangeModel minModel, BoundedRangeModel maxModel){
-        new MinMaxEqListener(minModel, maxModel, true);
+        new MinMaxRestrictor(minModel, maxModel, true);
     }
     
     /**
@@ -146,7 +146,7 @@ public class MinMaxEqListener {
      */
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public static void keepConsistentOrEqual(BoundedRangeModel minModel, BoundedRangeModel maxModel, ButtonModel equalityButton){
-        new MinMaxEqListener(minModel, maxModel, equalityButton);
+        new MinMaxRestrictor(minModel, maxModel, equalityButton);
     }
 }
 
