@@ -6,11 +6,18 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class PushButtonDecoration implements ChangeListener {
+public class PushButtonDecoration {
 
     private AbstractButton button;
     private boolean isToggle;
     private Border upBorder,  downBorder,  otherBorder;
+    
+    private ChangeListener changeListener = new ChangeListener() {
+
+        public void stateChanged(ChangeEvent e) {
+            updateBorder();
+        }
+    };
 
     private PushButtonDecoration(AbstractButton b) {
         this(b, false);
@@ -21,7 +28,7 @@ public class PushButtonDecoration implements ChangeListener {
         isToggle = isT;
         otherBorder = button.getBorder();
         computeBorders();
-        button.getModel().addChangeListener(this);
+        button.getModel().addChangeListener(changeListener);
     }
 
     private void computeBorders() {
@@ -35,10 +42,6 @@ public class PushButtonDecoration implements ChangeListener {
     private void updateBorder() {
         boolean depressed = isToggle ? button.getModel().isSelected() : button.getModel().isPressed();
         button.setBorder(depressed ? downBorder : upBorder);
-    }
-
-    public void stateChanged(ChangeEvent e) {
-        updateBorder();
     }
     
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
