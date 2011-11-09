@@ -3,6 +3,7 @@ package cage.viewer.twoview;
 import cage.utility.BrowseComponent;
 
 import cage.utility.SingleActionDocumentLister;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
@@ -53,7 +54,12 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
 
             @Override
             public void update() {
-                batchTwoViewModel.setFileNameTemplate(filenameField.getText());
+                EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        batchTwoViewModel.setFileNameTemplate(filenameField.getText());
+                    }
+                });
+                
             }
         });
         folderSelector.addChangeListener(new ChangeListener() {
