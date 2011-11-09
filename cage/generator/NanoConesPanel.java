@@ -101,7 +101,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
     }
 
     public GeneratorInfo getGeneratorInfo() {
-        String symmetric = symmetricButton.isSelected() ? " s" : "n";
+        String symmetric = symmetricButton.isSelected() ? "s" : "n";
         String pentagons = Integer.toString(numberOfPentagonsSlider.getValue());
         String length = Integer.toString(lengthOfSide.getValue() - (symmetricButton.isSelected() ? 0 : 1));
 
