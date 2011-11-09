@@ -70,6 +70,14 @@ public class TwoViewBatchBackgroundRunner extends AbstractBackgroundRunner {
     }
 
     @Override
+    public void start() throws IllegalThreadStateException {
+        if(!(folder.exists() || folder.mkdirs())){
+            end();
+        }
+        super.start();
+    }
+
+    @Override
     protected void embeddingMade(CaGeResult result) {
         model.setResult(result);
         String fileName = String.format(fileNameTemplate, result.getGraphNo());
