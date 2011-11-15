@@ -509,16 +509,12 @@ public class NanoconeEmbedder {
 
     private void doubleCurrentGraph(int[][] matrix) {
         currentGraph = new int [matrix.length*2][this.graphStartColumns];
-        for (int i=0; i< matrix.length ; i++) {
-            currentGraph[i] = matrix[i];
-        }
+        System.arraycopy(matrix, 0, currentGraph, 0, matrix.length);
     }
 
     private void doubleGraphCoords(double[][] matrix) {
         graphCoords = new double [matrix.length*2][3];
-        for (int i=0; i< matrix.length ; i++) {
-            graphCoords[i] = matrix[i];
-        }
+        System.arraycopy(matrix, 0, graphCoords, 0, matrix.length);
     }
 
     /**
@@ -1127,8 +1123,7 @@ public class NanoconeEmbedder {
     //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
     //private void setFactors(double ... factors) {
     private void setFactors(double[] factors) {
-        for (int i=0; i<factors.length; i++)
-            this.factors[i] = factors[i];
+        System.arraycopy(factors, 0, this.factors, 0, factors.length);
         if (factors.length < this.factors.length)
             for (int i=factors.length; i<this.factors.length; i++)
                 this.factors[i] = factors[factors.length - 1];
@@ -1137,8 +1132,7 @@ public class NanoconeEmbedder {
     //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
     //private void setMaxSteps(int ... steps) {
     private void setMaxSteps(int[] steps) {
-        for (int i=0; i<steps.length; i++)
-            this.steps[i] = steps[i];
+        System.arraycopy(steps, 0, this.steps, 0, steps.length);
         if (steps.length < this.steps.length)
             for (int i=steps.length; i<this.steps.length; i++)
                 this.steps[i] = steps[steps.length - 1];
@@ -1147,8 +1141,7 @@ public class NanoconeEmbedder {
     //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
     //private void setShowPerPhase(int ... show) {
     private void setShowPerPhase(int[] show) {
-        for (int i=0; i<show.length; i++)
-            this.show[i] = show[i];
+        System.arraycopy(show, 0, this.show, 0, show.length);
         if (show.length < this.show.length)
             for (int i=show.length; i<this.show.length; i++)
                 this.show[i] = show[show.length - 1];

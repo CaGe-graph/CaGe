@@ -837,8 +837,7 @@ public class NanotubeEmbedder {
     //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
     //private void setFactors(double ... factors) {
     private void setFactors(double[] factors) {
-        for (int i=0; i<factors.length; i++)
-            this.factors[i] = factors[i];
+        System.arraycopy(factors, 0, this.factors, 0, factors.length);
         if (factors.length < this.factors.length)
             for (int i=factors.length; i<this.factors.length; i++)
                 this.factors[i] = factors[factors.length - 1];
