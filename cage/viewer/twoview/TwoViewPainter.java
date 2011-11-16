@@ -176,6 +176,11 @@ public abstract class TwoViewPainter {
     }
     
     void calculateBoundingBox(){
+        //don't do anything if the graph hasn't been set yet
+        if(coordinate==null){
+            return;
+        }
+        
         double angle = rotation*Math.PI/180;
         xMin = xMax = coordinate[0][0]*Math.cos(angle)-coordinate[0][1]*Math.sin(angle);
         yMin = yMax = coordinate[0][0]*Math.sin(angle)+coordinate[0][1]*Math.cos(angle);
