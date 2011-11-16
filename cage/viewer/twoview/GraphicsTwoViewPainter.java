@@ -6,10 +6,14 @@
 package cage.viewer.twoview;
 
 import cage.CaGeResult;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
@@ -20,7 +24,9 @@ import javax.swing.SwingUtilities;
  * @author nvcleemp
  */
 public class GraphicsTwoViewPainter extends TwoViewPainter {
-
+    
+    private static final Color DEFAULT_VERTEX_COLOR = new Color(250, 178, 126);
+    
     private Graphics graphics;
 
     private Color edgeColor;
@@ -216,6 +222,9 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
     protected void beginGraph() {
         if(graphics==null)
             throw new IllegalStateException("Graphics hasn't been set yet!");
+        
+        //turn on antialiasing
+        ((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
     protected void beginEdges() {
@@ -274,12 +283,36 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
             graphics.setColor(edgeColor);
             graphics.fillOval(xp - (model.getEdgeWidth() - 1) / 2, yp - (model.getEdgeWidth() - 1) / 2, model.getEdgeWidth(), model.getEdgeWidth());
         }
-        vertexImage.paintIcon(null, graphics, xp - model.getVertexSize()/2, yp - model.getVertexSize()/2);
+        
+        final int vertexDiameter = model.getVertexSize();
+        final int vertexCornerX = xp - vertexDiameter/2;
+        final int vertexCornerY = yp - vertexDiameter/2;
+        
+        //calculate the two endpoints of the gradient
+        final Color colorA = new Color(
+                Math.min(DEFAULT_VERTEX_COLOR.getRed() + 4, 255),
+                Math.max(DEFAULT_VERTEX_COLOR.getGreen() - 14, 0),
+                Math.max(DEFAULT_VERTEX_COLOR.getBlue() - 26, 0));
+        final Color colorB = new Color(
+                Math.max(DEFAULT_VERTEX_COLOR.getRed() - 4, 0),
+                Math.min(DEFAULT_VERTEX_COLOR.getGreen() + 14, 255),
+                Math.min(DEFAULT_VERTEX_COLOR.getBlue() + 26, 255));
+        
+        ((Graphics2D)graphics).setPaint(
+                new GradientPaint(
+                        vertexCornerX, vertexCornerY, colorA, //from color A in upper left corner
+                        vertexCornerX + vertexDiameter, vertexCornerY+vertexDiameter, colorB)); //to color B in lower right corner
+        
+        graphics.fillOval(vertexCornerX, vertexCornerY, vertexDiameter, vertexDiameter);
+        graphics.setColor(Color.BLACK);
+        graphics.drawOval(vertexCornerX, vertexCornerY, vertexDiameter, vertexDiameter);
         if (model.getShowNumbers() && vertexFontArray[model.getVertexSizeID()].getSize() > 0) {
             String numberString = Integer.toString(number);
             graphics.setColor(numbersColor);
             int width = graphics.getFontMetrics().stringWidth(numberString);
-            graphics.drawString(numberString, xp - (int) Math.floor(width * 0.52), yp + (int) Math.floor(graphics.getFontMetrics().getAscent() * 0.47));
+            graphics.drawString(numberString,
+                    xp - (int) Math.floor(width * 0.52),
+                    yp + (int) Math.floor(graphics.getFontMetrics().getAscent() * 0.47));
         }
     }
 
