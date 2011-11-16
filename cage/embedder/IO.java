@@ -121,16 +121,12 @@ public class IO {
 
     private void doubleCurrentGraph(int[][] matrix) {
         currentGraph = new int [matrix.length*2][this.graphStartColumns];
-        for (int i=0; i< matrix.length ; i++) {
-            currentGraph[i] = matrix[i];
-        }
+        System.arraycopy(matrix, 0, currentGraph, 0, matrix.length);
     }
 
     private void doubleGraphCoords(double[][] matrix) {
         graphCoords = new double [matrix.length*2][dimension];
-        for (int i=0; i< matrix.length ; i++) {
-            graphCoords[i] = matrix[i];
-        }
+        System.arraycopy(matrix, 0, graphCoords, 0, matrix.length);
     }
 
     /**
