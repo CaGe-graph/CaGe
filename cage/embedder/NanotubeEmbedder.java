@@ -24,7 +24,7 @@ public class NanotubeEmbedder {
     private int graphStartRows;
     private int nrVertices;
     // Number of vertices on 1 level
-    private int length = 0;
+    private int levelVertexCount = 0;
     private int firstPentagon;
     // find the next vertex on the same level before or after the current
     private int next = 1;
@@ -32,7 +32,7 @@ public class NanotubeEmbedder {
     // The distance between 2 C-atoms in graphite (in nm)
     private double l = 1.42;
     // distance between 2 vertices with common neighbour for a hexagon (x = 2 * l * sin(Pi/3));
-    private double x = l * 1.73205081;
+    private double vertexDistanceInHexagon = l * 1.73205081;
     // distance between 2 levels (from outer level orthogonal on x)
     private double a = l * 0.5;
     private final double epsilon = 1e-15;
@@ -300,7 +300,7 @@ public class NanotubeEmbedder {
         /**************     Embedding Phase 1 : Pre-Embedding      *************/
 
         int temp, start = 0, offset = 0, i=0, begin = 0;
-        double prevX = -x, prevZ = 0, beginX = 0, beginZ = 0;
+        double prevX = -vertexDistanceInHexagon, prevZ = 0, beginX = 0, beginZ = 0;
         boolean horizontal = true;
 
 
@@ -312,20 +312,20 @@ public class NanotubeEmbedder {
             if (areNeighbours(vertDepth[0][i], temp + 1))
                 start = i;
             i++;
-            length = i;
+            levelVertexCount = i;
         }
 
         i = 0;
         while (vertDepth[1][i + 1] == 0) {
             if (areNeighbours(vertDepth[0][i], vertDepth[0][i + 1] + 1)) {
                 horizontal = true;
-                beginX = -x;
+                beginX = -vertexDistanceInHexagon;
                 beginZ = 0;
                 break;
             }
             else if (!haveCommonNeighbour(vertDepth[0][i], vertDepth[0][i + 1])) {
                 horizontal = false;
-                beginX = - x / 2;
+                beginX = - vertexDistanceInHexagon / 2;
                 beginZ = l + a;
                 break;
             }
@@ -333,14 +333,14 @@ public class NanotubeEmbedder {
         }
 
         i = 0;
-        if (areNeighbours(vertDepth[0][0], vertDepth[0][length - 1] + 1)) {
+        if (areNeighbours(vertDepth[0][0], vertDepth[0][levelVertexCount - 1] + 1)) {
             i++;
             offset = -1;
             begin = 1;
         }
 
-        if (!haveCommonNeighbour(vertDepth[0][0], vertDepth[0][length - 1] + 1)) {
-            beginX = - x;
+        if (!haveCommonNeighbour(vertDepth[0][0], vertDepth[0][levelVertexCount - 1] + 1)) {
+            beginX = - vertexDistanceInHexagon;
             beginZ = l;
         }
 
@@ -348,21 +348,21 @@ public class NanotubeEmbedder {
             temp = (i + 1 >= nrVertices || vertDepth[1][i + 1] != 0) ? vertDepth[0][0] : vertDepth[0][i+1];
 
             if (horizontal) {
-                prevX += x;
+                prevX += vertexDistanceInHexagon;
             }
             else {
-                prevX += x / 2;
+                prevX += vertexDistanceInHexagon / 2;
                 prevZ -= l + a;
             }
             graphCoords[vertDepth[0][i]][0] = prevX;
             graphCoords[vertDepth[0][i]][2] = prevZ;
-            graphCoords[vertDepth[0][i + length + offset]][0] = prevX - x/2;
-            graphCoords[vertDepth[0][i + length + offset]][2] = prevZ - (horizontal ? a : -a);
+            graphCoords[vertDepth[0][i + levelVertexCount + offset]][0] = prevX - vertexDistanceInHexagon/2;
+            graphCoords[vertDepth[0][i + levelVertexCount + offset]][2] = prevZ - (horizontal ? a : -a);
 
             if (areNeighbours(vertDepth[0][i], temp + 1)) {
                 horizontal = false;
                 prevZ -= a;
-                prevX += x/2;
+                prevX += vertexDistanceInHexagon/2;
                 graphCoords[temp][0] = prevX;
                 graphCoords[temp][2] = prevZ;
                 i++;
@@ -372,20 +372,20 @@ public class NanotubeEmbedder {
                 horizontal = true;
                 prevZ -= l;
                 offset += 1;
-                graphCoords[vertDepth[0][i + length + offset]][0] = prevX;
-                graphCoords[vertDepth[0][i + length + offset]][2] = prevZ;
+                graphCoords[vertDepth[0][i + levelVertexCount + offset]][0] = prevX;
+                graphCoords[vertDepth[0][i + levelVertexCount + offset]][2] = prevZ;
             }
             i++;
         }
 
         temp = 0;
         for (i = 2; i <= vertDepth[1][firstPentagon]; i += 2) {
-            for (int j = 0; j < length; j++) {
-                temp = i * length + j;
-                graphCoords[vertDepth[0][temp]][0] = graphCoords[vertDepth[0][temp - 2 * length]][0] - x / 2;
-                graphCoords[vertDepth[0][temp]][2] = graphCoords[vertDepth[0][temp - 2 * length]][2] - l - a;
-                graphCoords[vertDepth[0][temp + length]][0] = graphCoords[vertDepth[0][temp - length]][0] - x / 2;
-                graphCoords[vertDepth[0][temp + length]][2] = graphCoords[vertDepth[0][temp - length]][2] - l - a;
+            for (int j = 0; j < levelVertexCount; j++) {
+                temp = i * levelVertexCount + j;
+                graphCoords[vertDepth[0][temp]][0] = graphCoords[vertDepth[0][temp - 2 * levelVertexCount]][0] - vertexDistanceInHexagon / 2;
+                graphCoords[vertDepth[0][temp]][2] = graphCoords[vertDepth[0][temp - 2 * levelVertexCount]][2] - l - a;
+                graphCoords[vertDepth[0][temp + levelVertexCount]][0] = graphCoords[vertDepth[0][temp - levelVertexCount]][0] - vertexDistanceInHexagon / 2;
+                graphCoords[vertDepth[0][temp + levelVertexCount]][2] = graphCoords[vertDepth[0][temp - levelVertexCount]][2] - l - a;
             }
         }
 
@@ -401,9 +401,9 @@ public class NanotubeEmbedder {
         
         /**** ROTATE AXES ****/
 
-        double distance = Math.sqrt(Math.pow(b2 * x / 2 + b1 * x, 2)
+        double distance = Math.sqrt(Math.pow(b2 * vertexDistanceInHexagon / 2 + b1 * vertexDistanceInHexagon, 2)
                 + Math.pow(b2 * (a + l), 2));
-        double distOnX = b2 * x / 2 + b1 * x;
+        double distOnX = b2 * vertexDistanceInHexagon / 2 + b1 * vertexDistanceInHexagon;
 
         double angle = Math.acos(distOnX / distance);
         double aCos = Math.cos(angle);
@@ -432,7 +432,7 @@ public class NanotubeEmbedder {
             i++;
         }
 
-        beginX = graphCoords[vertDepth[0][2*length]][0] - graphCoords[vertDepth[0][0]][0];
+        beginX = graphCoords[vertDepth[0][2*levelVertexCount]][0] - graphCoords[vertDepth[0][0]][0];
         while (i < nrVertices) {
             start = i;
             distOnX = distance / amount[vertDepth[1][start]];
@@ -487,7 +487,7 @@ public class NanotubeEmbedder {
             //for (int n : currentGraph[vertDepth[0][i]]) {
             for (int j=0; j < currentGraph[vertDepth[0][i]].length; j++) {
                 int n = currentGraph[vertDepth[0][i]][j];
-                if (n != 0 && getDistance(vertDepth[0][i], n - 1) > x) {
+                if (n != 0 && getDistance(vertDepth[0][i], n - 1) > vertexDistanceInHexagon) {
                     moveTowards(vertDepth[0][i], n - 1, beginX);
                 }
             }
@@ -503,7 +503,7 @@ public class NanotubeEmbedder {
             //for (int n : currentGraph[vertDepth[0][i]]) {
             for (int j=0; j < currentGraph[vertDepth[0][i]].length; j++) {
                 int n = currentGraph[vertDepth[0][i]][j];
-                if (n != 0 && getDistance(vertDepth[0][i], n - 1) > x) {
+                if (n != 0 && getDistance(vertDepth[0][i], n - 1) > vertexDistanceInHexagon) {
                     moveTowardsEachother(vertDepth[0][i], n - 1, l);
                 }
             }
@@ -596,11 +596,11 @@ public class NanotubeEmbedder {
                             d = getDistance(vertex, nn - 1);
                             if (d > epsilon) {
                                 if (!quadratic)
-                                    d = (this.x - d) / d;
-                                else if (this.x - d < 0)
-                                    d = - Math.pow(this.x - d, 2) / d;
+                                    d = (vertexDistanceInHexagon - d) / d;
+                                else if (vertexDistanceInHexagon - d < 0)
+                                    d = - Math.pow(vertexDistanceInHexagon - d, 2) / d;
                                 else
-                                    d = Math.pow(this.x - d, 2) / d;
+                                    d = Math.pow(vertexDistanceInHexagon - d, 2) / d;
                                 x += factor*d*(graphCoords[vertex][0] - graphCoords[n - 1][0]);
                                 y += factor*d*(graphCoords[vertex][1] - graphCoords[n - 1][1]);
                                 z += factor*d*(graphCoords[vertex][2] - graphCoords[n - 1][2]);

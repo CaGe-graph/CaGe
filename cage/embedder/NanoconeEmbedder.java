@@ -29,7 +29,7 @@ public class NanoconeEmbedder {
     // The distance between 2 C-atoms in graphite (in nm)
     private double l = 1.42;
     // distance between 2 vertices with common neighbour for a hexagon (x = 2 * l * sin(Pi/3));
-    private double x = l * 1.73205081;
+    private double vertexDistanceInHexagon = l * 1.73205081;
     // distance between 2 levels (from outer level orthogonal on x)
     private double a = l * 0.5;
     private double zeroZ;
@@ -553,7 +553,7 @@ public class NanoconeEmbedder {
         /**
          * The outline of the circle for level 0
          */
-        outline = amountOfL * l + amountOfX * x;
+        outline = amountOfL * l + amountOfX * vertexDistanceInHexagon;
 
         /**
          * We first set the levels containing only hexagons correct.
@@ -565,7 +565,7 @@ public class NanoconeEmbedder {
             evenDepth = temp%2 == 0;
 
             theta = 0;
-            thetaIncreaseX = 2.0*Math.PI*(x)/outline;
+            thetaIncreaseX = 2.0*Math.PI*(vertexDistanceInHexagon)/outline;
             thetaIncreaseL = 2.0*Math.PI*((evenDepth?l:2*l))/outline;
             radius = outline / (2.0*Math.PI);
 
@@ -600,7 +600,7 @@ public class NanoconeEmbedder {
 
             // Update outline
             if (evenDepth) {
-                diff = amountOfL * (x - l);
+                diff = amountOfL * (vertexDistanceInHexagon - l);
                 outline -= diff;
                 amountOfX -= amountOfL;
             }
@@ -612,7 +612,7 @@ public class NanoconeEmbedder {
             // Update z for next round
             if (!evenDepth && amountOfX > 0) {
                 diff /= 2.0*Math.PI;
-                z += Math.sqrt(l*l - diff*diff) - (l - x/2)*amountOfL/amountOfX;
+                z += Math.sqrt(l*l - diff*diff) - (l - vertexDistanceInHexagon/2)*amountOfL/amountOfX;
             }
             else
                 z += a;
@@ -641,7 +641,7 @@ public class NanoconeEmbedder {
                 amountOfX++;
             }
 
-            outline = amountOfX * x;
+            outline = amountOfX * vertexDistanceInHexagon;
 
             theta = 0;
             thetaIncreaseX = 2.0*Math.PI/amountOfX;
@@ -709,11 +709,11 @@ public class NanoconeEmbedder {
                             d = getDistance(vertex, nn - 1);
                             if (d > epsilon) {
                                 if (!quadratic)
-                                    d = (this.x - d) / d;
-                                else if (this.x - d < 0)
-                                    d = - Math.pow(this.x - d, 2) / d;
+                                    d = (vertexDistanceInHexagon - d) / d;
+                                else if (vertexDistanceInHexagon - d < 0)
+                                    d = - Math.pow(vertexDistanceInHexagon - d, 2) / d;
                                 else
-                                    d = Math.pow(this.x - d, 2) / d;
+                                    d = Math.pow(vertexDistanceInHexagon - d, 2) / d;
                                 x += factor*d*(graphCoords[vertex][0] - graphCoords[n - 1][0]);
                                 y += factor*d*(graphCoords[vertex][1] - graphCoords[n - 1][1]);
                                 z += factor*d*(graphCoords[vertex][2] - graphCoords[n - 1][2]);
@@ -943,7 +943,7 @@ public class NanoconeEmbedder {
 
     private void setLengthBetweenAtoms(double l) {
         this.l = l;
-        x = l * 1.73205081;
+        vertexDistanceInHexagon = l * 1.73205081;
         a = l * 0.5;
     }
 
