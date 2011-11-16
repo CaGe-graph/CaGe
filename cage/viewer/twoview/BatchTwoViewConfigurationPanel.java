@@ -75,7 +75,9 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
     }
     
     public void setFilenameTemplate(String template){
-        filenameField.setText(template);
+        if(!filenameField.getText().equals(template)){
+            filenameField.setText(template);
+        }
     }
     
     private class SaverComboBoxModel extends AbstractListModel implements ComboBoxModel, BatchTwoViewConfigurationListener {
