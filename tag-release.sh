@@ -1,6 +1,6 @@
 #!/bin/bash
 
-repository=svn+ssh://caagt/public/svn-cage/cage
+repository=svn+ssh://caagt.ugent.be/public/svn-cage/cage
 
 if [ $# -eq 1 ]
 then
