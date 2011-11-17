@@ -14,7 +14,6 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 /**
@@ -33,9 +32,6 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
     private Color specialEdgeColor;
     private Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
     private Font[] vertexFontArray;
-    private ImageIcon vertexImage;
-    private ImageIcon[] vertexImageArray;
-    private int maxVertexSize;
 
     private TwoViewListener listener = new TwoViewAdapter() {
 
@@ -56,11 +52,6 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         }
 
         @Override
-        public void vertexSizeIDChanged() {
-            loadVertexImage();
-        }
-
-        @Override
         public void vertexNumbersShownChanged() {
             handleShowNumbers();
         }
@@ -73,24 +64,12 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
 
     public GraphicsTwoViewPainter(TwoViewModel model) {
         super(model);
-        initializeImages();
         initializeVertexFonts();
         calculateColors();
 
-        loadVertexImage();
         determineVertexFont();
         
         this.model.addTwoViewListener(listener);
-    }
-
-    private void initializeImages(){
-        vertexImageArray = new ImageIcon[model.getVertexSizesCount()];
-        for (int i = 0; i < vertexImageArray.length; i++) {
-            vertexImageArray[i] = new ImageIcon(ClassLoader.getSystemResource("Images/twoview-vertex-" + (i + 1) + ".gif"));
-        }
-        maxVertexSize = Math.max(
-                vertexImageArray[model.getVertexSizesCount()-1].getIconWidth(),
-                vertexImageArray[model.getVertexSizesCount()-1].getIconHeight());
     }
 
     private void initializeVertexFonts(){
@@ -109,7 +88,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
     }
 
     public int getMaxVertexSize() {
-        return maxVertexSize;
+        return TwoViewModel.MAX_VERTEX_SIZE;
     }
 
     /*
@@ -124,7 +103,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
 
         determineVertexFont_impl();
 
-        model.setShowNumbers(model.getShowNumbers() && vertexFontArray[model.getVertexSizeID()].getSize()>0);
+        model.setShowNumbers(model.getShowNumbers() && vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE].getSize()>0);
     }
 
     /*
@@ -132,10 +111,10 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
      * the current vertex size.
      */
     private void determineVertexFont_impl() {
-        if (vertexFontArray[model.getVertexSizeID()] == null) {
+        if (vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE] == null) {
             Font vertexFont = graphics.getFont();
-            int fontSize = getVertexFontSize(model.getVertexSizeID());
-            vertexFontArray[model.getVertexSizeID()] = new Font(
+            int fontSize = getVertexFontSize(model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE);
+            vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE] = new Font(
                     vertexFont.getName(),
                     vertexFont.getStyle() & Font.BOLD,
                     fontSize);
@@ -151,7 +130,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
             int w = fm.stringWidth(Integer.toString(model.getResult().getGraph().getSize()));
             int h = fm.getAscent();
             int fontSize;
-            double factor = getVertexSize(vertexSizeID) * 0.85 / Math.sqrt(w * w + h * h);
+            double factor = (vertexSizeID + TwoViewModel.MIN_VERTEX_SIZE) * 0.85 / Math.sqrt(w * w + h * h);
             if (h * factor < 7.5) {
                 fontSize = 0;
             } else {
@@ -178,23 +157,9 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         model.setShowNumbers(showNumbers);
     }
 
-    private void loadVertexImage() {
-        vertexImage = vertexImageArray[model.getVertexSizeID()];
-
-        model.setVertexSize(
-                Math.max(vertexImage.getIconWidth(), vertexImage.getIconHeight())
-                );
-    }
-
-    private int getVertexSize(int vertexSizeID){
-        return  Math.max(
-                    vertexImageArray[vertexSizeID].getIconWidth(),
-                    vertexImageArray[vertexSizeID].getIconHeight());
-    }
-
     private void handleShowNumbers(){
-        if(model.getShowNumbers() && getVertexFontSize(model.getVertexSizeID()) <= 0){
-            int id = model.getVertexSizeID() + 1;
+        if(model.getShowNumbers() && getVertexFontSize(model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE) <= 0){
+            int id = model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE + 1;
             while(id<model.getVertexSizesCount() && getVertexFontSize(id) <= 0){
                 id++;
             }
@@ -202,7 +167,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
                 final int idFinal = id;
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        model.setVertexSizeID(idFinal);
+                        model.setVertexSize(idFinal + TwoViewModel.MIN_VERTEX_SIZE);
                     }
                 });
             } else {
@@ -272,8 +237,8 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
     }
 
     protected void beginVertices() {
-        if (model.getShowNumbers() && vertexFontArray[model.getVertexSizeID()].getSize() > 0) {
-            graphics.setFont(vertexFontArray[model.getVertexSizeID()]);
+        if (model.getShowNumbers() && vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE].getSize() > 0) {
+            graphics.setFont(vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE]);
         }
     }
 
@@ -306,7 +271,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         graphics.fillOval(vertexCornerX, vertexCornerY, vertexDiameter, vertexDiameter);
         graphics.setColor(Color.BLACK);
         graphics.drawOval(vertexCornerX, vertexCornerY, vertexDiameter, vertexDiameter);
-        if (model.getShowNumbers() && vertexFontArray[model.getVertexSizeID()].getSize() > 0) {
+        if (model.getShowNumbers() && vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE].getSize() > 0) {
             String numberString = Integer.toString(number);
             graphics.setColor(numbersColor);
             int width = graphics.getFontMetrics().stringWidth(numberString);

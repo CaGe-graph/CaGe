@@ -25,9 +25,6 @@ public abstract class TwoViewAdapter implements TwoViewListener{
     public void vertexSizeChanged() {
     }
 
-    public void vertexSizeIDChanged() {
-    }
-
     public void highlightedFacesChanged() {
     }
 

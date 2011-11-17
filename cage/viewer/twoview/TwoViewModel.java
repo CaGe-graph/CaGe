@@ -27,6 +27,10 @@ public class TwoViewModel {
     public static final int MIN_EDGE_WIDTH = 0;
     public static final int MAX_EDGE_WIDTH = 9;
     public static final int DEFAULT_EDGE_WIDTH = MAX_EDGE_WIDTH / 2;
+    
+    public static final int MIN_VERTEX_SIZE = 3;
+    public static final int MAX_VERTEX_SIZE = 25;
+    public static final int DEFAULT_VERTEX_SIZE = 11;
 
     private PropertyChangeListener listener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
@@ -44,9 +48,7 @@ public class TwoViewModel {
 
     private boolean showNumbers;
     private int edgeWidth;
-    private int vertexSize; //the size of the image
-    private int vertexSizeID; //the number of the corresponding checkbox
-    private final int vertexSizesCount;
+    private int vertexSize = DEFAULT_VERTEX_SIZE; //the size of the image
     private float edgeBrightness = 0.75f;
 
     private boolean highlightFaces = false;
@@ -60,27 +62,6 @@ public class TwoViewModel {
     private String graphComment = "";
 
     public TwoViewModel() {
-        //initialize vertex sizes from the configuration file
-        try {
-            vertexSizesCount = Integer.parseInt(CaGe.config.getProperty("TwoView.MaxVertexSize"));
-        } catch (NumberFormatException numberFormatException) {
-            Debug.reportException(numberFormatException);
-            throw new RuntimeException("Couldn't read TwoView.MaxVertexSize from configuration");
-        }
-
-        try {
-            vertexSizeID = Integer.parseInt(CaGe.config.getProperty("TwoView.VertexSize"))-1;
-            if (vertexSizeID < 0) {
-                vertexSizeID = 0;
-            }
-            if (vertexSizeID >= vertexSizesCount) {
-                vertexSizeID = vertexSizesCount-1;
-            }
-        } catch (NumberFormatException numberFormatException) {
-            Debug.reportException(numberFormatException);
-            vertexSizeID = 1;
-        }
-
         //initialize edge width
         edgeWidth = DEFAULT_EDGE_WIDTH;
 
@@ -122,25 +103,14 @@ public class TwoViewModel {
     }
 
     public void setVertexSize(int vertexSize) {
-        if(this.vertexSize != vertexSize){
+        if(this.vertexSize != vertexSize && vertexSize>=MIN_VERTEX_SIZE && vertexSize<=MAX_VERTEX_SIZE){
             this.vertexSize = vertexSize;
             fireVertexSizeChanged();
         }
     }
 
-    public int getVertexSizeID() {
-        return vertexSizeID;
-    }
-
-    public void setVertexSizeID(int vertexSizeID) {
-        if(this.vertexSizeID != vertexSizeID){
-            this.vertexSizeID = vertexSizeID;
-            fireVertexSizeIDChanged();
-        }
-    }
-
     public int getVertexSizesCount() {
-        return vertexSizesCount;
+        return MAX_VERTEX_SIZE - MIN_VERTEX_SIZE + 1;
     }
 
     public float getEdgeBrightness() {
@@ -249,12 +219,6 @@ public class TwoViewModel {
     private void fireVertexSizeChanged(){
         for (TwoViewListener l : listeners) {
             l.vertexSizeChanged();
-        }
-    }
-
-    private void fireVertexSizeIDChanged(){
-        for (TwoViewListener l : listeners) {
-            l.vertexSizeIDChanged();
         }
     }
 

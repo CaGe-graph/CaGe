@@ -18,7 +18,6 @@ public interface TwoViewListener {
     
     public void vertexNumbersShownChanged();
     public void vertexSizeChanged();
-    public void vertexSizeIDChanged();
 
     public void highlightedFacesChanged();
 

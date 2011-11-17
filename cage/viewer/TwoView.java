@@ -105,34 +105,18 @@ public class TwoView implements ActionListener, CaGeViewer {
         sizeLabel.setFont(titleFont);
         titlePanel1.add(sizeLabel);
         titlePanel1.add(Box.createHorizontalStrut(5));
+        
+        final JSlider slider =
+                new JSlider(TwoViewModel.MIN_VERTEX_SIZE,
+                        TwoViewModel.MAX_VERTEX_SIZE,
+                        (TwoViewModel.MIN_VERTEX_SIZE+TwoViewModel.MAX_VERTEX_SIZE)/2);
+        slider.addChangeListener(new ChangeListener() {
 
-        final JRadioButton[] sizeButtonArray = new JRadioButton[model.getVertexSizesCount()];
-        final ButtonGroup vertexSizeGroup = new ButtonGroup();
-        for (int i = 0; i < model.getVertexSizesCount();i++) {
-            JRadioButton sizeButton = new JRadioButton(Integer.toString(i + 1));
-            sizeButton.setActionCommand(" " + i);
-            sizeButton.setAlignmentY(0.5f);
-            if (i < 10) {
-                sizeButton.setMnemonic(KeyEvent.VK_1 + i % 10);
+            public void stateChanged(ChangeEvent e) {
+                model.setVertexSize(slider.getValue());
             }
-            vertexSizeGroup.add(sizeButton);
-            sizeButtonArray[i] = sizeButton;
-        }
-        sizeButtonArray[model.getVertexSizeID()].setSelected(true);
-        ActionListener sizeButtonListener = new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                model.setVertexSizeID(Integer.parseInt(e.getActionCommand().substring(1)));
-            }
-        };
-
-        for (int i = 0; i < model.getVertexSizesCount(); ++i) {
-            AbstractButton sizeButton = sizeButtonArray[i];
-            sizeButton.setFont(titleFont);
-            titlePanel1.add(Box.createHorizontalStrut(5));
-            titlePanel1.add(sizeButton);
-            sizeButton.addActionListener(sizeButtonListener);
-        }
+        });
+        titlePanel1.add(slider);
         titlePanel1.add(Box.createHorizontalStrut(10));
 
         final JCheckBox showNumbersButton = new JCheckBox("Numbers", model.getShowNumbers());
@@ -234,8 +218,8 @@ public class TwoView implements ActionListener, CaGeViewer {
             }
 
             @Override
-            public void vertexSizeIDChanged() {
-                sizeButtonArray[model.getVertexSizeID()].setSelected(true);
+            public void vertexSizeChanged() {
+                slider.setValue(model.getVertexSize());
             }
 
             @Override

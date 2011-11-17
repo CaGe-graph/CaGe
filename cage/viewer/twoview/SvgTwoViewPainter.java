@@ -70,11 +70,11 @@ public class SvgTwoViewPainter extends TwoViewPainter {
             builder.append(
                     String.format(
                         "  <circle cx=\"%f\" cy=\"%f\" r=\"%d\" style=\"fill:rgb(255,200,100);stroke:rgb(0,0,0);stroke-width:1\"/>\n",
-                        x, y, model.getVertexSizeID()*2));
+                        x, y, model.getVertexSize()));
             builder.append(
                     String.format(
                         "<text x=\"%f\" y=\"%f\" dy=\"%d\" style=\"font-size:%dpx;text-anchor:middle;alignment-baseline:middle\">",
-                        x, y, model.getVertexSizeID(), model.getVertexSizeID()*2+2));
+                        x, y, model.getVertexSize()/2, model.getVertexSize()));
             builder.append(Integer.toString(number));
             builder.append("</text>\n");
             builder.append("</g>\n");
@@ -82,7 +82,7 @@ public class SvgTwoViewPainter extends TwoViewPainter {
             builder.append(
                     String.format(
                         "  <circle cx=\"%f\" cy=\"%f\" r=\"%d\" style=\"fill:rgb(255,200,100);stroke:rgb(0,0,0);stroke-width:1\"/>\n",
-                        x, y, model.getVertexSizeID()*2));
+                        x, y, model.getVertexSize()));
         }
     }
 
