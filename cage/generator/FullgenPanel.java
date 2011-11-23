@@ -76,7 +76,7 @@ public class FullgenPanel extends GeneratorPanel {
     private AbstractButton[] symmetryButton = new AbstractButton[symmetries];
     private boolean[] selectedSymmetry = new boolean[symmetries];
     private final int symmRows = 4;
-    private int cases = 0, selectedSymmetries = 0;
+    private int selectedSymmetries = 0;
     
     private ActionListener actionListener = new ActionListener() {
 
