@@ -61,11 +61,8 @@ public class FullgenPanel extends GeneratorPanel {
     
     private boolean embedderIsConstant = false;
     private JPanel FullgenAtomsPanel = new JPanel();
-    private JLabel minAtomsLabel = new JLabel();
-    private JLabel maxAtomsLabel = new JLabel();
     private EnhancedSlider minAtomsSlider = new EnhancedSlider();
     private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
-    private JSeparator sep1 = new JSeparator(SwingConstants.HORIZONTAL);
     private JPanel FullgenExtrasPanel = new JPanel();
     private JCheckBox minEqMax = new JCheckBox();
     private JCheckBox ipr = new JCheckBox();
@@ -112,10 +109,10 @@ public class FullgenPanel extends GeneratorPanel {
     };
 
     public FullgenPanel() {
-        minAtomsLabel.setText("minimum number of Atoms");
+        JLabel minAtomsLabel = new JLabel("minimum number of Atoms");
         minAtomsLabel.setLabelFor(minAtomsSlider.slider());
         minAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_N);
-        maxAtomsLabel.setText("maximum number of Atoms");
+        JLabel maxAtomsLabel = new JLabel("maximum number of Atoms");
         maxAtomsLabel.setLabelFor(maxAtomsSlider.slider());
         maxAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_X);
         minAtomsSlider.setMajorTickSpacing(MAX_ATOMS - MIN_ATOMS);
@@ -208,7 +205,7 @@ public class FullgenPanel extends GeneratorPanel {
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-        this.add(sep1,
+        this.add(new JSeparator(SwingConstants.HORIZONTAL),
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(25, 0, 25, 0), 0, 0));
