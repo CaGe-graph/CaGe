@@ -46,24 +46,24 @@ public class FullgenPanel extends GeneratorPanel {
     public static final int MAX_ATOMS = 250;
     private static final int DEFAULT_ATOMS = 60;
     
-    boolean embedderIsConstant = false;
-    JPanel FullgenAtomsPanel = new JPanel();
-    JLabel minAtomsLabel = new JLabel();
-    JLabel maxAtomsLabel = new JLabel();
-    EnhancedSlider minAtomsSlider = new EnhancedSlider();
-    EnhancedSlider maxAtomsSlider = new EnhancedSlider();
-    JSeparator sep1 = new JSeparator(SwingConstants.HORIZONTAL);
-    JPanel FullgenExtrasPanel = new JPanel();
-    JCheckBox minEqMax = new JCheckBox();
-    JCheckBox ipr = new JCheckBox();
-    JCheckBox dual = new JCheckBox();
-    JCheckBox spiralStats = new JCheckBox();
-    JCheckBox symmStats = new JCheckBox();
-    JToggleButton symmetryFilterButton = new JToggleButton();
-    JButton symmetriesOkButton = new JButton();
-    JButton symmetriesAllButton = new JButton();
-    FlaggedJDialog symmetriesDialog = new FlaggedJDialog((Frame) null, "Fullgen - symmetry filter", true);
-    final String[] symmetry = new String[]{
+    private boolean embedderIsConstant = false;
+    private JPanel FullgenAtomsPanel = new JPanel();
+    private JLabel minAtomsLabel = new JLabel();
+    private JLabel maxAtomsLabel = new JLabel();
+    private EnhancedSlider minAtomsSlider = new EnhancedSlider();
+    private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
+    private JSeparator sep1 = new JSeparator(SwingConstants.HORIZONTAL);
+    private JPanel FullgenExtrasPanel = new JPanel();
+    private JCheckBox minEqMax = new JCheckBox();
+    private JCheckBox ipr = new JCheckBox();
+    private JCheckBox dual = new JCheckBox();
+    private JCheckBox spiralStats = new JCheckBox();
+    private JCheckBox symmStats = new JCheckBox();
+    private JToggleButton symmetryFilterButton = new JToggleButton();
+    private JButton symmetriesOkButton = new JButton();
+    private JButton symmetriesAllButton = new JButton();
+    private FlaggedJDialog symmetriesDialog = new FlaggedJDialog((Frame) null, "Fullgen - symmetry filter", true);
+    private final String[] symmetry = new String[]{
         "C1", "C2", "Ci", "Cs",
         "C3", "D2", "S4", "C2v",
         "C2h", "D3", "S6", "C3v",
@@ -72,11 +72,11 @@ public class FullgenPanel extends GeneratorPanel {
         "D5h", "D5d", "D6h", "D6d",
         "Td", "Th", "I", "Ih"
     };
-    final int symmetries = symmetry.length;
-    AbstractButton[] symmetryButton = new AbstractButton[symmetries];
-    boolean[] selectedSymmetry = new boolean[symmetries];
-    final int symmRows = 4;
-    int cases = 0, selectedSymmetries = 0;
+    private final int symmetries = symmetry.length;
+    private AbstractButton[] symmetryButton = new AbstractButton[symmetries];
+    private boolean[] selectedSymmetry = new boolean[symmetries];
+    private final int symmRows = 4;
+    private int cases = 0, selectedSymmetries = 0;
     
     private ActionListener actionListener = new ActionListener() {
 
