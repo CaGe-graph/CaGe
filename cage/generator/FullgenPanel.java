@@ -42,9 +42,10 @@ import lisken.uitoolbox.UItoolbox;
 
 public class FullgenPanel extends GeneratorPanel {
 
-    public static final int minAtoms = 20;
-    public static final int maxAtoms = 250;
-    private static final int defaultAtoms = 60;
+    public static final int MIN_ATOMS = 20;
+    public static final int MAX_ATOMS = 250;
+    private static final int DEFAULT_ATOMS = 60;
+    
     boolean embedderIsConstant = false;
     JPanel FullgenAtomsPanel = new JPanel();
     JLabel minAtomsLabel = new JLabel();
@@ -115,28 +116,28 @@ public class FullgenPanel extends GeneratorPanel {
         maxAtomsLabel.setText("maximum number of Atoms");
         maxAtomsLabel.setLabelFor(maxAtomsSlider.slider());
         maxAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_X);
-        minAtomsSlider.setMajorTickSpacing(maxAtoms - minAtoms);
+        minAtomsSlider.setMajorTickSpacing(MAX_ATOMS - MIN_ATOMS);
         minAtomsSlider.setSnapToTicks(true);
-        minAtomsSlider.setMinimum(minAtoms);
-        minAtomsSlider.setMaximum(maxAtoms);
-        minAtomsSlider.setMinorTickSpacing(2 - (maxAtoms - minAtoms) % 2);
+        minAtomsSlider.setMinimum(MIN_ATOMS);
+        minAtomsSlider.setMaximum(MAX_ATOMS);
+        minAtomsSlider.setMinorTickSpacing(2 - (MAX_ATOMS - MIN_ATOMS) % 2);
         minAtomsSlider.setPaintMinorTicks(false);
         minAtomsSlider.setPaintLabels(true);
         minAtomsSlider.setPaintTicks(true);
         minAtomsSlider.setSnapWhileDragging(minAtomsSlider.getMinorTickSpacing());
         minAtomsSlider.setClickScrollByBlock(false);
-        minAtomsSlider.setValue(defaultAtoms);
-        maxAtomsSlider.setMajorTickSpacing(maxAtoms - minAtoms);
+        minAtomsSlider.setValue(DEFAULT_ATOMS);
+        maxAtomsSlider.setMajorTickSpacing(MAX_ATOMS - MIN_ATOMS);
         maxAtomsSlider.setSnapToTicks(true);
-        maxAtomsSlider.setMinimum(minAtoms);
-        maxAtomsSlider.setMaximum(maxAtoms);
-        maxAtomsSlider.setMinorTickSpacing(2 - (maxAtoms - minAtoms) % 2);
+        maxAtomsSlider.setMinimum(MIN_ATOMS);
+        maxAtomsSlider.setMaximum(MAX_ATOMS);
+        maxAtomsSlider.setMinorTickSpacing(2 - (MAX_ATOMS - MIN_ATOMS) % 2);
         maxAtomsSlider.setPaintMinorTicks(false);
         maxAtomsSlider.setPaintLabels(true);
         maxAtomsSlider.setPaintTicks(true);
         maxAtomsSlider.setSnapWhileDragging(maxAtomsSlider.getMinorTickSpacing());
         maxAtomsSlider.setClickScrollByBlock(false);
-        maxAtomsSlider.setValue(defaultAtoms);
+        maxAtomsSlider.setValue(DEFAULT_ATOMS);
         minEqMax.setText("min = max");
         minEqMax.setSelected(true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
