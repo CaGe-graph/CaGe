@@ -60,11 +60,8 @@ public class FullgenPanel extends GeneratorPanel {
     private static final int SYMMETRIES_ROWS = 4;
     
     private boolean embedderIsConstant = false;
-    private JPanel FullgenAtomsPanel = new JPanel();
     private EnhancedSlider minAtomsSlider = new EnhancedSlider();
     private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
-    private JPanel FullgenExtrasPanel = new JPanel();
-    private JCheckBox minEqMax = new JCheckBox();
     private JCheckBox ipr = new JCheckBox();
     private JCheckBox dual = new JCheckBox();
     private JCheckBox spiralStats = new JCheckBox();
@@ -109,6 +106,28 @@ public class FullgenPanel extends GeneratorPanel {
     };
 
     public FullgenPanel() {
+        initGui();
+    }
+
+    private void initGui() {        
+        setLayout(new GridBagLayout());
+        add(buildAtomsSelectionPanel(),
+                new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+        add(new JSeparator(SwingConstants.HORIZONTAL),
+                new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(25, 0, 25, 0), 0, 0));
+        add(buildFullerenesExtrasPanel(),
+                new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+        
+        initSymmetriesDialog();
+    }
+
+    private JPanel buildAtomsSelectionPanel() {
         JLabel minAtomsLabel = new JLabel("minimum number of Atoms");
         minAtomsLabel.setLabelFor(minAtomsSlider.slider());
         minAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_N);
@@ -137,11 +156,36 @@ public class FullgenPanel extends GeneratorPanel {
         maxAtomsSlider.setSnapWhileDragging(maxAtomsSlider.getMinorTickSpacing());
         maxAtomsSlider.setClickScrollByBlock(false);
         maxAtomsSlider.setValue(DEFAULT_ATOMS);
-        minEqMax.setText("min = max");
+        JCheckBox minEqMax = new JCheckBox("min = max");
         minEqMax.setSelected(true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
         MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
-        FullgenAtomsPanel.setLayout(new GridBagLayout());
+        
+        JPanel atomsSelectionPanel = new JPanel(new GridBagLayout());
+        atomsSelectionPanel.add(minAtomsLabel,
+                new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.BOTH,
+                new Insets(0, 5, 5, 0), 0, 0));
+        atomsSelectionPanel.add(maxAtomsLabel,
+                new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.BOTH,
+                new Insets(0, 5, 5, 0), 0, 0));
+        atomsSelectionPanel.add(minAtomsSlider,
+                new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 20), 0, 0));
+        atomsSelectionPanel.add(maxAtomsSlider,
+                new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 20), 0, 0));
+        atomsSelectionPanel.add(minEqMax,
+                new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        return atomsSelectionPanel;
+    }
+
+    private JPanel buildFullerenesExtrasPanel() {
         ipr.setText("Isolated Pentagons (ipr)");
         ipr.setMnemonic(KeyEvent.VK_I);
         dual.setText("output Dual graph (triangulation)");
@@ -159,61 +203,28 @@ public class FullgenPanel extends GeneratorPanel {
                 symmetryFilterButton.getBorder(),
                 BorderFactory.createEmptyBorder(5, 0, 5, 0)));
         symmetryFilterButton.addActionListener(actionListener);
-        FullgenAtomsPanel.add(minAtomsLabel,
-                new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.BOTH,
-                new Insets(0, 5, 5, 0), 0, 0));
-        FullgenAtomsPanel.add(maxAtomsLabel,
-                new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.BOTH,
-                new Insets(0, 5, 5, 0), 0, 0));
-        FullgenAtomsPanel.add(minAtomsSlider,
-                new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 20), 0, 0));
-        FullgenAtomsPanel.add(maxAtomsSlider,
-                new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 20), 0, 0));
-        FullgenAtomsPanel.add(minEqMax,
-                new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0,
-                GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        FullgenExtrasPanel.setLayout(new GridBagLayout());
-        FullgenExtrasPanel.add(Box.createRigidArea(new Dimension(0, 0)),
-                new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-        FullgenExtrasPanel.add(ipr,
-                new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-        FullgenExtrasPanel.add(dual,
-                new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-        FullgenExtrasPanel.add(symmStats,
-                new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-        FullgenExtrasPanel.add(symmetryFilterButton,
-                new GridBagConstraints(3, 0, 1, 2, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        this.setLayout(new GridBagLayout());
-        this.add(FullgenAtomsPanel,
-                new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-        this.add(new JSeparator(SwingConstants.HORIZONTAL),
-                new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(25, 0, 25, 0), 0, 0));
-        this.add(FullgenExtrasPanel,
-                new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+        
+        JPanel fullerenesExtrasPanel = new JPanel(new GridBagLayout());
+        final GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+                                       GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                                       new Insets(0, 0, 0, 0), 0, 0);
+        fullerenesExtrasPanel.add(Box.createRigidArea(new Dimension(0, 0)), gbc);
+        gbc.gridx = 1;
+        fullerenesExtrasPanel.add(ipr, gbc);
+        gbc.gridy = 1;
+        fullerenesExtrasPanel.add(dual, gbc);
+        gbc.gridy = 2;
+        fullerenesExtrasPanel.add(symmStats, gbc);
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.gridheight = 2;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        fullerenesExtrasPanel.add(symmetryFilterButton, gbc);
+        return fullerenesExtrasPanel;
+    }
 
+    private void initSymmetriesDialog() {
         JPanel symmetriesContent = (JPanel) symmetriesDialog.getContentPane();
         symmetriesContent.setLayout(new BoxLayout(symmetriesContent, BoxLayout.Y_AXIS));
         JPanel symmetryButtonPanel = new JPanel();
