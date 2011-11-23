@@ -46,6 +46,19 @@ public class FullgenPanel extends GeneratorPanel {
     public static final int MAX_ATOMS = 250;
     private static final int DEFAULT_ATOMS = 60;
     
+    
+    private static final String[] SYMMETRY = new String[]{
+        "C1", "C2", "Ci", "Cs",
+        "C3", "D2", "S4", "C2v",
+        "C2h", "D3", "S6", "C3v",
+        "C3h", "D2h", "D2d", "D5",
+        "D6", "D3h", "D3d", "T",
+        "D5h", "D5d", "D6h", "D6d",
+        "Td", "Th", "I", "Ih"
+    };
+    private static final int SYMMETRIES_COUNT = SYMMETRY.length;
+    private static final int SYMMETRIES_ROWS = 4;
+    
     private boolean embedderIsConstant = false;
     private JPanel FullgenAtomsPanel = new JPanel();
     private JLabel minAtomsLabel = new JLabel();
@@ -63,19 +76,8 @@ public class FullgenPanel extends GeneratorPanel {
     private JButton symmetriesOkButton = new JButton();
     private JButton symmetriesAllButton = new JButton();
     private FlaggedJDialog symmetriesDialog = new FlaggedJDialog((Frame) null, "Fullgen - symmetry filter", true);
-    private final String[] symmetry = new String[]{
-        "C1", "C2", "Ci", "Cs",
-        "C3", "D2", "S4", "C2v",
-        "C2h", "D3", "S6", "C3v",
-        "C3h", "D2h", "D2d", "D5",
-        "D6", "D3h", "D3d", "T",
-        "D5h", "D5d", "D6h", "D6d",
-        "Td", "Th", "I", "Ih"
-    };
-    private final int symmetries = symmetry.length;
-    private AbstractButton[] symmetryButton = new AbstractButton[symmetries];
-    private boolean[] selectedSymmetry = new boolean[symmetries];
-    private final int symmRows = 4;
+    private AbstractButton[] symmetryButton = new AbstractButton[SYMMETRIES_COUNT];
+    private boolean[] selectedSymmetry = new boolean[SYMMETRIES_COUNT];
     private int selectedSymmetries = 0;
     
     private ActionListener actionListener = new ActionListener() {
@@ -92,18 +94,18 @@ public class FullgenPanel extends GeneratorPanel {
                     break;
                 case 'a':
                     boolean selected = actionCommand.charAt(1) == '+';
-                    for (int i = 0; i < symmetries; ++i) {
+                    for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
                         symmetryButton[i].setSelected(selected);
                     }
-                    selectedSymmetries = selected ? symmetries : 0;
+                    selectedSymmetries = selected ? SYMMETRIES_COUNT : 0;
                     symmetriesOkButton.setEnabled(selectedSymmetries > 0);
-                    symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
+                    symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
                     break;
                 case 's':
                     AbstractButton sb = (AbstractButton) e.getSource();
                     selectedSymmetries += sb.isSelected() ? +1 : -1;
                     symmetriesOkButton.setEnabled(selectedSymmetries > 0);
-                    symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
+                    symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
                     break;
             }
         }
@@ -218,12 +220,12 @@ public class FullgenPanel extends GeneratorPanel {
         JPanel symmetriesContent = (JPanel) symmetriesDialog.getContentPane();
         symmetriesContent.setLayout(new BoxLayout(symmetriesContent, BoxLayout.Y_AXIS));
         JPanel symmetryButtonPanel = new JPanel();
-        symmetryButtonPanel.setLayout(new GridLayout(symmRows, 0, 10, 10));
+        symmetryButtonPanel.setLayout(new GridLayout(SYMMETRIES_ROWS, 0, 10, 10));
         symmetryButtonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        int symmCols = (symmetries - 1) / symmRows + 1;
-        for (int i = 0; i < symmetries; ++i) {
-            int k = (i % symmCols) * symmRows + (i / symmCols);
-            symmetryButton[k] = new JToggleButton(symmetry[k]);
+        int symmCols = (SYMMETRIES_COUNT - 1) / SYMMETRIES_ROWS + 1;
+        for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
+            int k = (i % symmCols) * SYMMETRIES_ROWS + (i / symmCols);
+            symmetryButton[k] = new JToggleButton(SYMMETRY[k]);
             symmetryButton[k].setBorder(BorderFactory.createEmptyBorder(3, 7, 3, 7));
             PushButtonDecoration.decorate(symmetryButton[k], true);
             symmetryButton[k].setSelected(true);
@@ -232,7 +234,7 @@ public class FullgenPanel extends GeneratorPanel {
             symmetryButton[k].addActionListener(actionListener);
             symmetryButtonPanel.add(symmetryButton[k]);
         }
-        selectedSymmetries = symmetries;
+        selectedSymmetries = SYMMETRIES_COUNT;
         symmetriesContent.add(symmetryButtonPanel);
         JPanel symmetriesFinishPanel = new JPanel();
         symmetriesAllButton.setText("Set all");
@@ -261,24 +263,24 @@ public class FullgenPanel extends GeneratorPanel {
     }
 
     public void symmetryFilter() {
-        symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
+        symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
         symmetriesDialog.setSuccess(false);
         symmetriesAllButton.requestFocus();
         symmetriesDialog.setVisible(true);
         if (symmetriesDialog.getSuccess()) {
-            for (int i = 0; i < symmetries; ++i) {
+            for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
                 selectedSymmetry[i] = symmetryButton[i].isSelected();
             }
         } else {
             selectedSymmetries = 0;
-            for (int i = 0; i < symmetries; ++i) {
+            for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
                 symmetryButton[i].setSelected(selectedSymmetry[i]);
                 selectedSymmetries += selectedSymmetry[i] ? 1 : 0;
             }
         }
         symmetriesOkButton.setEnabled(selectedSymmetries > 0);
         // actually, selectedSymmetries is guaranteed to be positive
-        symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
+        symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
     }
 
     public GeneratorInfo getGeneratorInfo() {
@@ -306,12 +308,12 @@ public class FullgenPanel extends GeneratorPanel {
         if (symmStats.isSelected()) {
             command.add("symstat");
         }
-        if (selectedSymmetries < symmetries) {
-            for (int k = 0; k < symmetries; ++k) {
+        if (selectedSymmetries < SYMMETRIES_COUNT) {
+            for (int k = 0; k < SYMMETRIES_COUNT; ++k) {
                 if (selectedSymmetry[k]) {
                     command.add("symm");
-                    command.add(symmetry[k]);
-                    filename += "_" + symmetry[k];
+                    command.add(SYMMETRY[k]);
+                    filename += "_" + SYMMETRY[k];
                 }
             }
         }
