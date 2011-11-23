@@ -61,12 +61,6 @@ public class FullgenPanel extends GeneratorPanel {
     JToggleButton symmetryFilterButton = new JToggleButton();
     JButton symmetriesOkButton = new JButton();
     JButton symmetriesAllButton = new JButton();
-    /* --- "select cases" disabled ---
-    JToggleButton selectCasesButton = new JToggleButton();
-    ButtonGroup casesButtonGroup = new ButtonGroup();
-    AbstractButton[] caseButton = new AbstractButton[4];
-    FlaggedJDialog casesDialog = new FlaggedJDialog((Frame) null, "Fullgen - select cases", true);
-     */
     FlaggedJDialog symmetriesDialog = new FlaggedJDialog((Frame) null, "Fullgen - symmetry filter", true);
     final String[] symmetry = new String[]{
         "C1", "C2", "Ci", "Cs",
@@ -89,14 +83,6 @@ public class FullgenPanel extends GeneratorPanel {
         public void actionPerformed(ActionEvent e) {
             String actionCommand = e.getActionCommand();
             switch (actionCommand.charAt(0)) {
-                /* --- "select cases" disabled ---
-                case 'c':
-                selectCases();
-                break;
-                case 'd':
-                selectCasesButton.setSelected(actionCommand.charAt(1) != '0');
-                break;
-                 */
                 case 'D':
                     embedderIsConstant = false;
                     break;
@@ -173,16 +159,6 @@ public class FullgenPanel extends GeneratorPanel {
                 symmetryFilterButton.getBorder(),
                 BorderFactory.createEmptyBorder(5, 0, 5, 0)));
         symmetryFilterButton.addActionListener(actionListener);
-        /* --- "select cases" disabled ---
-        selectCasesButton.setText("Select Cases");
-        selectCasesButton.setMnemonic(KeyEvent.VK_C);
-        selectCasesButton.setActionCommand("c");
-        selectCasesButton.setBorder(BorderFactory.createCompoundBorder(
-        selectCasesButton.getBorder(),
-        BorderFactory.createEmptyBorder(5, 0, 5, 0)));
-        selectCasesButton.addActionListener(this);
-        selectCasesButton.setPreferredSize(symmetryFilterButton.getPreferredSize());
-         */
         FullgenAtomsPanel.add(minAtomsLabel,
                 new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.BOTH,
@@ -224,12 +200,6 @@ public class FullgenPanel extends GeneratorPanel {
                 new GridBagConstraints(3, 0, 1, 2, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        /* --- "select cases" disabled ---
-        FullgenExtrasPanel.add(selectCasesButton,
-        new GridBagConstraints(3, 2, 1, 2, 1.0, 1.0,
-        GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-        new Insets(0, 0, 0, 0), 0, 0));
-         */
         this.setLayout(new GridBagLayout());
         this.add(FullgenAtomsPanel,
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
@@ -287,55 +257,8 @@ public class FullgenPanel extends GeneratorPanel {
         symmetriesDialog.setDefaultButton(symmetriesOkButton);
         symmetriesDialog.setCancelButton(symmetriesCancelButton);
         symmetriesDialog.pack();
-
-    /* --- "select cases" disabled ---
-    JPanel casesContent = (JPanel) casesDialog.getContentPane();
-    casesContent.setLayout(new BoxLayout(casesContent, BoxLayout.Y_AXIS));
-    for (int i = 0; i <= 3; ++i)
-    {
-    caseButton[i] = new JRadioButton();
-    caseButton[i].setActionCommand("d" + i);
-    caseButton[i].addActionListener(this);
-    casesButtonGroup.add(caseButton[i]);
-    if (i == 0) {
-    caseButton[i].setText("All cases");
-    caseButton[i].setMnemonic(KeyEvent.VK_A);
-    } else {
-    caseButton[i].setText("case " + i);
-    caseButton[i].setMnemonic(KeyEvent.VK_0 + i);
-    }
-    casesContent.add(caseButton[i]);
-    casesContent.add(Box.createVerticalStrut(5));
-    }
-    JPanel casesFinishPanel = new JPanel();
-    JButton casesOkButton = new JButton("Ok");
-    casesFinishPanel.add(casesOkButton);
-    JButton casesCancelButton = new JButton("Cancel");
-    casesFinishPanel.add(casesCancelButton);
-    casesContent.add(Box.createVerticalStrut(5));
-    casesContent.add(casesFinishPanel);
-    casesContent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    casesDialog.setDefaultButton(casesOkButton);
-    casesDialog.setCancelButton(casesCancelButton);
-    casesDialog.pack();
-     */
     }
 
-    /* --- "select cases" disabled ---
-    public void selectCases()
-    {
-    selectCasesButton.setSelected(cases != 0);
-    casesDialog.setSuccess(false);
-    caseButton[cases].setSelected(true);
-    caseButton[cases].requestFocus();
-    casesDialog.show();
-    if (casesDialog.getSuccess()) {
-    cases = casesButtonGroup.getSelection().getActionCommand().charAt(1) - '0';
-    }
-    caseButton[cases].setSelected(true);
-    selectCasesButton.setSelected(cases != 0);
-    }
-     */
     public void symmetryFilter() {
         symmetryFilterButton.setSelected(selectedSymmetries < symmetries);
         symmetriesDialog.setSuccess(false);
@@ -376,13 +299,6 @@ public class FullgenPanel extends GeneratorPanel {
             command.add("ipr");
             filename += "_ipr";
         }
-        /* --- "select cases" disabled ---
-        if (cases != 0) {
-        command.addElement("case");
-        command.addElement(Integer.toString(cases));
-        filename += "_c" + cases;
-        }
-         */
         if (spiralStats.isSelected()) {
             command.add("spistat");
         }
