@@ -9,28 +9,44 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
 /**
  * An extension of <code>JDialog</code> that can be asked whether the dialog
  * was closed successfull or was canceled.
  */
-public class FlaggedJDialog extends JDialog implements ActionListener {
+public class FlaggedJDialog extends JDialog {
 
     private boolean success = false;
-    private AbstractButton cancelButton = null;
     protected Component nearComponent = null;
+    
+    private ActionListener cancelListener = new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            success = false;
+            setVisible(false);
+        }
+    };
+    
+    private ActionListener defaultButtonListener = new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            success = true;
+            setVisible(false);
+        }
+    };
 
     public FlaggedJDialog(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
-        getRootPane().registerKeyboardAction(this,
+        
+        //cancel when user presses escape
+        getRootPane().registerKeyboardAction(cancelListener,
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public void setDefaultButton(JButton defaultButton) {
-        defaultButton.addActionListener(this);
+        defaultButton.addActionListener(defaultButtonListener);
         getRootPane().setDefaultButton(defaultButton);
     }
 
@@ -39,22 +55,9 @@ public class FlaggedJDialog extends JDialog implements ActionListener {
     }
 
     public void setCancelButton(AbstractButton cancelButton) {
-        cancelButton.addActionListener(this);
-        this.cancelButton = cancelButton;
+        cancelButton.addActionListener(cancelListener);
     }
-
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (source instanceof JRootPane) {
-            if (cancelButton != null) {
-                cancelButton.doClick();
-            }
-        } else {
-            success = source != cancelButton;
-            setVisible(false);
-        }
-    }
-
+    
     public void setSuccess(boolean success) {
         this.success = success;
     }
@@ -67,6 +70,7 @@ public class FlaggedJDialog extends JDialog implements ActionListener {
         this.nearComponent = nearComponent;
     }
 
+    @Override
     public void setVisible(boolean visible) {
         if (visible && !isVisible()) {
             UItoolbox.moveComponentNearComponent(this, nearComponent);

@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -29,6 +30,14 @@ public class SaveDialog extends FlaggedJDialog {
     JTextField saveInfoField;
     JCheckBox includeInfoBox;
     FileFormatBox fileFormatBox = null;
+    
+    private ActionListener successListener = new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            setSuccess(true);
+            setVisible(false);
+        }
+    };
 
     public SaveDialog(String title) {
         this(null, title, false);
@@ -60,7 +69,7 @@ public class SaveDialog extends FlaggedJDialog {
         setContentPane(content);
         content.setLayout(new GridBagLayout());
         saveFilenameField = new JTextField(15);
-        saveFilenameField.addActionListener(this);
+        saveFilenameField.addActionListener(successListener);
         new JTextComponentFocusSelector(saveFilenameField);
         JLabel saveFilenameLabel = new JLabel("save in:");
         saveFilenameLabel.setLabelFor(saveFilenameField);
@@ -72,7 +81,7 @@ public class SaveDialog extends FlaggedJDialog {
                 font.getSize());
         saveFilenameLabel.setFont(font);
         saveInfoField = new JTextField(15);
-        saveInfoField.addActionListener(this);
+        saveInfoField.addActionListener(successListener);
         new JTextComponentFocusSelector(saveInfoField);
         infoLabel = new JLabel("info:");
         infoLabel.setFont(font);
@@ -128,7 +137,6 @@ public class SaveDialog extends FlaggedJDialog {
                 useInfo |= fileFormatBox.getCaGeWriter().usesInfo();
             }
             fileFormatBox.setSelectedIndex(index);
-            fileFormatBox.addActionListener(this);
             JLabel formatLabel = new JLabel("format:");
             formatLabel.setFont(font);
             formatLabel.setLabelFor(fileFormatBox);
@@ -158,15 +166,6 @@ public class SaveDialog extends FlaggedJDialog {
 
     public CaGeWriter getCaGeWriter() {
         return fileFormatBox.getCaGeWriter();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() instanceof JTextField) {
-            getDefaultButton().doClick();
-        } else if (e.getSource() != fileFormatBox) {
-            super.actionPerformed(e);
-        }
     }
 
     public void setFilename(String filename) {
