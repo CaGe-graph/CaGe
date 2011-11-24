@@ -111,20 +111,13 @@ public class FullgenPanel extends GeneratorPanel {
         initSymmetriesDialog();
     }
 
-    private void initGui() {        
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-                                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                                new Insets(0, 0, 0, 0), 0, 0);
-        add(buildAtomsSelectionPanel(), gbc);
-        
-        gbc.gridy++;
-        gbc.insets = new Insets(25, 0, 25, 0);
-        add(new JSeparator(SwingConstants.HORIZONTAL), gbc);
-        
-        gbc.gridy++;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        add(buildFullerenesExtrasPanel(), gbc);
+    private void initGui() {
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        add(buildAtomsSelectionPanel());
+        add(Box.createVerticalStrut(25));
+        add(new JSeparator(SwingConstants.HORIZONTAL));
+        add(Box.createVerticalStrut(25));
+        add(buildFullerenesExtrasPanel());
     }
 
     private JPanel buildAtomsSelectionPanel() {
