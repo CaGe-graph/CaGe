@@ -107,24 +107,24 @@ public class FullgenPanel extends GeneratorPanel {
 
     public FullgenPanel() {
         initGui();
+        
+        initSymmetriesDialog();
     }
 
     private void initGui() {        
         setLayout(new GridBagLayout());
-        add(buildAtomsSelectionPanel(),
-                new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-        add(new JSeparator(SwingConstants.HORIZONTAL),
-                new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(25, 0, 25, 0), 0, 0));
-        add(buildFullerenesExtrasPanel(),
-                new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+                                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                                new Insets(0, 0, 0, 0), 0, 0);
+        add(buildAtomsSelectionPanel(), gbc);
         
-        initSymmetriesDialog();
+        gbc.gridy++;
+        gbc.insets = new Insets(25, 0, 25, 0);
+        add(new JSeparator(SwingConstants.HORIZONTAL), gbc);
+        
+        gbc.gridy++;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        add(buildFullerenesExtrasPanel(), gbc);
     }
 
     private JPanel buildAtomsSelectionPanel() {
@@ -162,26 +162,32 @@ public class FullgenPanel extends GeneratorPanel {
         MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
         
         JPanel atomsSelectionPanel = new JPanel(new GridBagLayout());
-        atomsSelectionPanel.add(minAtomsLabel,
-                new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.BOTH,
-                new Insets(0, 5, 5, 0), 0, 0));
-        atomsSelectionPanel.add(maxAtomsLabel,
-                new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.BOTH,
-                new Insets(0, 5, 5, 0), 0, 0));
-        atomsSelectionPanel.add(minAtomsSlider,
-                new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 20), 0, 0));
-        atomsSelectionPanel.add(maxAtomsSlider,
-                new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 20), 0, 0));
-        atomsSelectionPanel.add(minEqMax,
-                new GridBagConstraints(2, 1, 1, 1, 0.001, 1.0,
-                GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 5, 5, 0), 0, 0);
+        atomsSelectionPanel.add(minAtomsLabel, gbc);
+        
+        gbc.gridx = 1;
+        atomsSelectionPanel.add(maxAtomsLabel, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 0, 20);
+        atomsSelectionPanel.add(minAtomsSlider, gbc);
+        
+        gbc.gridx = 1;
+        atomsSelectionPanel.add(maxAtomsSlider, gbc);
+        
+        gbc.gridx = 2;
+        gbc.weightx = 0.001;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        atomsSelectionPanel.add(minEqMax, gbc);
+        
         return atomsSelectionPanel;
     }
 
