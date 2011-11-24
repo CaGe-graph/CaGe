@@ -13,7 +13,7 @@ import javax.swing.KeyStroke;
 
 /**
  * An extension of <code>JDialog</code> that can be asked whether the dialog
- * was closed successfull or was canceled.
+ * was closed successful or was cancelled.
  */
 public class FlaggedJDialog extends JDialog {
 
