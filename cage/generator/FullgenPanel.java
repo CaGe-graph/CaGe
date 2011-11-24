@@ -8,10 +8,8 @@ import cage.StaticGeneratorInfo;
 import cage.ValencyElementRule;
 
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,11 +17,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,11 +29,11 @@ import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.FlaggedJDialog;
 import lisken.uitoolbox.MinMaxRestrictor;
-import lisken.uitoolbox.PushButtonDecoration;
 import lisken.uitoolbox.UItoolbox;
 
 public class FullgenPanel extends GeneratorPanel {
@@ -45,19 +41,6 @@ public class FullgenPanel extends GeneratorPanel {
     public static final int MIN_ATOMS = 20;
     public static final int MAX_ATOMS = 250;
     private static final int DEFAULT_ATOMS = 60;
-    
-    
-    private static final String[] SYMMETRY = new String[]{
-        "C1", "C2", "Ci", "Cs",
-        "C3", "D2", "S4", "C2v",
-        "C2h", "D3", "S6", "C3v",
-        "C3h", "D2h", "D2d", "D5",
-        "D6", "D3h", "D3d", "T",
-        "D5h", "D5d", "D6h", "D6d",
-        "Td", "Th", "I", "Ih"
-    };
-    private static final int SYMMETRIES_COUNT = SYMMETRY.length;
-    private static final int SYMMETRIES_ROWS = 4;
     
     private boolean embedderIsConstant = false;
     private EnhancedSlider minAtomsSlider = new EnhancedSlider();
@@ -67,48 +50,18 @@ public class FullgenPanel extends GeneratorPanel {
     private JCheckBox spiralStats = new JCheckBox();
     private JCheckBox symmStats = new JCheckBox();
     private JToggleButton symmetryFilterButton = new JToggleButton();
-    private JButton symmetriesOkButton = new JButton();
-    private JButton symmetriesAllButton = new JButton();
-    private FlaggedJDialog symmetriesDialog = new FlaggedJDialog((Frame) null, "Fullgen - symmetry filter", true);
-    private AbstractButton[] symmetryButton = new AbstractButton[SYMMETRIES_COUNT];
-    private boolean[] selectedSymmetry = new boolean[SYMMETRIES_COUNT];
-    private int selectedSymmetries = 0;
     
-    private ActionListener actionListener = new ActionListener() {
-
-
-        public void actionPerformed(ActionEvent e) {
-            String actionCommand = e.getActionCommand();
-            switch (actionCommand.charAt(0)) {
-                case 'D':
-                    embedderIsConstant = false;
-                    break;
-                case 'F':
-                    symmetryFilter();
-                    break;
-                case 'a':
-                    boolean selected = actionCommand.charAt(1) == '+';
-                    for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
-                        symmetryButton[i].setSelected(selected);
-                    }
-                    selectedSymmetries = selected ? SYMMETRIES_COUNT : 0;
-                    symmetriesOkButton.setEnabled(selectedSymmetries > 0);
-                    symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
-                    break;
-                case 's':
-                    AbstractButton sb = (AbstractButton) e.getSource();
-                    selectedSymmetries += sb.isSelected() ? +1 : -1;
-                    symmetriesOkButton.setEnabled(selectedSymmetries > 0);
-                    symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
-                    break;
-            }
-        }
-    };
+    private SymmetriesDialog symmetriesDialog = new SymmetriesDialog(null, "Fullerenes - symmetry filter", true);
 
     public FullgenPanel() {
         initGui();
         
-        initSymmetriesDialog();
+        symmetriesDialog.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+                symmetryFilterButton.setSelected(!symmetriesDialog.areAllSymmetriesSelected());
+            }
+        });
     }
 
     private void initGui() {
@@ -190,7 +143,12 @@ public class FullgenPanel extends GeneratorPanel {
         dual.setText("output Dual graph (triangulation)");
         dual.setMnemonic(KeyEvent.VK_D);
         dual.setActionCommand("Dual");
-        dual.addActionListener(actionListener);
+        dual.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //TODO: is this needed? Strange that the state of the check box is not looked up
+                embedderIsConstant = false;
+            }
+        });
         spiralStats.setText("Spiral Statistics");
         spiralStats.setMnemonic(KeyEvent.VK_P);
         symmStats.setText("Symmetry Statistics");
@@ -201,7 +159,12 @@ public class FullgenPanel extends GeneratorPanel {
         symmetryFilterButton.setBorder(BorderFactory.createCompoundBorder(
                 symmetryFilterButton.getBorder(),
                 BorderFactory.createEmptyBorder(5, 0, 5, 0)));
-        symmetryFilterButton.addActionListener(actionListener);
+        symmetryFilterButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                showSymmetryFilterDialog();
+            }
+        });
         
         JPanel fullerenesExtrasPanel = new JPanel(new GridBagLayout());
         final GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
@@ -223,71 +186,9 @@ public class FullgenPanel extends GeneratorPanel {
         return fullerenesExtrasPanel;
     }
 
-    private void initSymmetriesDialog() {
-        JPanel symmetriesContent = (JPanel) symmetriesDialog.getContentPane();
-        symmetriesContent.setLayout(new BoxLayout(symmetriesContent, BoxLayout.Y_AXIS));
-        JPanel symmetryButtonPanel = new JPanel();
-        symmetryButtonPanel.setLayout(new GridLayout(SYMMETRIES_ROWS, 0, 10, 10));
-        symmetryButtonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        int symmCols = (SYMMETRIES_COUNT - 1) / SYMMETRIES_ROWS + 1;
-        for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
-            int k = (i % symmCols) * SYMMETRIES_ROWS + (i / symmCols);
-            symmetryButton[k] = new JToggleButton(SYMMETRY[k]);
-            symmetryButton[k].setBorder(BorderFactory.createEmptyBorder(3, 7, 3, 7));
-            PushButtonDecoration.decorate(symmetryButton[k], true);
-            symmetryButton[k].setSelected(true);
-            selectedSymmetry[k] = true;
-            symmetryButton[k].setActionCommand("s");
-            symmetryButton[k].addActionListener(actionListener);
-            symmetryButtonPanel.add(symmetryButton[k]);
-        }
-        selectedSymmetries = SYMMETRIES_COUNT;
-        symmetriesContent.add(symmetryButtonPanel);
-        JPanel symmetriesFinishPanel = new JPanel();
-        symmetriesAllButton.setText("Set all");
-        symmetriesAllButton.setMnemonic(KeyEvent.VK_S);
-        symmetriesAllButton.setActionCommand("a+");
-        symmetriesAllButton.addActionListener(actionListener);
-        symmetriesFinishPanel.add(symmetriesAllButton);
-        JButton symmetriesNoneButton = new JButton("Clear all");
-        symmetriesNoneButton.setMnemonic(KeyEvent.VK_C);
-        symmetriesNoneButton.setActionCommand("a-");
-        symmetriesNoneButton.addActionListener(actionListener);
-        symmetriesFinishPanel.add(Box.createHorizontalStrut(5));
-        symmetriesFinishPanel.add(symmetriesNoneButton);
-        symmetriesOkButton.setText("Ok");
-        symmetriesFinishPanel.add(Box.createHorizontalStrut(5));
-        symmetriesFinishPanel.add(symmetriesOkButton);
-        JButton symmetriesCancelButton = new JButton("Cancel");
-        symmetriesFinishPanel.add(Box.createHorizontalStrut(5));
-        symmetriesFinishPanel.add(symmetriesCancelButton);
-        symmetriesContent.add(Box.createVerticalStrut(10));
-        symmetriesContent.add(symmetriesFinishPanel);
-        symmetriesContent.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        symmetriesDialog.setDefaultButton(symmetriesOkButton);
-        symmetriesDialog.setCancelButton(symmetriesCancelButton);
-        symmetriesDialog.pack();
-    }
-
-    public void symmetryFilter() {
-        symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
-        symmetriesDialog.setSuccess(false);
-        symmetriesAllButton.requestFocus();
+    private void showSymmetryFilterDialog() {
+        symmetryFilterButton.setSelected(!symmetriesDialog.areAllSymmetriesSelected());
         symmetriesDialog.setVisible(true);
-        if (symmetriesDialog.getSuccess()) {
-            for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
-                selectedSymmetry[i] = symmetryButton[i].isSelected();
-            }
-        } else {
-            selectedSymmetries = 0;
-            for (int i = 0; i < SYMMETRIES_COUNT; ++i) {
-                symmetryButton[i].setSelected(selectedSymmetry[i]);
-                selectedSymmetries += selectedSymmetry[i] ? 1 : 0;
-            }
-        }
-        symmetriesOkButton.setEnabled(selectedSymmetries > 0);
-        // actually, selectedSymmetries is guaranteed to be positive
-        symmetryFilterButton.setSelected(selectedSymmetries < SYMMETRIES_COUNT);
     }
 
     public GeneratorInfo getGeneratorInfo() {
@@ -315,13 +216,11 @@ public class FullgenPanel extends GeneratorPanel {
         if (symmStats.isSelected()) {
             command.add("symstat");
         }
-        if (selectedSymmetries < SYMMETRIES_COUNT) {
-            for (int k = 0; k < SYMMETRIES_COUNT; ++k) {
-                if (selectedSymmetry[k]) {
-                    command.add("symm");
-                    command.add(SYMMETRY[k]);
-                    filename += "_" + SYMMETRY[k];
-                }
+        if (!symmetriesDialog.areAllSymmetriesSelected()) {
+            for (String symmetry : symmetriesDialog.getSelectedSymmetries()) {
+                command.add("symm");
+                command.add(symmetry);
+                filename += "_" + symmetry;
             }
         }
         command.add("code");
