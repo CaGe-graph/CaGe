@@ -170,14 +170,14 @@ public class FullgenPanel extends GeneratorPanel {
         fullerenesExtrasPanel.add(Box.createRigidArea(new Dimension(0, 0)), gbc);
         gbc.gridx = 1;
         fullerenesExtrasPanel.add(ipr, gbc);
-        gbc.gridy = 1;
+        gbc.gridy++;
         fullerenesExtrasPanel.add(dual, gbc);
-        gbc.gridy = 2;
+        gbc.gridy++;
         fullerenesExtrasPanel.add(symmStats, gbc);
         gbc.gridx = 3;
         gbc.gridy = 0;
-        gbc.gridheight = 2;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.gridheight = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
         fullerenesExtrasPanel.add(symmetryFilterButton, gbc);
         return fullerenesExtrasPanel;
