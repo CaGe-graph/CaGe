@@ -1,7 +1,5 @@
 package lisken.uitoolbox;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BoundedRangeModel;
 import javax.swing.ButtonModel;
 import javax.swing.event.ChangeEvent;
@@ -29,9 +27,9 @@ public class MinMaxRestrictor {
         }
     };
     
-    private ActionListener actionListener = new ActionListener() {
+    private ChangeListener buttonChangeListener = new ChangeListener() {
 
-        public void actionPerformed(ActionEvent e) {
+        public void stateChanged(ChangeEvent e) {
             equality = ((ButtonModel) e.getSource()).isSelected();
             enforceConstraints(lastChangedModel, false);
         }
@@ -65,7 +63,7 @@ public class MinMaxRestrictor {
         maxModel.addChangeListener(changeListener);
         if (equalityButton != null) {
             equality = equalityButton.isSelected();
-            equalityButton.addActionListener(actionListener);
+            equalityButton.addChangeListener(buttonChangeListener);
         }
         enforceConstraints(maxModel, false);
         mayVeto = veto;
