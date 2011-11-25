@@ -156,9 +156,6 @@ public class FullgenPanel extends GeneratorPanel {
         symmetryFilterButton.setText("Symmetry Filter");
         symmetryFilterButton.setMnemonic(KeyEvent.VK_F);
         symmetryFilterButton.setActionCommand("F");
-        symmetryFilterButton.setBorder(BorderFactory.createCompoundBorder(
-                symmetryFilterButton.getBorder(),
-                BorderFactory.createEmptyBorder(5, 0, 5, 0)));
         symmetryFilterButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
