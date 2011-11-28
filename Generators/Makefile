@@ -9,7 +9,7 @@ CFLAGS=-O4
 SUFFIX=
 
 
-all: generators embedders others clean
+all: generators embedders others tools clean
 
 
 generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
