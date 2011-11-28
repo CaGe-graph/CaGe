@@ -13,13 +13,24 @@ import javax.swing.event.ChangeListener;
  *
  * @author nvcleemp
  */
-public abstract class CombinedGeneratorPanel extends GeneratorPanel implements ChangeListener {
+public abstract class CombinedGeneratorPanel extends GeneratorPanel {
 
     protected JTabbedPane pane = new JTabbedPane();
     private boolean notShown = true; //set to false when this panel is shown for the first time
+    
+    private ChangeListener tabbedPaneListener = new ChangeListener() {
+
+        public void stateChanged(ChangeEvent e) {
+            //this object should only listen to pane
+            if(!notShown && e.getSource().equals(pane)){
+                getNextButton().setEnabled(true); //TODO: provide method for this in GeneratorPanel
+                ((GeneratorPanel) pane.getSelectedComponent()).showing();
+            }
+        }
+    };
 
     public CombinedGeneratorPanel() {
-        pane.addChangeListener(this);
+        pane.addChangeListener(tabbedPaneListener);
         setLayout(new GridLayout(1,1));
     }
 
@@ -105,15 +116,5 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
         else
             return null;
     }
-
-    public void stateChanged(ChangeEvent e) {
-        //this object should only listen to its own tabbed pane
-        if(!notShown && e.getSource().equals(pane)){
-            getNextButton().setEnabled(true); //TODO: provide method for this in GeneratorPanel
-            ((GeneratorPanel) pane.getSelectedComponent()).showing();
-        }
-    }
-
-
-
+    
 }
