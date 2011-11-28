@@ -1,5 +1,6 @@
 package cage;
 
+import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
@@ -19,6 +20,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel implements C
 
     public CombinedGeneratorPanel() {
         pane.addChangeListener(this);
+        setLayout(new GridLayout(1,1));
     }
 
     /**
