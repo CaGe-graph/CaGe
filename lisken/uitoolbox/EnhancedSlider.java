@@ -51,6 +51,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     public EnhancedSlider(int orientation, int min, int max, int value, boolean debug) {
         slider = new JSlider(orientation, min, max, value) {
 
+            @Override
             public void setValue(int n) {
                 if (snapping) {
                     super.setValue(snappedValue);
@@ -140,6 +141,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         this.sizeFactor = sizeFactor;
     }
 
+    @Override
     public Dimension getPreferredSize() {
         int extraSpace;
         switch (getOrientation()) {
@@ -157,10 +159,12 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         return slider;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         slider.setEnabled(enabled);
     }
 
+    @Override
     public boolean isEnabled() {
         return slider.isEnabled();
     }
@@ -296,14 +300,17 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         slider.setPaintLabels(b);
     }
 
+    @Override
     public AccessibleContext getAccessibleContext() {
         return slider.getAccessibleContext();
     }
 
+    @Override
     public final LayoutManager getLayout() {
         return null;
     }
 
+    @Override
     public final void setLayout(LayoutManager mgr) {
     }
 
@@ -361,16 +368,19 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             return thumbRect;
         }
 
+        @Override
         protected void calculateTrackRect() {
             super.calculateTrackRect();
             adjustValueLabelLocation();
         }
 
+        @Override
         protected void calculateThumbLocation() {
             super.calculateThumbLocation();
             adjustValueLabelLocation();
         }
 
+        @Override
         public void setThumbLocation(int x, int y) {
             int snap = enhancedSlider.getSnapWhileDragging();
             if (snap != 0) {
@@ -410,12 +420,14 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             return ((2 * nom + denom * gran) / (denom * 2 * gran)) * gran;
         }
 
+        @Override
         protected void paintMinorTickForHorizSlider(Graphics g, Rectangle tickBounds, int x) {
             if (enhancedSlider.getPaintMinorTicks()) {
                 super.paintMinorTickForHorizSlider(g, tickBounds, x);
             }
         }
 
+        @Override
         protected void paintMinorTickForVertSlider(Graphics g, Rectangle tickBounds, int y) {
             if (enhancedSlider.getPaintMinorTicks()) {
                 super.paintMinorTickForVertSlider(g, tickBounds, y);
@@ -434,10 +446,12 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             }
         }
 
+        @Override
         public void scrollByUnit(int direction) {
             scrollBy(epsilon(), direction);
         }
 
+        @Override
         public void scrollByBlock(int direction) {
             scrollBy(
                     roundIntFraction(
@@ -446,6 +460,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
                     direction);
         }
 
+        @Override
         protected void scrollDueToClickInTrack(int direction) {
             if (enhancedSlider.getClickScrollByBlock()) {
                 scrollByBlock(direction);
@@ -485,18 +500,22 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             setForeground(Color.black);
         }
 
+        @Override
         public void setLocation(Point p) {
             setBounds(p.x, p.y, this.getWidth(), this.getHeight());
         }
 
+        @Override
         public void setLocation(int x, int y) {
             setBounds(x, y, this.getWidth(), this.getHeight());
         }
 
+        @Override
         public void setBounds(Rectangle r) {
             setBounds(r.x, r.y, r.width, r.height);
         }
 
+        @Override
         public void setBounds(int x, int y, int newWidth, int newHeight) {
             if (slider == null) {
                 if (debug) {
@@ -508,11 +527,13 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             }
         }
 
+        @Override
         public void setSize(Dimension d) {
             Point p = this.getLocation();
             setBounds(p.x, p.y, d.width, d.height);
         }
 
+        @Override
         public void setSize(int newWidth, int newHeight) {
             Point p = this.getLocation();
             setBounds(p.x, p.y, newWidth, newHeight);
@@ -548,6 +569,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             }
         }
 
+        @Override
         public void setFont(Font font) {
             super.setFont(font);
             calculateSize();
@@ -570,15 +592,18 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             setSize(width, height);
         }
 
+        @Override
         public void setText(String text) {
             super.setText(text);
             adjustSize();
         }
 
+        @Override
         public Dimension getMinimumSize() {
             return new Dimension(width, height);
         }
 
+        @Override
         public Dimension getPreferredSize() {
             return new Dimension(width, height);
         }
