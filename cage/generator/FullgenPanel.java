@@ -7,6 +7,7 @@ import cage.GeneratorPanel;
 import cage.StaticGeneratorInfo;
 import cage.ValencyElementRule;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,32 +27,44 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
 import lisken.uitoolbox.MinMaxRestrictor;
+import lisken.uitoolbox.RevealableComponent;
 import lisken.uitoolbox.UItoolbox;
 
 public class FullgenPanel extends GeneratorPanel {
 
     public static final int MIN_ATOMS = 20;
     public static final int MAX_ATOMS = 250;
+    public static final int ATLAS_ORDER_MAX_ATOMS = 100;
     private static final int DEFAULT_ATOMS = 60;
     
     private boolean embedderIsConstant = false;
     private EnhancedSlider minAtomsSlider = new EnhancedSlider();
     private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
-    private JCheckBox ipr = new JCheckBox();
-    private JCheckBox dual = new JCheckBox();
-    private JCheckBox spiralStats = new JCheckBox();
-    private JCheckBox symmStats = new JCheckBox();
-    private JToggleButton symmetryFilterButton = new JToggleButton();
+    private JCheckBox minEqMax;
+    private JCheckBox ipr;
+    private JCheckBox dual;
+    private JCheckBox spiralStats;
+    private JCheckBox symmStats;
+    private JCheckBox atlasOrder;
+    private JToggleButton symmetryFilterButton;
     
     private SymmetriesDialog symmetriesDialog = new SymmetriesDialog(null, "Fullerenes - symmetry filter", true);
+    
+    private ChangeListener sliderListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+            getNextButton().setEnabled(isValidConfiguration());
+        }
+    };
 
     public FullgenPanel() {
         initGui();
@@ -59,7 +72,24 @@ public class FullgenPanel extends GeneratorPanel {
         symmetriesDialog.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
-                symmetryFilterButton.setSelected(!symmetriesDialog.areAllSymmetriesSelected());
+                if(symmetriesDialog.areAllSymmetriesSelected()){
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            atlasOrder.setEnabled(true);
+                            symmetryFilterButton.setSelected(false);
+                            atlasOrder.setText("Atlas order");
+                        }
+                    });
+                } else {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            atlasOrder.setEnabled(false);
+                            atlasOrder.setSelected(false);
+                            symmetryFilterButton.setSelected(false);
+                            atlasOrder.setText("Atlas order (Remove symmetry restrictions to enable)");
+                        }
+                    });
+                }
             }
         });
     }
@@ -80,32 +110,39 @@ public class FullgenPanel extends GeneratorPanel {
         JLabel maxAtomsLabel = new JLabel("maximum number of Atoms");
         maxAtomsLabel.setLabelFor(maxAtomsSlider.slider());
         maxAtomsLabel.setDisplayedMnemonic(KeyEvent.VK_X);
-        minAtomsSlider.setMajorTickSpacing(MAX_ATOMS - MIN_ATOMS);
+        
         minAtomsSlider.setSnapToTicks(true);
-        minAtomsSlider.setMinimum(MIN_ATOMS);
-        minAtomsSlider.setMaximum(MAX_ATOMS);
-        minAtomsSlider.setMinorTickSpacing(2 - (MAX_ATOMS - MIN_ATOMS) % 2);
         minAtomsSlider.setPaintMinorTicks(false);
         minAtomsSlider.setPaintLabels(true);
         minAtomsSlider.setPaintTicks(true);
-        minAtomsSlider.setSnapWhileDragging(minAtomsSlider.getMinorTickSpacing());
         minAtomsSlider.setClickScrollByBlock(false);
+        configureSliderBounds(minAtomsSlider, MIN_ATOMS, MAX_ATOMS);
         minAtomsSlider.setValue(DEFAULT_ATOMS);
-        maxAtomsSlider.setMajorTickSpacing(MAX_ATOMS - MIN_ATOMS);
+        minAtomsSlider.addChangeListener(sliderListener);
+        
         maxAtomsSlider.setSnapToTicks(true);
-        maxAtomsSlider.setMinimum(MIN_ATOMS);
-        maxAtomsSlider.setMaximum(MAX_ATOMS);
-        maxAtomsSlider.setMinorTickSpacing(2 - (MAX_ATOMS - MIN_ATOMS) % 2);
         maxAtomsSlider.setPaintMinorTicks(false);
         maxAtomsSlider.setPaintLabels(true);
         maxAtomsSlider.setPaintTicks(true);
-        maxAtomsSlider.setSnapWhileDragging(maxAtomsSlider.getMinorTickSpacing());
         maxAtomsSlider.setClickScrollByBlock(false);
+        configureSliderBounds(maxAtomsSlider, MIN_ATOMS, MAX_ATOMS);
         maxAtomsSlider.setValue(DEFAULT_ATOMS);
-        JCheckBox minEqMax = new JCheckBox("min = max");
-        minEqMax.setSelected(true);
+        maxAtomsSlider.addChangeListener(sliderListener);
+        
+        minEqMax = new JCheckBox("min = max", true);
         minEqMax.setMnemonic(KeyEvent.VK_M);
         MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
+        minEqMax.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if(!minEqMax.isSelected()){
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            atlasOrder.setSelected(false);
+                        }
+                    });
+                }
+            }
+        });
         
         JPanel atomsSelectionPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -136,11 +173,25 @@ public class FullgenPanel extends GeneratorPanel {
         
         return atomsSelectionPanel;
     }
+    
+    /*
+     * Utility method to set the bounds of a slider
+     */
+    private void configureSliderBounds(EnhancedSlider slider, int minimum, int maximum){
+        slider.setMajorTickSpacing(maximum - minimum);
+        slider.setMinimum(minimum);
+        slider.setMaximum(maximum);
+        slider.setMinorTickSpacing(2 - (maximum - minimum) % 2);
+        slider.setSnapWhileDragging(slider.getMinorTickSpacing());
+    }
 
     private JPanel buildFullerenesExtrasPanel() {
-        ipr.setText("Isolated Pentagons (ipr)");
+        //only generate IPR fullerenes or not?
+        ipr = new JCheckBox("Isolated Pentagons (ipr)");
         ipr.setMnemonic(KeyEvent.VK_I);
-        dual.setText("output Dual graph (triangulation)");
+        
+        //output the dual graphs?
+        dual = new JCheckBox("output Dual graph (triangulation)");
         dual.setMnemonic(KeyEvent.VK_D);
         dual.setActionCommand("Dual");
         dual.addActionListener(new ActionListener() {
@@ -149,13 +200,71 @@ public class FullgenPanel extends GeneratorPanel {
                 embedderIsConstant = false;
             }
         });
-        spiralStats.setText("Spiral Statistics");
+        dual.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if(dual.isSelected()){
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            atlasOrder.setSelected(false);
+                        }
+                    });
+                }
+            }
+        });
+        
+        //output spiral statistics?
+        spiralStats = new JCheckBox("Spiral Statistics");
         spiralStats.setMnemonic(KeyEvent.VK_P);
-        symmStats.setText("Symmetry Statistics");
+        
+        //output symmetry statistics?
+        symmStats = new JCheckBox("Symmetry Statistics");
         symmStats.setMnemonic(KeyEvent.VK_Y);
-        symmetryFilterButton.setText("Symmetry Filter");
+        
+        //output graphs in atlas order
+        atlasOrder = new JCheckBox("Atlas order");
+        atlasOrder.setMnemonic(KeyEvent.VK_A);
+        
+        //warning to show when atlas order is chosen
+        JTextArea warningText = new JTextArea("Warning: when fullerenes need to be output in atlas order, " +
+                                            "the generator will first generate all fullerenes and then " +
+                                            "sort them. This might take some time. Therefore this option " +
+                                            "is only available for up to 100 vertices.");
+        warningText.setWrapStyleWord(true);
+        warningText.setLineWrap(true);
+        warningText.setEnabled(false);
+        warningText.setDisabledTextColor(Color.RED);
+        final RevealableComponent<JTextArea> warningField = new RevealableComponent<JTextArea>(warningText, false);
+        warningText.setBackground(warningField.getBackground());
+        
+        //impose some restrictions when atlas order is chosen
+        atlasOrder.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if(atlasOrder.isSelected()){
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            minEqMax.setSelected(true);
+                            dual.setSelected(false);
+                            symmetryFilterButton.setEnabled(false);
+                            warningField.setRevealed(true);
+                            getNextButton().setEnabled(isValidConfiguration());
+                            repaint();
+                        }
+                    });
+                } else {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            symmetryFilterButton.setEnabled(true);
+                            warningField.setRevealed(false);
+                            getNextButton().setEnabled(isValidConfiguration());
+                            repaint();
+                        }
+                    });
+                }
+            }
+        });
+        
+        symmetryFilterButton = new JToggleButton("Symmetry Filter");
         symmetryFilterButton.setMnemonic(KeyEvent.VK_F);
-        symmetryFilterButton.setActionCommand("F");
         symmetryFilterButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -174,18 +283,31 @@ public class FullgenPanel extends GeneratorPanel {
         fullerenesExtrasPanel.add(dual, gbc);
         gbc.gridy++;
         fullerenesExtrasPanel.add(symmStats, gbc);
+        gbc.gridy++;
+        fullerenesExtrasPanel.add(atlasOrder, gbc);
         gbc.gridx = 3;
+        gbc.gridheight = gbc.gridy + 1;
         gbc.gridy = 0;
-        gbc.gridheight = 3;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
         fullerenesExtrasPanel.add(symmetryFilterButton, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = gbc.gridheight;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 4;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 0, 0);
+        fullerenesExtrasPanel.add(warningField, gbc);
         return fullerenesExtrasPanel;
     }
 
     private void showSymmetryFilterDialog() {
         symmetryFilterButton.setSelected(!symmetriesDialog.areAllSymmetriesSelected());
         symmetriesDialog.setVisible(true);
+    }
+    
+    private boolean isValidConfiguration() {
+        return atlasOrder.isSelected() != (minAtomsSlider.getValue() > 100);
     }
 
     public GeneratorInfo getGeneratorInfo() {
@@ -224,13 +346,30 @@ public class FullgenPanel extends GeneratorPanel {
         if (dual.isSelected()) {
             command.add("7");
         } else {
-            command.add("1");
+            if(atlasOrder.isSelected()){
+                command.add("3");
+                command.add("list");
+                if(min<=90){
+                    command.add("100000");
+                } else {
+                    command.add("285914");
+                }
+            } else {
+                command.add("1");
+            }
         }
         command.add("stdout");
         command.add("logerr");
 
-        String[][] generator = new String[1][command.size()];
-        generator[0] = command.toArray(generator[0]);
+        String[][] generator;
+        if(atlasOrder.isSelected()){
+            generator = new String[2][command.size()];
+            generator[0] = command.toArray(generator[0]);
+            generator[1] = new String[]{"short_spiral_to_pl"};
+        } else {
+            generator = new String[1][command.size()];
+            generator[0] = command.toArray(generator[0]);
+        }
 
         String[][] embed2D = {{"embed"}};
         String[][] embed3D;
