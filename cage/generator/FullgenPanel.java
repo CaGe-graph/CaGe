@@ -308,7 +308,7 @@ public class FullgenPanel extends GeneratorPanel {
     }
     
     private boolean isValidConfiguration() {
-        return atlasOrder.isSelected() != (minAtomsSlider.getValue() > 100);
+        return !atlasOrder.isSelected() || (minAtomsSlider.getValue() <= 100);
     }
 
     public GeneratorInfo getGeneratorInfo() {
