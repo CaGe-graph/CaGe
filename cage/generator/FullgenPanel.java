@@ -225,10 +225,11 @@ public class FullgenPanel extends GeneratorPanel {
         atlasOrder.setMnemonic(KeyEvent.VK_A);
         
         //warning to show when atlas order is chosen
-        JTextArea warningText = new JTextArea("Warning: when fullerenes need to be output in atlas order, " +
+        JTextArea warningText = new JTextArea("Warning: when fullerenes need to be output in Atlas order, " +
                                             "the generator will first generate all fullerenes and then " +
-                                            "sort them. This might take some time. Therefore this option " +
-                                            "is only available for up to 100 vertices.");
+                                            "sort them. This might take some time.\n" +
+                                            "As the Atlas only gives lists for up to 100 vertices, this option " +
+                                            "is only available for this range.");
         warningText.setWrapStyleWord(true);
         warningText.setLineWrap(true);
         warningText.setEnabled(false);
