@@ -67,26 +67,6 @@ void processStructure(PATCH *patch, SHELL *shell) {
     }
 }
 
-boolean validateStructure(PATCH *patch) {
-    int i;
-    int symmetric;
-    if (symmetric) {
-        //first check all other break-edges in clockwise direction
-        for (i = 1; i < 6 - patch->numberOfPentagons; i++) {
-
-        }
-        if (!mirror) {
-            //check all break-edges in counterclockwise direction
-
-        }
-    } else if (!mirror) {
-        //only one other spiral needs to be investigated
-
-    } //there are no ther cases: a nearsymmetric patch is always canonical
-      //if mirror images are considered nonisomorphic
-    return 1;
-}
-
 void start5PentagonsCone(PATCH *patch, int sside, boolean mirror,
         FRAGMENT *currentFragment, SHELL *currentShell) {
     FRAGMENT *current = addNewFragment(currentFragment);
