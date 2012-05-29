@@ -4,6 +4,7 @@
 # include <jni.h>
 
 # include "graph.h"
+# include <stdlib.h>
 
 
 /*

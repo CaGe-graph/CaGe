@@ -11,7 +11,7 @@
 
 # include <string.h>
 # include <errno.h>
-
+# include <stdlib.h>
 
 /*
    This macro takes an lvalue of type jlong and converts it
