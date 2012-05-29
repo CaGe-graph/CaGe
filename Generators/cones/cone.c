@@ -67,6 +67,10 @@ void processStructure(PATCH *patch, SHELL *shell) {
     }
 }
 
+boolean validateStructure(PATCH *patch) {
+    return TRUE;
+}
+
 void start5PentagonsCone(PATCH *patch, int sside, boolean mirror,
         FRAGMENT *currentFragment, SHELL *currentShell) {
     FRAGMENT *current = addNewFragment(currentFragment);
