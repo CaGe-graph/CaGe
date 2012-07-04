@@ -15,7 +15,8 @@ all: generators embedders others tools clean
 generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
-	    kekule_all cone_all tube_all quad_restrict$(SUFFIX) leapfrog$(SUFFIX)
+	    kekule_all cone_all tube_all quad_restrict$(SUFFIX) \
+	    leapfrog$(SUFFIX) buckygen_all
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
@@ -23,10 +24,10 @@ others: mkfoldnet
 	
 tools: short_spiral_to_pl$(SUFFIX)
 
-clean: kekule_clean cone_clean tube_clean
+clean: kekule_clean cone_clean tube_clean buckygen_clean
 	rm -f *.o
 
-clear: clean kekule_clear cone_clear tube_clear
+clear: clean kekule_clear cone_clear tube_clear buckygen_clear
 	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen quad_restrict
 
 reset: clean
@@ -116,3 +117,13 @@ leapfrog$(SUFFIX) : leapfrog.c
 
 short_spiral_to_pl$(SUFFIX) : short_spiral_to_pl.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
+
+buckygen_all:
+	SUFFIX=$(SUFFIX) $(MAKE) -C bucky
+	cp bucky/buckygen$(SUFFIX) .
+
+buckygen_clean:
+	SUFFIX=$(SUFFIX) $(MAKE) -C bucky clean
+
+buckygen_clear:
+	rm -f buckygen$(SUFFIX)
