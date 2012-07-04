@@ -312,12 +312,33 @@ public class FullgenPanel extends GeneratorPanel {
     }
 
     public GeneratorInfo getGeneratorInfo() {
+
+        String[][] embed2D = {{"embed"}};
+        String[][] embed3D;
+        if (dual.isSelected()) {
+            embed3D = new String[][]{{"embed", "-d3"}};
+        } else {
+            embed3D = new String[][]{{"embed", "-d3", "-it"}};
+        }
+
+        int maxFacesize = dual.isSelected() ? 3 : 6;
+
+        ElementRule rule = new ValencyElementRule("3:C Si N S I");
+        if(spiralStats.isSelected() ||
+                symmStats.isSelected() ||
+                !symmetriesDialog.areAllSymmetriesSelected() ||
+                atlasOrder.isSelected()){
+            return getFullgenGeneratorInfo(embed2D, embed3D, maxFacesize, rule);
+        } else {
+            return getBuckygenGeneratorInfo(embed2D, embed3D, maxFacesize, rule);
+        }
+    }
+
+    private StaticGeneratorInfo getFullgenGeneratorInfo(String[][] embed2D, String[][] embed3D, int maxFacesize, ElementRule rule) {
         String filename = "";
         ArrayList<String> command = new ArrayList<String>();
-
         int min = minAtomsSlider.getValue();
         int max = maxAtomsSlider.getValue();
-
         command.add("fullgen");
         command.add(Integer.toString(max));
         filename += "full_" + max;
@@ -361,7 +382,6 @@ public class FullgenPanel extends GeneratorPanel {
         }
         command.add("stdout");
         command.add("logerr");
-
         String[][] generator;
         if(atlasOrder.isSelected()){
             generator = new String[2][command.size()];
@@ -371,19 +391,45 @@ public class FullgenPanel extends GeneratorPanel {
             generator = new String[1][command.size()];
             generator[0] = command.toArray(generator[0]);
         }
+        StaticGeneratorInfo generatorInfo = new StaticGeneratorInfo(
+                generator,
+                EmbedFactory.createEmbedder(embedderIsConstant, embed2D, embed3D),
+                filename, maxFacesize, rule);
+        embedderIsConstant = true;
+        return generatorInfo;
+    }
 
-        String[][] embed2D = {{"embed"}};
-        String[][] embed3D;
-        if (dual.isSelected()) {
-            embed3D = new String[][]{{"embed", "-d3"}};
-        } else {
-            embed3D = new String[][]{{"embed", "-d3", "-it"}};
+    private StaticGeneratorInfo getBuckygenGeneratorInfo(String[][] embed2D, String[][] embed3D, int maxFacesize, ElementRule rule) {
+        String filename = "";
+        ArrayList<String> command = new ArrayList<String>();
+        //calculated the number of vertices in the dual
+        int min = (minAtomsSlider.getValue()+4)/2;
+        int max = (maxAtomsSlider.getValue()+4)/2;
+        
+        command.add("buckygen");
+        
+        command.add(Integer.toString(max));
+        filename += "bucky_" + max;
+        if (max != min) {
+            command.add("-S" + Integer.toString(min));
+            filename += "_S" + min;
         }
-
-        int maxFacesize = dual.isSelected() ? 3 : 6;
-
-        ElementRule rule = new ValencyElementRule("3:C Si N S I");
-
+        
+        if (ipr.isSelected()) {
+            command.add("-I");
+            filename += "_ipr";
+        }
+        
+        //unless we want the dual, we need to add -d
+        //this might seem strange, but buckygen actually generates triangulations
+        if (!dual.isSelected()) {
+            command.add("-d");
+            filename += "_d";
+        }
+        
+        String[][] generator;
+        generator = new String[1][command.size()];
+        generator[0] = command.toArray(generator[0]);
         StaticGeneratorInfo generatorInfo = new StaticGeneratorInfo(
                 generator,
                 EmbedFactory.createEmbedder(embedderIsConstant, embed2D, embed3D),
