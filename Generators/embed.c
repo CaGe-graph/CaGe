@@ -1130,7 +1130,7 @@ int
 find_edge_from_contained_point(GRAPH *G, POSITIONING *P,
 			       double px, double py, int *startp, int *endp)
 {
-  double x1, y1, x2, y2, ye, yemin;
+  double x1, y1, x2, y2, ye, yemin=0;
   int vertex, neighbor, edge_below_found = 0;
   EDGE **edges, *edge, *first_edge, *edge_above_found = NULL;
 
