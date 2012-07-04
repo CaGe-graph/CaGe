@@ -260,7 +260,7 @@ for (j=0; j<3; j++)
 
 void baue_polygon(int n, PLANMAP map, KANTE **marke )
 {
-int i,j;
+int j;
 
 if (n<3) { fprintf(stderr,"Error, no 2-gons allowed !\n"); return; }
 
@@ -297,8 +297,8 @@ void add_polygon(int n, PLANMAP map, KANTE *start, KANTE **lastout)
 
 
 {
-int i, new_tempknz, tempknz;
-KANTE *ende, *run;
+int new_tempknz, tempknz;
+KANTE *ende;
 int common_vertices;
 
 
@@ -369,7 +369,7 @@ map[0][0].name=tempknz;
 void decodiere(PLANMAP map, FLAECHENTYP code[])
 {
 KANTE *run;
-int stelle,zaehler,i;
+int stelle,zaehler;
 
 /*for (i=0;i<12;i++) fprintf(stderr,"%d ",code[i]); fprintf(stderr," \n");*/
 
@@ -417,7 +417,7 @@ int lcode(unsigned char *code, int codelengte)
 
 /************************MAIN*****************************************/
 
-main(argc,argv)
+int main(argc,argv)
 
 int argc;
 char *argv[];
@@ -452,4 +452,5 @@ if (welcher==0)
 fprintf(stderr,"Transformed %d maps. \n",zaehler);
 else
 fprintf(stderr,"Transformed 1 map. \n");
+return 0;
 }
