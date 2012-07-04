@@ -58,10 +58,10 @@ typedef KANTE PLANMAP[N+1][MAXVAL];
 		     und in [0][1].name die Zahl der gerichteten Kanten */
 
 
-schreibegraph(g)
+void schreibegraph(g)
 GRAPH g;
 {
-int i,x,y, unten,oben, maxvalence;
+int x,y, unten,oben, maxvalence;
 
 
 /*
@@ -176,7 +176,7 @@ void map_to_graph(PLANMAP map, GRAPH g)
 
 {
 KANTE *run, *merk;
-int i,val,j;
+int i,val;
 
 g[0][0]=map[0][0].name;
 
@@ -263,7 +263,6 @@ return(codelaenge);
 void decodiereplanar(unsigned short* code, PLANMAP graph, int adj[N])
 {
 int i,j,k,puffer,zaehler, kantenzaehler;
-KANTE *edge;
 
 
 /*for (i=0; i< 260*4+1; i++) fprintf(stderr," %d ",code[i]);*/
@@ -307,21 +306,19 @@ for(i=1;i<=graph[0][0].name;i++)
 
 /*******************MAIN********************************/
 
-main(argc,argv)
+int main(argc,argv)
 
 int argc;
 char *argv[];
 
 
 {
-GRAPH graph;
 int zaehlen, welchergraph;
 unsigned short code[4*N+2];
-unsigned char code2[4*N+2];
 int lauf, nullenzaehler;
 PLANMAP map;
 unsigned char ucharpuffer;
-int too_large, i;
+int too_large;
 int adj[N];
 
 if (N>USHRT_MAX-2) { fprintf(stderr,"Constant N (%d) may be at most %d.\n",N,USHRT_MAX-2);
