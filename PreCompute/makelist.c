@@ -59,7 +59,6 @@ long long int pos=0LL, impos=0LL;
 
 void runtest(char string[], int position, int lengte, unsigned long long int bitstring)
 {
-  char befehl[100+MAXBOUNDARY];
   static char dummy[]="getyesno";
   //FILE *fil;
   int result;
@@ -122,11 +121,9 @@ void write_boundary(unsigned long long int boundary[], int lengte)
 
 void checkdata(char string[], int position, int lengte, unsigned long long int bitstring)
 {
-  char befehl[100+MAXBOUNDARY];
   static char dummy[]="getyesno";
   //FILE *fil;
   int result, i;
-  static long long int teller=0;
   char *argv[20];
  
 
@@ -247,7 +244,7 @@ void uusage(char name[])
  exit(0);
 }
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
   int lengte, test=0;
@@ -255,10 +252,9 @@ main(int argc, char *argv[])
   unsigned long long int bitstring=0ULL;
   char filename[100];
   FILE *fil;
-  int i,j;
 
   if (sizeof(unsigned long long int)!=8) 
-{ fprintf(stderr,"sizeof(unsigned long long int) must be 8 not %d\n",sizeof(unsigned long long int));
+{ fprintf(stderr,"sizeof(unsigned long long int) must be 8 not %lu\n",sizeof(unsigned long long int));
  exit(0); } 
 
   if (argc<2) uusage(argv[0]);
@@ -311,7 +307,7 @@ if (test)
 
   fprintf(stderr,"possible boundaries %lld impossible %lld\n",pos,impos);
 
-  return;
+  return 0;
 
 
 
