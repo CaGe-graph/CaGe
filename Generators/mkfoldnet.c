@@ -339,6 +339,8 @@ int lese_vega(FILE *fil, EDGE ***map, int *knotenzahl, koordinaten_3d *koord){
   EDGE *kante2;
   EDGE **map_neu;
   float krd;
+  
+  kante2=NULL;
 
   static KANTENLISTE *Anfang;
   KANTENLISTE *aktuelle_kantenliste;
@@ -565,7 +567,7 @@ void mache_vega2d(FILE *fil, koordinaten_2d koord,
      An der Stelle *map[] wird Zeiger auf die Struktur geschrieben, die mit
      Hilfe von lese_vega(...) augebaut wurde.*/
   
-  int i, j, k, l, knoten, knoten_alt, akt_flaeche;
+  int i, j, k, l, knoten=0, knoten_alt, akt_flaeche;
   EDGE *kante;
   int *marks;
   int ek_alt, endfl;
@@ -873,7 +875,7 @@ void mache_flaechen(EDGE_DUAL ***map_d, EDGE *map[], int *flaechenzahl,
   EDGE_DUAL *kante_d, *kante2_d, *vorige_kante_d;
   int kp0_start, kp1_start, kp0_end, kp1_end;
 
-  
+  vorige_kante_d=NULL;
   *flaechenzahl=0;
 
   if(!MAX_Flaechenzahl){  
@@ -2187,6 +2189,8 @@ int vergleich(int neu, SURFACE *flaechen, koordinaten_3d koord3,
   int flaechenzahl;
   int kantennr, i, j;
   int endk, startk;
+  
+  kan_inv=NULL;
 
   
   if(neu){
@@ -2469,7 +2473,7 @@ int trianguliere_flaechen(SURFACE *flaechen, koordinaten_3d koord3,
   int *flaechengroessen;
   EDGE *kn, *skn, *knn, *min_kn;
 
-  int min_knoten, z, sp, uzs, vertig;
+  int min_knoten, z, sp=0, uzs, vertig;
   int position_neu, position_alt, knoten_neu, knoten_alt;
   int alloziert=1;
 
@@ -3393,7 +3397,7 @@ int einbettung_aufschnitt(koordinaten_3d koord3, koordinaten_2d *koord2,
 					 angeklebt[i][0] in der Einbettungs-
 					 reihenfolge */
   EDGE_DUAL *kante, *startkante;
-  int eingetr, i, j, k, min_knotenzahl, min_flaeche;
+  int eingetr, i, j, k, min_knotenzahl=0, min_flaeche=0;
   
   int aufruf=0;
   
