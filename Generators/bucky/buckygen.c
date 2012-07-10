@@ -290,7 +290,10 @@ static int maxnv;          /* order of output graphs */
 static int res,mod;        /* res/mod from command line (default 0/1) */
 static int splitlevel,
            splitcount;     /* used for res/mod splitting */
-static int splithint = -1; /* used by plugins to set splitting level */
+
+#ifdef PLUGIN
+    static int splithint = -1; /* used by plugins to set splitting level */
+#endif
 
 static int aswitch,        /* presence of command-line switches */
            gswitch,
@@ -859,7 +862,10 @@ print_embedded_graph() {
         }
         if(deg == 5) {
             number_deg_5++;
-            DEBUGASSERT(is_in_degree_5_vertices_list(i));
+            if(!is_in_degree_5_vertices_list(i)) {
+                fprintf(stderr, "Error: is not in degree 5 vertices list\n");
+                exit(1);
+            }
         }
     }
     if(number_deg_5 != 12) {
@@ -8820,12 +8826,12 @@ has_spiral(EDGE *edge, int use_next) {
 static void
 write_header(FILE *fil) {
     if(!uswitch && !aswitch) {
-        if(!zeroswitch && !hswitch && !gswitch && !sswitch &&
-                fwrite(PCODE, (size_t) 1, PCODELEN, fil) != PCODELEN
-                || hswitch && gswitch &&
-                fwrite(G6CODE, (size_t) 1, G6CODELEN, fil) != G6CODELEN
-                || hswitch && sswitch &&
-                fwrite(S6CODE, (size_t) 1, S6CODELEN, fil) != S6CODELEN) {
+        if((!zeroswitch && !hswitch && !gswitch && !sswitch &&
+                fwrite(PCODE, (size_t) 1, PCODELEN, fil) != PCODELEN)
+                || (hswitch && gswitch &&
+                fwrite(G6CODE, (size_t) 1, G6CODELEN, fil) != G6CODELEN)
+                || (hswitch && sswitch &&
+                fwrite(S6CODE, (size_t) 1, S6CODELEN, fil) != S6CODELEN)) {
             fprintf(stderr, ">E %s: error writing header\n", cmdname);
             perror(">E ");
             exit(1);
@@ -12606,7 +12612,6 @@ has_5_vertices_on_distance_at_most_three(int v1, int v2) {
     
     int i = 0;
     int j;
-    int vertex;
     EDGE *e;
     while(i < queue_size) {
         e = firstedge[queue[i]];
@@ -13302,7 +13307,7 @@ is_center_of_type4_patch(int vertex, int ismarked_cap) {
 
     e = e_temp->invers->next;
     int start = e->start;
-    int end = e->end;
+    //int end = e->end;
     DEBUGASSERT(degree[start] == 5 && (ISMARKED_V(start) || ISMARKED_V2(start) == ismarked_cap));
     int counter = 0;
     while(1) {
@@ -14476,10 +14481,10 @@ open_output_file(void)
     if (!uswitch)
     {
         nvf = dswitch ? 2*(maxnv-2) : maxnv;
-        if (aswitch && nvf > 99 ||
-            gswitch && nvf > 255 ||
-            sswitch && nvf > 255 ||
-           !aswitch && !gswitch && !sswitch && nvf > 255)
+        if((aswitch && nvf > 99)
+                || (gswitch && nvf > 255)
+                || (sswitch && nvf > 255)
+                || (!aswitch && !gswitch && !sswitch && nvf > 255))
         {
             fprintf(stderr,">E %s: n is too large for that output format\n",
                 cmdname);
