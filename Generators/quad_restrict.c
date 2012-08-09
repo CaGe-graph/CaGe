@@ -24,6 +24,7 @@
 */
 
 #include <math.h>
+#include <ctype.h>
 
 #ifdef UPPER_DEGREE_ERROR
 #define PRE_FILTER_QUAD	calculate_the_upper_degree_error()
@@ -106,7 +107,7 @@ static int no_quad_exist = 0;											/* TRUE if maxnv is odd and all allowed 
 static int b[MAXN];														/* used for calculate_the_maximal_upper_degree_error() */
 
 static int x_param = 0;													/* the x of the definition of the degree error (x is allways equal 0.) */
-static float mx = 0;													/* the quality how good the degree error can be reduced in each step (mx (is smaller or) equal 3)
+static float mx = 0;													/* the quality how good the degree error can be reduced in each step (mx (is smaller or) equal 3)*/
 
 static int number_of_rejections_a = 0;									/* some variables only for testing the program - they are not used */
 static int number_of_rejections_b = 0;
@@ -252,7 +253,7 @@ static void list_of_allowed_degrees(char arg[], int *pj )
 {  
   	static int init = 1;
   
-  	int i, n, j, k;  
+  	int i, n, j;  
 	int distance;
 
   if (init) 
@@ -409,8 +410,6 @@ static int calculate_the_upper_degree_error(void)
 {
 	int i, upper_error_of_graph = 0;
 	int difference = 0;
-	int count = 0;
-	EDGE *run, *last;
 
 	
 	for (i = 0; i < nv; i++)
@@ -682,7 +681,6 @@ static int calculate_the_degree_error(void)
 /******************************************/
 {
 	int error_of_graph = calculate_the_graph_error();
-	int k;
 	int number_of_remaining_steps = maxnv - nv;
 
 	if ((error_of_graph == (3 * number_of_remaining_steps)))
@@ -709,13 +707,11 @@ static int calculate_the_maximal_upper_degree_error(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	int s = 0;
 	int ordered_degrees[MAXN];						/* list of ordered degrees of the actual quadrangulation */
 	int diff = 0;
 	static int init = 1;
 	int start 	= 0;
 	int end 	= 0;
-	int number_of_ops_for_up_correction   = 0;
 	int number_of_ops_for_down_correction = 0;
 
 	int min_number_of_needed_operations = 0;
@@ -814,12 +810,10 @@ static int calculate_number_of_needed_operations(void)
 	int sum = 0;
 	int i = 0;
 	int j = 0;
-	int s_1 = 0;
 	int s_2 = 0;
 	int ordered_degrees[MAXN];						/* list of ordered degrees of the actual quadrangulation */
 	int can_use_better_cases = 1;
 	int diff = 0;
-	int p1, p2;
 
 	int min_number_of_needed_operations = 0;
 
