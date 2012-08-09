@@ -383,6 +383,7 @@ modes(int comp)
 	int i, j, k, num_ce, u0, u1, num_unsat, opp_comp;
 	char has_unknown_ce, u_unsat, m;
 	EDGE *ce, *u;
+        u = NULL;
 
 	num_ce = num_conn_edges[comp];
 	num_unsat = init_match(comp);

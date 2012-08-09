@@ -2700,7 +2700,6 @@ construct_numb(EDGE *givenedge, EDGE *numbering[])
 {
     EDGE *temp, **tail, **limit, *run;  
     EDGE *startedge[MAXNV]; 
-    int i; 
     int last_number, actual_number, vertex;
 
     RESETMARKS_V;
@@ -2759,8 +2758,7 @@ construct_numb_mirror(EDGE *givenedge, EDGE *numbering[])
    into the list.  Works like testcanon. Look there for comments.  */
 {
     EDGE *temp, **tail, **limit, *run;  
-    EDGE *startedge[MAXNV]; 
-    int i; 
+    EDGE *startedge[MAXNV];
     int last_number, actual_number, vertex;
 
     RESETMARKS_V;

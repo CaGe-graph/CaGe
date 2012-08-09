@@ -53,6 +53,7 @@
 
 #include <stdio.h> 
 #include <limits.h> 
+#include <string.h>
 #if __STDC__
 #include <stdlib.h>
 #endif
@@ -552,7 +553,7 @@ compute_code_sh_H(unsigned short code[], int *length)
 
 {
     register EDGE *run;
-    int i, j, localnv; 
+    int i, j; 
     unsigned short *start;
     int nextnumber, neighbours[2*MAXN];
 
@@ -592,7 +593,7 @@ compute_code_H(unsigned char code[], int *length)
 
 {
     register EDGE *run;
-    int i, j, localnv; 
+    int i, j; 
     unsigned char *start;
     int nextnumber, neighbours[2*MAXN];
 
@@ -832,7 +833,7 @@ compute_code_debug_long(unsigned short code[], int *length)
 
 {
     register EDGE *run;
-    int i, j, localnv; 
+    int i, j; 
     unsigned short *start;
     int nextnumber, neighbours[2*MAXN];
 
@@ -1740,7 +1741,7 @@ void addface5(EDGE *start, BOUNDARYTYPE boundary[], int boundarylength, int twos
      */
 
 {
-  EDGE *run, *realstart, *glueedge, *glueedge2;
+  EDGE *run, *realstart, *glueedge;
   int newvertices, commonvertices, i;
 
 #define size 5
@@ -2701,9 +2702,9 @@ MAINFUNCTION
 	fil=fopen(filename,"r");
       }
       if (fil==NULL) 
-	{ fprintf(stderr,"Can't find file with precomputed existence data -- will run without this information.\n",filename);
+	{ fprintf(stderr,"Can't find file with precomputed existence data -- will run without this information.\n");
 	maxknownboundary=0;
-	binfield==NULL;
+	binfield=NULL;
 	}
       else
 	{
@@ -2711,7 +2712,7 @@ MAINFUNCTION
 	  if (binfield==NULL) { fprintf(stderr,"Can't allocate room for existence data! Exiting!\n"); exit(12); } 
  
 	  if(fread(binfield,sizeof(unsigned char),SKIP(maxknownboundary+1),fil)!=SKIP(maxknownboundary+1))
-	    { fprintf(stderr,"File with precomputed existence data found, but can't read enough items!\n",filename); 
+	    { fprintf(stderr,"File with precomputed existence data found, but can't read enough items!\n"); 
 	    fprintf(stderr,"This is a hint that something is wrong, so I'd better exit!\n");
 	    exit(33); }
 	  fprintf(stderr,"Using precomputed existence data up to boundary length %d\n",maxknownboundary);

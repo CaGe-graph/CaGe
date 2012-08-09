@@ -6,7 +6,8 @@ void
 find_components_benz(void)
 {
 	EDGE *s, *t;
-	int v, len;
+	int v, len=0;
+        s = NULL;
 
 	num_comps = num_paths = 0;
 	must_label = 0;

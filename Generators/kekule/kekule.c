@@ -61,7 +61,8 @@ void
 find_components(void)
 {
 	EDGE *s, *t;
-	int v, len, i;
+	int v, len=0, i;
+        s = NULL;
 
 	num_comps = num_paths = 0;
 	must_label = 0;
