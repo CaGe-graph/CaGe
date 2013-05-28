@@ -1262,9 +1262,9 @@ int numvertices, i,j;
 
 if (l<3) { fprintf(stderr,"Error -- value of l too small \n"); exit(1); }
 
-numvertices=2*(l+m)*(rows+1);
-if (numvertices==0) return NULL;
+if (rows== -1) return NULL;
 
+numvertices=2*(l+m)*(rows+1);
 if ((edges=(EDGE *)malloc(sizeof(EDGE)*3*numvertices)) == NULL)
  { fprintf(stderr,"Do not get enough space for the edges of the tube.\n");
    exit(1); }
