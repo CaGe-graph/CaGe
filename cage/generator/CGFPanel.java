@@ -69,7 +69,7 @@ public class CGFPanel extends GeneratorPanel {
         }
     }
 
-    void initGUI() throws Exception {
+    private void initGUI() throws Exception {
         setLayout(new GridBagLayout());
         JPanel CGFExtrasPanel = new JPanel(new GridBagLayout());
         JPanel CGFAtomsPanel = new JPanel(new GridBagLayout());
