@@ -314,6 +314,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     public final void setLayout(LayoutManager mgr) {
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
         if (debug) {
             System.err.println("  slider focus");
@@ -321,6 +322,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         slider.requestFocus();
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
     }
 
@@ -478,6 +480,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             enhancedSlider = es;
         }
 
+        @Override
         public void stateChanged(ChangeEvent e) {
             JLabel label = enhancedSlider.getValueLabel();
             if (label == null) {
