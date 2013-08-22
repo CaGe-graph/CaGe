@@ -578,7 +578,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
             calculateSize();
         }
 
-        public void calculateSize() {
+        private void calculateSize() {
             Insets insets = getInsets();
             if (slider == null) {
                 return;
