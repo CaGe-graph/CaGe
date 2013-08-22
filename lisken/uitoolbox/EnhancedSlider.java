@@ -12,9 +12,9 @@ import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Vector;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.BoundedRangeModel;
@@ -36,7 +36,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     private boolean snapping;
     private int snappedValue;
     private boolean paintMinorTicks;
-    private transient Vector changeListeners;
+    private transient ArrayList<ChangeListener> changeListeners = new ArrayList<>();
     private double sizeFactor;
     private boolean clickScrollByBlock;
 
@@ -327,28 +327,20 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     }
 
     public synchronized void removeChangeListener(ChangeListener l) {
-        if (changeListeners != null && changeListeners.contains(l)) {
-            Vector v = (Vector) changeListeners.clone();
-            v.removeElement(l);
-            changeListeners = v;
-        }
+        changeListeners.remove(l);
     }
 
     public synchronized void addChangeListener(ChangeListener l) {
-        Vector v = changeListeners == null ? new Vector(2) : (Vector) changeListeners.clone();
-        if (!v.contains(l)) {
-            v.addElement(l);
-            changeListeners = v;
+        if(!changeListeners.contains(l)){
+            changeListeners.add(l);
         }
     }
 
     protected void fireStateChanged() {
         if (changeListeners != null) {
             ChangeEvent e = new ChangeEvent(this);
-            Vector listeners = changeListeners;
-            int count = listeners.size();
-            for (int i = 0; i < count; i++) {
-                ((ChangeListener) listeners.elementAt(i)).stateChanged(e);
+            for (ChangeListener l : changeListeners) {
+                l.stateChanged(e);
             }
         }
     }
