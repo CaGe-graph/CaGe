@@ -229,8 +229,78 @@ public class CGFPanel extends GeneratorPanel {
         boolean useCgf = (min != max) || faceStats.isSelected() ||
                 conn1.isSelected() || conn2.isSelected() ||
                 (nrOfFacesSmallerThan10 < 5);
+        
+        boolean usePlantri_md6 = !((min != max) || faceStats.isSelected() ||
+                conn1.isSelected() || conn2.isSelected()) && maxFacesize <= 6;
+        String plantri_md6Flag = "";
+        
+        if(usePlantri_md6){
+            boolean allowedFaces[] = {false, false, false, false}; //3, 4, 5, 6
+            boolean limitedFaces[] = {false, false, false, false}; //3, 4, 5, 6
+            Iterator it = sizeOptionsMap.values().iterator();
+            while (it.hasNext()) {
+                SizeOption sizeOption = (SizeOption) it.next();
+                int size = sizeOption.getSize();
+                if (size <= 6 && !sizeOption.isLimited()) {
+                    allowedFaces[size-3] = true;
+                    limitedFaces[size-3] = sizeOption.isLimited();
+                }
+            }
+            if(limitedFaces[0] || limitedFaces[1] || limitedFaces[2] || limitedFaces[3]){
+                //if any of the face sizes has a limit on the number of faces,
+                //then we can't use plantri_md6
+                usePlantri_md6 = false;
+            } else if(allowedFaces[0] && allowedFaces[1] && allowedFaces[2] && allowedFaces[3]){
+                //all faces allowed: no special flag needed and we can use plantri_md6
+            } else if(!allowedFaces[0] && allowedFaces[1] && allowedFaces[2] && allowedFaces[3]){
+                //faces of size 3 are not allowed. All other faces are allowed.
+                //we can use plantri_md6 with the flag -f
+                plantri_md6Flag = "f";
+            } else if(!allowedFaces[0] && allowedFaces[1] && !allowedFaces[2] && allowedFaces[3]){
+                //Only faces with size 4 and 6 are allowed.
+                //we can use plantri_md6 with the flag -x
+                plantri_md6Flag = "x";
+            } else {
+                //we can't use plantri_md6
+                usePlantri_md6 = false;
+            }
+        }
 
-        if(useCgf){
+        if(usePlantri_md6){
+            int vertices = dual ? minAtomsSlider.getValue() : minAtomsSlider.getValue()/2+2;
+            int length = 2;
+            if(!dual){
+                length++;
+            }
+            if(!plantri_md6Flag.equals("")){
+                length++;
+            }
+            generator = new String[1][length];
+            String[] fileArray = new String[length];
+            int j = 0;
+            
+            //program name
+            fileArray[j] = "plantri_md6";
+            generator[0][j++] = "plantri_md6";
+            
+            //additional flag
+            if(!plantri_md6Flag.equals("")){
+                fileArray[j] = "_" + plantri_md6Flag;
+                generator[0][j++] = "-" + plantri_md6Flag;
+            }
+            
+            //dual or not
+            if(!dual){
+                fileArray[j] = "_d";
+                generator[0][j++] = "-d";
+            }
+            
+            //number of vertices
+            fileArray[j] = "_" + vertices;
+            generator[0][j++] = Integer.toString(vertices);
+            
+            filename = Systoolbox.join(fileArray, "");
+        } else if(useCgf){
             Systoolbox.addArray(genV, new String[]{
                         "cgf", "-g", "0", "-output", "stdout", "-logfile", "stderr",
                         "-save", "0", "-no_recover", "-topdown", "-memory", "1610612736",
