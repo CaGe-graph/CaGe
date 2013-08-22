@@ -129,6 +129,7 @@ public class CGFPanel extends GeneratorPanel {
         facesSlider.setClickScrollByBlock(false);
         facesSlider.slider().addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getModifiers() != 0) {
                     return;
@@ -144,6 +145,7 @@ public class CGFPanel extends GeneratorPanel {
         sizeOptionsMap = new SizeOptionsMap(CGFFaceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton, dual, true);
         sizeOptionsMap.setSizeIncluded(facesSlider.getMinimum(), true);
         sizeOptionsMap.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 verifyData();
             }
@@ -151,6 +153,7 @@ public class CGFPanel extends GeneratorPanel {
         JLabel includedFacesLabel = new JLabel(dual ? "included degrees" : "included face types:");
         ActionListener connListener = new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 verifyData();
             }
@@ -199,6 +202,7 @@ public class CGFPanel extends GeneratorPanel {
         }
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         String[][] generator, embed2D, embed3D;
         String filename;
@@ -412,6 +416,7 @@ public class CGFPanel extends GeneratorPanel {
                 filename, maxFacesize, rule);
     }
 
+    @Override
     public void showing() {
         verifyData();
     }
@@ -448,6 +453,7 @@ public class CGFPanel extends GeneratorPanel {
         final JFrame f = new JFrame("Output Dialog");
         f.addWindowListener(new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 f.setVisible(false);
                 GeneratorInfo info = p.getGeneratorInfo();
