@@ -1,6 +1,5 @@
 package cage.generator;
 
-import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
@@ -17,7 +16,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.EventListener;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
