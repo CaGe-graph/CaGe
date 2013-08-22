@@ -1,138 +1,145 @@
-/* plantri.c :  generate 3-connected planar triangulations with 
-               maximum degree at most 6.
+/* plantri_md6.c :  generate 3-connected planar triangulations with 
+                maximum degree at most 6.
+    
+    It is necessary that either fullgen or buckygen be on the path,
+    as it is started in a subprocess. fullgen is available from
+    Gunnar Brinkmann, gunnar@mathematik.uni-bielefeld.de. buckygen
+    is available from Jan Goedgebeur <Jan.Goedgebeur@UGent.be>.
+    The variable FULLERENES determines which one is used; with
+    buckgen as the default.
 
-   It is necessary that the program fullgen be on the path, as it
-   is started in a subprocess.  fullgen is available from Gunnar
-   Brinkmann, gunnar@mathematik.uni-bielefeld.de.
+    Usage:  plantri_md6 [-aAghodufic#s#e#r#m#/#] n [outfile]
 
-   Usage:  plantri_md6 [-aAghodufic#s#e#r#m#/#] n [outfile]
+      n is the number of vertices (4-MAXN)
+        
+           This parameter can also be given as a range min-max for
+           greater total efficiency.
 
-     n is the number of vertices (4-MAXN)
+      outfile is the output file  (missing or "-" means stdout)
 
-          This parameter can also be given as a range min-max for
-          greater total efficiency.
-
-     outfile is the output file  (missing or "-" means stdout)
-
-     -o : Without this option, mirror images are treated as the same.  
+      -o : Without this option, mirror images are treated as the same.  
 	   With this option they are different unless there is a 
 	   reflecting automorphism.  Implies -g.  In the case of -A
-          (graph6 output), only one graph is written because graph6
-          format loses the imbedding.  Therefore it is usually a waste
-          of time to use -o and -A together.
+           (graph6 output), only one graph is written because graph6
+           format loses the imbedding.  Therefore it is usually a waste
+           of time to use -o and -A together.
 
-     -u : Just count, don't write any graphs.
+      -u : Just count, don't write any graphs.
 
-     -d : Write the dual graph instead (a 3-connected cubic planar graph).
+      -d : Write the dual graph instead (a 3-connected cubic planar graph).
 
-     -a : Write in a human-readable ascii text format, instead
+      -a : Write in a human-readable ascii text format, instead
 	   of the default planar_code format
 	   
-     -A : Write in graph6 format, instead of the default planar_code format.
+      -A : Write in graph6 format, instead of the default planar_code format.
 	   -a -A -S are incompatible.
 
-     -S : Write in sparse6 format, instead of the default planar_code format.
+      -S : Write in sparse6 format, instead of the default planar_code format.
 	   -a -A -S are incompatible.
 
-     -h : Without -a or -A, suppress writing of header ">>planar_code<<".
+      -h : Without -a or -A, suppress writing of header ">>planar_code<<".
 	   With -A, force writing of header ">>graph6<<".
 	   With -S, force writing of header ">>sparse6<<".
 
-     -g : Provide correct group in all cases.  This is only important
+      -g : Provide correct group in all cases.  This is only important
 	   if you use a plug-in that needs the group.  It causes a 
 	   significant performance penalty.
 
-     -f : Restrict to minimum degree at least 4.  This option is not
-          very efficient, but better than filtering at the end.
-          The minimum number of of vertices becomes 6.
+      -f : Restrict to minimum degree at least 4.  This option is not
+           very efficient, but better than filtering at the end.
+           The minimum number of vertices becomes 6.
 	   
-     -c# : Restrict to case # of fullerenes, where #=1,2,3.  The value
-          -c0 (default) gives all cases together.  The single
-          non-fullerene case (K4) goes in case 2.
+      -x : Restrict to only degrees 4 and 6.  This option is not
+           very efficient, but better than filtering at the end.
+           The minimum number of vertices becomes 6.
+	   
+      -c# : Restrict to case # of fullerenes, where #=1,2,3.  The value
+           -c0 (default) gives all cases together.  The single
+           non-fullerene case (K4) goes in case 2. (fullgen only)
 
-     -i : Make the fullerene generator write some information about the
-          generation process -- once to a logfile and once to stderr.    
+      -i : Make the fullerene generator write some information about the
+           generation process -- once to a logfile and once to stderr.    
 
-     -s# : Start from fullerenes with at least # faces (=vertices of the 
-          triangulation).  The default is 12 -- the smallest number of
-          faces in a fullerene.
+      -s# : Start from fullerenes with at least # faces (=vertices of the 
+           triangulation).  The default is 12 -- the smallest number of
+           faces in a fullerene.
 
-     -e# : Start from fullerenes with at most # faces.  Default is n. 
-          # must be a positive number.
+      -e# : Start from fullerenes with at most # faces.  Default is n. 
+           # must be a positive number.
 
-       The generation is performed by adding edges to the duals of
-       fullerenes, and also to the basic trangulation K4.  -s and -e
-       can be used to split the starting graphs into classes.
+        The generation is performed by adding edges to the duals of
+        fullerenes, and also to the basic trangulation K4.  -s and -e
+        can be used to split the starting graphs into classes.
 
 	If neither -s nor -e are chosen, the complete generation is 
-       performed -- including the generation of structures starting 
-       from the K4.  In case at least one of the options is chosen, 
-       the structures starting at K4 are generated if the e-value is 
-       smaller than 12 and otherwise the part between (including) 
-       the s-value and the e-value.
+        performed -- including the generation of structures starting 
+        from the K4.  In case at least one of the options is chosen, 
+        the structures starting at K4 are generated if the e-value is 
+        smaller than 12 and otherwise the part between (including) 
+        the s-value and the e-value.
 
-     -m#/# : The two integer arguments are res and mod, with
-       0 <= res < mod.  The fullerene generation is divided into
-       mod pieces and the res-th piece only is constructed.
+      -m#/# : The two integer arguments are res and mod, with
+        0 <= res < mod.  The fullerene generation is divided into
+        mod pieces and the res-th piece only is constructed.
 	The case of starting at K4 belongs to piece 0.
 
-     Switches can be given separately or concatenated.
+      Switches can be given separately or concatenated.
 
-  Authors:  Gunnar Brinkmann   gunnar@mathematik.uni-bielefeld.de
+   Authors:  Gunnar Brinkmann   gunnar@mathematik.uni-bielefeld.de
 	     Brendan McKay      bdm@cs.anu.edu.au
 
 ---------
 
-  Output formats: 
+   Output formats: 
 
-     The output for each graph consists of the number of vertices,
-     then for each vertex a list of all its neighbours in clockwise
-     order.  These neighbour lists are separated by a "separator",
-     and terminated by a "terminator".
+      The output for each graph consists of the number of vertices,
+      then for each vertex a list of all its neighbours in clockwise
+      order.  These neighbour lists are separated by a "separator",
+      and terminated by a "terminator".
 
 		             planar_code          ascii format
 		              (default)            (with -a)
 
-     file type               binary               text
-     number of vertices      one byte          decimal + blank
-     vertex names          bytes 1,2,3...        letters 'a','b',...
-     separators              zero byte           comma ','
-     terminator              zero byte           newline '\n'
+      file type               binary               text
+      number of vertices      one byte          decimal + blank
+      vertex names          bytes 1,2,3...        letters 'a','b',...
+      separators              zero byte           comma ','
+      terminator              zero byte           newline '\n'
 
-     For example, the planar dual of the cube appears like this:
+      For example, the planar dual of the cube appears like this:
 
-     planar_code: 
+      planar_code: 
 	 6 4 3 2 5 0 3 6 5 1 0 1 4 6 2 0 5 6 3 1 0 4 1 2 6 0 4 5 2 3 0
 	 (One number per byte, no newlines).
 
-     ascii format: 
+      ascii format: 
 	 6 dcbe,cfea,adfb,efca,dabf,debc
 	 (Including the space after "6".  Followed by newline.)
 
-     For planar_code, the standard header ">>planar_code<<"
-     (without null or newline) is written at the start of the
-     output unless the -h switch is given.
+      For planar_code, the standard header ">>planar_code<<"
+      (without null or newline) is written at the start of the
+      output unless the -h switch is given.
 
-     Using -A, the graph6 format can be selected instead.  This is
-     an ASCII format for general undirected graphs, and does not
-     encode the imbedding.  It is described elsewhere (contact bdm).
-     Similarly, -S selects sparse6 format (smaller for the dual).
+      Using -A, the graph6 format can be selected instead.  This is
+      an ASCII format for general undirected graphs, and does not
+      encode the imbedding.  It is described elsewhere (contact bdm).
+      Similarly, -S selects sparse6 format (smaller for the dual).
 
 ---------
 
-  plantri has a "plug-in" facility that enables you to examine
-  triangulations as they are made, without the need for expensive i/o
-  operations.  This can save a factor of two in some cases.
+   plantri has a "plug-in" facility that enables you to examine
+   triangulations as they are made, without the need for expensive i/o
+   operations.  This can save a factor of two in some cases.
 
-  If the preprocessor variable PLUGIN is defined at compile time, it
-  is taken to be a file name enclosed in double quotes.  For example,
-  in the Unix shell, this can be achieved with the switch 
-  '-DPLUGIN="plugin.c"' (including all quotes) on the cc command.
-  The contents of that file are included into this one.
+   If the preprocessor variable PLUGIN is defined at compile time, it
+   is taken to be a file name enclosed in double quotes.  For example,
+   in the Unix shell, this can be achieved with the switch 
+   '-DPLUGIN="plugin.c"' (including all quotes) on the cc command.
+   The contents of that file are included into this one.
 
-  As each graph is made, a call is made like this:
+   As each graph is made, a call is made like this:
 
-     int FILTER(int nbtot, int nbop, int doflip)  
+      int FILTER(int nbtot, int nbop, int doflip)  
 
 	nbtot = total number of canonical labellings
 	nbop  = number of those which are orientation-preserving
@@ -141,111 +148,111 @@
 	
 	nbtot and nbop are only guaranteed correct if -g or -o is given.
 
-  The procedure you provide can do anything except modify plantri data.  
-  You can write the graph (to outfile, or to a file you open yourself),
-  and/or you can collect statistics in global variables you declare
-  yourself.  PLUGIN must return an int value.  A value of 0 means
-  "don't write" and other values mean "write unless -u".
+   The procedure you provide can do anything except modify plantri data.  
+   You can write the graph (to outfile, or to a file you open yourself),
+   and/or you can collect statistics in global variables you declare
+   yourself.  PLUGIN must return an int value.  A value of 0 means
+   "don't write" and other values mean "write unless -u".
 
-  In addition, procedure SUMMARY() is called at the end of execution.  
-  This is to enable you to write information collected by FILTER().
-  Usually summary information is written to msgfile, which is equal
-  to stdout if an output file is specified, and to stderr if not.
-  The normal plantri summary is written if SUMMARY() is called, but
-  can be suppressed by setting the global variable dosummary = 0.
+   In addition, procedure SUMMARY() is called at the end of execution.  
+   This is to enable you to write information collected by FILTER().
+   Usually summary information is written to msgfile, which is equal
+   to stdout if an output file is specified, and to stderr if not.
+   The normal plantri summary is written if SUMMARY() is called, but
+   can be suppressed by setting the global variable dosummary = 0.
 
-  Names other than FILTER and SUMMARY can be used just by defining
-  those names as macros on the command line.
+   Names other than FILTER and SUMMARY can be used just by defining
+   those names as macros on the command line.
 
-  Note that the PLUGIN file is included right into the text of this
-  program, so all the information here is available.  For example,
-   outfile = open file for writing graphs (unless -u)
-   msgfile = open file for writing informational messages
+   Note that the PLUGIN file is included right into the text of this
+   program, so all the information here is available.  For example,
+    outfile = open file for writing graphs (unless -u)
+    msgfile = open file for writing informational messages
 
-  In addition, the plug-in code can define several optional features.
-  (1) If the preprocessor variable PLUGIN_INIT is defined, it is 
-      included after the input parameters are parsed but before any
-      triangulations are generated.
-  (2) If the preprocessor variable PRE_FILTER is defined, it is taken
-      to be an expression which is evaluated for each intermediate
-      triangulation (smaller than output size).  If the expression
-      evaluates to 0, that branch of the tree is cut off (i.e. no
-      descendants of the tested triangulation are generated).  
-      Otherwise, computation proceeds as normal.  Use of this facility
-      requires considerable knowledge of the working of the program.
-  (3) If the preprocess variable PLUGIN_SWITCHES is defined, it is
-      expanded at the place where command-line switches are parsed.
-      This allows you to add additional switches.  For example
+   In addition, the plug-in code can define several optional features.
+   (1) If the preprocessor variable PLUGIN_INIT is defined, it is 
+       included after the input parameters are parsed but before any
+       triangulations are generated.
+   (2) If the preprocessor variable PRE_FILTER is defined, it is taken
+       to be an expression which is evaluated for each intermediate
+       triangulation (smaller than output size).  If the expression
+       evaluates to 0, that branch of the tree is cut off (i.e. no
+       descendants of the tested triangulation are generated).  
+       Otherwise, computation proceeds as normal.  Use of this facility
+       requires considerable knowledge of the working of the program.
+   (3) If the preprocess variable PLUGIN_SWITCHES is defined, it is
+       expanded at the place where command-line switches are parsed.
+       This allows you to add additional switches.  For example
 
 #define PLUGIN_SWITCHES else if (arg[j] == 'x') xswitch = TRUE;
 
-      will add a -x option.  You must allocate space for xswitch yourself.
+       will add a -x option.  You must allocate space for xswitch yourself.
 
-  The file maxdeg.c contains a detailed example of a plug-in.
+   The file maxdeg.c contains a detailed example of a plug-in.
 
 ---------
 
 Counts (without -o):
 
 		     -- mindegree --
-nv   ne   nf       3       4       5      total
+ nv   ne   nf       3       4       5      total
 
- 4    6    4       1       0       0         1
- 5    9    6       1       0       0         1
- 6   12    8       1       1       0         2
- 7   15   10       4       1       0         5
- 8   18   12       8       2       0        10
- 9   21   14      11       4       0        15
-10   24   16      23       7       0        30
-11   27   18      34      10       0        44
-12   30   20      54      22       1        77
-13   33   22      83      32       0       115
-14   36   24     125      58       1       184
-15   39   26     174      92       1       267
-16   42   28     267     151       2       420
-17   45   30     365     227       3       595
-18   48   32     509     368       6       883
-19   51   34     706     530       6      1242
-20   54   36     963     805      15      1783
-21   57   38    1270    1158      17      2445
-22   60   40    1708    1695      40      3443
-23   63   42    2204    2373      45      4622
-24   66   44    2876    3354      89      6319
-25   69   46    3695    4595     116      8406
-26   72   48    4708    6340     199     11247
-27   75   50    5925    8480     271     14676
-28   78   52    7491   11417     437     19345
-29   81   54    9255   15049     580     24884
-30   84   56   11463   19832     924     32219
-31   87   58   14083   25719    1205     41007
-32   90   60   17223   33258    1812     52293
-33   93   62   20857   42482    2385     65724
-34   96   64   25304   54184    3465     82953
-35   99   66   30273   68271    4478    103022
-36  102   68   36347   85664    6332    128343
-37  105   70   43225  106817    8149    158191
-38  108   72   51229  132535   11190    194954
-39  111   74   60426  163194   14246    237866
-40  114   76   71326  200251   19151    290728
-41  117   78   83182  244387   24109    351678
-42  120   80   97426  296648   31924    425998
-43  123   82  113239  358860   39718    511817
-44  126   84  131425  431578   51592    614595
-45  129   86  151826  517533   63761    733120
-46  132   88  175302  617832   81738    874872
-47  135   90  200829  735257   99918   1036004
-48  138   92  231042  870060  126409   1227511
-49  141   94  263553 1029114  153493   1446160
-50  144   96  300602 1209783  191839   1702224
+  4    6    4       1       0       0         1
+  5    9    6       1       0       0         1
+  6   12    8       1       1       0         2
+  7   15   10       4       1       0         5
+  8   18   12       8       2       0        10
+  9   21   14      11       4       0        15
+ 10   24   16      23       7       0        30
+ 11   27   18      34      10       0        44
+ 12   30   20      54      22       1        77
+ 13   33   22      83      32       0       115
+ 14   36   24     125      58       1       184
+ 15   39   26     174      92       1       267
+ 16   42   28     267     151       2       420
+ 17   45   30     365     227       3       595
+ 18   48   32     509     368       6       883
+ 19   51   34     706     530       6      1242
+ 20   54   36     963     805      15      1783
+ 21   57   38    1270    1158      17      2445
+ 22   60   40    1708    1695      40      3443
+ 23   63   42    2204    2373      45      4622
+ 24   66   44    2876    3354      89      6319
+ 25   69   46    3695    4595     116      8406
+ 26   72   48    4708    6340     199     11247
+ 27   75   50    5925    8480     271     14676
+ 28   78   52    7491   11417     437     19345
+ 29   81   54    9255   15049     580     24884
+ 30   84   56   11463   19832     924     32219
+ 31   87   58   14083   25719    1205     41007
+ 32   90   60   17223   33258    1812     52293
+ 33   93   62   20857   42482    2385     65724
+ 34   96   64   25304   54184    3465     82953
+ 35   99   66   30273   68271    4478    103022
+ 36  102   68   36347   85664    6332    128343
+ 37  105   70   43225  106817    8149    158191
+ 38  108   72   51229  132535   11190    194954
+ 39  111   74   60426  163194   14246    237866
+ 40  114   76   71326  200251   19151    290728
+ 41  117   78   83182  244387   24109    351678
+ 42  120   80   97426  296648   31924    425998
+ 43  123   82  113239  358860   39718    511817
+ 44  126   84  131425  431578   51592    614595
+ 45  129   86  151826  517533   63761    733120
+ 46  132   88  175302  617832   81738    874872
+ 47  135   90  200829  735257   99918   1036004
+ 48  138   92  231042  870060  126409   1227511
+ 49  141   94  263553 1029114  153493   1446160
+ 50  144   96  300602 1209783  191839   1702224
 
 From here on, totals don't include mindegree 3.
 
-51  147   98     -   1420472  231017   1651489
-52  150  100     -   1659473  285914   1945387
-53  153  102     -   1937509  341658   2279167
-54  156  104     -   2249285  419013   2668298
-55  139  106     -   2612410  303174   2915584
-56  142  108     -   2677727  604217   3281944
+ 51  147   98     -   1420472  231017   1651489
+ 52  150  100     -   1659473  285914   1945387
+ 53  153  102     -   1937509  341658   2279167
+ 54  156  104     -   2249285  419013   2668298
+ 55  139  106     -   2612410  303174   2915584
+ 56  142  108     -   2677727  604217   3281944
 
 --------------------------------------------------------
 
@@ -256,19 +263,20 @@ practical limits on MAXN (the maximum permitted number of vertices)
 is determined by the limits imposed by the output syntax.
 
 The following table gives the largest legal MAXN value.
-
- Switches:     none    -d     -a    -ad      -A    -Ad     -u
- Output:       planar_code      ascii         graph6      none
-              primal  dual   primal dual   primal dual    
- MAXN limit:   255    129      99     51    4094  2049   no limit
+  
+  Switches:     none    -d     -a    -ad      -A    -Ad     -u
+  Output:       planar_code      ascii         graph6      none
+               primal  dual   primal dual   primal dual    
+  MAXN limit:   255    129      99     51    4094  2049   no limit
 
 The limits for ascii code could be raised to 114,59 easily.
 
 Change History:
 
-      19-Nov-1996 : created from plantri 1.0.5
-      12-Mar-1997 : trivial changes
-
+       19-Nov-1996 : created from plantri 1.0.5
+       12-Mar-1997 : trivial changes
+       13-Sep-2011 : allow buckgen as well as fullgen
+ 
 **************************************************************************/
 
 #include <stdio.h> 
@@ -293,12 +301,18 @@ Change History:
 #endif
 #if !defined(CLK_TCK)
 #define CLK_TCK 60     /* If the CPU time stated by the program appears
-                      to be out by a constant ratio, the most likely
-                      explanation is that the code got to this point but
-                      60 is the wrong guess.  Another common value is 100. */
+                       to be out by a constant ratio, the most likely
+                       explanation is that the code got to this point but
+                       60 is the wrong guess.  Another common value is 100. */
 #endif
 #endif
 
+#ifndef FULLERENES
+#define FULLERENES 1  /* 0 = use fullgen; 1 = use buckygen */
+#endif
+#ifndef STATS
+#define STATS 1  /* nonzero = write some statistics */
+#endif
 
 #ifndef MAXN
 #define MAXN (400/2+2)     /* the maximum number of vertices; see above */
@@ -337,18 +351,19 @@ static int aswitch,
 	   oswitch,
 	   uswitch,
 	   cswitch,
-          iswitch,
-          sswitch,
-          eswitch,
-          esswitch,
-          mswitch,
-	   fswitch;        /* presence of command-line switches */
+           iswitch,
+           sswitch,
+           eswitch,
+           esswitch,
+           mswitch,
+	   fswitch,        /* presence of command-line switches */
+           xswitch;
 extern int errno;
 static int dosummary;      /* used by plugin */
 static char *cmdname;      /* points to arg[0] */
 
 /* The variables below are used at each level of the iteration,
-  updating and restoring as we move up and down the search tree */
+   updating and restoring as we move up and down the search tree */
 
 static int nv;             /* number of vertices; they are 0..nv-1 */
 static int ne;             /* number of directed edges (6*nv-12) */
@@ -361,14 +376,14 @@ static EDGE edges[6+32*MAXN];
 
 static int degree[MAXN];   /* the degrees of the vertices */
 static EDGE *firstedge[MAXN]; /* pointer to arbitrary edge out of vertex i. */
- /* This pointer may change during the run, so all one can rely on is that
-    at any point it is "some" edge out of i */
+  /* This pointer may change during the run, so all one can rely on is that
+     at any point it is "some" edge out of i */
 
 static EDGE *facestart[MAXF]; /* an edge in the clockwise orientation of
 			         each face.  Only valid when computed. */
 
 static EDGE *numbering[2*MAXE][MAXE]; 
- /* holds numberings produced by canon() */
+  /* holds numberings produced by canon() */
 
 #define PCODE ">>planar_code<<"
 #define PCODELEN (sizeof(PCODE)-1)    /* "-1" to avoid the null */
@@ -376,17 +391,22 @@ static EDGE *numbering[2*MAXE][MAXE];
 #define G6CODELEN (sizeof(G6CODE)-1)    /* "-1" to avoid the null */
 #define S6CODE ">>sparse6<<"
 #define S6CODELEN (sizeof(S6CODE)-1)    /* "-1" to avoid the null */
+
+#if FULLERENES==0
 #define SWITCHES "[-aASghodufic#e#s#m#/#]"
+#else
+#define SWITCHES "[-aASghodufie#s#m#/#]"
+#endif
 
 /* The program is so fast that the count of output graphs can quickly
-  overflow a 32-bit integer.  Therefore, we use two long values
-  for each count, with a ratio of 10^9 between them.  The macro
-  ADDBIG adds a small number to one of these big ones.  The macro
-  PRINTBIG prints one in decimal. */
+   overflow a 32-bit integer.  Therefore, we use two long values
+   for each count, with a ratio of 10^9 between them.  The macro
+   ADDBIG adds a small number to one of these big ones.  The macro
+   PRINTBIG prints one in decimal. */
 
 typedef struct
 {
-   long hi,lo;
+    long hi,lo;
 } bigint;
 
 #define ZEROBIG(big) big.hi = big.lo = 0L
@@ -394,12 +414,12 @@ typedef struct
 #define ADDBIG(big,extra) if ((big.lo += (extra)) >= 1000000000L) \
 	{ ++big.hi; big.lo -= 1000000000L;}
 #define PRINTBIG(file,big) if (big.hi == 0) \
-fprintf(file,"%ld",big.lo); else fprintf(file,"%ld%09ld",big.hi,big.lo)
+ fprintf(file,"%ld",big.lo); else fprintf(file,"%ld%09ld",big.hi,big.lo)
 #define BIGTODOUBLE(big) (big.hi * 1000000000.0 + big.lo)
 
 static bigint nout;          /* counter of output graphs */
 
-#ifdef STATS    /* optional statistics collection */
+#if STATS    /* optional statistics collection */
 static bigint numrooted;  /* rooted maps */
 static bigint ntriv;      /* counter of those with trivial groups 
 				   (an upper bound only without -o) */
@@ -408,17 +428,17 @@ static unsigned long nummindeg[4][MAXN+1]; /* count according to min degree */
 
 /**************************************************************************/
 /* Routines for extending and reducing a triangulation.
-  General principle:  extendx(e); reducex(e)  will extend by one 
-  vertex of degree x (x=3,4,5) then reduce it to the original graph.  
-  The final graph is exactly the as the original (including pointer values) 
-  except that possibly the values of firstedge[] might be different.
+   General principle:  extendx(e); reducex(e)  will extend by one 
+   vertex of degree x (x=3,4,5) then reduce it to the original graph.  
+   The final graph is exactly the as the original (including pointer values) 
+   except that possibly the values of firstedge[] might be different.
 */
 
 static void 
 extend3(EDGE *e)
 
 /* inserts a vertex with valence 3 in the triangle on the right hand
-  side (->next direction) of the edge e */
+   side (->next direction) of the edge e */
 {
 	register EDGE *work1, *work2, *work3;
 
@@ -470,11 +490,11 @@ static void
 reduce3(EDGE *e)
 
 /* deletes a vertex with valence 3 in the triangle on the right hand side
-(->next-direction) of the edge e. It is not checked whether the vertex
-really has valence 3 -- this has to be made sure in advance      */
+ (->next-direction) of the edge e. It is not checked whether the vertex
+ really has valence 3 -- this has to be made sure in advance      */
 {
 /* It might be that one of the edges leading to the new vertex now is
-  an entry of firstedge[] */
+   an entry of firstedge[] */
 
 /*if (firstedge[e->start]==e->next) would take too much time, so just*/ 
 
@@ -504,9 +524,9 @@ static void
 extend4(EDGE *e, EDGE *list[])
 
 /* Deletes e->next and its inverse and puts a valence 4 vertex into the
-  resulting square.
-  In list[0..1] the deleted edges are stored. This list must be handed 
-  to reduce4() */
+   resulting square.
+   In list[0..1] the deleted edges are stored. This list must be handed 
+   to reduce4() */
 {
 	register EDGE *work1, *work2, *work3, *work4;
 
@@ -579,12 +599,12 @@ static void
 reduce4(EDGE *e, EDGE *list[])
 
 /* The inverse operation to extend4().
-  Deletes the vertex with valence 4 in the triangle on the right hand side
-  (->next-direction) of the edge e that is not contained in e. It is not 
-  checked whether the vertex really has valence 4 -- this has to be made sure 
-  in advance. The vector list[] must contain the edges deleted before. 
-  It might be that one of the edges leading to the new vertex now is
-  an entry of firstedge[] */
+   Deletes the vertex with valence 4 in the triangle on the right hand side
+   (->next-direction) of the edge e that is not contained in e. It is not 
+   checked whether the vertex really has valence 4 -- this has to be made sure 
+   in advance. The vector list[] must contain the edges deleted before. 
+   It might be that one of the edges leading to the new vertex now is
+   an entry of firstedge[] */
 {
 
 	firstedge[e->start] = e;
@@ -619,11 +639,11 @@ static int
 testcanon(EDGE *givenedge, int representation[], int colour[])
 
 /* Tests whether starting from a given edge and constructing the code in
-  "->next" direction, an automorphism or even a better representation 
-  can be found. Returns 0 for failure, 1 for an automorphism and 2 for 
-  a better representation.  This function exits as soon as a better 
-  representation is found. A function that computes and returns the 
-  complete better representation can work pretty similar.*/
+   "->next" direction, an automorphism or even a better representation 
+   can be found. Returns 0 for failure, 1 for an automorphism and 2 for 
+   a better representation.  This function exits as soon as a better 
+   representation is found. A function that computes and returns the 
+   complete better representation can work pretty similar.*/
 {
 	EDGE *temp, *run;  
 	EDGE *startedge[MAXN]; /* startedge[i] is the starting edge for 
@@ -643,20 +663,20 @@ testcanon(EDGE *givenedge, int representation[], int colour[])
 	startedge[1] = givenedge->invers;
 
 /* A representation is a clockwise ordering of all neighbours ended with a 0.
-  The neighbours are numbered in the order that they are reached by the BFS 
-  procedure. Every number is preceded by the colour of the vertex.
-  Since every representation starts with "2" and the same colour, we do not 
-  have to note that. Every first entry in a new clockwise ordering (and its 
-  colour) is determined by the entries before (the first time it occurs in 
-  the list to be exact), so this is not given either. 
-  The K4 could be denoted  c0 3 c1 4 0 c1 4 c0 3 0 c3 2 c1 4 0 c0 3 c3 2 0 
-  if c0 is the colour of vertex 3, c1 that of vertex 4 and c3 that of 
-  vertex 2. Note that the colour of vertex 1 is -- by definition -- always 
-  the smallest one */
+   The neighbours are numbered in the order that they are reached by the BFS 
+   procedure. Every number is preceded by the colour of the vertex.
+   Since every representation starts with "2" and the same colour, we do not 
+   have to note that. Every first entry in a new clockwise ordering (and its 
+   colour) is determined by the entries before (the first time it occurs in 
+   the list to be exact), so this is not given either. 
+   The K4 could be denoted  c0 3 c1 4 0 c1 4 c0 3 0 c3 2 c1 4 0 c0 3 c3 2 0 
+   if c0 is the colour of vertex 3, c1 that of vertex 4 and c3 that of 
+   vertex 2. Note that the colour of vertex 1 is -- by definition -- always 
+   the smallest one */
 
 	while (last_number < nv)
 	{  
-  	    for (run = temp->next; run != temp; run = run->next)
+   	    for (run = temp->next; run != temp; run = run->next)
 	/* this loop marks all edges around temp->origin. */
 	      { vertex = run->end;
 	  	col = colour[vertex];
@@ -670,17 +690,17 @@ testcanon(EDGE *givenedge, int representation[], int colour[])
 	  	if (vertex < (*representation)) return(2);
 	  	representation++;
 	      }
-  /* check whether representation[] is also at the end of a cyclic list */
-  	    if ((*representation) != 0) return(2); 
-  	    representation++;
-  /* Next vertex to explore: */
-  	    temp = startedge[actual_number];  actual_number++; 
+   /* check whether representation[] is also at the end of a cyclic list */
+   	    if ((*representation) != 0) return(2); 
+   	    representation++;
+   /* Next vertex to explore: */
+   	    temp = startedge[actual_number];  actual_number++; 
 	}
 
 	while (actual_number <= nv) 
 			/* Now we know that all numbers have been given */
 	{  
-  	    for (run = temp->next; run != temp; run = run->next)
+   	    for (run = temp->next; run != temp; run = run->next)
 	/* this loop marks all edges around temp->origin. */
 	      { vertex = run->end;
 	    	col = colour[vertex];
@@ -692,12 +712,12 @@ testcanon(EDGE *givenedge, int representation[], int colour[])
 	    	if (vertex < (*representation)) return(2);
 	    	representation++;
 	      }
-  /* check whether representation[] is also at the end of a cyclic list */
-    	    if ((*representation) != 0) return(2); 
-  	    representation++;
-  /* Next vertex to explore: */
-  	    temp = startedge[actual_number];  actual_number++; 
-	}
+   /* check whether representation[] is also at the end of a cyclic list */
+     	    if ((*representation) != 0) return(2); 
+   	    representation++;
+   /* Next vertex to explore: */
+   	    temp = startedge[actual_number];  actual_number++; 
+ 	}
 
 	return(1);
 }
@@ -708,9 +728,9 @@ static int
 testcanon_mirror(EDGE *givenedge, int representation[], int colour[])
 
 /* Tests whether starting from a given edge and constructing the code in
-  "->prev" direction, an automorphism or even a better representation can 
-  be found. Comments see testcanon -- it is exactly the same except for 
-  the orientation */
+   "->prev" direction, an automorphism or even a better representation can 
+   be found. Comments see testcanon -- it is exactly the same except for 
+   the orientation */
 {
 	EDGE *temp, *run;  
 	EDGE *startedge[MAXN]; /* startedge[i] is the starting edge for 
@@ -730,20 +750,20 @@ testcanon_mirror(EDGE *givenedge, int representation[], int colour[])
 	startedge[1] = givenedge->invers;
 
 /* A representation is a clockwise ordering of all neighbours ended with a 0.
-  The neighbours are numbered in the order that they are reached by the BFS 
-  procedure. Every number is preceded by the colour of the vertex.
-  Since every representation starts with "2" and the same colour, we do not 
-  have to note that. Every first entry in a new clockwise ordering (and its 
-  colour) is determined by the entries before (the first time it occurs in 
-  the list to be exact), so this is not given either. 
-  The K4 could be denoted  c0 3 c1 4 0 c1 4 c0 3 0 c3 2 c1 4 0 c0 3 c3 2 if
-  c0 is the colour of vertex 3, c1 that of vertex 4 and c3 that of vertex 2. 
-  Note that the colour of vertex 1 is -- by definition -- always the 
-  smallest one */
+   The neighbours are numbered in the order that they are reached by the BFS 
+   procedure. Every number is preceded by the colour of the vertex.
+   Since every representation starts with "2" and the same colour, we do not 
+   have to note that. Every first entry in a new clockwise ordering (and its 
+   colour) is determined by the entries before (the first time it occurs in 
+   the list to be exact), so this is not given either. 
+   The K4 could be denoted  c0 3 c1 4 0 c1 4 c0 3 0 c3 2 c1 4 0 c0 3 c3 2 if
+   c0 is the colour of vertex 3, c1 that of vertex 4 and c3 that of vertex 2. 
+   Note that the colour of vertex 1 is -- by definition -- always the 
+   smallest one */
 
 	while (last_number < nv)
 	{  
-  	    for (run = temp->prev; run != temp; run = run->prev)
+   	    for (run = temp->prev; run != temp; run = run->prev)
 	/* this loop marks all edges around temp->origin. */
 	      { vertex = run->end;
 	  	col = colour[vertex];
@@ -758,11 +778,11 @@ testcanon_mirror(EDGE *givenedge, int representation[], int colour[])
 	  	representation++;
 	      }
 	      
-  /* check whether representation[] is also at the end of a cyclic list */
-  	    if ((*representation) != 0) return(2); 
-  	    representation++;
-  /* Next vertex to explore: */
-  	    temp = startedge[actual_number];  actual_number++; 
+   /* check whether representation[] is also at the end of a cyclic list */
+   	    if ((*representation) != 0) return(2); 
+   	    representation++;
+   /* Next vertex to explore: */
+   	    temp = startedge[actual_number];  actual_number++; 
 	}
 
 	while (actual_number <= nv) 
@@ -780,26 +800,26 @@ testcanon_mirror(EDGE *givenedge, int representation[], int colour[])
 	  	if (vertex < (*representation)) return(2);
 	  	representation++;
 	      }
-  /* check whether representation[] is also at the end of a cyclic list */
-  	    if ((*representation) != 0) return(2); 
-  	    representation++;
-  /* Next vertex to explore: */
-  	    temp = startedge[actual_number];  actual_number++; 
+   /* check whether representation[] is also at the end of a cyclic list */
+   	    if ((*representation) != 0) return(2); 
+   	    representation++;
+   /* Next vertex to explore: */
+   	    temp = startedge[actual_number];  actual_number++; 
 	}
 
 	return(1);
 }
 
 /****************************************************************************/
-
+ 
 static void
 testcanon_first_init(EDGE *givenedge, int representation[], int colour[])
-
+ 
 /* Tests whether starting from a given edge and constructing the code in
-  "->next" direction, an automorphism or even a better representation can 
-  be found. A better representation will be completely constructed and 
-  returned in "representation".  It works pretty similar to testcanon except 
-  for obviously necessary changes, so for extensive comments see testcanon */
+   "->next" direction, an automorphism or even a better representation can 
+   be found. A better representation will be completely constructed and 
+   returned in "representation".  It works pretty similar to testcanon except 
+   for obviously necessary changes, so for extensive comments see testcanon */
 {
 	register EDGE *run;
 	register vertex;
@@ -807,16 +827,16 @@ testcanon_first_init(EDGE *givenedge, int representation[], int colour[])
 	EDGE *startedge[MAXN]; 
 	int number[MAXN], i; 
 	int last_number, actual_number;
-
+ 
 	for (i = 0; i < nv; i++) number[i] = 0;
-
+ 
 	number[givenedge->start] = 1; 
 	number[givenedge->end] = 2;
 	actual_number = 1;
 	last_number = 2;
 	temp = givenedge;
 	startedge[1] = givenedge->invers;
-
+ 
 	while (last_number < nv)
 	{  
 	    for (run = temp->next; run != temp; run = run->next)
@@ -852,10 +872,10 @@ static int
 testcanon_init(EDGE *givenedge, int representation[], int colour[])
 
 /* Tests whether starting from a given edge and constructing the code in
-  "->next" direction, an automorphism or even a better representation can 
-  be found. A better representation will be completely constructed and 
-  returned in "representation".  It works pretty similar to testcanon except 
-  for obviously necessary changes, so for extensive comments see testcanon */
+   "->next" direction, an automorphism or even a better representation can 
+   be found. A better representation will be completely constructed and 
+   returned in "representation".  It works pretty similar to testcanon except 
+   for obviously necessary changes, so for extensive comments see testcanon */
 {
 	register EDGE *run;
 	register int col, vertex;
@@ -876,7 +896,7 @@ testcanon_init(EDGE *givenedge, int representation[], int colour[])
 
 	while (last_number < nv)
 	{  
-  	    for (run = temp->next; run != temp; run = run->next)
+   	    for (run = temp->next; run != temp; run = run->next)
 	      { vertex = run->end;
 	  	col = colour[vertex];
 	  	if (!number[vertex]) { startedge[last_number] = run->invers;
@@ -903,10 +923,10 @@ testcanon_init(EDGE *givenedge, int representation[], int colour[])
 		    }
 	        }
 	      }
-  	    if ((*representation) != 0) { better = 1; *representation = 0; }
-  	    representation++;
-  	    temp = startedge[actual_number];  actual_number++;
-	}
+   	    if ((*representation) != 0) { better = 1; *representation = 0; }
+   	    representation++;
+   	    temp = startedge[actual_number];  actual_number++;
+ 	}
 
 	while (actual_number <= nv) 
 	{  
@@ -935,9 +955,9 @@ testcanon_init(EDGE *givenedge, int representation[], int colour[])
 		    }
 	        }
 	      }
-  	    if ((*representation) != 0) { better = 1; *representation = 0; }
-  	    representation++;
-  	    temp = startedge[actual_number];  actual_number++;
+   	    if ((*representation) != 0) { better = 1; *representation = 0; }
+   	    representation++;
+   	    temp = startedge[actual_number];  actual_number++;
 	}
 
 	if (better) return(2);
@@ -950,10 +970,10 @@ static int
 testcanon_mirror_init(EDGE *givenedge, int representation[], int colour[])
 
 /* Tests whether starting from a given edge and constructing the code in
-  "->prev" direction, an automorphism or even a better representation can 
-  be found. A better representation will be completely constructed and 
-  returned in "representation".  It works pretty similar to testcanon except 
-  for obviously necessary changes, so for extensive comments see testcanon */
+   "->prev" direction, an automorphism or even a better representation can 
+   be found. A better representation will be completely constructed and 
+   returned in "representation".  It works pretty similar to testcanon except 
+   for obviously necessary changes, so for extensive comments see testcanon */
 {
 	EDGE *temp, *run;  
 	EDGE *startedge[MAXN]; 
@@ -1000,14 +1020,14 @@ testcanon_mirror_init(EDGE *givenedge, int representation[], int colour[])
 		    }
 	        }
 	      }
-  	    if ((*representation) != 0) { better = 1; *representation = 0; }
-  	    representation++;
-  	    temp = startedge[actual_number];  actual_number++;
+   	    if ((*representation) != 0) { better = 1; *representation = 0; }
+   	    representation++;
+   	    temp = startedge[actual_number];  actual_number++;
 	}
 
 	while (actual_number <= nv) 
 	{  
-  	    for (run = temp->prev; run != temp; run = run->prev)
+   	    for (run = temp->prev; run != temp; run = run->prev)
 	      { vertex = run->end; 
 	  	col = colour[vertex];
 	  	if (better)
@@ -1047,14 +1067,14 @@ static void
 construct_numb(EDGE *givenedge, EDGE *numbering[])
 
 /* Starts at givenedge and writes the edges in the well defined order 
-  into the list.  Works like testcanon. Look there for comments. */
+   into the list.  Works like testcanon. Look there for comments. */
 {
 	EDGE *temp, **tail, **limit, *run;  
 	EDGE *startedge[MAXN]; /* startedge[i] is the starting edge for 
- 				 exploring the vertex with the number i+1 */
+  				 exploring the vertex with the number i+1 */
 	int number[MAXN], i; /* The new numbers of the vertices, starting 
 				at 1 in order to have "0" as a possibility to
-   				mark ends of lists and not yet given numbers */
+    				mark ends of lists and not yet given numbers */
 	int last_number, actual_number, vertex;
 
 
@@ -1071,31 +1091,31 @@ construct_numb(EDGE *givenedge, EDGE *numbering[])
 
 	while (last_number < nv)
 	{  
-  	    for (run = temp->next; run != temp; run = run->next)
+   	    for (run = temp->next; run != temp; run = run->next)
 	/* this loop marks all edges around temp->origin. */
 	      { vertex = run->end;
 	  	if (!number[vertex]) { startedge[last_number] = run->invers;
 				 last_number++; number[vertex] = 1; }
 	  	tail++; *tail = run; 
 	      }
-  	    if (tail != limit)
-    	    {
-      		tail++;
-      		*tail = temp = startedge[actual_number];  actual_number++; }
-	}
+   	    if (tail != limit)
+     	    {
+       		tail++;
+       		*tail = temp = startedge[actual_number];  actual_number++; }
+ 	}
 
 	while (tail != limit) 
 			/* Now we know that all numbers have been given */
 	{  
-  	    for (run = temp->next; run != temp; run = run->next)
+   	    for (run = temp->next; run != temp; run = run->next)
 	/* this loop marks all edges around temp->origin. */
 	      { tail++; *tail = run; }
-  	    if (tail != limit)
-    	    { 
-      /* Next vertex to explore: */
-      	        tail++;
+   	    if (tail != limit)
+     	    { 
+       /* Next vertex to explore: */
+       	        tail++;
 	       *tail = temp = startedge[actual_number];  actual_number++; }
-	}
+ 	}
 
 	return;
 }
@@ -1106,7 +1126,7 @@ static void
 construct_numb_mirror(EDGE *givenedge, EDGE *numbering[])
 
 /* Starts at givenedge and writes the edges in the well defined order 
-  into the list.  Works like testcanon. Look there for comments.  */
+   into the list.  Works like testcanon. Look there for comments.  */
 {
 	EDGE *temp, **tail, **limit, *run;  
 	EDGE *startedge[MAXN]; /* startedge[i] is the starting edge for 
@@ -1129,7 +1149,7 @@ construct_numb_mirror(EDGE *givenedge, EDGE *numbering[])
 
 	while (last_number < nv)
 	{  
-  	    for (run = temp->prev; run != temp; run = run->prev)
+   	    for (run = temp->prev; run != temp; run = run->prev)
 	/* this loop marks all edges around temp->origin. */
 	      { vertex = run->end;
 	        if (!number[vertex]) { startedge[last_number] = run->invers;
@@ -1137,23 +1157,23 @@ construct_numb_mirror(EDGE *givenedge, EDGE *numbering[])
 	  	tail++; *tail = run; 
 	      }
 	    if (tail != limit)
-    	    {
-      	        tail++;
-      		*tail = temp = startedge[actual_number];  actual_number++; }
-	}
+     	    {
+       	        tail++;
+       		*tail = temp = startedge[actual_number];  actual_number++; }
+ 	}
 
 	while (tail != limit) 
 			/* Now we know that all numbers have been given */
 	{  
-  	    for (run = temp->prev; run != temp; run = run->prev)
+   	    for (run = temp->prev; run != temp; run = run->prev)
 	/* this loop marks all edges around temp->origin. */
 	      { tail++; *tail = run; }
-  	    if (tail != limit)
-    	    { 
-      /* Next vertex to explore: */
-      	        tail++;
-      		*tail = temp = startedge[actual_number];  actual_number++; }
-	}
+   	    if (tail != limit)
+     	    { 
+       /* Next vertex to explore: */
+       	        tail++;
+       		*tail = temp = startedge[actual_number];  actual_number++; }
+ 	}
 
 	return;
 }
@@ -1162,33 +1182,33 @@ construct_numb_mirror(EDGE *givenedge, EDGE *numbering[])
 
 static int 
 canon(int colour[], EDGE *can_numberings[][MAXE], 
-     int *num_can_numberings, int *num_can_numberings_or_pres)
+      int *num_can_numberings, int *num_can_numberings_or_pres)
 
 /* Checks whether the last vertex (number: nv-1) is canonical or not. 
-  Returns 1 if yes, 0 if not. One of the criterions a canonical vertex 
-  must fulfill, is that its colour is minimal. If the vertex with minimal
-  colour is not one with minimal valence, startlist and startlist_last
-  may be too small.
-  A possible starting edge for the construction of a representation is 
-  one with lexicographically minimal colour pair (start,INT_MAX-end).
-  In can_numberings[][] the canonical numberings are stored as sequences 
-  of oriented edges.  For every 0 <= i,j < *num_can_numberings and every 
-  0 <= k < ne the edges can_numberings[i][k] and can_numberings[j][k] can 
-  be mapped onto each other by an automorphism. The first 
-  *num_can_numberings_or_pres numberings are orientation preserving while 
-  the rest is orientation reversing.
+   Returns 1 if yes, 0 if not. One of the criterions a canonical vertex 
+   must fulfill, is that its colour is minimal. If the vertex with minimal
+   colour is not one with minimal valence, startlist and startlist_last
+   may be too small.
+   A possible starting edge for the construction of a representation is 
+   one with lexicographically minimal colour pair (start,INT_MAX-end).
+   In can_numberings[][] the canonical numberings are stored as sequences 
+   of oriented edges.  For every 0 <= i,j < *num_can_numberings and every 
+   0 <= k < ne the edges can_numberings[i][k] and can_numberings[j][k] can 
+   be mapped onto each other by an automorphism. The first 
+   *num_can_numberings_or_pres numberings are orientation preserving while 
+   the rest is orientation reversing.
 
-  In case of only 1 automorphism, in can_numberings[0][0] the "canonical" 
-  edge is given.  It is one edge emanating at the canonical vertex. The 
-  rest of the numbering is not given. 
+   In case of only 1 automorphism, in can_numberings[0][0] the "canonical" 
+   edge is given.  It is one edge emanating at the canonical vertex. The 
+   rest of the numbering is not given. 
 
-  In case of nontrivial automorphisms, can[0] starts with a list of edges 
-  adjacent to nv-1. In case of an orientation preserving numbering the deges 
-  are listed in ->next direction, otherwise in ->prev direction.
+   In case of nontrivial automorphisms, can[0] starts with a list of edges 
+   adjacent to nv-1. In case of an orientation preserving numbering the deges 
+   are listed in ->next direction, otherwise in ->prev direction.
 
-  Works OK if at least one vertex has valence >= 3. Otherwise some numberings 
-  are computed twice, since changing the orientation (the cyclic order around 
-  each vertex) doesn't change anything */
+   Works OK if at least one vertex has valence >= 3. Otherwise some numberings 
+   are computed twice, since changing the orientation (the cyclic order around 
+   each vertex) doesn't change anything */
 {
 	int i, last_vertex, test;
 	int minstart, maxend; /* (minstart,maxend) will be the chosen colour 
@@ -1209,23 +1229,23 @@ canon(int colour[], EDGE *can_numberings[][MAXE],
 	maxend = colour[end->end];
 
 	for (run = end->next; run != end; run = run->next)
- 	  { if (colour[run->end] > maxend)
+  	  { if (colour[run->end] > maxend)
 	    { startlist_last[0] = run; 
 	      list_length_last = 1; maxend = colour[run->end];}
 	    else if (colour[run->end] == maxend)
 	    { startlist_last[list_length_last] = run; list_length_last++; }
- 	  }
+  	  }
 
 /* Now we know the pair that SHOULD be minimal and we can determine a list 
-  of all edges with this colour pair. If a new pair is found that is even 
-  smaller, we can return 0 at once */
+   of all edges with this colour pair. If a new pair is found that is even 
+   smaller, we can return 0 at once */
 
 	list_length = 0;
 
 	for (i = 0; i < last_vertex; i++) 
- 	  { if (colour[i] < minstart) return(0);
-   	    if (colour[i] == minstart)
-     	    { run = end = firstedge[i];
+  	  { if (colour[i] < minstart) return(0);
+    	    if (colour[i] == minstart)
+      	    { run = end = firstedge[i];
 	      do
 	      {
 	          if (colour[run->end] > maxend) return(0);
@@ -1234,10 +1254,10 @@ canon(int colour[], EDGE *can_numberings[][MAXE],
 	          run = run->next;
 	      } while (run != end);
 	    }
- 	  }
+  	  }
 
 /* OK -- so there is no smaller pair and now we have to determine the 
-  smallest representation around vertex "last_vertex": */
+   smallest representation around vertex "last_vertex": */
 
 	testcanon_first_init(startlist_last[0], representation, colour);
 	numblist[0] = startlist_last[0];
@@ -1250,43 +1270,43 @@ canon(int colour[], EDGE *can_numberings[][MAXE],
 
 	for (i = 1; i < list_length_last; i++)
 	  { test = testcanon_init(startlist_last[i], representation, colour);
-   	    if (test == 1) { numblist[numbs] = startlist_last[i]; numbs++; }
-   	    else if (test == 2) 
+    	    if (test == 1) { numblist[numbs] = startlist_last[i]; numbs++; }
+    	    else if (test == 2) 
 	    { numbs_mirror = 0; numbs = 1; numblist[0] = startlist_last[i]; };
 	    test = testcanon_mirror_init(startlist_last[i], 
 					 representation, colour);
-   	    if (test == 1)  
+    	    if (test == 1)  
 	    { numblist_mirror[numbs_mirror] = startlist_last[i]; 
 	      numbs_mirror++; }
-   	    else if (test == 2) 
+    	    else if (test == 2) 
 	    { numbs_mirror = 1; numbs = 0; 
 	      numblist_mirror[0] = startlist_last[i]; };
- 	  }
+  	  }
 
 /* Now we know the best representation we can obtain starting at last_vertex. 
-  Now we will check all the others. We can return 0 at once if we find a 
-  better one */
+   Now we will check all the others. We can return 0 at once if we find a 
+   better one */
 
 	for (i = 0; i < list_length; i++)
- 	  { test = testcanon(startlist[i], representation, colour);
+  	  { test = testcanon(startlist[i], representation, colour);
 	    if (test == 1) { numblist[numbs] = startlist[i]; numbs++; }
 	    else if (test == 2) return(0);
 	    test = testcanon_mirror(startlist[i], representation, colour);
 	    if (test == 1) 
 	    { numblist_mirror[numbs_mirror] = startlist[i]; numbs_mirror++; }
-   	    else if (test == 2) return(0);
- 	  }
+    	    else if (test == 2) return(0);
+  	  }
 
 	*num_can_numberings_or_pres = numbs;
 	*num_can_numberings = numbs+numbs_mirror;
 
 	if (*num_can_numberings>1)
- 	{ for (i = 0; i < numbs; i++) 
+  	{ for (i = 0; i < numbs; i++) 
 	      construct_numb(numblist[i], can_numberings[i]); 
-   	  for (i = 0; i < numbs_mirror; i++, numbs++) 
+    	  for (i = 0; i < numbs_mirror; i++, numbs++) 
 	      construct_numb_mirror(numblist_mirror[i], 
 				     can_numberings[numbs]);
- 	}
+  	}
 	else 
 	{ if (numbs) can_numberings[0][0] = numblist[0];
 	  else can_numberings[0][0] = numblist_mirror[0]; }
@@ -1301,10 +1321,10 @@ compute_autom_fullerenes(int colour[], EDGE *can_numberings[][MAXE],
 	      int *num_can_numberings, int *num_can_numberings_or_pres)
 
 /* Works pretty similar to canon() -- the only difference is that it
-  always computes the automorphism group -- not only in case the last
-  vertex is canonical. The restriction to fullerenes has its cause in
-  the restriction to maximum degree 6, which is used for the size of
-  startlist and startlist_last.*/
+   always computes the automorphism group -- not only in case the last
+   vertex is canonical. The restriction to fullerenes has its cause in
+   the restriction to maximum degree 6, which is used for the size of
+   startlist and startlist_last.*/
 
 {
 	int i, last_vertex, test;
@@ -1329,30 +1349,30 @@ compute_autom_fullerenes(int colour[], EDGE *can_numberings[][MAXE],
 	maxend = colour[end->end];
 
 	for (run = end->next; run != end; run = run->next)
- 	{ 
+  	{ 
 	    if (colour[run->end] > maxend)
 	    { 	
 		startlist_last[0] = run; 
 	        list_length_last = 1; 
-               maxend = colour[run->end];
-           }
+                maxend = colour[run->end];
+            }
 	    else if (colour[run->end] == maxend)
 	    { 
 		startlist_last[list_length_last] = run; 
-               list_length_last++; 
-           }
- 	}
+                list_length_last++; 
+            }
+  	}
 
 /* Now we know the pair that SHOULD be minimal and we can determine a list 
-  of all edges with this colour pair. If a new pair is found that is even 
-  smaller, we can NOT return 0 at once */
+   of all edges with this colour pair. If a new pair is found that is even 
+   smaller, we can NOT return 0 at once */
 
 	list_length = 0;
 
 	for (i = 0; i < last_vertex; i++) 
- 	{
-   	    if (colour[i] == minstart)
-     	    { 
+  	{
+    	    if (colour[i] == minstart)
+      	    { 
 		run = end = firstedge[i];
 	        do
 	        {
@@ -1364,19 +1384,19 @@ compute_autom_fullerenes(int colour[], EDGE *can_numberings[][MAXE],
 	            run = run->next;
 	        } while (run != end);
 	    }
- 	}
+  	}
 
 /* OK -- now we have to determine the 
-  smallest representation around vertex "last_vertex": */
+   smallest representation around vertex "last_vertex": */
 
 	testcanon_first_init(startlist_last[0], representation, colour);
 	numblist[0] = startlist_last[0];
 	test = testcanon_mirror_init(startlist_last[0],representation,colour);
 	if (test == 1) 
 	{ 
-	    numbs_mirror = 1; 
+ 	    numbs_mirror = 1; 
 	    numblist_mirror[0] = startlist_last[0]; 
-	}
+ 	}
 	else if (test == 2)  
 	{ 
 	    numbs_mirror = 1; 
@@ -1387,12 +1407,12 @@ compute_autom_fullerenes(int colour[], EDGE *can_numberings[][MAXE],
 	for (i = 1; i < list_length_last; i++)
 	{ 
 	    test = testcanon_init(startlist_last[i], representation, colour);
-   	    if (test == 1) 
+    	    if (test == 1) 
 	    { 
 		numblist[numbs] = startlist_last[i]; 
 		numbs++; 
 	    }
-   	    else if (test == 2) 
+    	    else if (test == 2) 
 	    { 
 		numbs_mirror = 0; 
 		numbs = 1; 
@@ -1401,24 +1421,24 @@ compute_autom_fullerenes(int colour[], EDGE *can_numberings[][MAXE],
 
 	    test = testcanon_mirror_init(startlist_last[i], 
 					 representation, colour);
-   	    if (test == 1)  
+    	    if (test == 1)  
 	    { 
 		numblist_mirror[numbs_mirror] = startlist_last[i]; 
 	        numbs_mirror++; 
 	    }
-   	    else if (test == 2) 
+    	    else if (test == 2) 
 	    { 
 		numbs_mirror = 1; 
 		numbs = 0; 
 	        numblist_mirror[0] = startlist_last[i]; 
 	    }
- 	}
+  	}
 
 /* Now we know the best representation we can obtain starting at last_vertex. 
-  Now we will check all the others. */ 
+   Now we will check all the others. */ 
 
 	for (i = 0; i < list_length; i++)
- 	{ 
+  	{ 
 	    test = testcanon(startlist[i], representation, colour);
 	    if (test == 1) 
 	    { 
@@ -1431,20 +1451,20 @@ compute_autom_fullerenes(int colour[], EDGE *can_numberings[][MAXE],
 		numblist_mirror[numbs_mirror] = startlist[i]; 
 		numbs_mirror++; 
 	    }
- 	}
+  	}
 
 	*num_can_numberings_or_pres = numbs;
 	*num_can_numberings = numbs + numbs_mirror;
 
 
 	if (*num_can_numberings>1)
- 	{ 
+  	{ 
 	    for (i = 0; i < numbs; i++) 
 	        construct_numb(numblist[i], can_numberings[i]); 
-   	    for (i = 0; i < numbs_mirror; i++, numbs++) 
+    	    for (i = 0; i < numbs_mirror; i++, numbs++) 
 	        construct_numb_mirror(numblist_mirror[i], 
 				             can_numberings[numbs]);
- 	}
+  	}
 	else 
 	{
 	    if (numbs) can_numberings[0][0] = numblist[0];
@@ -1459,7 +1479,7 @@ static int
 numedgeorbits(int nbtot, int nbop)
 
 /* return number of orbits of directed edges, under the
-  orientation-preserving automorphism group (assumed computed) */
+   orientation-preserving automorphism group (assumed computed) */
 {
 	register EDGE **nb0,**nblim,**nb;
 	register int i,j;
@@ -1519,7 +1539,7 @@ initialize()
 	    }
 
 	    si = STAR4(i);
-
+ 
 	    for (j = 0; j < 4; ++j) 
 	    { 
 		si[j].end = si[j+4].start = i;
@@ -1530,7 +1550,7 @@ initialize()
 	    }
 
 	    si = STAR5(i);
-
+  
 	    for (j = 0; j < 5; ++j)  
 	    {  
 		si[j].end = si[j+5].start = i; 
@@ -1588,172 +1608,172 @@ initialK4()
 
 static void
 find_extensions(int numb_total, int numb_pres,
-               EDGE *ext3[], int *numext3, 
-               EDGE *ext4[], int *numext4,
-               EDGE *ext5[], int *numext5)
+                EDGE *ext3[], int *numext3, 
+                EDGE *ext4[], int *numext4,
+                EDGE *ext5[], int *numext5)
 
 /* Find all nonequivalent places for extension.
-  These are listed in ext3/4/5 according to the degree of the 
-  future new vertex.  The number of cases is returned in numext3/4/5. */
+   These are listed in ext3/4/5 according to the degree of the 
+   future new vertex.  The number of cases is returned in numext3/4/5. */
 {
-       register int i,k;
-       int deg3,deg4;
-       register EDGE *e,*e1,*e2,*ex;
-       EDGE **nb0,**nb1,**nbop,**nblim;
+        register int i,k;
+        int deg3,deg4;
+        register EDGE *e,*e1,*e2,*ex;
+        EDGE **nb0,**nb1,**nbop,**nblim;
 
-       deg3 = deg4 = 0;
-       for (i = 0; i < nv; ++i)
-           if      (degree[i] == 3) ++deg3;
-           else if (degree[i] == 4) ++deg4;
+        deg3 = deg4 = 0;
+        for (i = 0; i < nv; ++i)
+            if      (degree[i] == 3) ++deg3;
+            else if (degree[i] == 4) ++deg4;
+        
+     /* code for trivial group */
 
-    /* code for trivial group */
-
-       if (numb_total == 1)
-       {
+        if (numb_total == 1)
+        {
 	    if (nv == maxnv-1 && fswitch)
 	       *numext3 = 0;
 	    else
 	    {
-               k = 0;
-               for (i = 0; i < nv; ++i)
-               {
+                k = 0;
+                for (i = 0; i < nv; ++i)
+                {
 		    if (degree[i] == 6) continue;
-                   e = ex = firstedge[i];
-                   do
-                   {
-                       e1 = e->invers->prev;
-                       if (e1 > e)
-                       {
-                           e1 = e1->invers->prev;
-                           if (e1 > e) 
+                    e = ex = firstedge[i];
+                    do
+                    {
+                        e1 = e->invers->prev;
+                        if (e1 > e)
+                        {
+                            e1 = e1->invers->prev;
+                            if (e1 > e) 
 			    {
 				if (degree[e->end] < 6 &&
 					degree[e1->start] < 6)
 				    ext3[k++] = e;
 			    }
-                       }
-                       e = e->next;
-                   }
-                   while (e != ex);
+                        }
+                        e = e->next;
+                    }
+                    while (e != ex);
 		}
-               *numext3 = k;
+                *numext3 = k;
 	    }
 
-           if (deg3 <= 2)
-           {
-               k = 0;
-               for (i = 0; i < nv; ++i)
-               {
-                   if (degree[i] == 3) continue;
-                   e = ex = firstedge[i];
-                   do
-                   {
-                       e1 = e->next;
-                       if (e1->invers > e1)
-                       {
-                           e2 = e1->invers->prev;
-                           if (degree[e->end] < 6 &&
+            if (deg3 <= 2)
+            {
+                k = 0;
+                for (i = 0; i < nv; ++i)
+                {
+                    if (degree[i] == 3) continue;
+                    e = ex = firstedge[i];
+                    do
+                    {
+                        e1 = e->next;
+                        if (e1->invers > e1)
+                        {
+                            e2 = e1->invers->prev;
+                            if (degree[e->end] < 6 &&
 				degree[e2->end] < 6 &&
 				(degree[e->end] == 3)
-                                       + (degree[e2->end] == 3) == deg3)
-                           ext4[k++] = e;
-                       }
-                       e = e->next;
-                   }
-                   while (e != ex);
-               }
-               *numext4 = k;
-           }
-           else
-               *numext4 = 0;
+                                        + (degree[e2->end] == 3) == deg3)
+                            ext4[k++] = e;
+                        }
+                        e = e->next;
+                    }
+                    while (e != ex);
+                }
+                *numext4 = k;
+            }
+            else
+                *numext4 = 0;
+                        
+            *numext5 = 0;
+        }
 
-           *numext5 = 0;
-       }
+     /* code for nontrivial group */
+        else
+        {
+            nb0 = (EDGE**)numbering[0];
+            nbop = (EDGE**)numbering[numb_pres == 0 ? numb_total : numb_pres];
+            nblim = (EDGE**)numbering[numb_total];
 
-    /* code for nontrivial group */
-       else
-       {
-           nb0 = (EDGE**)numbering[0];
-           nbop = (EDGE**)numbering[numb_pres == 0 ? numb_total : numb_pres];
-           nblim = (EDGE**)numbering[numb_total];
-
-           for (i = 0; i < ne; ++i)
-           {
-               nb0[i]->mark = 0;
-               nb0[i]->index = i;
-           }
+            for (i = 0; i < ne; ++i)
+            {
+                nb0[i]->mark = 0;
+                nb0[i]->index = i;
+            }
 
 	    if (nv == maxnv-1 && fswitch)
 		*numext3 = 0;
 	    else
 	    {
-               k = 0;
-               for (i = 0; i < ne; ++i)
-               {
-                   e = nb0[i];
-                   if (e->mark) continue;
+                k = 0;
+                for (i = 0; i < ne; ++i)
+                {
+                    e = nb0[i];
+                    if (e->mark) continue;
 		    if (degree[e->start] == 6 || degree[e->end] == 6
-                       || degree[e->next->end] == 6) continue;
+                        || degree[e->next->end] == 6) continue;
 
-                   ext3[k++] = e;
-
-                   for (nb1 = nb0 + i; nb1 < nbop; nb1 += MAXE)
-                       (*nb1)->mark = 1;
-
-                   for (; nb1 < nblim; nb1 += MAXE)
-                           (*nb1)->invers->mark = 1;
-
-                   e1 = e->invers->prev;
-                   for (nb1 = nb0 + e1->index; nb1 < nbop; nb1 += MAXE)
-                       (*nb1)->mark = 1;
-
-                   for (; nb1 < nblim; nb1 += MAXE)
-                       (*nb1)->invers->mark = 1;
-
-                   e1 = e1->invers->prev;
-                   for (nb1 = nb0 + e1->index; nb1 < nbop; nb1 += MAXE)
-                       (*nb1)->mark = 1;
-
-                   for (; nb1 < nblim; nb1 += MAXE)
-                       (*nb1)->invers->mark = 1;
-               }
-               *numext3 = k;
+                    ext3[k++] = e;
+                    
+                    for (nb1 = nb0 + i; nb1 < nbop; nb1 += MAXE)
+                        (*nb1)->mark = 1;
+    
+                    for (; nb1 < nblim; nb1 += MAXE)
+                            (*nb1)->invers->mark = 1;
+    
+                    e1 = e->invers->prev;
+                    for (nb1 = nb0 + e1->index; nb1 < nbop; nb1 += MAXE)
+                        (*nb1)->mark = 1;
+    
+                    for (; nb1 < nblim; nb1 += MAXE)
+                        (*nb1)->invers->mark = 1;
+    
+                    e1 = e1->invers->prev;
+                    for (nb1 = nb0 + e1->index; nb1 < nbop; nb1 += MAXE)
+                        (*nb1)->mark = 1;
+    
+                    for (; nb1 < nblim; nb1 += MAXE)
+                        (*nb1)->invers->mark = 1;
+                }
+                *numext3 = k;
 	    }
-
-           if (deg3 <= 2)
-           {
-               for (i = 0; i < ne; ++i)
-                   nb0[i]->mark = 0;
-               k = 0;
-               for (i = 0; i < ne; ++i)
-               {
-                   e = nb0[i];
-                   if (e->mark) continue;
-                   e1 = e->next->invers->prev;
+        
+            if (deg3 <= 2)
+            {
+                for (i = 0; i < ne; ++i)
+                    nb0[i]->mark = 0;
+                k = 0;
+                for (i = 0; i < ne; ++i)
+                {
+                    e = nb0[i];
+                    if (e->mark) continue;
+                    e1 = e->next->invers->prev;
 		    if (degree[e->end] == 6 || degree[e1->end] == 6) continue;
-                   if ((degree[e->end] == 3) + (degree[e1->end] == 3) != deg3)
-                       continue;
-                   ext4[k++] = e;
+                    if ((degree[e->end] == 3) + (degree[e1->end] == 3) != deg3)
+                        continue;
+                    ext4[k++] = e;
 
-                   for (nb1 = nb0 + i; nb1 < nbop; nb1 += MAXE)
-                       (*nb1)->mark = 1;
+                    for (nb1 = nb0 + i; nb1 < nbop; nb1 += MAXE)
+                        (*nb1)->mark = 1;
 
-                   for (; nb1 < nblim; nb1 += MAXE)
-                       (*nb1)->prev->prev->mark = 1;
+                    for (; nb1 < nblim; nb1 += MAXE)
+                        (*nb1)->prev->prev->mark = 1;
 
-                   for (nb1 = nb0 + e1->index; nb1 < nbop; nb1 += MAXE)
-                       (*nb1)->mark = 1;
+                    for (nb1 = nb0 + e1->index; nb1 < nbop; nb1 += MAXE)
+                        (*nb1)->mark = 1;
+ 
+                    for (; nb1 < nblim; nb1 += MAXE)
+                        (*nb1)->prev->prev->mark = 1;
+                }
+                *numext4 = k;
+            }
+            else
+                *numext4 = 0;
 
-                   for (; nb1 < nblim; nb1 += MAXE)
-                       (*nb1)->prev->prev->mark = 1;
-               }
-               *numext4 = k;
-           }
-           else
-               *numext4 = 0;
-
-           *numext5 = 0;
-       }
+            *numext5 = 0;
+        }
 }
 
 /**************************************************************************/
@@ -1762,9 +1782,9 @@ static void
 find_dual()
 
 /* Store in the rightface field of each edge the number of the face on 
-  the right hand side of that edge.  Faces are numbered 0,1,....  Also
-  store in facestart[i] an example of an edge in the clockwise
-  orientation of the face boundary, for each i. */
+   the right hand side of that edge.  Faces are numbered 0,1,....  Also
+   store in facestart[i] an example of an edge in the clockwise
+   orientation of the face boundary, for each i. */
 {
 	register int i,nf;
 	register EDGE *e,*e1,*ex;
@@ -1806,8 +1826,8 @@ static void
 write_dual_planar_code(FILE *f, int doflip)   
 
 /* Write the dual in planar_code format.  Always write in next direction,
-  and if doflip != 0 also write in prev direction.  find_dual() must
-  have been called first */
+   and if doflip != 0 also write in prev direction.  find_dual() must
+   have been called first */
 {
 	register int i,k,k1;
 	register EDGE *e;
@@ -1859,8 +1879,8 @@ static void
 write_dual_alpha(FILE *f, int doflip)   
 
 /* Write the dual in planar_code format.  Always write in next direction,
-  and if doflip != 0 also write in prev direction.  find_dual must have
-  been called first. */
+   and if doflip != 0 also write in prev direction.  find_dual must have
+   been called first. */
 {
 	register int i,k,k1;
 	register EDGE *e;
@@ -1927,7 +1947,7 @@ static void
 write_planar_code(FILE *f, int doflip)   
 
 /* Write in planar_code format.  Always write in next direction,
-  and if doflip != 0 also write in prev direction. */
+   and if doflip != 0 also write in prev direction. */
 {
 	register int i,k;
 	register EDGE *ex,*e;
@@ -1979,107 +1999,107 @@ write_sparse6(FILE *f, int doflip)
 
 /* Write in sparse6 format.  doflip is ignored. */
 {
-   unsigned char code[20+2*MAXE+2*MAXN];
-   register unsigned char *p;
-   int nb,i,j,lastj,x,k,r,rr,topbit;
-   EDGE *e,*ex;
+    unsigned char code[20+2*MAXE+2*MAXN];
+    register unsigned char *p;
+    int nb,i,j,lastj,x,k,r,rr,topbit;
+    EDGE *e,*ex;
 
-   p = code;
-   *p++ = ':';
+    p = code;
+    *p++ = ':';
 
-   if (nv <= 62)
-       *p++ = 63 + nv;
-   else
-   {
-       *p++ = 63 + 63;
-       *p++ = 63 + 0;
-       *p++ = 63 + (nv >> 6);
-       *p++ = 63 + (nv & 0x3F);
-   }
+    if (nv <= 62)
+        *p++ = 63 + nv;
+    else
+    {
+        *p++ = 63 + 63;
+        *p++ = 63 + 0;
+        *p++ = 63 + (nv >> 6);
+        *p++ = 63 + (nv & 0x3F);
+    }
 
-   for (i = nv-1, nb = 0; i != 0 ; i >>= 1, ++nb) {}
-   topbit = 1 << (nb-1);
-   k = 6;
-   x = 0;
+    for (i = nv-1, nb = 0; i != 0 ; i >>= 1, ++nb) {}
+    topbit = 1 << (nb-1);
+    k = 6;
+    x = 0;
 
-   lastj = 0;
-   for (j = 0; j < nv; ++j)
-   {
-       e = ex = firstedge[j];
-       do
-       {
-           i = e->end;
-           if (i <= j)
-           {
-               if (j == lastj)
-               {
-                   x <<= 1;
-                   if (--k == 0)
-                   {
-                       *p++ = 63 + x;
-                       k = 6;
-                       x = 0;
-                   }
-               }
-               else
-               {
-                   x = (x << 1) | 1;
-                   if (--k == 0)
-                   {
-                       *p++ = 63 + x;
-                       k = 6;
-                       x = 0;
-                   }
-                   if (j > lastj+1)
-                   {
-                       for (r = 0, rr = j; r < nb; ++r, rr <<= 1)
-                       {
-                           if (rr & topbit) x = (x << 1) | 1;
-                           else             x <<= 1;
-                           if (--k == 0)
-                           {
-                               *p++ = 63 + x;
-                               k = 6;
-                               x = 0;
-                           }
-                       }
-                       x <<= 1;
-                       if (--k == 0)
-                       {
-                           *p++ = 63 + x;
-                           k = 6;
-                           x = 0;
-                       }
-                   }
-                   lastj = j;
-               }
-               for (r = 0, rr = i; r < nb; ++r, rr <<= 1)
-               {
-                   if (rr & topbit) x = (x << 1) | 1;
-                   else             x <<= 1;
-                   if (--k == 0)
-                   {
-                       *p++ = 63 + x;
-                       k = 6;
-                       x = 0;
-                   }
-               }
-           }
-           e = e->next;
-       } while (e != ex);
-   }
+    lastj = 0;
+    for (j = 0; j < nv; ++j)
+    {
+        e = ex = firstedge[j];
+        do
+        {
+            i = e->end;
+            if (i <= j)
+            {
+                if (j == lastj)
+                {
+                    x <<= 1;
+                    if (--k == 0)
+                    {
+                        *p++ = 63 + x;
+                        k = 6;
+                        x = 0;
+                    }
+                }
+                else
+                {
+                    x = (x << 1) | 1;
+                    if (--k == 0)
+                    {
+                        *p++ = 63 + x;
+                        k = 6;
+                        x = 0;
+                    }
+                    if (j > lastj+1)
+                    {
+                        for (r = 0, rr = j; r < nb; ++r, rr <<= 1)
+                        {
+                            if (rr & topbit) x = (x << 1) | 1;
+                            else             x <<= 1;
+                            if (--k == 0)
+                            {
+                                *p++ = 63 + x;
+                                k = 6;
+                                x = 0;
+                            }
+                        }
+                        x <<= 1;
+                        if (--k == 0)
+                        {
+                            *p++ = 63 + x;
+                            k = 6;
+                            x = 0;
+                        }
+                    }
+                    lastj = j;
+                }
+                for (r = 0, rr = i; r < nb; ++r, rr <<= 1)
+                {
+                    if (rr & topbit) x = (x << 1) | 1;
+                    else             x <<= 1;
+                    if (--k == 0)
+                    {
+                        *p++ = 63 + x;
+                        k = 6;
+                        x = 0;
+                    }
+                }
+            }
+            e = e->next;
+        } while (e != ex);
+    }
 
-   if (k != 6) *p++ = 63 + ((x << k) | ((1 << k) - 1));
+    if (k != 6) *p++ = 63 + ((x << k) | ((1 << k) - 1));
 
-   *p++ = '\n';
-   k = p - code;
+    *p++ = '\n';
+    k = p - code;
 
-   if (fwrite(code,sizeof(unsigned char),(size_t)k,f) != k)
-   {
-       fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
-       perror(">E ");
-       exit(1);
-   }
+    if (fwrite(code,sizeof(unsigned char),(size_t)k,f) != k)
+    {
+        fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
+        perror(">E ");
+        exit(1);
+    }
 }
 
 /**************************************************************************/
@@ -2088,111 +2108,111 @@ static void
 write_dual_sparse6(FILE *f, int doflip)
 
 /* Write dual cubic graph in sparse6 format.  doflip is ignored.
-  find_dual() must have been called first. */
+   find_dual() must have been called first. */
 {
-   unsigned char code[20+2*MAXE+2*MAXF];
-   register unsigned char *p;
-   int nb,nf,i,j,lastj,x,k,r,rr,topbit;
-   EDGE *e,*ex;
+    unsigned char code[20+2*MAXE+2*MAXF];
+    register unsigned char *p;
+    int nb,nf,i,j,lastj,x,k,r,rr,topbit;
+    EDGE *e,*ex;
 
-   p = code;
-   *p++ = ':';
+    p = code;
+    *p++ = ':';
 
-   nf = 2*nv - 4;
+    nf = 2*nv - 4;
 
-   if (nf <= 62)
-       *p++ = 63 + nf;
-   else
-   {
-       *p++ = 63 + 63;
-       *p++ = 63 + 0;
-       *p++ = 63 + (nf >> 6);
-       *p++ = 63 + (nf & 0x3F);
-   }
+    if (nf <= 62)
+        *p++ = 63 + nf;
+    else
+    {
+        *p++ = 63 + 63;
+        *p++ = 63 + 0;
+        *p++ = 63 + (nf >> 6);
+        *p++ = 63 + (nf & 0x3F);
+    }
 
-   for (i = nf-1, nb = 0; i != 0 ; i >>= 1, ++nb) {}
-   topbit = 1 << (nb-1);
-   k = 6;
-   x = 0;
+    for (i = nf-1, nb = 0; i != 0 ; i >>= 1, ++nb) {}
+    topbit = 1 << (nb-1);
+    k = 6;
+    x = 0;
 
-   lastj = 0;
-   for (j = 0; j < nf; ++j)
-   {
-       e = ex = facestart[j]->invers;
-       do
-       {
-           i = e->rightface;
-           if (i <= j)
-           {
-               if (j == lastj)
-               {
-                   x <<= 1;
-                   if (--k == 0)
-                   {
-                       *p++ = 63 + x;
-                       k = 6;
-                       x = 0;
-                   }
-               }
-               else
-               {
-                   x = (x << 1) | 1;
-                   if (--k == 0)
-                   {
-                       *p++ = 63 + x;
-                       k = 6;
-                       x = 0;
-                   }
-                   if (j > lastj+1)
-                   {
-                       for (r = 0, rr = j; r < nb; ++r, rr <<= 1)
-                       {
-                           if (rr & topbit) x = (x << 1) | 1;
-                           else             x <<= 1;
-                           if (--k == 0)
-                           {
-                               *p++ = 63 + x;
-                               k = 6;
-                               x = 0;
-                           }
-                       }
-                       x <<= 1;
-                       if (--k == 0)
-                       {
-                           *p++ = 63 + x;
-                           k = 6;
-                           x = 0;
-                       }
-                   }
-                   lastj = j;
-               }
-               for (r = 0, rr = i; r < nb; ++r, rr <<= 1)
-               {
-                   if (rr & topbit) x = (x << 1) | 1;
-                   else             x <<= 1;
-                   if (--k == 0)
-                   {
-                       *p++ = 63 + x;
-                       k = 6;
-                       x = 0;
-                   }
-               }
-           }
-           e = e->prev->invers;
-       } while (e != ex);
-   }
+    lastj = 0;
+    for (j = 0; j < nf; ++j)
+    {
+        e = ex = facestart[j]->invers;
+        do
+        {
+            i = e->rightface;
+            if (i <= j)
+            {
+                if (j == lastj)
+                {
+                    x <<= 1;
+                    if (--k == 0)
+                    {
+                        *p++ = 63 + x;
+                        k = 6;
+                        x = 0;
+                    }
+                }
+                else
+                {
+                    x = (x << 1) | 1;
+                    if (--k == 0)
+                    {
+                        *p++ = 63 + x;
+                        k = 6;
+                        x = 0;
+                    }
+                    if (j > lastj+1)
+                    {
+                        for (r = 0, rr = j; r < nb; ++r, rr <<= 1)
+                        {
+                            if (rr & topbit) x = (x << 1) | 1;
+                            else             x <<= 1;
+                            if (--k == 0)
+                            {
+                                *p++ = 63 + x;
+                                k = 6;
+                                x = 0;
+                            }
+                        }
+                        x <<= 1;
+                        if (--k == 0)
+                        {
+                            *p++ = 63 + x;
+                            k = 6;
+                            x = 0;
+                        }
+                    }
+                    lastj = j;
+                }
+                for (r = 0, rr = i; r < nb; ++r, rr <<= 1)
+                {
+                    if (rr & topbit) x = (x << 1) | 1;
+                    else             x <<= 1;
+                    if (--k == 0)
+                    {
+                        *p++ = 63 + x;
+                        k = 6;
+                        x = 0;
+                    }
+                }
+            }
+            e = e->prev->invers;
+        } while (e != ex);
+    }
 
-   if (k != 6) *p++ = 63 + ((x << k) | ((1 << k) - 1));
+    if (k != 6) *p++ = 63 + ((x << k) | ((1 << k) - 1));
 
-   *p++ = '\n';
-   k = p - code;
+    *p++ = '\n';
+    k = p - code;
 
-   if (fwrite(code,sizeof(unsigned char),(size_t)k,f) != k)
-   {
-       fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
-       perror(">E ");
-       exit(1);
-   }
+    if (fwrite(code,sizeof(unsigned char),(size_t)k,f) != k)
+    {
+        fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
+        perror(">E ");
+        exit(1);
+    }
 }
 
 /**************************************************************************/
@@ -2229,27 +2249,27 @@ write_graph6(FILE *f)
 	body[bodylen] = '\n';
 
 	for (i = org = 0; i < nv; org += i, ++i)
-       {
-           e = ex = firstedge[i];
-           do
-           {
-               if (e->end < i)
+        {
+            e = ex = firstedge[i];
+            do
+            {
+                if (e->end < i)
 		{
 		    j = org + e->end;
 		    body[j/6] += g6bit[j%6];
 		}
-               e = e->next;
-           }
-           while (e != ex);
-       }
+                e = e->next;
+            }
+            while (e != ex);
+        }
 
 	j = nlen + bodylen + 1;
-       if (fwrite(code,(size_t)1,(size_t)j,f) != j)
-       {
-           fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
-           perror(">E ");
-           exit(1);
-       }
+        if (fwrite(code,(size_t)1,(size_t)j,f) != j)
+        {
+            fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
+            perror(">E ");
+            exit(1);
+        }
 }	
 
 /**************************************************************************/
@@ -2287,34 +2307,34 @@ write_dual_graph6(FILE *f)
 	body[bodylen] = '\n';
 
 	for (i = org = 0; i < nf; org += i, ++i)
-       {
-           e = facestart[i]->invers;
-           if (e->rightface < i)
+        {
+            e = facestart[i]->invers;
+            if (e->rightface < i)
 	    { 
 		j = org + e->rightface;
 		body[j/6] += g6bit[j%6];
 	    }
 	    e = e->prev->invers;
 	    if (e->rightface < i)
-           {
-               j = org + e->rightface;
-               body[j/6] += g6bit[j%6];
-           }
-           e = e->prev->invers;
-           if (e->rightface < i)
-           {
-               j = org + e->rightface;
-               body[j/6] += g6bit[j%6];
-           }
-       }
+            {
+                j = org + e->rightface;
+                body[j/6] += g6bit[j%6];
+            }
+            e = e->prev->invers;
+            if (e->rightface < i)
+            {
+                j = org + e->rightface;
+                body[j/6] += g6bit[j%6];
+            }
+        }
 
 	j = nlen + bodylen + 1;
-       if (fwrite(code,(size_t)1,(size_t)j,f) != j)
-       {
-           fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
-           perror(">E ");
-           exit(1);
-       }
+        if (fwrite(code,(size_t)1,(size_t)j,f) != j)
+        {
+            fprintf(stderr,">E %s: fwrite() failed\n",cmdname);
+            perror(">E ");
+            exit(1);
+        }
 }	
 
 /**************************************************************************/
@@ -2323,7 +2343,7 @@ static void
 write_alpha(FILE *f, int doflip)
 
 /* Write in alphabetic format.  Always write in next direction,
-  and if doflip != 0 also write in prev direction. */
+   and if doflip != 0 also write in prev direction. */
 {
 	register int i,k;
 	register EDGE *ex,*e;
@@ -2390,7 +2410,7 @@ static void
 got_one(int nbtot, int nbop)
 
 /* This is called when a complete triangulation is formed.  The main 
-  purpose is to write the triangulation and to collect some stats. */
+   purpose is to write the triangulation and to collect some stats. */
 {
 	register int doflip,wt,maxdeg;
 
@@ -2401,7 +2421,7 @@ got_one(int nbtot, int nbop)
 #endif
 	{
 	    ADDBIG(nout,doflip + 1);
-#ifdef STATS
+#if STATS
 	    wt = doflip ? 2 : 1;
 	    ADDBIG(numrooted,wt * numedgeorbits(nbtot,nbop));
 	    maxdeg = degree[nv-1];
@@ -2434,10 +2454,10 @@ static int
 make_colours(int col[])  
 
 /* make better colours for maxdeg=3.
-  If nv-1 is not best, return 0.
-  Otherwise, return the number of vertices with the same
-  colour as nv-1 (including itself).  Note that for correct
-  operation, col[nv-1] must have the smallest value in col[]. */
+   If nv-1 is not best, return 0.
+   Otherwise, return the number of vertices with the same
+   colour as nv-1 (including itself).  Note that for correct
+   operation, col[nv-1] must have the smallest value in col[]. */
 {
 	register int i,c,c0,nc;
 	register EDGE *e;
@@ -2478,8 +2498,8 @@ static void
 scantree(int nbtot, int nbop)
 
 /* The main node of the recursion.  As this procedure is entered,
-  nv,ne,degree etc are set for some graph, and nbtot/nbop are the
-  values returned by canon() for that graph. */
+   nv,ne,degree etc are set for some graph, and nbtot/nbop are the
+   values returned by canon() for that graph. */
 {
 	EDGE *ext3[MAXE/3],*ext4[MAXE/2],*ext5[1];
 	int next3,next4,next5;
@@ -2488,14 +2508,22 @@ scantree(int nbtot, int nbop)
 	register EDGE *e1,*e2,**nb,**nblim;
 	EDGE *e,*ex;
 	int nc,xnbtot,xnbop,v;
-	int colour[MAXN];
+	int colour[MAXN],nodd;
+
+	nodd = 0;
+	if (xswitch)
+	{
+	    for (i = 0; i < nv; ++i) if ((degree[i]&1)) ++ nodd;
+	    if (nodd > 2*(maxnv-nv)) return;
+	}
 
 	if (nv == maxnv)
 	{
 	    got_one(nbtot,nbop);
 	    return;
 	}
-	else if (nv >= minnv && (!fswitch || degree[nv-1] > 3))
+	else if (nodd == 0 && 
+                  nv >= minnv && (!fswitch || degree[nv-1] > 3))
 	    got_one(nbtot,nbop);
 
 #ifdef PRE_FILTER
@@ -2553,20 +2581,20 @@ static int
 getswitchvalue(char *arg, int *pj)
 
 /* Find integer value for switch. 
-  arg is a pointer to command-line argument.
-  pj is an index into arg, which is updated.
-  The value of the switch is the function return value.
-  For example, if arg="-xyz1432q" and *pj=3 (pointing at "z"),
-      the value 1432 is returned and *pj=8 (pointing at "q"). */
+   arg is a pointer to command-line argument.
+   pj is an index into arg, which is updated.
+   The value of the switch is the function return value.
+   For example, if arg="-xyz1432q" and *pj=3 (pointing at "z"),
+       the value 1432 is returned and *pj=8 (pointing at "q"). */
 {
-       int j,ans;
+        int j,ans;
 
-       ans = 0;
-       for (j = *pj; arg[j+1] >= '0' && arg[j+1] <= '9'; ++j)
-           ans = ans * 10 + (arg[j+1] - '0');
-
-       *pj = j;
-       return ans;
+        ans = 0;
+        for (j = *pj; arg[j+1] >= '0' && arg[j+1] <= '9'; ++j)
+            ans = ans * 10 + (arg[j+1] - '0');
+        
+        *pj = j;
+        return ans;
 }
 
 
@@ -2584,10 +2612,10 @@ init_circular_lists(EDGE *edge, int length)
 	edge->next=edge+1;
 
 	for (j = 1; j < length; ++j)  
-   	{  
-     	    edge[j].next = edge+j+1;
-     	    edge[j].prev = edge+j-1;
-   	}
+    	{  
+      	    edge[j].next = edge+j+1;
+      	    edge[j].prev = edge+j-1;
+    	}
 
 	edge[length].prev=edge+length-1;
 	edge[length].next=edge;
@@ -2599,15 +2627,15 @@ init_circular_lists(EDGE *edge, int length)
 int read_next_fullerene(int which_case, int res, int mod)
 
 /* This function reads the next fullerene from a Unix pipe and writes the 
-  dual of it in a way that it can be accessed via the global variable
+   dual of it in a way that it can be accessed via the global variable
 
-  static EDGE *firstedge[MAXN];
+   static EDGE *firstedge[MAXN];
 
-  It relies on that for call n+1 the data structure is in the same shape 
-  as at the end of call n (fully restored). It returns 1 if a fullerene 
-  is read, 0 if no more fullerene is read. 
+   It relies on that for call n+1 the data structure is in the same shape 
+   as at the end of call n (fully restored). It returns 1 if a fullerene 
+   is read, 0 if no more fullerene is read. 
 
-  The program fullgen must be in the path */
+   The program fullgen or buckygen must be in the path */
 
 { 
 	static int first_call=1;
@@ -2618,34 +2646,42 @@ int read_next_fullerene(int which_case, int res, int mod)
 
 	int code[MAXN*7];
 	int nlt, ch, i, j, nulls, counter, count5, count6, end;
-	char resmod[30],command[80];
+	char resmod[30],command[100];
 	EDGE *search;
 
 	
 	if (first_call)
- 	  { if (maxnv < 12) return 0;
-   	    first_call=0;
-   	    for (i = 0; i < 12; i++) 
+  	  { if (maxnv < 12) return 0;
+    	    first_call=0;
+    	    for (i = 0; i < 12; i++) 
 		init_circular_lists(fives[i],5);
-   	    for (i = 0; i < MAXN-12; i++) 
+    	    for (i = 0; i < MAXN-12; i++) 
 		init_circular_lists(sixes[i],6);
 
+#if FULLERENES==0
 	    if (mod > 1) sprintf(resmod," mod %d %d",res,mod);
 	    else         sprintf(resmod,"");
 	    
 	    if (which_case==0) 
-               sprintf(command,
+                sprintf(command,
 	               "fullgen %d start %d stdout code 7%s%s",
-                      2*eswitch-4,2*sswitch-4,resmod,
+                       2*eswitch-4,2*sswitch-4,resmod,
 		       iswitch ? " spiralcheck" : " quiet");
-           else 
+            else 
 	        sprintf(command,
 		       "fullgen %d start %d stdout code 7 case %d%s%s",
-                      2*eswitch-4,2*sswitch-4,which_case,resmod,
+                       2*eswitch-4,2*sswitch-4,which_case,resmod,
 		       iswitch ? " spiralcheck" : " quiet"); 
+#else
+	    if (mod > 1) sprintf(resmod," %d/%d",res,mod);
+	    else         sprintf(resmod,"");
 
-   	    fullpipe=popen(command,"r");
-   	    if (fullpipe==NULL) 
+	    sprintf(command,"buckygen -S%d%s %d%s",sswitch,
+		    iswitch ? "" : " -q",eswitch,resmod);
+#endif
+
+    	    fullpipe=popen(command,"r");
+    	    if (fullpipe==NULL) 
 	      { fprintf(stderr,"Can't open fullerene pipe for reading !\n");
 	        exit(1); 
 	      }
@@ -2665,14 +2701,14 @@ int read_next_fullerene(int which_case, int res, int mod)
 	ne= 6*nv - 12;
 
 	for (nulls = counter = 0; nulls < nv; counter++)
- 	  { code[counter] = getc(fullpipe)-1;
-   	    if (code[counter] < 0) nulls++;
-   	  }
+  	  { code[counter] = getc(fullpipe)-1;
+    	    if (code[counter] < 0) nulls++;
+    	  }
 	
 	count5 = count6 = 0;
 	for (j = 0, counter = 0; j < nv; j++)
- 	  { if (code[counter+5] < 0) /* a vertex with valence 5 following */
-     	      { for (i = 0; i < 5; i++)
+  	  { if (code[counter+5] < 0) /* a vertex with valence 5 following */
+      	      { for (i = 0; i < 5; i++)
 	  	  { end = code[counter]; counter++;
 	    	    fives[count5][i].start = j; 
 		    fives[count5][i].end = end;
@@ -2687,9 +2723,9 @@ int read_next_fullerene(int which_case, int res, int mod)
 		firstedge[j] = fives[count5];
 		counter++; /* throw away the endmark */
 		count5++;
-      	      }
-   	    else    /* a vertex with valence 6 following */
-             { for (i = 0; i < 6; i++)
+       	      }
+    	    else    /* a vertex with valence 6 following */
+              { for (i = 0; i < 6; i++)
 	  	  { end = code[counter]; counter++;
 	    	    sixes[count6][i].start = j; 
 		    sixes[count6][i].end = end;
@@ -2704,8 +2740,8 @@ int read_next_fullerene(int which_case, int res, int mod)
 		firstedge[j] = sixes[count6];
 		counter++; /* throw away the endmark */
 		count6++;
-     	      }
- 	  }
+      	      }
+  	  }
 
 	return 1;
 }
@@ -2727,9 +2763,9 @@ main(int argc, char *argv[])
 	char *malloc();
 #endif
 #if CPUTIME
-       struct tms timestruct0,timestruct1;
+        struct tms timestruct0,timestruct1;
 
-       times(&timestruct0);
+        times(&timestruct0);
 #endif
 
 	cmdname = argv[0];
@@ -2746,6 +2782,7 @@ main(int argc, char *argv[])
 	dswitch = FALSE;
 	uswitch = FALSE;
 	fswitch = FALSE;
+	xswitch = FALSE;
 	cswitch = 0;
 	iswitch = FALSE;
 	sswitch = 12;
@@ -2770,29 +2807,30 @@ main(int argc, char *argv[])
 		    else if (arg[j] == 'S') Sswitch = TRUE;
 		    else if (arg[j] == 'u') uswitch = TRUE;
 		    else if (arg[j] == 'f') fswitch = TRUE;
+		    else if (arg[j] == 'x') xswitch = fswitch = TRUE;
 		    else if (arg[j] == 'i') iswitch = TRUE;
 		    else if (arg[j] == 'c')
 			cswitch = getswitchvalue(arg,&j);
 		    else if (arg[j] == 'e')
 		    {
-                       eswitch = getswitchvalue(arg,&j); 
+                        eswitch = getswitchvalue(arg,&j); 
 			esswitch = TRUE; 
 		    }
 		    else if (arg[j] == 's')
 		    { 
 			sswitch = getswitchvalue(arg,&j);
-			esswitch = TRUE; 
+ 			esswitch = TRUE; 
 		    }
 		    else if (arg[j] == 'm')
-                   {
-                       res = getswitchvalue(arg,&j);
-                       mswitch = TRUE;
-                   }
-                   else if (arg[j] == '/')
-                   {
-                       mod = getswitchvalue(arg,&j);
-                       mswitch = TRUE;
-                   }
+                    {
+                        res = getswitchvalue(arg,&j);
+                        mswitch = TRUE;
+                    }
+                    else if (arg[j] == '/')
+                    {
+                        mod = getswitchvalue(arg,&j);
+                        mswitch = TRUE;
+                    }
 
 #ifdef PLUGIN_SWITCHES
 		    PLUGIN_SWITCHES
@@ -2805,11 +2843,11 @@ main(int argc, char *argv[])
 	    else if (argsgot == 0)
 	    {
 		if (sscanf(arg,"%d-%d",&minnv,&maxnv) != 2 &&
-                   sscanf(arg,"%d:%d",&minnv,&maxnv) != 2)
+                    sscanf(arg,"%d:%d",&minnv,&maxnv) != 2)
 		{
 		    if (sscanf(arg,"%d",&maxnv) == 1) 
 		        minnv = maxnv;
-                   else
+                    else
 		 	badargs = TRUE;
 		}
 		++argsgot;
@@ -2833,14 +2871,14 @@ main(int argc, char *argv[])
 	if (badargs)
 	{
 	    fprintf(stderr,
-             ">E Usage: %s %s [n | min-max] [outfile]\n",cmdname,SWITCHES);
+              ">E Usage: %s %s [n | min-max] [outfile]\n",cmdname,SWITCHES);
 	    exit(2);
 	}
 	
 	if (maxnv < 4 || fswitch && maxnv < 6 || maxnv > MAXN)
 	{
 	    fprintf(stderr,">E %s: n must be 4..%d (6..%d with -f)\n",
-                   cmdname,MAXN,MAXN);
+                    cmdname,MAXN,MAXN);
 	    exit(2);
 	}
 
@@ -2850,11 +2888,18 @@ main(int argc, char *argv[])
 	    exit(2);
 	}
 
-       if (cswitch < 0 || cswitch > 3)
-       {
-           fprintf(stderr,">E %s: value of -c must be 0..3\n",cmdname);
-           exit(2);
-       }
+        if (cswitch < 0 || cswitch > 3)
+        {
+            fprintf(stderr,">E %s: value of -c must be 0..3\n",cmdname);
+            exit(2);
+        }
+#if FULLERENES>0
+        if (cswitch != 0)
+        {
+            fprintf(stderr,">E %s: -c is not available with buckgen\n",cmdname);
+            exit(2);
+        }
+#endif
 
 	if (aswitch + Aswitch + Sswitch > 1)
 	{
@@ -2862,15 +2907,15 @@ main(int argc, char *argv[])
 	    exit(2);
 	}
 
-       if (!uswitch)
+        if (!uswitch)
 	{
 	    nvf = dswitch ? 2*maxnv-4 : maxnv;
-           if (aswitch && nvf > 99 ||
+            if (aswitch && nvf > 99 ||
 	        Aswitch && nvf > 4094 ||
-              !aswitch && !Aswitch && !Sswitch && nvf > 255)
+               !aswitch && !Aswitch && !Sswitch && nvf > 255)
 	    {
 	        fprintf(stderr,
-                   ">E %s: n is too large for that output format\n",
+                    ">E %s: n is too large for that output format\n",
 		    cmdname);
 		exit(2);
 	    }
@@ -2880,9 +2925,9 @@ main(int argc, char *argv[])
 	if (eswitch < 12) eswitch = sswitch = 0;
 	else if (sswitch > eswitch)
 	{
-           fprintf(stderr,">E %s: -e# < -s# not allowed\n",cmdname);
-           exit(2);
-       }
+            fprintf(stderr,">E %s: -e# < -s# not allowed\n",cmdname);
+            exit(2);
+        }
 
 	if (mswitch && (res < 0 || res >= mod))
 	{
@@ -2890,7 +2935,7 @@ main(int argc, char *argv[])
 	    exit(2);
 	}
 
-    /* open output file */
+     /* open output file */
 
 	msgfile = stdout;
 	if (outfilename == NULL)
@@ -2909,7 +2954,7 @@ main(int argc, char *argv[])
 	}
 
 	ZEROBIG(nout);
-#ifdef STATS
+#if STATS
 	ZEROBIG(ntriv);
 	ZEROBIG(numrooted);
 #endif
@@ -2936,14 +2981,14 @@ main(int argc, char *argv[])
 		if (!hswitch && !Aswitch && !Sswitch &&
 	            fwrite(PCODE,(size_t)1,PCODELEN,outfile) != PCODELEN
 		  || hswitch && Sswitch &&
-                   fwrite(S6CODE,(size_t)1,S6CODELEN,outfile) != S6CODELEN
+                    fwrite(S6CODE,(size_t)1,S6CODELEN,outfile) != S6CODELEN
 		  || hswitch && Aswitch &&
-                   fwrite(G6CODE,(size_t)1,G6CODELEN,outfile) != G6CODELEN)
-               {
-                   fprintf(stderr,">E %s: error writing header\n",cmdname);
-                   perror(">E ");
-                   exit(2);
-               }
+                    fwrite(G6CODE,(size_t)1,G6CODELEN,outfile) != G6CODELEN)
+                {
+                    fprintf(stderr,">E %s: error writing header\n",cmdname);
+                    perror(">E ");
+                    exit(2);
+                }
 	    }
 
 	    scantree(nbtot,nbop);
@@ -2958,7 +3003,7 @@ main(int argc, char *argv[])
 	    }
 
 #if CPUTIME
-       times(&timestruct1);
+        times(&timestruct1);
 #endif
 
 	dosummary = 1;
@@ -2972,11 +3017,11 @@ main(int argc, char *argv[])
 	fprintf(msgfile," fullerenes used");
 	if (K4used) fprintf(msgfile," plus K4");
 #if CPUTIME
-       fprintf(msgfile,"; cpu=%.2f sec\n",
-           (double)(timestruct1.tms_cutime+timestruct1.tms_cstime
-             -timestruct0.tms_cutime-timestruct0.tms_cstime)/(double)CLK_TCK);
+        fprintf(msgfile,"; cpu=%.2f sec\n",
+            (double)(timestruct1.tms_cutime+timestruct1.tms_cstime
+              -timestruct0.tms_cutime-timestruct0.tms_cstime)/(double)CLK_TCK);
 #else
-       fprintf(msgfile,"\n");
+        fprintf(msgfile,"\n");
 #endif
 
 	PRINTBIG(msgfile,nout);
@@ -2985,14 +3030,14 @@ main(int argc, char *argv[])
 	if (uswitch) fprintf(msgfile," generated");
 	else         fprintf(msgfile," written to %s",outfilename);
 #if CPUTIME
-       fprintf(msgfile,"; cpu=%.2f sec\n",
-           (double)(timestruct1.tms_utime+timestruct1.tms_stime
-             -timestruct0.tms_utime-timestruct0.tms_stime)/(double)CLK_TCK);
+        fprintf(msgfile,"; cpu=%.2f sec\n",
+            (double)(timestruct1.tms_utime+timestruct1.tms_stime
+              -timestruct0.tms_utime-timestruct0.tms_stime)/(double)CLK_TCK);
 #else
-       fprintf(msgfile,"\n");
+        fprintf(msgfile,"\n");
 #endif
 
-#ifdef STATS
+#if STATS
 	if (gswitch)
 	{
 	    PRINTBIG(msgfile,numrooted);
@@ -3015,3 +3060,4 @@ main(int argc, char *argv[])
 
 	return 0;
 }
+
