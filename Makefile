@@ -2,7 +2,7 @@
 what?:
 
 rebuild: clean
-	javac -cp .:Jmol.jar -deprecation -source 1.5 -target 1.5 ` find cage lisken util -name "*.java" -print `
+	javac -cp .:Jmol.jar -deprecation -source 1.7 -target 1.7 ` find cage lisken util -name "*.java" -print `
 
 clean:
 	rm -f ` find cage lisken util -name "*.class" -print `
