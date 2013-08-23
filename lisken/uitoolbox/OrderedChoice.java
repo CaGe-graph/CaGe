@@ -131,7 +131,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         if (allowEmptySelection) {
             noEmptySelection = false;
         } else {
-            if (selection.size() == 0) {
+            if (selection.isEmpty()) {
                 throw new RuntimeException("this OrderedChoice currently has an empty choice, so don't disallow that");
             } else {
                 noEmptySelection = true;
