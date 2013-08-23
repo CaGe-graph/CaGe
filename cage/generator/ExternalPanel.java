@@ -310,7 +310,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         } else {
             generatorCmdLine = "cat " + fromFileCmd.getText();
         }
-        StringBuffer filename = new StringBuffer();
+        StringBuilder filename = new StringBuilder();
         boolean inWord = false;
         int n = generatorCmdLine.length();
         for (int i = 0; i < n; ++i) {
