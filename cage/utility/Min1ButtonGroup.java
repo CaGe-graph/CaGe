@@ -46,6 +46,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         selections = new Hashtable();
     }
 
+    @Override
     public void add(AbstractButton button) {
         super.add(button);
         button.addKeyListener(this);
@@ -55,6 +56,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         }
     }
 
+    @Override
     public void remove(AbstractButton button) {
         super.remove(button);
         button.removeKeyListener(this);
@@ -64,6 +66,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         }
     }
 
+    @Override
     public void itemStateChanged(ItemEvent e) {
         AbstractButton button = (AbstractButton) e.getSource();
         if (button.isSelected()) {
@@ -108,6 +111,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         return active;
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         AbstractButton source = (AbstractButton) e.getSource();
         if (source == deactivateButton) {
@@ -115,22 +119,27 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         }
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
         if (e.getKeyChar() == ' ' && lastModifiers == InputEvent.SHIFT_MASK) {
             ((AbstractButton) e.getSource()).doClick();
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         lastModifiers = e.getModifiers();
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         lastModifiers = e.getModifiers() &
                 ~(InputEvent.BUTTON1_MASK |
@@ -138,12 +147,15 @@ public class Min1ButtonGroup extends AbstractButtonGroup
                 InputEvent.BUTTON3_MASK);
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 }

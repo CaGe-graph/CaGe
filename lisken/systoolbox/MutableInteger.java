@@ -8,6 +8,7 @@ public class MutableInteger implements Comparable {
         value = n;
     }
 
+    @Override
     public int compareTo(Object o) {
         return value - ((MutableInteger) o).intValue();
     }

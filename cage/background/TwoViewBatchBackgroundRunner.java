@@ -85,6 +85,7 @@ public class TwoViewBatchBackgroundRunner extends AbstractBackgroundRunner {
         saver.saveFile(file);
     }
 
+    @Override
     public String getInfoText() {
         /*
          * just return the content of infoText. We added our data to this 

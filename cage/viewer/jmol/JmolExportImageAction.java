@@ -27,6 +27,7 @@ public class JmolExportImageAction extends AbstractAction{
         this.panel = panel;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         BufferedImage im = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = im.createGraphics();

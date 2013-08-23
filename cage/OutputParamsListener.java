@@ -16,6 +16,7 @@ public class OutputParamsListener implements ActionListener {
         this.outputPanel = outputPanel;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         if (cmd.equals(Wizard.SHOWING)) {
@@ -23,6 +24,7 @@ public class OutputParamsListener implements ActionListener {
         } else if (cmd.equals(Wizard.NEXT)) {
             final CaGeStarter starter = new CaGeStarter(outputPanel);
             new Thread(new Runnable() {
+                @Override
                 public void run() {
                     starter.start();
                 }

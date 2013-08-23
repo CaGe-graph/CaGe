@@ -95,20 +95,24 @@ public class RasmolViewer implements CaGeViewer {
                 "refuses to work on your X display - we have no way of testing for that.");
     }
 
+    @Override
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         pdbWriter.setGeneratorInfo(generatorInfo);
     }
 
+    @Override
     public void setDimension(int dimension) {
         if (dimension != 3) {
             throw new RuntimeException("RasmolViewer is for 3D only");
         }
     }
 
+    @Override
     public int getDimension() {
         return 3;
     }
 
+    @Override
     public void outputResult(CaGeResult result) {
         try {
             if (rasmolPipe == null || rasmolPipe.checkForExit() >= 0) {
@@ -136,6 +140,7 @@ public class RasmolViewer implements CaGeViewer {
         }
     }
 
+    @Override
     public void stop() {
         if (rasmolPipe != null) {
             try {
@@ -152,10 +157,12 @@ public class RasmolViewer implements CaGeViewer {
         }
     }
 
+    @Override
     public void setResultPanel(ResultPanel resultPanel) {
         this.resultPanel = resultPanel;
     }
 
+    @Override
     public void setVisible(boolean isVisible) {
     }
 }
@@ -213,6 +220,7 @@ class RasmolWatcher extends WindowAdapter implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == rasmolTimer) {

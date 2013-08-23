@@ -30,30 +30,37 @@ public class CaGeJmolAdapter extends JmolAdapter{
         super("CaGeJmolAdapter");
     }
 
+    @Override
     public Object openBufferedReader(String name, String type, BufferedReader bufferedReader, Hashtable htParams) {
         return clientFile;
     }
 
+    @Override
     public Object openBufferedReader(String name, BufferedReader bufferedReader) {
         return clientFile;
     }
 
+    @Override
     public Object openBufferedReader(String name, BufferedReader bufferedReader, Hashtable htParams) {
         return clientFile;
     }
 
+    @Override
     public Object openBufferedReader(String name, String type, BufferedReader bufferedReader) {
         return clientFile;
     }
 
+    @Override
     public Object openBufferedReaders(JmolFileReaderInterface fileReader, String[] names, String[] types, Hashtable[] htParams) {
         return clientFile;
     }
 
+    @Override
     public Object openDOMReader(Object DOMNode) {
         return clientFile;
     }
 
+    @Override
     public Object openZipFiles(InputStream is, String fileName, String[] zipDirectory, Hashtable htParams, boolean asBufferedReader) {
         return clientFile;
     }
@@ -70,6 +77,7 @@ public class CaGeJmolAdapter extends JmolAdapter{
         this.generatorInfo = generatorInfo;
     }
 
+    @Override
     public int getEstimatedAtomCount(Object clientFile) {
         if(!(clientFile instanceof EmbeddableGraph))
             throw new RuntimeException("CaGeJmolAdpater used with wrong clientFile.");
@@ -77,6 +85,7 @@ public class CaGeJmolAdapter extends JmolAdapter{
         return graph.getSize();
     }
 
+    @Override
     public JmolAdapter.AtomIterator getAtomIterator(Object clientFile) {
         if(!(clientFile instanceof EmbeddableGraph))
             throw new RuntimeException("CaGeJmolAdpater used with wrong clientFile.");
@@ -85,6 +94,7 @@ public class CaGeJmolAdapter extends JmolAdapter{
         return it;
     }
 
+    @Override
     public JmolAdapter.BondIterator getBondIterator(Object clientFile) {
         if(!(clientFile instanceof EmbeddableGraph))
             throw new RuntimeException("CaGeJmolAdpater used with wrong clientFile.");
@@ -103,27 +113,33 @@ public class CaGeJmolAdapter extends JmolAdapter{
             this.graph = graph;
         }
 
+        @Override
         public boolean hasNext() {
             position++;
             return (position <= graph.getSize());
         }
 
+        @Override
         public Object getUniqueID() {
             return Integer.valueOf(position);
         }
 
+        @Override
         public float getX() {
             return graph.get3DCoordinates(position)[0];
         }
 
+        @Override
         public float getY() {
             return graph.get3DCoordinates(position)[1];
         }
 
+        @Override
         public float getZ() {
             return graph.get3DCoordinates(position)[2];
         }
 
+        @Override
         public String getElementSymbol() {
             return generatorInfo.getElementRule().getElement(graph, position);
         }
@@ -158,19 +174,23 @@ public class CaGeJmolAdapter extends JmolAdapter{
             }
         }
 
+        @Override
         public boolean hasNext() {
             position++;
             return position < edges.length;
         }
 
+        @Override
         public Object getAtomUniqueID1() {
             return Integer.valueOf(edges[position][0]);
         }
 
+        @Override
         public Object getAtomUniqueID2() {
             return Integer.valueOf(edges[position][1]);
         }
 
+        @Override
         public int getEncodedOrder() {
             return 1;
         }

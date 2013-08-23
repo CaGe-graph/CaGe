@@ -36,6 +36,7 @@ public class DefaultBackgroundRunner extends AbstractBackgroundRunner {
         writer = writers.toArray(writer);
     }
     
+    @Override
     public String getInfoText() {
         infoText.append("generator:\t ").append(generatorInfo.getGeneratorName()).append("\n");
         if (CaGe.expertMode) {
@@ -51,6 +52,7 @@ public class DefaultBackgroundRunner extends AbstractBackgroundRunner {
         return infoText.toString();
     }
     
+    @Override
     protected void cleanUp(){
         for (int i = 0; i < writer.length; ++i) {
             writer[i].stop();
@@ -59,6 +61,7 @@ public class DefaultBackgroundRunner extends AbstractBackgroundRunner {
         writer = null;
     }
 
+    @Override
     protected void embeddingMade(CaGeResult result) {
         for (int i = 0; i < writer.length; ++i) {
             try {

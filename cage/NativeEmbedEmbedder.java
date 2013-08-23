@@ -65,14 +65,17 @@ class NativeEmbedEmbedder extends Embedder {
         computeEmbedders();
     }
 
+    @Override
     public void setConstant(boolean isConstant) {
         this.isConstant = isConstant;
     }
 
+    @Override
     public boolean isConstant() {
         return isConstant;
     }
 
+    @Override
     public void setEmbed2D(String[][] embed2D) {
         Debug.print("{ setEmbed2D");
         this.embed2DOrigCmd = embed2D;
@@ -81,6 +84,7 @@ class NativeEmbedEmbedder extends Embedder {
         Debug.print("} setEmbed2D");
     }
 
+    @Override
     public void setEmbed3D(String[][] embed3D) {
         Debug.print("{ setEmbed3D");
         this.embed3DOrigCmd = embed3D;
@@ -89,6 +93,7 @@ class NativeEmbedEmbedder extends Embedder {
         Debug.print("} setEmbed3D");
     }
 
+    @Override
     public void setRunDir(String runDir) {
         Debug.print("{ setRunDir");
         this.runDir = runDir == null ? null : runDir.getBytes();
@@ -96,6 +101,7 @@ class NativeEmbedEmbedder extends Embedder {
         Debug.print("} setRunDir");
     }
 
+    @Override
     public void setPath(String path) {
         Debug.print("{ setPath");
         this.path = path == null ? null : path.getBytes();
@@ -103,6 +109,7 @@ class NativeEmbedEmbedder extends Embedder {
         Debug.print("} setPath");
     }
 
+    @Override
     public void setIntensityFactor(float factor) {
         Debug.print("{ setIntensity");
         this.intensityFactor = factor;
@@ -111,6 +118,7 @@ class NativeEmbedEmbedder extends Embedder {
         Debug.print("} setIntensity");
     }
 
+    @Override
     public void setMode(int mode) {
         Debug.print("{ setMode");
         this.embeddedMode = mode;
@@ -122,6 +130,7 @@ class NativeEmbedEmbedder extends Embedder {
         Debug.print("} setMode");
     }
 
+    @Override
     public int getMode() {
         return embeddedMode;
     }
@@ -181,14 +190,17 @@ class NativeEmbedEmbedder extends Embedder {
         }
     }
 
+    @Override
     public String[][] getEmbed2DNew() {
         return embed2DNewCmd;
     }
 
+    @Override
     public String[][] getEmbed3DNew() {
         return embed3DNewCmd;
     }
 
+    @Override
     public String[][] getEmbed3DRefine() {
         return embed3DEmbeddedCmd;
     }
@@ -261,12 +273,14 @@ class NativeEmbedEmbedder extends Embedder {
         return new String[][]{embedCmd};
     }
 
+    @Override
     public void embed2D(EmbeddableGraph graph)
             throws Exception {
         NativeEmbeddableGraph nGraph = (NativeEmbeddableGraph) graph;
         nEmbed2D(nGraph.nGraph, nEmbed2DNew);
     }
 
+    @Override
     public void embed3D(EmbeddableGraph graph)
             throws Exception {
         NativeEmbeddableGraph nGraph = (NativeEmbeddableGraph) graph;
@@ -287,6 +301,7 @@ class NativeEmbedEmbedder extends Embedder {
         }
     }
 
+    @Override
     public void reembed2D(EmbeddableGraph graph)
             throws Exception {
         reembed2DCmd[0][reembed2DArg] = "-b" + e1 + "," + e2;
@@ -296,6 +311,7 @@ class NativeEmbedEmbedder extends Embedder {
         nEmbed2D(nGraph.nGraph, nReembed2D);
     }
 
+    @Override
     public String getDiagnosticOutput() {
         if (errFilenameBytes != null) {
             return Systoolbox.getFileContent(new String(errFilenameBytes), true);
@@ -304,12 +320,14 @@ class NativeEmbedEmbedder extends Embedder {
         }
     }
 
+    @Override
     public synchronized void abort() {
         if (nEmbedPID != 0) {
             nStop(nEmbedPID);
         }
     }
 
+    @Override
     public void finalize() {
         nFinalize(nEmbed2DNew);
         nFinalize(nReembed2D);

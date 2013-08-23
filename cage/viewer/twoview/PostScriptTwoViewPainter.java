@@ -154,6 +154,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         savePostScriptStream = null;
     }
 
+    @Override
     protected void beginGraph() {
         for (int i = 1; i <= getGraphSize(); ++i) {
             FloatingPoint p = getCoordinatePoint(i);
@@ -161,12 +162,14 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         }
     }
 
+    @Override
     protected void beginEdges() {
         savePS("\n\nbegin_edges\n\n");
     }
 
     private List<String> coloredEdges = new ArrayList<>();
 
+    @Override
     protected void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         if(useSpecialColour){
             coloredEdges.add("v" + v1 + " " + "v" + v2 + " edge\n");
@@ -175,6 +178,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         }
     }
 
+    @Override
     protected void beginVertices() {
         //first we finish the edges by painting the colored edges
         savePS("\n\nbegin_colored_edges\n\n");
@@ -189,6 +193,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         }
     }
 
+    @Override
     protected void paintVertex(double x, double y, int number) {
         savePS("v" + number + " vertex\n");
         if (model.getShowNumbers()) {

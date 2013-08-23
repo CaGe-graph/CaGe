@@ -20,14 +20,17 @@ public abstract class CaGeWriter implements CaGeOutlet {
     GeneratorInfo generatorInfo;
     IOException lastException;
 
+    @Override
     public void setDimension(int dimension) {
         this.dimension = dimension;
     }
 
+    @Override
     public int getDimension() {
         return dimension;
     }
 
+    @Override
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         this.generatorInfo = generatorInfo;
     }
@@ -36,6 +39,7 @@ public abstract class CaGeWriter implements CaGeOutlet {
         this.out = out;
     }
 
+    @Override
     public void stop() {
         lastException = null;
         if (out == null) {

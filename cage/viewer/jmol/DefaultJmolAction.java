@@ -15,6 +15,7 @@ public class DefaultJmolAction extends JmolAction{
         this.command = command;
     }
 
+    @Override
     public String getCommand() {
         return command;
     }

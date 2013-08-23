@@ -52,11 +52,13 @@ public class NativeEmbeddableGraph implements EmbeddableGraph {
         this.nGraph = nGraph;
     }
 
+    @Override
     public String getComment() {
         byte[] bytes = nGetComment(nGraph);
         return bytes == null ? null : new String(bytes);
     }
 
+    @Override
     public void setComment(String comment) {
         nSetComment(nGraph, comment.getBytes());
     }
@@ -69,62 +71,77 @@ public class NativeEmbeddableGraph implements EmbeddableGraph {
         nSetFormat(nGraph, format);
     }
 
+    @Override
     public void addVertex() {
         nAddVertex(nGraph);
     }
 
+    @Override
     public void addEdge(int to) {
         nAddEdge(nGraph, to);
     }
 
+    @Override
     public int getSize() {
         return nGetSize(nGraph);
     }
 
+    @Override
     public int getValency(int vertex) {
         return nGetValency(nGraph, vertex);
     }
 
+    @Override
     public EdgeIterator getEdgeIterator(int vertex) {
         return nGetEdgeIterator(nGraph, vertex);
     }
 
+    @Override
     public boolean has2DCoordinates() {
         return nHas2DCoordinates(nGraph);
     }
 
+    @Override
     public float[] get2DCoordinates(int vertex) {
         return nGet2DCoordinates(nGraph, vertex);
     }
 
+    @Override
     public float[][] get2DCoordinates() {
         return nGetAll2DCoordinates(nGraph);
     }
 
+    @Override
     public void set2DCoordinates(int vertex, float[] coords) {
         nSet2DCoordinates(nGraph, vertex, coords);
     }
 
+    @Override
     public boolean has3DCoordinates() {
         return nHas3DCoordinates(nGraph);
     }
 
+    @Override
     public float[] get3DCoordinates(int vertex) {
         return nGet3DCoordinates(nGraph, vertex);
     }
 
+    @Override
     public float[][] get3DCoordinates() {
         return nGetAll3DCoordinates(nGraph);
     }
 
+    @Override
     public void set3DCoordinates(int vertex, float[] coords) {
         nSet3DCoordinates(nGraph, vertex, coords);
     }
 
+    @Override
     public String toString() {
         return new String(toBytes(nGraph));
     }
 
+    @Override
     protected void finalize() throws Throwable {
         nFinalize(nGraph);
         super.finalize();

@@ -348,6 +348,7 @@ public class CaGe implements ActionListener {
         wizard.nextStage(titlePanel, this, null, null, null, null, Wizard.EXIT);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         if (cmd.equals(Wizard.SHOWING)) {

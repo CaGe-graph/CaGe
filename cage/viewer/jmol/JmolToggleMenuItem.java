@@ -20,6 +20,7 @@ public class JmolToggleMenuItem extends JCheckBoxMenuItem{
         super(text, isSelected);
         addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if(isSelected()){
                     viewer.evalString(onAction);

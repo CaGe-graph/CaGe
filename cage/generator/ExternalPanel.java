@@ -124,6 +124,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         fromFileButton.setSelected(false);
         fromFileButton.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 fromFileCmd.setEnabled(fromFileButton.isSelected());
                 if (fromFileButton.isSelected()) {
@@ -235,6 +236,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         char actionCommand = e.getActionCommand().charAt(0);
         switch (actionCommand) {

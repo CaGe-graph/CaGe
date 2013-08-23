@@ -38,14 +38,17 @@ public class AboutJmolPanel extends JPanel {
             new Timer(5000, this).start();
         }
 
+        @Override
         public int getRowCount() {
             return NAMES.length;
         }
 
+        @Override
         public int getColumnCount() {
             return 2;
         }
 
+        @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             //TODO: when switching to Java 5 or above this should be an enum
             if (columnIndex == 1) {
@@ -78,6 +81,7 @@ public class AboutJmolPanel extends JPanel {
             }
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             for (int i = 0; i < IS_VARIABLE.length; i++) {
                 if (IS_VARIABLE[i]) {

@@ -37,6 +37,7 @@ public class PngTwoViewSaver implements TwoViewSaver{
                 5 + graphicsTwoViewPainter.getMaxVertexSize() / 2);
     }
 
+    @Override
     public void saveFile(File file) {
         BufferedImage im = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         graphicsTwoViewPainter.setGraph(model.getResult().getGraph());

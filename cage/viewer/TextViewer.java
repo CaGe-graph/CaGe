@@ -35,6 +35,7 @@ public class TextViewer implements CaGeViewer {
     private JLabel title;
     private JScrollPane scrollPane;
 
+    @Override
     public void outputResult(CaGeResult result) {
         EmbeddableGraph graph = result.getGraph();
         int graphNo = result.getGraphNo();
@@ -134,19 +135,24 @@ public class TextViewer implements CaGeViewer {
         frame.setContentPane(content);
     }
 
+    @Override
     public void setResultPanel(ResultPanel resultPanel) {
     }
 
+    @Override
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
     }
 
+    @Override
     public void setDimension(int d) {
     }
 
+    @Override
     public int getDimension() {
         return 0;
     }
 
+    @Override
     public void setVisible(boolean isVisible) {
         if (isVisible) {
             createFrame();
@@ -157,6 +163,7 @@ public class TextViewer implements CaGeViewer {
         }
     }
 
+    @Override
     public void stop() {
         setVisible(false);
     }

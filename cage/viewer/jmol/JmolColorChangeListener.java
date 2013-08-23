@@ -32,6 +32,7 @@ public class JmolColorChangeListener implements ChangeListener{
         return colorString;
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         Object[] obj = {component, colorToString(colorModel.getSelectedColor())};
         viewer.evalString(MessageFormat.format("color {0} {1}", obj));

@@ -15,6 +15,7 @@ public class CaGeTimer extends Timer
 
     public CaGeTimer(CaGeRunner runner, int delay) {
         super(delay, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 //dummy implementation
             }
@@ -37,6 +38,7 @@ public class CaGeTimer extends Timer
         running = false;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         if (!running) {
             return;
@@ -48,6 +50,7 @@ public class CaGeTimer extends Timer
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this) {
             runner.fireGraphNoChanged();

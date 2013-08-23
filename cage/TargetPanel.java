@@ -120,6 +120,7 @@ public class TargetPanel extends JPanel {
      */
     protected class FilePanelActionListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             fireActionPerformed();
         }

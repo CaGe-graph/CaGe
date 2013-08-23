@@ -100,6 +100,7 @@ public class OutputPanel extends JPanel {
     
     private ActionListener uiActionListener = new ActionListener() {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (defaultButton != null) {
                 defaultButton.doClick();
@@ -109,6 +110,7 @@ public class OutputPanel extends JPanel {
     
     private ActionListener outputOptionsListener = new ActionListener() {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             checkOutputOptions();
         }
@@ -370,6 +372,7 @@ public class OutputPanel extends JPanel {
                 new BatchTwoViewConfigurationPanel(batchTwoViewModel);
         addOutputSettingsListener(new OutputSettingsListener() {
 
+            @Override
             public void generatorInfoChanged(GeneratorInfo generatorInfo) {
                 String numberFormat;
                 if(generatorInfo.getFilename().endsWith("_")) {

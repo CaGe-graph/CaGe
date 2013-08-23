@@ -20,6 +20,7 @@ public class TikZTwoViewSaver implements TwoViewSaver {
         tikzTwoViewPainter = new TikzTwoViewPainter(model);
     }
 
+    @Override
     public void saveFile(File file) {
         tikzTwoViewPainter.setGraph(model.getResult().getGraph());
         tikzTwoViewPainter.paintGraph();

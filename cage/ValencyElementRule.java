@@ -56,6 +56,7 @@ public class ValencyElementRule implements ElementRule {
      * @param vertex The vertex for which the element is requested
      * @return The symbol of the element of <tt>vertex</tt>
      */
+    @Override
     public String getElement(EmbeddableGraph graph, int vertex) {
         int valency = graph.getValency(vertex);
         return (String) elements.get(new MutableInteger(valency));

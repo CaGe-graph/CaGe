@@ -109,6 +109,7 @@ public class TwoView implements ActionListener, CaGeViewer {
                         (TwoViewModel.MIN_VERTEX_SIZE+TwoViewModel.MAX_VERTEX_SIZE)/2);
         slider.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 model.setVertexSize(slider.getValue());
             }
@@ -122,6 +123,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         showNumbersButton.setAlignmentY(0.5f);
         showNumbersButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 model.setShowNumbers(showNumbersButton.isSelected());
             }
@@ -135,6 +137,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         highlightFacesButton.setAlignmentY(0.5f);
         highlightFacesButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 model.setHighlightFaces(highlightFacesButton.isSelected());
             }
@@ -146,8 +149,10 @@ public class TwoView implements ActionListener, CaGeViewer {
         highlightedFacesSizeField.setAlignmentY(0.5f);
         highlightedFacesSizeField.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         model.setHighlightedFacesSize((Integer)highlightedFacesSizeField.getValue());
                     }
@@ -159,6 +164,7 @@ public class TwoView implements ActionListener, CaGeViewer {
             @Override
             public void focusLost(FocusEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         model.setHighlightedFacesSize((Integer)highlightedFacesSizeField.getValue());
                     }
@@ -171,6 +177,7 @@ public class TwoView implements ActionListener, CaGeViewer {
                 new JSlider(0, 15, (int) Math.round(20 * model.getEdgeBrightness()));
         edgeBrightnessSlider.setPreferredSize(new Dimension(20, edgeBrightnessSlider.getPreferredSize().height));
         edgeBrightnessSlider.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 model.setEdgeBrightness(edgeBrightnessSlider.getValue() / 20.0f);
             }
@@ -184,6 +191,7 @@ public class TwoView implements ActionListener, CaGeViewer {
                 TwoViewModel.MIN_EDGE_WIDTH, TwoViewModel.MAX_EDGE_WIDTH);
         edgeWidthButton.setMaximumSize(edgeWidthButton.getPreferredSize());
         edgeWidthButton.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 model.setEdgeWidth(edgeWidthButton.getValue());
             }
@@ -200,6 +208,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         resetButton.setMnemonic(KeyEvent.VK_R);
         resetButton.setAlignmentY(0.5f);
         resetButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 resetButton.setText("re-embedding ...");
                 resetButton.setEnabled(false);
@@ -244,6 +253,7 @@ public class TwoView implements ActionListener, CaGeViewer {
                 resetButton.setEnabled(result.isReembed2DMade());
                 SwingUtilities.invokeLater(new Runnable() {
 
+                    @Override
                     public void run() {
                         twoViewPanel.embeddingChanged(caGeResult);
                     }
@@ -370,6 +380,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         
         rotationSlider.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 twoViewPanel.setRotation(rotationSlider.getValue());
             }
@@ -407,6 +418,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         saveButtons.add(saveButton);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         savePSButtonPressed();
     }
@@ -426,26 +438,31 @@ public class TwoView implements ActionListener, CaGeViewer {
         savePSButton.setSelected(result.getSaved2DPS() > 0);
     }
 
+    @Override
     public void setDimension(int dimension) {
         if (dimension != 2) {
             throw new RuntimeException("TwoView is for 2D viewing only");
         }
     }
 
+    @Override
     public int getDimension() {
         return 2;
     }
 
+    @Override
     public void setResultPanel(ResultPanel resultPanel) {
         this.resultPanel = resultPanel;
         twoViewPanel.setResultPanel(resultPanel);
     }
 
+    @Override
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         this.generatorInfo = generatorInfo;
         twoViewPanel.setGeneratorInfo(generatorInfo);
     }
 
+    @Override
     public void setVisible(boolean isVisible) {
         if (isVisible) {
             createFrame();
@@ -456,6 +473,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         }
     }
 
+    @Override
     public void outputResult(CaGeResult result) {
         CaGeResult previousResult = this.result;
         this.result = result;
@@ -503,6 +521,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         }
     }
 
+    @Override
     public void stop() {
         psTwoViewPainter.finishPostScriptFiles();
         psFilenames = new Hashtable();

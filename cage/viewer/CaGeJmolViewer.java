@@ -50,10 +50,12 @@ public class CaGeJmolViewer implements CaGeViewer{
         });
     }
 
+    @Override
     public void setResultPanel(ResultPanel resultPanel) {
         this.resultPanel = resultPanel;
     }
 
+    @Override
     public void setVisible(boolean isVisible) {
         if (isVisible) {
             createFrame();
@@ -65,18 +67,22 @@ public class CaGeJmolViewer implements CaGeViewer{
         }
     }
 
+    @Override
     public void setGeneratorInfo(GeneratorInfo generatorInfo) {
         jmolPanel.setGeneratorInfo(generatorInfo);
     }
 
+    @Override
     public void setDimension(int d) {
         dimension = d;
     }
 
+    @Override
     public int getDimension() {
         return dimension;
     }
 
+    @Override
     public void outputResult(CaGeResult result) {
         EmbeddableGraph graph = result.getGraph();
         int graphNo = result.getGraphNo();
@@ -98,6 +104,7 @@ public class CaGeJmolViewer implements CaGeViewer{
         }
     }
 
+    @Override
     public void stop() {
         setVisible(false);
     }

@@ -33,6 +33,7 @@ public class SaveDialog extends FlaggedJDialog {
     
     private ActionListener successListener = new ActionListener() {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             setSuccess(true);
             setVisible(false);

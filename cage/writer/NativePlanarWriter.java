@@ -7,10 +7,12 @@ import java.io.OutputStream;
 
 public class NativePlanarWriter extends CaGeWriter {
 
+    @Override
     public String getFormatName() {
         return "planar code";
     }
 
+    @Override
     public String getFileExtension() {
         return "plc";
     }
@@ -25,6 +27,7 @@ public class NativePlanarWriter extends CaGeWriter {
         out(header());
     }
 
+    @Override
     public void outputResult(CaGeResult result) {
         out(nEncodeGraph((NativeEmbeddableGraph) result.getGraph()));
     }

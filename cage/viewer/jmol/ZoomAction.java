@@ -18,6 +18,7 @@ public class ZoomAction extends JmolAction{
 
     }
 
+    @Override
     public String getCommand() {
         return command;
     }

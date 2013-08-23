@@ -46,6 +46,7 @@ public class OnActionClickerLayoutSwitcher implements ActionListener {
         target.addActionListener(this);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Component c = (Component) e.getSource();
         ((CardLayout) container.getLayout()).show(container, e.getActionCommand());

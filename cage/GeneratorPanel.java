@@ -24,6 +24,7 @@ public abstract class GeneratorPanel extends JPanel implements WizardAwareCompon
      *
      * @param nextButton The next button of the current stage
      */
+    @Override
     public void setNextButton(JButton nextButton) {
         this.nextButton = nextButton;
     }
@@ -44,6 +45,7 @@ public abstract class GeneratorPanel extends JPanel implements WizardAwareCompon
      *
      * @param previousButton The previous button of the current stage
      */
+    @Override
     public void setPreviousButton(JButton previousButton) {
         this.previousButton = previousButton;
     }
@@ -65,6 +67,7 @@ public abstract class GeneratorPanel extends JPanel implements WizardAwareCompon
      *
      * @param finishButton The finish button of the current stage
      */
+    @Override
     public void setFinishButton(JButton finishButton) {
         this.finishButton = finishButton;
     }
@@ -85,6 +88,7 @@ public abstract class GeneratorPanel extends JPanel implements WizardAwareCompon
      *
      * @param cancelButton The cancel button of the current stage
      */
+    @Override
     public void setCancelButton(JButton cancelButton) {
         this.cancelButton = cancelButton;
     }
@@ -105,6 +109,7 @@ public abstract class GeneratorPanel extends JPanel implements WizardAwareCompon
      *
      * @param exitButton The exit button of the current stage
      */
+    @Override
     public void setExitButton(JButton exitButton) {
         this.exitButton = exitButton;
     }

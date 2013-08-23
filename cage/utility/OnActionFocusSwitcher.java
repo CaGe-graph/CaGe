@@ -38,6 +38,7 @@ public class OnActionFocusSwitcher implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         component.requestFocus();
     }

@@ -52,6 +52,7 @@ public class RunnerControl implements PropertyChangeListener {
         infoButton.setHorizontalAlignment(SwingConstants.RIGHT);
         infoButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if(RunnerControl.this.runner!=null){
                     UItoolbox.showTextInfo("task info", RunnerControl.this.runner.getInfoText(), infoButton);
@@ -75,6 +76,7 @@ public class RunnerControl implements PropertyChangeListener {
         stopButton.setEnabled(running);
         stopButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 stopButtonUsed = true;
                 RunnerControl.this.window.setStopButtonUsed();
@@ -127,9 +129,11 @@ public class RunnerControl implements PropertyChangeListener {
         }
     }
 
+    @Override
     public void propertyChange(final PropertyChangeEvent e) {
         SwingUtilities.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 handlePropertyChange(e);
             }

@@ -153,6 +153,7 @@ public class JmolMenu {
         final JCheckBoxMenuItem atomsByElementItem = new JCheckBoxMenuItem("By element");
         atomsByElementItem.setSelected(true);
         atomsByElementItem.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 atomsColorItem.setEnabled(!atomsByElementItem.isSelected());
                 if(atomsByElementItem.isSelected()){
@@ -174,6 +175,7 @@ public class JmolMenu {
         final JCheckBoxMenuItem bondsInheritItem = new JCheckBoxMenuItem("Inherit");
         bondsInheritItem.setSelected(true);
         bondsInheritItem.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 bondsColorItem.setEnabled(!bondsInheritItem.isSelected());
                 if(bondsInheritItem.isSelected()){
@@ -203,6 +205,7 @@ public class JmolMenu {
         final JCheckBoxMenuItem labelsInheritColorItem = new JCheckBoxMenuItem("Inherit");
         labelsInheritColorItem.setSelected(true);
         labelsInheritColorItem.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 labelsColorItem.setEnabled(!labelsInheritColorItem.isSelected());
                 if(labelsInheritColorItem.isSelected()){

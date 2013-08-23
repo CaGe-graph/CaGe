@@ -8,14 +8,17 @@ import java.util.NoSuchElementException;
 
 public class CMLWriter extends AbstractChemicalWriter {
 
+    @Override
     public String getFormatName() {
         return "CML";
     }
 
+    @Override
     public String getFileExtension() {
         return "cml";
     }
 
+    @Override
     public String encodeResult(CaGeResult result) {
         EmbeddableGraph graph = result.getGraph();
         StringBuilder builder = new StringBuilder();
@@ -81,6 +84,7 @@ public class CMLWriter extends AbstractChemicalWriter {
         return builder.toString();
     }
 
+    @Override
     public void outputResult(CaGeResult result) {
         out(encodeResult(result));
     }

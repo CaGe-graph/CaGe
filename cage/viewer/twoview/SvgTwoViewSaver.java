@@ -23,6 +23,7 @@ public class SvgTwoViewSaver implements TwoViewSaver {
         svgTwoViewPainter = new SvgTwoViewPainter(model);
     }
     
+    @Override
     public void saveFile(File file){
         svgTwoViewPainter.setGraph(model.getResult().getGraph());
         svgTwoViewPainter.setSvgDimension(new Dimension(

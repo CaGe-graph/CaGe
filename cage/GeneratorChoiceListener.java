@@ -12,6 +12,7 @@ import lisken.uitoolbox.Wizard;
  */
 public class GeneratorChoiceListener implements ActionListener {
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         CaGe.getWizardWindow().setVisible(false);
         CaGe.lastGeneratorChoice = Integer.parseInt(e.getActionCommand());

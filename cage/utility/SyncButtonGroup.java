@@ -13,6 +13,7 @@ import javax.swing.AbstractButton;
  */
 public class SyncButtonGroup extends AbstractButtonGroup {
 
+    @Override
     public void add(AbstractButton button) {
         if (buttons.size() > 0) {
             boolean selected = button.isSelected();
@@ -29,6 +30,7 @@ public class SyncButtonGroup extends AbstractButtonGroup {
         super.add(button);
     }
 
+    @Override
     public void itemStateChanged(ItemEvent e) {
         int change = e.getStateChange();
         if (change != ItemEvent.SELECTED && change != ItemEvent.DESELECTED) {

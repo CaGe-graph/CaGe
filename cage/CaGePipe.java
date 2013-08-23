@@ -24,6 +24,7 @@ public abstract class CaGePipe extends Pipe
         super(generatorCmds, inFilename, outFilename, errFilename);
     }
 
+    @Override
     public void start()
             throws Exception {
         super.start();
@@ -34,6 +35,7 @@ public abstract class CaGePipe extends Pipe
     }
     int graphNo = 0;
 
+    @Override
     public int getGraphNo() {
         return graphNo;
     }
@@ -73,6 +75,7 @@ public abstract class CaGePipe extends Pipe
 
     protected final List<PropertyChangeListener> propertyChangeListeners = new ArrayList<>();
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
@@ -83,6 +86,7 @@ public abstract class CaGePipe extends Pipe
         }
     }
 
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
@@ -99,6 +103,7 @@ public abstract class CaGePipe extends Pipe
         }
     }
 
+    @Override
     public void fireGraphNoChanged() {
         firePropertyChange(
                 new PropertyChangeEvent(this, "graphNo", null, new Integer(graphNo)));
@@ -109,11 +114,13 @@ public abstract class CaGePipe extends Pipe
                 new PropertyChangeEvent(this, "flowing", null, new Boolean(flowing)));
     }
 
+    @Override
     public void fireRunningChanged() {
         firePropertyChange(
                 new PropertyChangeEvent(this, "running", null, new Boolean(running)));
     }
 
+    @Override
     public void fireExceptionOccurred(Exception e) {
         firePropertyChange(new PropertyChangeEvent(this, "exception", "generator exception (after " + getGraphNo() + " graphs)", e));
     }

@@ -33,6 +33,7 @@ public class TwoViewModel {
     public static final int DEFAULT_VERTEX_SIZE = 11;
 
     private PropertyChangeListener listener = new PropertyChangeListener() {
+        @Override
         public void propertyChange(PropertyChangeEvent evt) {
             final CaGeResult cageResult = (CaGeResult) evt.getNewValue();
             if(cageResult.equals(result)){

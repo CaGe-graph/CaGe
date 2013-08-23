@@ -18,6 +18,7 @@ public class GeneratorParamsListener implements ActionListener {
         this.generatorName = generatorName;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         if (cmd.equals(Wizard.SHOWING)) {

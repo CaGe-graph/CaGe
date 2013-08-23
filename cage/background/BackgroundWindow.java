@@ -276,10 +276,12 @@ public class BackgroundWindow extends JFrame
         return foldnetsField;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         SwingUtilities.invokeLater(this);
     }
 
+    @Override
     public void run() {
         int left = foldnetThread.tasksLeft();
         foldnetsLeft.setText(Integer.toString(left));
@@ -311,6 +313,7 @@ public class BackgroundWindow extends JFrame
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand().charAt(0)) {
             case 'n':

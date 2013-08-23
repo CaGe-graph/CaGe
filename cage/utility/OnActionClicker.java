@@ -48,6 +48,7 @@ public class OnActionClicker implements ActionListener {
         this(null, bf, target);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         AbstractButton source = (AbstractButton) e.getSource();
         if(!target.equals(source))

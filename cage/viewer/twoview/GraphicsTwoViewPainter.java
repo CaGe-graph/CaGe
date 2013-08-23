@@ -166,6 +166,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
             if(id<model.getVertexSizesCount()){
                 final int idFinal = id;
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         model.setVertexSize(idFinal + TwoViewModel.MIN_VERTEX_SIZE);
                     }
@@ -174,6 +175,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
                 //we can't display the numbers because they are to large even
                 //for the largest vertex size
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         model.setShowNumbers(false);
                     }
@@ -184,6 +186,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
 
     //---Begin implementation TwoViewPainter---
 
+    @Override
     protected void beginGraph() {
         if(graphics==null)
             throw new IllegalStateException("Graphics hasn't been set yet!");
@@ -192,6 +195,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         ((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
+    @Override
     protected void beginEdges() {
         if (model.getEdgeWidth() <= 0) {
             return;
@@ -199,6 +203,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         graphics.setColor(edgeColor);
     }
 
+    @Override
     protected void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         if(useSpecialColour)
             graphics.setColor(specialEdgeColor);
@@ -236,12 +241,14 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
             graphics.setColor(edgeColor);
     }
 
+    @Override
     protected void beginVertices() {
         if (model.getShowNumbers() && vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE].getSize() > 0) {
             graphics.setFont(vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE]);
         }
     }
 
+    @Override
     protected void paintVertex(double x, double y, int number) {
         int xp = (int) Math.floor(x), yp = (int) Math.floor(y);
         if (model.getEdgeWidth() > 0) {

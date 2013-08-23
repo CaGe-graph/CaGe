@@ -25,6 +25,7 @@ public class NativeEdgeIterator implements EdgeIterator {
      *
      * @return <tt>true</tt> if the iterator has more elements.
      */
+    @Override
     public boolean hasNext() {
         return nHasNextEdge(nIter);
     }
@@ -37,6 +38,7 @@ public class NativeEdgeIterator implements EdgeIterator {
      * @return the next edge in the iteration as an <code>MutableInteger</code>.
      * @exception NoSuchElementException iteration has no more elements.
      */
+    @Override
     public Object next() throws NoSuchElementException {
         return new MutableInteger(nGetNextEdge(nIter));
     }
@@ -49,6 +51,7 @@ public class NativeEdgeIterator implements EdgeIterator {
      * @return the next edge in the iteration as an <code>int</code>.
      * @exception NoSuchElementException iteration has no more elements.
      */
+    @Override
     public int nextEdge() throws NoSuchElementException {
         return nGetNextEdge(nIter);
     }
@@ -60,6 +63,7 @@ public class NativeEdgeIterator implements EdgeIterator {
      * @exception UnsupportedOperationException if the <tt>remove</tt>
      *		  operation is not supported by this Iterator.
      */
+    @Override
     public void remove() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Graph edges can't be removed");
     }

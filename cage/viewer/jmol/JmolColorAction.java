@@ -39,6 +39,7 @@ public class JmolColorAction extends AbstractAction{
         this.previewModel = previewModel;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if(previewModel.isSelected()){
             //if preview is enabled we use the chooser connected to the colormodel
@@ -47,6 +48,7 @@ public class JmolColorAction extends AbstractAction{
             JDialog d = JColorChooser.createDialog(parentComponent,
                 getValue(AbstractAction.NAME).toString(), true , chooser,
                 null, new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         colorModel.setSelectedColor(oldColor);
                     }
@@ -59,6 +61,7 @@ public class JmolColorAction extends AbstractAction{
             JDialog d = JColorChooser.createDialog(parentComponent,
                     getValue(AbstractAction.NAME).toString(), true, newColorChooser,
                     new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             colorModel.setSelectedColor(newColorChooser.getColor());
                         }

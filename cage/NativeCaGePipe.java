@@ -24,10 +24,12 @@ public class NativeCaGePipe extends CaGePipe {
 
     private native void nStartAdvancing();
 
+    @Override
     public native EmbeddableGraph getGraph();
 
     public native boolean wouldBlock();
 
+    @Override
     public native void setGraphNoFireInterval(int interval);
 
     public NativeCaGePipe(String[][] generatorCmds,
@@ -47,6 +49,7 @@ public class NativeCaGePipe extends CaGePipe {
         this(generatorCmds, "/dev/null", null, errFilename);
     }
 
+    @Override
     public void start()
             throws Exception {
         super.start();
@@ -61,6 +64,7 @@ public class NativeCaGePipe extends CaGePipe {
             super("FlowingThread-" + (++flowThreadCount));
         }
 
+        @Override
         public void run() {
             while (waitForWork()) {
                 startAdvancing();
@@ -95,6 +99,7 @@ public class NativeCaGePipe extends CaGePipe {
         return flowingThread;
     }
 
+    @Override
     public void advanceBy(final int d) {
         advanceViaThread(d);
     }
@@ -117,6 +122,7 @@ public class NativeCaGePipe extends CaGePipe {
         }
     }
 
+    @Override
     public void yieldAndAdvanceBy(int d) {
         getAdvancePermission();
         while (wouldBlock()) {
@@ -150,6 +156,7 @@ public class NativeCaGePipe extends CaGePipe {
         }
     }
 
+    @Override
     public void setFlowing(boolean flowingOn) {
         if (!running) {
             return;
@@ -172,6 +179,7 @@ public class NativeCaGePipe extends CaGePipe {
         }
     }
 
+    @Override
     public void stop() {
         setRunning(false);
         setFlowing(false);
@@ -179,6 +187,7 @@ public class NativeCaGePipe extends CaGePipe {
         fireRunningChanged();
     }
 
+    @Override
     protected void finalize() throws Throwable {
         removeAllPropertyChangeListeners();
         finalizeCaGePipe();

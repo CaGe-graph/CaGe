@@ -35,6 +35,7 @@ public class JmolTranslucentColorChangeListener implements ChangeListener{
         return colorString;
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         Object[] obj = {component, colorToString(colorModel.getSelectedColor())};
         if(translucencyModel.isSelected())

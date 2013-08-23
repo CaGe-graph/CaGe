@@ -20,6 +20,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel {
     
     private ChangeListener tabbedPaneListener = new ChangeListener() {
 
+        @Override
         public void stateChanged(ChangeEvent e) {
             //this object should only listen to pane
             if(!notShown && e.getSource().equals(pane)){
@@ -96,6 +97,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel {
      * <code>JTabbedPane</code>, calls the <code>showing()</code> method of
      * this panel.
      */
+    @Override
     public void showing() {
         notShown = false;
         if(pane.getSelectedComponent()!=null)
@@ -110,6 +112,7 @@ public abstract class CombinedGeneratorPanel extends GeneratorPanel {
      * @return The <code>GeneratorInfo</code> of the currently selected generator
      *         or <tt>null</tt> if no generator is selected.
      */
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         if(pane.getSelectedComponent()!=null)
             return ((GeneratorPanel) pane.getSelectedComponent()).getGeneratorInfo();

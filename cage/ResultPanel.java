@@ -92,6 +92,7 @@ public class ResultPanel extends JPanel {
     
     private ActionListener actionListener = new ActionListener() {
         
+        @Override
         public void actionPerformed(ActionEvent e) {
             String cmd = e.getActionCommand();
             switch (cmd.charAt(0)) {
@@ -149,10 +150,12 @@ public class ResultPanel extends JPanel {
     
     private GeneratorListener generatorListener = new GeneratorListener() {
 
+        @Override
         public void showException(Exception ex, String context) {
             ResultPanel.this.showException(ex, context, false, null);
         }
 
+        @Override
         public void propertyChange(PropertyChangeEvent evt) {
             handlePropertyChange(evt);
         }
@@ -161,6 +164,7 @@ public class ResultPanel extends JPanel {
     
     private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
 
+        @Override
         public void propertyChange(PropertyChangeEvent evt) {
             handlePropertyChange(evt);
         }
@@ -168,15 +172,18 @@ public class ResultPanel extends JPanel {
     
     private EmbedThreadListener embedThreadListener = new EmbedThreadListener() {
 
+        @Override
         public void showEmbeddingException(final Exception ex, final String context, final String diagnosticOutput) {
             SwingUtilities.invokeLater(new Runnable() {
 
+                @Override
                 public void run() {
                     showException(ex, context, true, diagnosticOutput);
                 }
             });
         }
 
+        @Override
         public void embeddingFinished() {
         }
     };
@@ -811,6 +818,7 @@ public class ResultPanel extends JPanel {
         Debug.print("property changed: " + e.getPropertyName());
         Runnable handler = new Runnable() {
 
+            @Override
             public void run() {
                 handlePropertyChangeEDT(e);
             }
@@ -954,6 +962,7 @@ public class ResultPanel extends JPanel {
         logButton.setBackground(statusPanel.getBackground());
         logButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 UItoolbox.showTextInfo("generator's diagnostic output", logText, true);
                 logButton.requestFocus();
@@ -992,6 +1001,7 @@ public class ResultPanel extends JPanel {
         exceptionButton.setBackground(statusPanel.getBackground());
         exceptionButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 StringBuilder message = new StringBuilder(Systoolbox.getStackTrace(ex));
                 if (context != null) {
@@ -1090,6 +1100,7 @@ public class ResultPanel extends JPanel {
             m.addChangeListener(this);
         }
 
+        @Override
         public void stateChanged(ChangeEvent e) {
             advanceButton.setText("+" + ((BoundedRangeModel) e.getSource()).getValue());
             advanceButton.setMnemonic(KeyEvent.VK_ADD);

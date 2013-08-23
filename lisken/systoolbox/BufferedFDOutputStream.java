@@ -39,6 +39,7 @@ public class BufferedFDOutputStream extends OutputStream {
         file = openFile(filename.getBytes(), append);
     }
 
+    @Override
     public void write(int b)
             throws IOException {
         nWrite(file, b);

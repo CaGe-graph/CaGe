@@ -8,10 +8,12 @@ import java.io.IOException;
 
 public class NativePDBWriter extends AbstractChemicalWriter {
 
+    @Override
     public String getFormatName() {
         return "PDB";
     }
 
+    @Override
     public String getFileExtension() {
         return "pdb";
     }
@@ -19,6 +21,7 @@ public class NativePDBWriter extends AbstractChemicalWriter {
     native byte[] nEncodeGraph(NativeEmbeddableGraph graph, ElementRule elementRule, int dimension)
             throws IOException;
 
+    @Override
     public String encodeResult(CaGeResult result) {
         byte[] encoding;
         lastException = null;
@@ -32,6 +35,7 @@ public class NativePDBWriter extends AbstractChemicalWriter {
         return new String(encoding);
     }
 
+    @Override
     public void outputResult(CaGeResult result) {
         byte[] encoding;
         lastException = null;

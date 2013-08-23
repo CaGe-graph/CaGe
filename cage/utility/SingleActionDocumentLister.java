@@ -10,14 +10,17 @@ import javax.swing.event.DocumentListener;
  */
 public abstract class SingleActionDocumentLister implements DocumentListener {
 
+    @Override
     public void insertUpdate(DocumentEvent e) {
         update();
     }
 
+    @Override
     public void removeUpdate(DocumentEvent e) {
         update();
     }
 
+    @Override
     public void changedUpdate(DocumentEvent e) {
         update();
     }

@@ -26,14 +26,17 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
     
     private BatchTwoViewConfigurationListener listener = new BatchTwoViewConfigurationListener() {
 
+        @Override
         public void fileNameTemplateChanged() {
             filenameField.setText(batchTwoViewModel.getFileNameTemplate());
         }
 
+        @Override
         public void folderChanged() {
             folderSelector.setFile(batchTwoViewModel.getFolder());
         }
 
+        @Override
         public void saverChanged(TwoViewSavers oldSaver, TwoViewSavers newSaver) {
             //do nothing: the combo box model takes care of this
         }
@@ -55,6 +58,7 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
             @Override
             public void update() {
                 EventQueue.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         batchTwoViewModel.setFileNameTemplate(filenameField.getText());
                     }
@@ -64,6 +68,7 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
         });
         folderSelector.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 batchTwoViewModel.setFolder(folderSelector.getFile());
             }
@@ -83,6 +88,7 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
     private class SaverComboBoxModel extends AbstractListModel implements ComboBoxModel, BatchTwoViewConfigurationListener {
         
 
+        @Override
         public void setSelectedItem(Object saver) {
             if(saver instanceof TwoViewSavers && saver != getSelectedItem()){
                 batchTwoViewModel.setSaver((TwoViewSavers)saver);
@@ -92,26 +98,32 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
             }
         }
 
+        @Override
         public TwoViewSavers getSelectedItem() {
             return batchTwoViewModel.getSaver();
         }
 
+        @Override
         public int getSize() {
             return TwoViewSavers.values().length;
         }
 
+        @Override
         public Object getElementAt(int index) {
             return TwoViewSavers.values()[index];
         }
 
+        @Override
         public void fileNameTemplateChanged() {
             //do nothing
         }
 
+        @Override
         public void folderChanged() {
             //do nothing
         }
 
+        @Override
         public void saverChanged(TwoViewSavers oldSaver, TwoViewSavers newSaver) {
             fireContentsChanged(this, -1, -1);
         }

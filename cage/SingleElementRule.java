@@ -29,6 +29,7 @@ public class SingleElementRule implements ElementRule{
      * @param vertex The vertex for which the element is requested
      * @return The symbol of the element of <tt>vertex</tt>
      */
+    @Override
     public String getElement(EmbeddableGraph graph, int vertex) {
         return element;
     }

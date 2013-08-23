@@ -35,6 +35,7 @@ public class ViewAction extends JmolAction {
         command = MessageFormat.format("if not(showBoundBox);if not(showUnitcell);boundbox on;{0};boundbox off;endif;else;{0};endif;", view);
     }
 
+    @Override
     public String getCommand() {
         return command;
     }

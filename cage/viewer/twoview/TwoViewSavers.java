@@ -7,16 +7,19 @@ package cage.viewer.twoview;
  */
 public enum TwoViewSavers {
     SVG(".svg"){
+        @Override
         public SvgTwoViewSaver getSaver(TwoViewModel model){
             return new SvgTwoViewSaver(model);
         }
     },
     TIKZ(".tikz"){
+        @Override
         public TikZTwoViewSaver getSaver(TwoViewModel model){
             return new TikZTwoViewSaver(model);
         }
     },
     PNG(".png"){
+        @Override
         public PngTwoViewSaver getSaver(TwoViewModel model){
             return new PngTwoViewSaver(model);
         }

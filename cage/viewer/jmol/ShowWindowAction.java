@@ -17,6 +17,7 @@ public class ShowWindowAction extends AbstractAction{
         this.window = window;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if(!window.isVisible())
             window.setVisible(true);

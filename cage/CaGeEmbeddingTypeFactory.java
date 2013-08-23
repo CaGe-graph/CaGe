@@ -8,6 +8,7 @@ package cage;
  */
 public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
 
+    @Override
     public String[] getEmbeddingTypes() {
         String[] types = new String[Type.values().length];
         for (int i = 0; i < types.length; i++) {
@@ -16,6 +17,7 @@ public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
         return types;
     }
 
+    @Override
     public Embedder getEmbedderFor(String type) {
         int i = 0;
         while(i < Type.values().length && !Type.values()[i].getTypeName().equals(type)) i++;
@@ -30,6 +32,7 @@ public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
             private String[][] embed2D = {{"embed"}};
             private String[][] embed3D = {{"embed", "-d3", "-ip"}};
 
+            @Override
             public Embedder getEmbedder(){
                 return EmbedFactory.createEmbedder(true, embed2D, embed3D);
             }
@@ -38,6 +41,7 @@ public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
             private String[][] embed2D = {{"embed"}};
             private String[][] embed3D = {{"embed", "-d3", "-is"}};
 
+            @Override
             public Embedder getEmbedder(){
                 return EmbedFactory.createEmbedder(true, embed2D, embed3D);
             }
@@ -46,6 +50,7 @@ public class CaGeEmbeddingTypeFactory implements EmbeddingTypeFactory{
             private String[][] embed2D = {{"embed"}};
             private String[][] embed3D = {{"embed", "-d3", "-it"}};
 
+            @Override
             public Embedder getEmbedder(){
                 return EmbedFactory.createEmbedder(true, embed2D, embed3D);
             }

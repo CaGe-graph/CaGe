@@ -118,30 +118,37 @@ public class StaticGeneratorInfo extends GeneratorInfo {
         this.expertMode = expertMode;
     }
 
+    @Override
     public String[][] getGenerator() {
         return generator;
     }
 
+    @Override
     public void setGenerator(String[][] generator) {
         this.generator = generator;
     }
 
+    @Override
     public Embedder getEmbedder() {
         return embedder;
     }
 
+    @Override
     public void setEmbedder(Embedder embedder) {
         this.embedder = embedder;
     }
 
+    @Override
     public String getFilename() {
         return filename;
     }
 
+    @Override
     public int getMaxFacesize() {
         return maxFacesize;
     }
 
+    @Override
     public boolean isReembed2DEnabled() {
         return reembed2DEnabled;
     }
@@ -151,10 +158,12 @@ public class StaticGeneratorInfo extends GeneratorInfo {
      * 
      * @return The element rule to be used with this generator.
      */
+    @Override
     public ElementRule getElementRule() {
         return elementRule;
     }
 
+    @Override
     public int getExpertMode() {
         return expertMode;
     }

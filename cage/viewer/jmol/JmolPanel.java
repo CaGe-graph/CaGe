@@ -55,6 +55,7 @@ public class JmolPanel extends JPanel {
     final Rectangle rectClip = new Rectangle();
     final Dimension preferredSize;
 
+    @Override
     public void paint(Graphics g) {
         if(viewer==null)
             return;
@@ -63,6 +64,7 @@ public class JmolPanel extends JPanel {
         viewer.renderScreenImage(g, currentSize, rectClip);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return preferredSize;
     }

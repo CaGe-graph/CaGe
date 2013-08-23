@@ -41,6 +41,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
     private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
 
         @SuppressWarnings(value = "CallToThreadDumpStack")
+        @Override
         public void propertyChange(PropertyChangeEvent e) {
             if (CaGe.debugMode) {
                 new StackTrace("queueing property change: " + e.getPropertyName() + " = " + e.getNewValue() + " (old value: " + e.getOldValue() + ")").printStackTrace();
@@ -56,6 +57,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
     private EmbedThread embedThread;
     private EmbedThreadListener embedThreadListener = new EmbedThreadListener() {
 
+        @Override
         public void showEmbeddingException(Exception ex, String context, String embedDiagnostics) {
             String diagnostics = embedDiagnostics == null ? "" : embedDiagnostics;
             int p = diagnostics.length() - 1;
@@ -71,6 +73,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
             fireExceptionOccurred((Exception) e.fillInStackTrace());
         }
 
+        @Override
         public void embeddingFinished() {
             if (!generatorRunning) {
                 end();
@@ -172,6 +175,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
         }
     }
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
@@ -182,6 +186,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
         }
     }
 
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
@@ -224,6 +229,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
     protected abstract void embeddingMade(CaGeResult result);
 
     @SuppressWarnings("CallToThreadDumpStack")
+    @Override
     public void fireExceptionOccurred(Exception e) {
         if (propertyChangeListeners != null) {
             firePropertyChange(new PropertyChangeEvent(this, "exception", null, e));
@@ -232,15 +238,18 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
         }
     }
 
+    @Override
     public void fireGraphNoChanged() {
         firePropertyChange(new PropertyChangeEvent(this, "graphNo", null, new Integer(graphNo)));
     }
 
+    @Override
     public void fireRunningChanged() {
         Debug.print("announcing running change: " + generatorRunning);
         firePropertyChange(new PropertyChangeEvent(this, "running", null, generatorRunning));
     }
 
+    @Override
     public int getGraphNo() {
         return graphNo;
     }
@@ -288,6 +297,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
      * due to an error while starting the generator or embedder, or because the
      * user requested the termination of the background task.
      */
+    @Override
     public void abort() {
         //in case there is a CaGeTimer we stop this timer
         if (timer != null) {

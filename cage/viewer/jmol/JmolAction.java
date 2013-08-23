@@ -28,6 +28,7 @@ public abstract class JmolAction extends AbstractAction {
         this.viewer = viewer;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         viewer.evalString(getCommand());
     }
