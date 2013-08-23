@@ -107,9 +107,11 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
                 new Insets(0, 5, 0, 0), 0, 0));
     }
 
+    @Override
     public void showing() {
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector genCmd = new Vector();
         String filename = "";

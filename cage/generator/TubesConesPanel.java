@@ -20,9 +20,11 @@ public class TubesConesPanel extends GeneratorPanel {
         add(pane);
     }
 
+    @Override
     public void showing() {
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         GeneratorPanel chosenPanel = (GeneratorPanel) pane.getSelectedComponent();
         GeneratorInfo info = chosenPanel.getGeneratorInfo();

@@ -61,6 +61,7 @@ public class FullgenPanel extends GeneratorPanel {
     private SymmetriesDialog symmetriesDialog = new SymmetriesDialog(null, "Fullerenes - symmetry filter", true);
     
     private ChangeListener sliderListener = new ChangeListener() {
+        @Override
         public void stateChanged(ChangeEvent e) {
             getNextButton().setEnabled(isValidConfiguration());
         }
@@ -71,9 +72,11 @@ public class FullgenPanel extends GeneratorPanel {
         
         symmetriesDialog.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if(symmetriesDialog.areAllSymmetriesSelected()){
                     SwingUtilities.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
                             atlasOrder.setEnabled(true);
                             symmetryFilterButton.setSelected(false);
@@ -82,6 +85,7 @@ public class FullgenPanel extends GeneratorPanel {
                     });
                 } else {
                     SwingUtilities.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
                             atlasOrder.setEnabled(false);
                             atlasOrder.setSelected(false);
@@ -133,9 +137,11 @@ public class FullgenPanel extends GeneratorPanel {
         minEqMax.setMnemonic(KeyEvent.VK_M);
         MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
         minEqMax.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if(!minEqMax.isSelected()){
                     SwingUtilities.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
                             atlasOrder.setSelected(false);
                         }
@@ -195,15 +201,18 @@ public class FullgenPanel extends GeneratorPanel {
         dual.setMnemonic(KeyEvent.VK_D);
         dual.setActionCommand("Dual");
         dual.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO: is this needed? Strange that the state of the check box is not looked up
                 embedderIsConstant = false;
             }
         });
         dual.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if(dual.isSelected()){
                     SwingUtilities.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
                             atlasOrder.setSelected(false);
                         }
@@ -239,9 +248,11 @@ public class FullgenPanel extends GeneratorPanel {
         
         //impose some restrictions when atlas order is chosen
         atlasOrder.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if(atlasOrder.isSelected()){
                     SwingUtilities.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
                             minEqMax.setSelected(true);
                             dual.setSelected(false);
@@ -253,6 +264,7 @@ public class FullgenPanel extends GeneratorPanel {
                     });
                 } else {
                     SwingUtilities.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
                             symmetryFilterButton.setEnabled(true);
                             warningField.setRevealed(false);
@@ -268,6 +280,7 @@ public class FullgenPanel extends GeneratorPanel {
         symmetryFilterButton.setMnemonic(KeyEvent.VK_F);
         symmetryFilterButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showSymmetryFilterDialog();
             }
@@ -311,6 +324,7 @@ public class FullgenPanel extends GeneratorPanel {
         return !atlasOrder.isSelected() || (minAtomsSlider.getValue() <= 100);
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
 
         String[][] embed2D = {{"embed"}};
@@ -438,6 +452,7 @@ public class FullgenPanel extends GeneratorPanel {
         return generatorInfo;
     }
 
+    @Override
     public void showing() {
     }
 

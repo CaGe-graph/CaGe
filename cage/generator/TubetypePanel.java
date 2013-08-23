@@ -58,6 +58,7 @@ public class TubetypePanel extends GeneratorPanel {
         tubelengthSlider.setSizeFactor(10);
         tubelengthSlider.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (!adjusting) {
                     defaultTubelengthButton.setSelected(false);
@@ -69,6 +70,7 @@ public class TubetypePanel extends GeneratorPanel {
         defaultTubelengthButton.setMnemonic(KeyEvent.VK_D);
         defaultTubelengthButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (defaultTubelengthButton.isSelected()) {
                     adjustTubelength();
@@ -98,6 +100,7 @@ public class TubetypePanel extends GeneratorPanel {
         adjustTubelength();
         ChangeListener offsetListener = new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (defaultTubelengthButton.isSelected()) {
                     adjustTubelength();
@@ -169,6 +172,7 @@ public class TubetypePanel extends GeneratorPanel {
         }
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector command = new Vector();
         String filename;
@@ -203,6 +207,7 @@ public class TubetypePanel extends GeneratorPanel {
                 filename, 6, rule);
     }
 
+    @Override
     public void showing() {
     }
 
@@ -218,6 +223,7 @@ public class TubetypePanel extends GeneratorPanel {
         final JFrame f = new JFrame("Tubetype Dialog");
         f.addWindowListener(new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 f.setVisible(false);
                 GeneratorInfo info = p.getGeneratorInfo();

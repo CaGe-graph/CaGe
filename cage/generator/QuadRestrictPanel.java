@@ -152,6 +152,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         restrictionSlider.setClickScrollByBlock(false);
         restrictionSlider.slider().addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getModifiers() != 0) {
                     return;
@@ -171,6 +172,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         JToggleButton addRestrictedSizeButton = new JToggleButton(dual ? "include this face type" : "include this degree");
         addRestrictedSizeButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 checkParameters();
             }
@@ -196,6 +198,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
                 new Insets(0, 0, 10, 0), 0, 0));
     }
 
+    @Override
     public void showing() {
         checkParameters();
     }
@@ -210,6 +213,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
      * @return A <code>GeneratorInfo</code> object reflecting the settings on
      *         this panel.
      */
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector genCmd = new Vector();
         StringBuilder filename = new StringBuilder("quad");
@@ -260,6 +264,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
                 filename.toString(), dual ? 0 : 4, true);
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         checkParameters();
     }

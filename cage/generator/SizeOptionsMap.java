@@ -118,6 +118,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
         }
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         int faces = sizesModel.getValue();
         SizeOption sizeOption = (SizeOption) this.get(new MutableInteger(faces));
@@ -129,6 +130,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
             includedButton.setText((included ? "discard " : "include ") + "degree " + faces);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         MutableInteger key = null;

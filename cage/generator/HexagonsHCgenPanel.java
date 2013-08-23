@@ -68,6 +68,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel {
                 new Insets(0, 10, 0, 10), 0, 0));
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
 
         String generator;
@@ -96,6 +97,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel {
                 6);
     }
 
+    @Override
     public void showing() {
         defaultButton = SwingUtilities.getRootPane(this).getDefaultButton();
         defaultButton.setText("Next");

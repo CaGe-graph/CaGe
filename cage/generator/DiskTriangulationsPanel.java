@@ -152,9 +152,11 @@ public class DiskTriangulationsPanel extends GeneratorPanel
                 new Insets(0, 0, 10, 0), 0, 0));
     }
 
+    @Override
     public void showing() {
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector genCmd = new Vector();
         String filename = "";
@@ -193,6 +195,7 @@ public class DiskTriangulationsPanel extends GeneratorPanel
                 filename, 3, enableReembed2D);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         boolean forbidden;

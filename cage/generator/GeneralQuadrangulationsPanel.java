@@ -139,6 +139,7 @@ public class GeneralQuadrangulationsPanel extends GeneratorPanel {
             button.setActionCommand("-c2m2");
             button.addChangeListener(new ChangeListener() {
 
+                @Override
                 public void stateChanged(ChangeEvent e) {
                     JRadioButton radioButton = (JRadioButton)e.getSource();
                     if(radioButton.isSelected()){
@@ -179,12 +180,14 @@ public class GeneralQuadrangulationsPanel extends GeneratorPanel {
                 new Insets(0, 0, 10, 0), 0, 0));
     }
 
+    @Override
     public void showing() {
         //enable next button, because this might have been disabled.
         if(getNextButton()!=null)
             getNextButton().setEnabled(true);
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector genCmd = new Vector();
         String filename = "";

@@ -99,6 +99,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
                 new Insets(0, 10, 0, 10), 0, 0));
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         String symmetric = symmetricButton.isSelected() ? "s" : "n";
         String pentagons = Integer.toString(numberOfPentagonsSlider.getValue());
@@ -116,10 +117,12 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
                 6, true, new SingleElementRule("C"), 0);
     }
 
+    @Override
     public void showing() {
         //
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (symmetricButton.isSelected()) {
             numberOfPentagonsSlider.setMinimum(1);
@@ -139,6 +142,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
      */
     private class HexagonLayersBoxListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             hexagonLayers.setEnabled(hexagonLayersBox.isSelected());
         }

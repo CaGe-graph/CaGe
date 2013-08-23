@@ -16,6 +16,7 @@ public class TriangulationsPanel extends CombinedGeneratorPanel {
         add(pane);
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         GeneratorPanel chosenPanel = (GeneratorPanel) pane.getSelectedComponent();
         GeneratorInfo info = chosenPanel.getGeneratorInfo();

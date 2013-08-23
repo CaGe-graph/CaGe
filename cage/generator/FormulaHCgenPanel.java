@@ -86,6 +86,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         CSlider.setClickScrollByBlock(false);
         CSlider.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 C = CSlider.getValue();
                 checkCLimits();
@@ -108,6 +109,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         HSlider.setClickScrollByBlock(false);
         HSlider.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 H = HSlider.getValue();
                 checkHLimits();
@@ -131,6 +133,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         pentSlider.setClickScrollByBlock(false);
         pentSlider.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 pentagons = pentSlider.getValue();
                 checkPentagonLimits();
@@ -338,6 +341,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         defaultButton.setEnabled(COk && HOk && pentagonsOk && parityOk);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         boolean isMin = command.charAt(1) == '-';
@@ -354,6 +358,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         }
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector command = new Vector();
         String filename = "";
@@ -392,6 +397,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
                 filename, 6, enableReembed2D, rule);
     }
 
+    @Override
     public void showing() {
        // if(SwingUtilities.getRootPane(this)!=null)
        //     defaultButton = SwingUtilities.getRootPane(this).getDefaultButton();
@@ -414,6 +420,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         final JFrame f = new JFrame("HCgen Dialog");
         final WindowAdapter closeListener = new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 f.setVisible(false);
                 GeneratorInfo info = p.getGeneratorInfo();
@@ -428,6 +435,7 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
         JButton okButton = new JButton("Ok");
         okButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 closeListener.windowClosing(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             }

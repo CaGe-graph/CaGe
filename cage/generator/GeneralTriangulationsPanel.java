@@ -165,9 +165,11 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
                 new Insets(0, 5, 0, 0), 0, 0));
     }
 
+    @Override
     public void showing() {
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector genCmd = new Vector();
         String filename = "";
@@ -208,6 +210,7 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
                 filename, 3, true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         char deg, conn;

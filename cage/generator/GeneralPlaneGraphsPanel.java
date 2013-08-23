@@ -91,6 +91,7 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
             minDegGroup.add(degButtons[i-1]);
             minDegPanel.add(degButtons[i-1]);
             degButtons[i-1].addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
                     int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
@@ -118,6 +119,7 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
             minConnGroup.add(connButtons[i-1]);
             minConnPanel.add(connButtons[i-1]);
             connButtons[i-1].addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
                     int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
@@ -245,9 +247,11 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
         }
     }
 
+    @Override
     public void showing() {
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         Vector genCmd = new Vector();
         String filename = "";
@@ -293,6 +297,7 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
                 dual.isSelected() ? verticesSlider.getValue() - 1 : maxFacesize.getValue());
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand().charAt(0)) {
             case 'a':
@@ -319,6 +324,7 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
         }
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         setValues();
     }

@@ -94,6 +94,7 @@ public class SymmetriesDialog extends JDialog{
         JButton symmetriesAllButton = new JButton("Set all");
         symmetriesAllButton.setMnemonic(KeyEvent.VK_S);
         symmetriesAllButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 for (String symmetry : SYMMETRY) {
                     selectedSymmetriesModel.addSymmetry(symmetry);
@@ -105,6 +106,7 @@ public class SymmetriesDialog extends JDialog{
         JButton symmetriesNoneButton = new JButton("Clear all");
         symmetriesNoneButton.setMnemonic(KeyEvent.VK_C);
         symmetriesNoneButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 selectedSymmetriesModel.clear();
             }
@@ -113,6 +115,7 @@ public class SymmetriesDialog extends JDialog{
         //OK button
         final JButton okButton = new JButton("Ok");
         okButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
             }
@@ -127,6 +130,7 @@ public class SymmetriesDialog extends JDialog{
         //cancel button
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 //restore the state of the selection and hide the dialog
                 restoreState();
@@ -157,6 +161,7 @@ public class SymmetriesDialog extends JDialog{
         //add action listener that (de)selects the symmetry in the model when the button is pressed
         button.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if(button.isSelected()){
                     selectedSymmetriesModel.addSymmetry(symmetry);
@@ -169,18 +174,21 @@ public class SymmetriesDialog extends JDialog{
         //add listener for model that keeps the button's selection state in sync with the model
         selectedSymmetriesModel.addSymmetriesModelListener(new SymmetriesModelListener() {
 
+            @Override
             public void symmetryAdded(String localSymmetry) {
                 if(localSymmetry.equals(symmetry)){
                     button.setSelected(true);
                 }
             }
 
+            @Override
             public void symmetryRemoved(String localSymmetry) {
                 if(localSymmetry.equals(symmetry)){
                     button.setSelected(false);
                 }
             }
 
+            @Override
             public void selectedSymmetriesChanged() {
                 button.setSelected(selectedSymmetriesModel.containsSymmetry(symmetry));
             }
@@ -344,14 +352,17 @@ public class SymmetriesDialog extends JDialog{
      */
     private static abstract class SingleActionSymmetriesModelListener implements SymmetriesModelListener {
 
+        @Override
         public void symmetryAdded(String symmetry) {
             selectionChanged();
         }
 
+        @Override
         public void symmetryRemoved(String symmetry) {
             selectionChanged();
         }
 
+        @Override
         public void selectedSymmetriesChanged() {
             selectionChanged();
         }

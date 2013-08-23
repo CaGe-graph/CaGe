@@ -66,14 +66,17 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         externalCmd.addActionListener(this);
         externalCmd.getDocument().addDocumentListener(new DocumentListener() {
 
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 checkCmd();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 checkCmd();
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 checkCmd();
             }
@@ -84,6 +87,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         externalCmdButton.setSelected(true);
         externalCmdButton.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 externalCmd.setEnabled(externalCmdButton.isSelected());
                 if (externalCmdButton.isSelected()) {
@@ -98,14 +102,17 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         fromFileCmd.addActionListener(this);
         fromFileCmd.getDocument().addDocumentListener(new DocumentListener() {
 
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 checkCmd();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 checkCmd();
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 checkCmd();
             }
@@ -267,6 +274,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         embedExpertBox.setEnabled(enabled);
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         GeneratorInfo templateInfo = null;
         int embeddedMode = Embedder.IGNORE_OLD_EMBEDDING;
@@ -331,6 +339,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
                 embedExpert ? 0 : GeneratorInfo.EMBED_EXPERT));
     }
 
+    @Override
     public void showing() {
         defaultButton = SwingUtilities.getRootPane(externalCmd).getDefaultButton();
         checkCmd();

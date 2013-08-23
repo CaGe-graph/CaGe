@@ -75,6 +75,7 @@ public class BoundaryHCgenPanel extends GeneratorPanel
                 new Insets(0, 10, 0, 10), 0, 0));
     }
 
+    @Override
     public GeneratorInfo getGeneratorInfo() {
         String ipr = iprBox.isSelected() ? " ipr" : "";
         String showH = showHBox.isSelected() ? " H" : "";
@@ -88,10 +89,12 @@ public class BoundaryHCgenPanel extends GeneratorPanel
                 6);
     }
 
+    @Override
     public void showing() {
         checkList();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         char actionCommand = e.getActionCommand().charAt(0);
         System.out.println(actionCommand);
@@ -128,14 +131,17 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 
     private class MyListener implements DocumentListener {
 
+        @Override
         public void insertUpdate(DocumentEvent e) {
             checkList();
         }
 
+        @Override
         public void removeUpdate(DocumentEvent e) {
             checkList();
         }
 
+        @Override
         public void changedUpdate(DocumentEvent e) {
             checkList();
         }
@@ -143,6 +149,7 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 
     private class BoundaryListDocumentFilter extends DocumentFilter {
 
+        @Override
         public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
             int i = 0;
             while (i < string.length() && (string.charAt(i) == '2' || string.charAt(i) == '3')) {
@@ -154,6 +161,7 @@ public class BoundaryHCgenPanel extends GeneratorPanel
 
         }
 
+        @Override
         public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
             int i = 0;
             while (i < string.length() && (string.charAt(i) == '2' || string.charAt(i) == '3')) {

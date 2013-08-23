@@ -140,6 +140,7 @@ public class SizeOption implements ChangeListener, ActionListener {
         return size;
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         Object source = e.getSource();
         if (source == (Object) limitNrOfSize) {
@@ -153,6 +154,7 @@ public class SizeOption implements ChangeListener, ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == (Object) limitNrOfSize) {
