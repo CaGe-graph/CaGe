@@ -1,6 +1,5 @@
 package cage.generator;
 
-import cage.CaGe;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
