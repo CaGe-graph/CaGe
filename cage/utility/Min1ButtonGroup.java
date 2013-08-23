@@ -73,7 +73,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         }
         int lastLowLevelModifiers = lastModifiers;
         lastModifiers = 0;
-        if (active && selections.size() == 0) {
+        if (active && selections.isEmpty()) {
             if (deactivateButton != null && !button.hasFocus()) {
                 deactivateButton.doClick();
                 if (!active) {
@@ -99,7 +99,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
             return;
         }
         this.active = active;
-        if (active && selections.size() == 0 && buttons.size() > 0) {
+        if (active && selections.isEmpty() && buttons.size() > 0) {
             buttons.get(0).setSelected(true);
         }
     }
