@@ -21,6 +21,7 @@ public class MinMaxRestrictor {
     
     private ChangeListener changeListener = new ChangeListener() {
 
+        @Override
         public void stateChanged(ChangeEvent e) {
             BoundedRangeModel m = (BoundedRangeModel) e.getSource();
             enforceConstraints(m, mayVeto);
@@ -29,6 +30,7 @@ public class MinMaxRestrictor {
     
     private ChangeListener buttonChangeListener = new ChangeListener() {
 
+        @Override
         public void stateChanged(ChangeEvent e) {
             equality = ((ButtonModel) e.getSource()).isSelected();
             enforceConstraints(lastChangedModel, false);

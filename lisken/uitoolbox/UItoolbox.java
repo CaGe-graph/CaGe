@@ -40,6 +40,7 @@ public class UItoolbox {
      */
     public static void addExitOnEscape(RootPaneContainer container) {
         container.getRootPane().registerKeyboardAction(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.exit(0);
             }
@@ -89,6 +90,7 @@ public class UItoolbox {
     public static void showTextInfo(String title, String info, boolean monospaced, Component nearComponent) {
         final JDialog dialog = new JDialog((Frame) null, title, true);
         ActionListener endDialog = new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
             }
@@ -291,6 +293,7 @@ public class UItoolbox {
     public static void focusWindow(final Window window) {
         SwingUtilities.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 window.toFront();
             }

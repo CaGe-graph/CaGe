@@ -18,6 +18,7 @@ public class JTextComponentFocusSelector extends MouseAdapter implements FocusLi
 
     private boolean dontSelect = false;
 
+    @Override
     public void focusGained(FocusEvent e) {
         if (e.isTemporary()) {
             return;
@@ -28,6 +29,7 @@ public class JTextComponentFocusSelector extends MouseAdapter implements FocusLi
         ((JTextComponent) e.getSource()).selectAll();
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         if (e.isTemporary()) {
             return;
@@ -39,6 +41,7 @@ public class JTextComponentFocusSelector extends MouseAdapter implements FocusLi
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == 0) {
             return;

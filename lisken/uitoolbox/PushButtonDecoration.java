@@ -14,6 +14,7 @@ public class PushButtonDecoration {
     
     private ChangeListener changeListener = new ChangeListener() {
 
+        @Override
         public void stateChanged(ChangeEvent e) {
             updateBorder();
         }

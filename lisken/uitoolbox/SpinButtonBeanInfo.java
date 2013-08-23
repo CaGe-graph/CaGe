@@ -23,6 +23,7 @@ public class SpinButtonBeanInfo extends SimpleBeanInfo {
     public SpinButtonBeanInfo() {
     }
 
+    @Override
     public PropertyDescriptor[] getPropertyDescriptors() {
         try {
             PropertyDescriptor _spinValue = new PropertyDescriptor("spinValue", beanClass, "getSpinValue", "setSpinValue");
@@ -36,6 +37,7 @@ public class SpinButtonBeanInfo extends SimpleBeanInfo {
         }
     }
 
+    @Override
     public java.awt.Image getIcon(int iconKind) {
         switch (iconKind) {
             case BeanInfo.ICON_COLOR_16x16:

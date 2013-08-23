@@ -23,6 +23,7 @@ public class EnhancedSliderBeanInfo extends SimpleBeanInfo {
     public EnhancedSliderBeanInfo() {
     }
 
+    @Override
     public PropertyDescriptor[] getPropertyDescriptors() {
         try {
             PropertyDescriptor _accessibleContext = new PropertyDescriptor("accessibleContext", beanClass, "getAccessibleContext", null);
@@ -90,6 +91,7 @@ public class EnhancedSliderBeanInfo extends SimpleBeanInfo {
         }
     }
 
+    @Override
     public java.awt.Image getIcon(int iconKind) {
         switch (iconKind) {
             case BeanInfo.ICON_COLOR_16x16:

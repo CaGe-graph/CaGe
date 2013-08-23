@@ -63,6 +63,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         addButton.setMnemonic(KeyEvent.VK_A);
         addButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 addToSelection();
             }
@@ -72,6 +73,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         removeButton.setMnemonic(KeyEvent.VK_R);
         removeButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 removeFromSelection();
             }
@@ -80,6 +82,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         upButton.setMnemonic(KeyEvent.VK_U);
         upButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 upInSelection();
             }
@@ -88,6 +91,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         downButton.setMnemonic(KeyEvent.VK_D);
         downButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 downInSelection();
             }
@@ -139,6 +143,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         return !noEmptySelection;
     }
 
+    @Override
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) {
             return;
@@ -325,6 +330,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         JButton okButton = new JButton("Ok");
         okButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 dialogCompleted = true;
                 d.dispose();
@@ -332,6 +338,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         });
         ActionListener cancelAction = new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 d.dispose();
             }

@@ -21,6 +21,7 @@ public class NumberDocument extends PlainDocument {
         allowSign = sign;
     }
 
+    @Override
     public void insertString(int offset, String string, AttributeSet attrs)
             throws BadLocationException {
         // accept only digits after "start" - will be 1 to allow a minus sign

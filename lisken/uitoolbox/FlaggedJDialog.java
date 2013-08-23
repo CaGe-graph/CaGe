@@ -22,6 +22,7 @@ public class FlaggedJDialog extends JDialog {
     
     private ActionListener cancelListener = new ActionListener() {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             success = false;
             setVisible(false);
@@ -30,6 +31,7 @@ public class FlaggedJDialog extends JDialog {
     
     private ActionListener defaultButtonListener = new ActionListener() {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             success = true;
             setVisible(false);

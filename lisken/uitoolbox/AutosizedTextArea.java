@@ -15,10 +15,12 @@ public class AutosizedTextArea extends JTextArea {
 
     Dimension size;
 
+    @Override
     public Dimension getPreferredScrollableViewportSize() {
         return size;
     }
 
+    @Override
     public void setText(String text) {
         int text_end = text.length();
         if (text_end > 0) {
@@ -30,11 +32,13 @@ public class AutosizedTextArea extends JTextArea {
         recalculateSize();
     }
 
+    @Override
     public void setFont(Font font) {
         super.setFont(font);
         recalculateSize();
     }
 
+    @Override
     public void setBorder(Border border) {
         super.setBorder(border);
         recalculateSize();

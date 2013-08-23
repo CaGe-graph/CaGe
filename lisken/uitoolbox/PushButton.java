@@ -30,6 +30,7 @@ public class PushButton extends JButton {
         this("", null);
     }
 
+    @Override
     public void setBorder(Border b) {
         otherBorder = b;
         computeBorders();
@@ -52,6 +53,7 @@ public class PushButton extends JButton {
         public PushButtonListener() {
         }
 
+        @Override
         public void stateChanged(ChangeEvent e) {
             updateBorder();
         }

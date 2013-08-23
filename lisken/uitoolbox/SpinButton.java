@@ -159,6 +159,7 @@ public class SpinButton extends JPanel
     text.getPreferredSize().height);
     }
      */
+    @Override
     public void sizing() {
         int h = text.getHeight() - insetsHeight(buttonPanel) - sep.getPreferredSize().height - up.getIcon().getIconHeight() - down.getIcon().getIconHeight();
         if (h != lastH) {
@@ -225,6 +226,7 @@ public class SpinButton extends JPanel
             offset = o;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             checkNewTextValue(true);
             setValue(value + (int) Math.round((maxValue - minValue) * fraction) + offset);
@@ -267,20 +269,24 @@ public class SpinButton extends JPanel
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         checkNewTextValue(true);
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
         if (e.getSource() == (Object) this) {
             text.requestFocus();
         }
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         checkNewTextValue(true);
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         int newValue = ((BoundedRangeModel) e.getSource()).getValue();
         setTextAndValue(newValue);
@@ -289,20 +295,24 @@ public class SpinButton extends JPanel
         fireStateChanged();
     }
 
+    @Override
     public boolean isEnabled() {
         return text.isEnabled();
     }
 
+    @Override
     public void setEnabled(boolean b) {
         text.setEnabled(b);
         up.setEnabled(b);
         down.setEnabled(b);
     }
 
+    @Override
     public Font getFont() {
         return (text == null ? super.getFont() : text.getFont());
     }
 
+    @Override
     public void setFont(Font f) {
         if (text == null) {
             super.setFont(f);
@@ -311,10 +321,12 @@ public class SpinButton extends JPanel
         }
     }
 
+    @Override
     public final LayoutManager getLayout() {
         return null;
     }
 
+    @Override
     public final void setLayout(LayoutManager mgr) {
     }
 
@@ -322,6 +334,7 @@ public class SpinButton extends JPanel
         JFrame f = new JFrame("SpinButton test");
         f.addWindowListener(new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
@@ -333,12 +346,14 @@ public class SpinButton extends JPanel
         BoundedRangeModel m = s.getModel();
         s.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 System.err.println("  button changed: " + ((SpinButton) e.getSource()).getValue());
             }
         });
         s.getModel().addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent e) {
                 System.err.println("  model changed: " + ((BoundedRangeModel) e.getSource()).getValue());
             }
@@ -353,6 +368,7 @@ public class SpinButton extends JPanel
         final JCheckBox e = new JCheckBox("Enabled?", true);
         e.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent ce) {
                 s.setEnabled(e.isSelected());
             }
@@ -365,6 +381,7 @@ public class SpinButton extends JPanel
         final JCheckBox v = new JCheckBox("Visible?", true);
         v.addChangeListener(new ChangeListener() {
 
+            @Override
             public void stateChanged(ChangeEvent ce) {
                 s.setVisible(v.isSelected());
             }
@@ -403,21 +420,25 @@ public class SpinButton extends JPanel
         }
         // this version of setBounds does the notifying
 
+        @Override
         public void setBounds(int x, int y, int newWidth, int newHeight) {
             super.setBounds(x, y, newWidth, newHeight);
             fireSizing();
         }
         // all other size-changing methods are redirected into the one above
 
+        @Override
         public void setBounds(Rectangle r) {
             setBounds(r.x, r.y, r.width, r.height);
         }
 
+        @Override
         public void setSize(Dimension d) {
             Point p = getLocation();
             setBounds(p.x, p.y, d.width, d.height);
         }
 
+        @Override
         public void setSize(int newWidth, int newHeight) {
             Point p = getLocation();
             setBounds(p.x, p.y, newWidth, newHeight);
@@ -444,6 +465,7 @@ public class SpinButton extends JPanel
             sizeListener = null;
         }
 
+        @Override
         public void setText(String text) {
         }
     }
@@ -477,6 +499,7 @@ public class SpinButton extends JPanel
             action = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand());
         }
 
+        @Override
         public void setPressed(boolean b) {
             // Stolen from the original source.
             if ((isPressed() == b) || !isEnabled()) {
@@ -496,6 +519,7 @@ public class SpinButton extends JPanel
             super.setPressed(b);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (isArmed()) {
                 fireActionPerformed(action);
@@ -513,6 +537,7 @@ public class SpinButton extends JPanel
             running = false;
         }
 
+        @Override
         public void start() {
             running = true;
             SwingUtilities.invokeLater(this);
@@ -523,11 +548,13 @@ public class SpinButton extends JPanel
             }
         }
 
+        @Override
         public synchronized void stop() {
             running = false;
             super.stop();
         }
 
+        @Override
         public void run() {
             fireActionPerformed(new ActionEvent(this, 0, null));
         }

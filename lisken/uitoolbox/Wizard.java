@@ -63,6 +63,7 @@ public class Wizard implements ActionListener {
         this.img = img;
         windowListener = new WindowAdapter() {
 
+            @Override
             public void windowClosing(WindowEvent e) {
                 if (stage.getExitButton() != null) {
                     stage.getExitButton().doClick();
@@ -75,6 +76,7 @@ public class Wizard implements ActionListener {
         };
         escapeListener = new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (stage.getCancelButton() != null) {
                     stage.getCancelButton().doClick();
@@ -234,6 +236,7 @@ public class Wizard implements ActionListener {
         panel.add(button, lc);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         if (cmd.equals(Wizard.PREVIOUS)) {
