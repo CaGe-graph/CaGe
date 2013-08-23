@@ -21,7 +21,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -360,34 +361,34 @@ public class FormulaHCgenPanel extends GeneratorPanel implements ActionListener 
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector command = new Vector();
+        List<String> command = new ArrayList<>();
         String filename = "";
-        command.addElement("hcgen");
+        command.add("hcgen");
         filename += "hc";
-        command.addElement(Integer.toString(CSlider.getValue()));
+        command.add(Integer.toString(CSlider.getValue()));
         filename += "_c" + CSlider.getValue();
-        command.addElement(Integer.toString(HSlider.getValue()));
+        command.add(Integer.toString(HSlider.getValue()));
         filename += "h" + HSlider.getValue();
-        command.addElement(Integer.toString(pentSlider.getValue()));
+        command.add(Integer.toString(pentSlider.getValue()));
         filename += "_" + pentSlider.getValue() + "pent";
-        command.addElement("gap");
-        command.addElement(Integer.toString(HGapSlider.getValue()));
+        command.add("gap");
+        command.add(Integer.toString(HGapSlider.getValue()));
         if (ipr.isSelected()) {
-            command.addElement("ipr");
+            command.add("ipr");
             filename += "_ipr";
         }
         if (peri.isSelected()) {
-            command.addElement("peri_condensed");
+            command.add("peri_condensed");
             filename += "_pc";
         }
         if (!includeH.isSelected()) {
-            command.addElement("without_H");
+            command.add("without_H");
             filename += "_noH";
         }
-        command.addElement("stdout");
-        command.addElement("logerr");
-        String[][] generator = new String[1][command.size()];
-        command.copyInto(generator[0]);
+        command.add("stdout");
+        command.add("logerr");
+        String[][] generator = new String[1][];
+        generator[0] = command.toArray(new String[command.size()]);
         String[][] embed2D = {{"embed"}};
         String[][] embed3D = {{"embed", "-d3", "-f1,1,4"}};
         ElementRule rule = new ValencyElementRule("H C C");

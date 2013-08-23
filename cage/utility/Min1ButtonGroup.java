@@ -6,8 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.ListIterator;
 import javax.swing.AbstractButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -84,9 +84,9 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         }
         if (lastLowLevelModifiers == InputEvent.SHIFT_MASK) {
             button.setSelected(true);
-            Enumeration elements = getElements();
-            while (elements.hasMoreElements()) {
-                AbstractButton otherButton = (AbstractButton) elements.nextElement();
+            ListIterator<AbstractButton> elements = getElements();
+            while (elements.hasNext()) {
+                AbstractButton otherButton = (AbstractButton) elements.next();
                 if (otherButton != button && otherButton.isSelected()) {
                     otherButton.setSelected(false);
                 }
@@ -100,7 +100,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         }
         this.active = active;
         if (active && selections.size() == 0 && buttons.size() > 0) {
-            ((AbstractButton) buttons.elementAt(0)).setSelected(true);
+            buttons.get(0).setSelected(true);
         }
     }
 

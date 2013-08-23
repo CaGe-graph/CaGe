@@ -11,7 +11,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,7 +43,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
     private JScrollPane selectionPane;
     private Object[] choices;
     private int[] position;
-    private Vector choice, selection, highlight;
+    private List<MutableInteger> choice, selection, highlight;
     private boolean dialogCompleted;
     private boolean noEmptySelection;
     private boolean building;
@@ -50,11 +51,11 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
     public OrderedChoice(Object[] choices) {
         this.choices = choices;
         position = new int[choices.length];
-        choice = new Vector(choices.length);
-        selection = new Vector(choices.length);
-        highlight = new Vector(choices.length);
+        choice = new ArrayList<>(choices.length);
+        selection = new ArrayList<>(choices.length);
+        highlight = new ArrayList<>(choices.length);
         for (int i = 0; i < choices.length; ++i) {
-            choice.addElement(new MutableInteger(i));
+            choice.add(new MutableInteger(i));
             position[i] = -1;
         }
         noEmptySelection = false;
@@ -155,14 +156,14 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         int last = Math.min(e.getLastIndex(), choice.size() - 1);
         int p;
         for (int i = first; i <= last; ++i) {
-            MutableInteger entry = (MutableInteger) choice.elementAt(i);
+            MutableInteger entry = choice.get(i);
             if (choiceList.isSelectedIndex(i)) {
                 if (highlight.indexOf(entry) < 0) {
-                    highlight.addElement(entry);
+                    highlight.add(entry);
                 }
             } else {
                 if ((p = highlight.indexOf(entry)) >= 0) {
-                    highlight.removeElementAt(p);
+                    highlight.remove(p);
                 }
             }
         }
@@ -174,12 +175,12 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
             return;
         }
         for (int i = 0; i < highlighted; ++i) {
-            MutableInteger entry = (MutableInteger) highlight.elementAt(i);
-            choice.removeElement(entry);
+            MutableInteger entry = highlight.get(i);
+            choice.remove(entry);
             position[entry.intValue()] = selection.size();
-            selection.addElement(entry);
+            selection.add(entry);
         }
-        highlight.setSize(0);
+        highlight.clear();
         buildLists();
         selectionList.addSelectionInterval(oldSize, oldSize + highlighted - 1);
     }
@@ -195,8 +196,8 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
             if (!selectionList.isSelectedIndex(i)) {
                 continue;
             }
-            MutableInteger entry = (MutableInteger) selection.elementAt(i);
-            selection.removeElementAt(i);
+            MutableInteger entry = selection.get(i);
+            selection.remove(i);
             position[entry.intValue()] = -1;
         }
         buildChoiceVector();
@@ -217,9 +218,9 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
                 continue;
             }
             int j = i - 1;
-            Object entry1 = selection.elementAt(j), entry2 = selection.elementAt(i);
-            selection.setElementAt(entry1, i);
-            selection.setElementAt(entry2, j);
+            MutableInteger entry1 = selection.get(j), entry2 = selection.get(i);
+            selection.set(i, entry1);
+            selection.set(j, entry2);
             --sel[s];
         }
         buildSelectionList();
@@ -240,9 +241,9 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
                 continue;
             }
             int j = i + 1;
-            Object entry1 = selection.elementAt(j), entry2 = selection.elementAt(i);
-            selection.setElementAt(entry1, i);
-            selection.setElementAt(entry2, j);
+            MutableInteger entry1 = selection.get(j), entry2 = selection.get(i);
+            selection.set(i, entry1);
+            selection.set(j, entry2);
             ++sel[s];
         }
         buildSelectionList();
@@ -259,7 +260,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         int choiceSize = choice.size();
         Object[] choiceData = new Object[choiceSize];
         for (int i = 0; i < choiceSize; ++i) {
-            choiceData[i] = choices[((MutableInteger) choice.elementAt(i)).intValue()];
+            choiceData[i] = choices[choice.get(i).intValue()];
         }
         choiceList.setListData(choiceData);
         if (listSize != null) {
@@ -273,7 +274,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         int selectionSize = selection.size();
         Object[] selectionData = new Object[selectionSize];
         for (int i = 0; i < selectionSize; ++i) {
-            selectionData[i] = choices[((MutableInteger) selection.elementAt(i)).intValue()];
+            selectionData[i] = choices[selection.get(i).intValue()];
         }
         selectionList.setListData(selectionData);
         if (listSize != null) {
@@ -288,26 +289,30 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
     }
 
     private void buildChoiceVector() {
-        choice.setSize(0);
+        choice.clear();
         for (int i = 0; i < choices.length; ++i) {
             if (position[i] < 0) {
-                choice.addElement(new MutableInteger(i));
+                choice.add(new MutableInteger(i));
             }
         }
     }
 
     private void buildSelectionVector() {
         int pos, maxPos = -1;
-        selection.setSize(choices.length);
-        for (int i = 0; i < choices.length; ++i) {
-            if ((pos = position[i]) >= 0) {
-                selection.setElementAt(new MutableInteger(i), pos);
-                if (pos > maxPos) {
-                    maxPos = pos;
-                }
+        selection.clear();
+        for (int p : position) {
+            if(p > maxPos){
+                maxPos = p;
             }
         }
-        selection.setSize(maxPos + 1);
+        for (int i = 0; i < maxPos+1; i++) {
+            selection.add(null);
+        }
+        for (int i = 0; i < choices.length; ++i) {
+            if ((pos = position[i]) >= 0) {
+                selection.set(pos, new MutableInteger(i));
+            }
+        }
     }
 
     public boolean getDialogCompleted() {
@@ -318,7 +323,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
         int selectionSize = selection.size();
         Object[] result = new Object[selectionSize];
         for (int i = 0; i < selectionSize; ++i) {
-            result[i] = choices[((MutableInteger) selection.elementAt(i)).intValue()];
+            result[i] = choices[selection.get(i).intValue()];
         }
         return result;
     }

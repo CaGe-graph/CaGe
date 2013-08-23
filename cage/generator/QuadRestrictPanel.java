@@ -12,8 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -215,7 +216,7 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
      */
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector genCmd = new Vector();
+        List<String> genCmd = new ArrayList<>();
         StringBuilder filename = new StringBuilder("quad");
 
         //vertices
@@ -243,16 +244,16 @@ public class QuadRestrictPanel extends GeneratorPanel implements ChangeListener 
         filename.append("_").append(restrictions.toString());
 
         //construct generator command
-        genCmd.addElement("quad_restrict");
-        genCmd.addElement("-q");
-        genCmd.addElement("-" + restrictions.toString());
+        genCmd.add("quad_restrict");
+        genCmd.add("-q");
+        genCmd.add("-" + restrictions.toString());
         if (dual) {
-            genCmd.addElement("-d");
+            genCmd.add("-d");
         }
-        genCmd.addElement(vertices);
+        genCmd.add(vertices);
 
-        String[][] generator = new String[1][genCmd.size()];
-        genCmd.copyInto(generator[0]);
+        String[][] generator = new String[1][];
+        generator[0] = genCmd.toArray(new String[genCmd.size()]);
 
         //construct embedder commands
         String[][] embed2D = {{"embed"}};

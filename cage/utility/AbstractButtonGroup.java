@@ -1,8 +1,9 @@
 package cage.utility;
 
 import java.awt.event.ItemListener;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 import javax.swing.AbstractButton;
 
 /**
@@ -13,8 +14,8 @@ import javax.swing.AbstractButton;
  */
 public abstract class AbstractButtonGroup implements GenericButtonGroup, ItemListener {
 
-    /** The <code>Vector</code> that contains the elements of this group. */
-    protected Vector buttons = new Vector();
+    /** The <code>List</code> that contains the elements of this group. */
+    protected List<AbstractButton> buttons = new ArrayList<>();
 
     /**
      * Add <tt>button</tt> to this group and <tt>this</tt> as listener to
@@ -22,7 +23,7 @@ public abstract class AbstractButtonGroup implements GenericButtonGroup, ItemLis
      * @param button The <code>AbstractButton</code> to add to this group.
      */
     public void add(AbstractButton button) {
-        buttons.addElement(button);
+        buttons.add(button);
         button.addItemListener(this);
     }
 
@@ -34,15 +35,15 @@ public abstract class AbstractButtonGroup implements GenericButtonGroup, ItemLis
      */
     public void remove(AbstractButton button) {
         button.getModel().removeItemListener(this);
-        buttons.removeElement(button);
+        buttons.remove(button);
     }
 
     /**
      * Returns an enumeration of the buttons in this group.
      * @return An enumeration of the buttons in this group.
      */
-    public Enumeration getElements() {
-        return buttons.elements();
+    public ListIterator<AbstractButton> getElements() {
+        return buttons.listIterator();
     }
 
     /**

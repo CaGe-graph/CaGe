@@ -12,7 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -40,7 +41,7 @@ public class Wizard implements ActionListener {
     private Image img;
     private WindowListener windowListener;
     private ActionListener escapeListener;
-    private Vector stageVector;
+    private List<WizardStage> stageVector;
     private JFrame currentWindow;
 
     /**
@@ -87,7 +88,7 @@ public class Wizard implements ActionListener {
                 }
             }
         };
-        stageVector = new Vector();
+        stageVector = new ArrayList<>();
         stageNo = 0;
     }
 
@@ -106,15 +107,14 @@ public class Wizard implements ActionListener {
         if (stageNo > stageVector.size()) {
             throw new RuntimeException("Wizard has fallen behind stage " + (stageNo + 1));
         } else if (stageNo == stageVector.size()) {
-            stageVector.addElement(null);
+            stageVector.add(null);
         }
         ActionListener listener = wizardListener != null ? wizardListener : this;
-        stageVector.setElementAt(
+        stageVector.set(stageNo,
                 new WizardStage(title, wizardContent,
                 windowListener, escapeListener, listener,
                 previousText, nextText, finishText, cancelText, exitText,
-                setDefaultButton),
-                stageNo);
+                setDefaultButton));
         ++stageNo;
         activate();
     }
@@ -139,7 +139,7 @@ public class Wizard implements ActionListener {
         }
         stageNo = n;
         if (forgetLaterStages) {
-            stageVector.setSize(stageNo);
+            stageVector = new ArrayList<>(stageVector.subList(0, stageNo-1));
         }
         activate();
     }
@@ -164,7 +164,7 @@ public class Wizard implements ActionListener {
         if (currentWindow != null) {
             currentWindow.dispose();
         }
-        stage = (WizardStage) stageVector.elementAt(stageNo - 1);
+        stage = stageVector.get(stageNo - 1);
 
         currentWindow = new JFrame(title);
         currentWindow.setIconImage(img);

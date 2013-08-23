@@ -26,7 +26,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -160,7 +159,7 @@ public class CaGe implements ActionListener {
         osName = osNameValue;
 
         // construct the list with embedding type factories
-        Vector embeddingTypeFactoryVector = Systoolbox.stringToVector(config.getProperty("CaGe.EmbeddingTypeFactory"));
+        List<String> embeddingTypeFactoryVector = Systoolbox.stringToVector(config.getProperty("CaGe.EmbeddingTypeFactory"));
         for (int i = 0; i < embeddingTypeFactoryVector.size(); i++) {
             try {
                 Object o = Class.forName(embeddingTypeFactoryVector.get(i).toString()).newInstance();
@@ -323,12 +322,12 @@ public class CaGe implements ActionListener {
         JPanel generatorsPanel = new JPanel();
         generatorsPanel.setLayout(new GridLayout(0, 1, 0, 20));
         GeneratorChoiceListener generatorChoiceListener = new GeneratorChoiceListener();
-        Vector generatorVector = Systoolbox.stringToVector(config.getProperty("CaGe.Generators"));
+        List<String> generatorVector = Systoolbox.stringToVector(config.getProperty("CaGe.Generators"));
         generators = generatorVector.size();
         generatorButton = new AbstractButton[generators];
         generator = new String[generators];
         for (int i = 0; i < generators; ++i) {
-            generator[i] = (String) generatorVector.elementAt(i);
+            generator[i] = generatorVector.get(i);
             generatorButton[i] = new JButton(config.getProperty(generator[i] + ".Title"));
             generatorButton[i].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             generatorButton[i].setActionCommand(Integer.toString(i));

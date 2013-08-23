@@ -3,11 +3,12 @@ package cage;
 import cage.background.BackgroundRunner;
 import cage.background.DefaultBackgroundRunner;
 import cage.background.TwoViewBatchBackgroundRunner;
+import cage.viewer.CaGeViewer;
 import cage.writer.CaGeWriter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.AbstractButton;
 
 import lisken.systoolbox.ExceptionGroup;
@@ -22,7 +23,9 @@ public class CaGeStarter implements ActionListener {
 
     private OutputPanel outputPanel;
     private GeneratorInfo generatorInfo;
-    private Vector viewers, writers, writeDests;
+    private List<CaGeViewer> viewers;
+    private List<CaGeWriter> writers;
+    private List<String> writeDests;
     private int nViewers, nWriters;
     private CaGePipe generatorPipe = null;
     private ResultPanel resultPanel = null;
@@ -175,9 +178,7 @@ public class CaGeStarter implements ActionListener {
         ExceptionGroup exceptionGroup = new ExceptionGroup();
         int n = Math.min(writers.size(), writeDests.size());
         for (int i = 0; i < n; ++i) {
-            setWriterOutputStream(
-                    (CaGeWriter) writers.elementAt(i), (String) writeDests.elementAt(i),
-                    exceptionGroup);
+            setWriterOutputStream(writers.get(i), writeDests.get(i), exceptionGroup);
         }
         if (exceptionGroup.size() > 0) {
             throw exceptionGroup;

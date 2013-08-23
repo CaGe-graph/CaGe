@@ -6,9 +6,10 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
 
 import lisken.systoolbox.BufferedFDOutputStream;
 import lisken.systoolbox.MutableInteger;
@@ -207,7 +208,7 @@ public class FoldnetThread extends Thread {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
                 if (!propertyChangeListeners.contains(listener)) {
-                    propertyChangeListeners.addElement(listener);
+                    propertyChangeListeners.add(listener);
                 }
             }
         }
@@ -216,20 +217,15 @@ public class FoldnetThread extends Thread {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
-                propertyChangeListeners.removeElement(listener);
+                propertyChangeListeners.remove(listener);
             }
         }
     }
 
     protected void firePropertyChange(PropertyChangeEvent e) {
         if (propertyChangeListeners != null) {
-            Vector listeners;
-            synchronized (propertyChangeListeners) {
-                listeners = (Vector) propertyChangeListeners.clone();
-            }
-            int count = listeners.size();
-            for (int i = 0; i < count; i++) {
-                ((PropertyChangeListener) listeners.elementAt(i)).propertyChange(e);
+            for (PropertyChangeListener listener : propertyChangeListeners) {
+                listener.propertyChange(e);
             }
         }
     }
@@ -238,7 +234,7 @@ public class FoldnetThread extends Thread {
     private boolean halted;
     private Pipe foldnetPipe = null;
     private int tasksGiven = 0,  tasksCompleted = 0,  tasksFailed = 0;
-    private final Vector propertyChangeListeners = new Vector(0);
+    private final List<PropertyChangeListener> propertyChangeListeners = new ArrayList<>();
     private String runDir,  path;
     private Hashtable foldnetPageNos;
 

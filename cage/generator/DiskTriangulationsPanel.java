@@ -13,7 +13,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -158,28 +159,28 @@ public class DiskTriangulationsPanel extends GeneratorPanel
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector genCmd = new Vector();
+        List<String> genCmd = new ArrayList<>();
         String filename = "";
 
-        genCmd.addElement("plantri");
-        genCmd.addElement("-P" + (boundarySegmentsAll.isSelected() ? "" : Integer.toString(boundarySegmentsSlider.getValue())));
+        genCmd.add("plantri");
+        genCmd.add("-P" + (boundarySegmentsAll.isSelected() ? "" : Integer.toString(boundarySegmentsSlider.getValue())));
         filename += "tri_disk" + (boundarySegmentsAll.isSelected() ? "" : ("_" + boundarySegmentsSlider.getValue()));
         String v = Integer.toString(verticesSlider.getValue());
         filename += "_" + v;
         char chords = chordsGroup.getSelection().getActionCommand().charAt(1);
         char vertices2 = vertices2Group.getSelection().getActionCommand().charAt(1);
         String c = "c" + (chords == '0' ? "3" : "2") + (chords == '2' ? "x" : "");
-        genCmd.addElement("-" + c);
+        genCmd.add("-" + c);
         filename += "_" + c;
         String m = chords == '0' ? "m3" : vertices2 == '1' ? "m2" : "";
         if (m.length() > 0) {
-            genCmd.addElement("-" + m);
+            genCmd.add("-" + m);
             filename += "_" + m;
         }
-        genCmd.addElement(v);
+        genCmd.add(v);
 
-        String[][] generator = new String[1][genCmd.size()];
-        genCmd.copyInto(generator[0]);
+        String[][] generator = new String[1][];
+        generator[0] = genCmd.toArray(new String[genCmd.size()]);
 
         /*
          * In plantri the outer face is defined as the edge left of the directed edge 1-2.

@@ -9,7 +9,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -189,7 +190,7 @@ public class GeneralQuadrangulationsPanel extends GeneratorPanel {
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector genCmd = new Vector();
+        List<String> genCmd = new ArrayList<>();
         String filename = "";
 
 
@@ -201,14 +202,14 @@ public class GeneralQuadrangulationsPanel extends GeneratorPanel {
         filename += option.replace('-', '_');
         if(dual) filename += "_d";
 
-        genCmd.addElement("plantri");
-        genCmd.addElement("-q");
-        genCmd.addElement(option);
-        if(dual) genCmd.addElement("-d");
-        genCmd.addElement(vertices);
+        genCmd.add("plantri");
+        genCmd.add("-q");
+        genCmd.add(option);
+        if(dual) genCmd.add("-d");
+        genCmd.add(vertices);
 
-        String[][] generator = new String[1][genCmd.size()];
-        genCmd.copyInto(generator[0]);
+        String[][] generator = new String[1][];
+        generator[0] = genCmd.toArray(new String[genCmd.size()]);
 
         String[][] embed2D = {{"embed"}};
         String[][] embed3D = {{"embed", "-d3", "-it"}};

@@ -12,7 +12,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -253,36 +254,36 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector genCmd = new Vector();
+        List<String> genCmd = new ArrayList<>();
         String filename = "";
 
-        genCmd.addElement("plantri");
-        genCmd.addElement("-p");
+        genCmd.add("plantri");
+        genCmd.add("-p");
         filename += "genplan";
         String v = Integer.toString(verticesSlider.getValue());
         filename += "_" + v;
         if (dual.isSelected()) {
-            genCmd.addElement("-d");
+            genCmd.add("-d");
             filename += "_d";
         }
         String minDeg = minDegGroup.getSelection().getActionCommand();
-        genCmd.addElement("-m" + minDeg);
+        genCmd.add("-m" + minDeg);
         filename += "_m" + minDeg;
         String minConn = minConnGroup.getSelection().getActionCommand();
-        genCmd.addElement("-c" + minConn + (exactConn.isSelected() ? "x" : ""));
+        genCmd.add("-c" + minConn + (exactConn.isSelected() ? "x" : ""));
         filename += "_c" + minConn + (exactConn.isSelected() ? "x" : "");
         if (!defaultEdges.isSelected()) {
-            genCmd.addElement("-e" + minEdges.getValue() + ":" + maxEdges.getValue());
+            genCmd.add("-e" + minEdges.getValue() + ":" + maxEdges.getValue());
             filename += "_e" + minEdges.getValue() + "-" + maxEdges.getValue();
         }
         if (!defaultMaxFacesize.isSelected()) {
-            genCmd.addElement("-f" + maxFacesize.getValue());
+            genCmd.add("-f" + maxFacesize.getValue());
             filename += "_f" + maxFacesize.getValue();
         }
-        genCmd.addElement(v);
+        genCmd.add(v);
 
-        String[][] generator = new String[1][genCmd.size()];
-        genCmd.copyInto(generator[0]);
+        String[][] generator = new String[1][];
+        generator[0] = genCmd.toArray(new String[genCmd.size()]);
         if (CaGe.debugMode) {
             System.err.println(Systoolbox.makeCmdLine(generator));
         }

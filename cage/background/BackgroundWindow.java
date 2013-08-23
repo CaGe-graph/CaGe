@@ -19,8 +19,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -77,7 +78,7 @@ public class BackgroundWindow extends JFrame
     }
     int runners, activeRunners, displayedRunners;
     JPanel runnersPanel;
-    Vector<RunnerControl> runnerControls;
+    List<RunnerControl> runnerControls;
     FoldnetThread foldnetThread;
     JPanel foldnetsPanel;
     JTextField foldnetsLeft;
@@ -102,9 +103,9 @@ public class BackgroundWindow extends JFrame
                     return;
                 }
                 setVisible(false);
-                Enumeration<RunnerControl> controls = runnerControls.elements();
-                while (controls.hasMoreElements()) {
-                    controls.nextElement().removeIfFinished();
+                ListIterator<RunnerControl> controls = runnerControls.listIterator();
+                while (controls.hasNext()) {
+                    controls.next().removeIfFinished();
                 }
             }
         });
@@ -165,7 +166,7 @@ public class BackgroundWindow extends JFrame
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(10, 10, 10, 10), 0, 0));
-        runnerControls = new Vector<RunnerControl>(0);
+        runnerControls = new ArrayList<>();
         stopButtonUsed = false;
         exitPanel = new JPanel();
         exitPanel.setLayout(new BoxLayout(exitPanel, BoxLayout.Y_AXIS));
@@ -252,8 +253,7 @@ public class BackgroundWindow extends JFrame
 
     public void addRunner(BackgroundRunner runner) {
         runners += 1;
-        runnerControls.addElement(
-                new RunnerControl(runner, this, runners, runnersPanel));
+        runnerControls.add(new RunnerControl(runner, this, runners, runnersPanel));
         runner.start();
     }
 
@@ -385,9 +385,9 @@ public class BackgroundWindow extends JFrame
     }
 
     void finishAndExit() {
-        Enumeration<RunnerControl> controls = runnerControls.elements();
-        while (controls.hasMoreElements()) {
-            controls.nextElement().stop();
+        ListIterator<RunnerControl> controls = runnerControls.listIterator();
+        while (controls.hasNext()) {
+            controls.next().stop();
         }
         foldnetThread.exit();
         exitPhase = 2;

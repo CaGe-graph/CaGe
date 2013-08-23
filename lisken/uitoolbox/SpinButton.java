@@ -14,7 +14,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -53,7 +54,7 @@ public class SpinButton extends JPanel
     private int value;
     private int minValue;
     private int maxValue;
-    private transient Vector changeListeners;
+    private transient List<ChangeListener> changeListeners = new ArrayList<>();
 
     public SpinButton() {
         this(0, 0, 9);
@@ -243,28 +244,20 @@ public class SpinButton extends JPanel
     }
      */
     public synchronized void removeChangeListener(ChangeListener l) {
-        if (changeListeners != null && changeListeners.contains(l)) {
-            Vector v = (Vector) changeListeners.clone();
-            v.removeElement(l);
-            changeListeners = v;
-        }
+        changeListeners.remove(l);
     }
 
     public synchronized void addChangeListener(ChangeListener l) {
-        Vector v = changeListeners == null ? new Vector(2) : (Vector) changeListeners.clone();
-        if (!v.contains(l)) {
-            v.addElement(l);
-            changeListeners = v;
+        if (!changeListeners.contains(l)) {
+            changeListeners.add(l);
         }
     }
 
     protected void fireStateChanged() {
-        if (changeListeners != null) {
+        if(!changeListeners.isEmpty()){
             ChangeEvent e = new ChangeEvent(this);
-            Vector listeners = changeListeners;
-            int count = listeners.size();
-            for (int i = 0; i < count; i++) {
-                ((ChangeListener) listeners.elementAt(i)).stateChanged(e);
+            for (ChangeListener listener : changeListeners) {
+                listener.stateChanged(e);
             }
         }
     }

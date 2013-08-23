@@ -10,7 +10,8 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import util.SysInfo;
 
@@ -159,20 +160,20 @@ public class Systoolbox {
         }
     }
 
-    public static Vector stringToVector(String string) {
+    public static List<String> stringToVector(String string) {
         return stringToVector(string, new SeparatorIndicator());
     }
 
-    private static Vector stringToVector(String string, SeparatorIndicator s) {
+    private static List<String> stringToVector(String string, SeparatorIndicator s) {
         if (string == null) {
             return null;
         }
         int pos, n = string.length(), start = -1;
-        Vector result = new Vector(0);
+        List<String> result = new ArrayList<>();
         for (pos = 0; pos < n; ++pos) {
             if (s.isSeparator(string.charAt(pos))) {
                 if (start >= 0) {
-                    result.addElement(string.substring(start, pos));
+                    result.add(string.substring(start, pos));
                     start = -1;
                 }
             } else if (start < 0) {
@@ -180,7 +181,7 @@ public class Systoolbox {
             }
         }
         if (start >= 0) {
-            result.addElement(string.substring(start, pos));
+            result.add(string.substring(start, pos));
         }
         return result;
     }
@@ -190,25 +191,7 @@ public class Systoolbox {
     }
 
     private static String[] stringToArray(String string, SeparatorIndicator s) {
-        Vector v;
-        String[] result;
-        v = stringToVector(string, s);
-        result = new String[v.size()];
-        v.copyInto(result);
-        return result;
-    }
-
-    /**
-     * Utility method to add all elements of an array to a vector.
-     *
-     * @param vector The vector to which the elements need to be added.
-     * @param array The array of which the elements will be added.
-     */
-    public static void addArray(Vector vector, Object[] array) {
-        int i;
-        for (i = 0; i < array.length; ++i) {
-            vector.addElement(array[i]);
-        }
+        return stringToVector(string, s).toArray(new String[0]);
     }
 
     public static String makeCmdLine(String[][] cmd) {
@@ -243,17 +226,17 @@ public class Systoolbox {
         t.quoteChar('"');
         t.quoteChar('\'');
         t.eolIsSignificant(true);
-        Vector cmd = new Vector();
-        Vector pipe = new Vector();
+        List<String> cmd = new ArrayList<>();
+        List<List<String>> pipe = new ArrayList<>();
         try {
             while (t.nextToken() != StreamTokenizer.TT_EOF) {
                 if (t.ttype == StreamTokenizer.TT_EOL) {
                     if (cmd.size() > 0) {
-                        pipe.addElement(cmd);
-                        cmd = new Vector();
+                        pipe.add(cmd);
+                        cmd = new ArrayList<>();
                     }
                 } else {
-                    cmd.addElement(t.sval);
+                    cmd.add(t.sval);
                 }
             }
         } catch (IOException e) {
@@ -261,9 +244,8 @@ public class Systoolbox {
         int pipeSize = pipe.size();
         String[][] result = new String[pipeSize][];
         for (int i = 0; i < pipeSize; ++i) {
-            cmd = (Vector) pipe.elementAt(i);
-            result[i] = new String[cmd.size()];
-            cmd.copyInto(result[i]);
+            cmd = pipe.get(i);
+            result[i] = cmd.toArray(new String[cmd.size()]);
         }
         return result;
     }

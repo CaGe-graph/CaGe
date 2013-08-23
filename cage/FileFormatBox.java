@@ -6,8 +6,8 @@ import cage.writer.WriterFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
@@ -21,7 +21,7 @@ import lisken.systoolbox.Systoolbox;
  */
 public class FileFormatBox extends JComboBox implements ActionListener {
 
-    private Vector writers = new Vector();
+    private List<CaGeWriter> writers = new ArrayList<>();
     private int dimension = 0;
     private JTextComponent filenameField;
     private String oldExtension;
@@ -38,14 +38,12 @@ public class FileFormatBox extends JComboBox implements ActionListener {
         if (Character.isDigit(firstChar)) {
             dimension = firstChar - '0';
         }
-        Enumeration formats = Systoolbox.stringToVector(
-                CaGe.config.getProperty("CaGe.Writers." + variety)).elements();
-        while (formats.hasMoreElements()) {
-            String format = (String) formats.nextElement();
+        for(String format : Systoolbox.stringToVector(
+                CaGe.config.getProperty("CaGe.Writers." + variety))){
             CaGeWriter writer = createCaGeWriter(format);
             format = createCaGeWriter(format).getFormatName();
             addItem(format);
-            writers.addElement(writer);
+            writers.add(writer);
         }
         addActionListener(this);
         registerKeyboardAction(this, "",
@@ -65,7 +63,7 @@ public class FileFormatBox extends JComboBox implements ActionListener {
     }
 
     public CaGeWriter getCaGeWriter() {
-        return (CaGeWriter) writers.elementAt(getSelectedIndex());
+        return writers.get(getSelectedIndex());
     }
 
     /**

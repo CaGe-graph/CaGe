@@ -13,7 +13,8 @@ import cage.utility.StackTrace;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import lisken.systoolbox.MessageQueue;
 import lisken.systoolbox.Systoolbox;
@@ -48,7 +49,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
         }
     };
     private int graphNo = 0;
-    private final Vector propertyChangeListeners = new Vector();
+    private final List<PropertyChangeListener> propertyChangeListeners = new ArrayList<>();
     private MessageQueue queue = new MessageQueue(CaGe.debugMode);
     private boolean doEmbed2D;
     private boolean doEmbed3D;
@@ -175,7 +176,7 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
                 if (!propertyChangeListeners.contains(listener)) {
-                    propertyChangeListeners.addElement(listener);
+                    propertyChangeListeners.add(listener);
                 }
             }
         }
@@ -184,20 +185,15 @@ public abstract class AbstractBackgroundRunner extends Thread implements Backgro
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
-                propertyChangeListeners.removeElement(listener);
+                propertyChangeListeners.remove(listener);
             }
         }
     }
 
     protected void firePropertyChange(PropertyChangeEvent e) {
         if (propertyChangeListeners != null) {
-            Vector listeners;
-            synchronized (propertyChangeListeners) {
-                listeners = (Vector) propertyChangeListeners.clone();
-            }
-            int count = listeners.size();
-            for (int i = 0; i < count; i++) {
-                ((PropertyChangeListener) listeners.elementAt(i)).propertyChange(e);
+            for (PropertyChangeListener listener : propertyChangeListeners) {
+                listener.propertyChange(e);
             }
         }
     }

@@ -9,7 +9,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -113,11 +114,11 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector genCmd = new Vector();
+        List<String> genCmd = new ArrayList<>();
         String filename = "";
 
-        genCmd.addElement("plantri");
-        genCmd.addElement("-b");
+        genCmd.add("plantri");
+        genCmd.add("-b");
         filename += "tri_euler";
         String v;
         if(dual)
@@ -130,19 +131,19 @@ public class EulerianTriangulationsPanel extends GeneratorPanel {
 
         filename += "_" + v;
         if(dual){
-            genCmd.addElement("-d");
+            genCmd.add("-d");
             filename += "_d";
         }
         String minConn = minConnGroup.getSelection().getActionCommand();
         if (minConn.charAt(0) < '4') {
             minConn += exactConn.isSelected() ? "x" : "";
         }
-        genCmd.addElement("-c" + minConn);
+        genCmd.add("-c" + minConn);
         filename += "_c" + minConn;
-        genCmd.addElement(v);
+        genCmd.add(v);
 
-        String[][] generator = new String[1][genCmd.size()];
-        genCmd.copyInto(generator[0]);
+        String[][] generator = new String[1][];
+        generator[0] = genCmd.toArray(new String[genCmd.size()]);
 
         String[][] embed2D = {{"embed"}};
         String[][] embed3D = {{"embed", "-d3", "-it"}};

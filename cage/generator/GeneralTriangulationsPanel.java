@@ -11,7 +11,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -171,10 +172,10 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector genCmd = new Vector();
+        List<String> genCmd = new ArrayList<>();
         String filename = "";
 
-        genCmd.addElement("plantri");
+        genCmd.add("plantri");
         filename += "tri";
         String vertices;
         if(dual)
@@ -186,20 +187,20 @@ public class GeneralTriangulationsPanel extends GeneratorPanel implements Action
             vertices = Integer.toString(verticesSlider.getValue());
         filename += "_" + vertices;
         if(dual){
-            genCmd.addElement("-d");
+            genCmd.add("-d");
             filename += "_d";
         }
         String minConn = minConnGroup.getSelection().getActionCommand().substring(1);
         minConn += exactConn.isSelected() ? "x" : "";
-        genCmd.addElement("-c" + minConn);
+        genCmd.add("-c" + minConn);
         filename += "_c" + minConn;
         String minDeg = minDegGroup.getSelection().getActionCommand().substring(1);
-        genCmd.addElement("-m" + minDeg);
+        genCmd.add("-m" + minDeg);
         filename += "_m" + minDeg;
-        genCmd.addElement(vertices);
+        genCmd.add(vertices);
 
-        String[][] generator = new String[1][genCmd.size()];
-        genCmd.copyInto(generator[0]);
+        String[][] generator = new String[1][];
+        generator[0] = genCmd.toArray(new String[genCmd.size()]);
 
         String[][] embed2D = {{"embed"}};
         String[][] embed3D = {{"embed", "-d3", "-it"}};

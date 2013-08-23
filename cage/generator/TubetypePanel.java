@@ -16,7 +16,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -174,27 +175,27 @@ public class TubetypePanel extends GeneratorPanel {
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        Vector command = new Vector();
+        List<String> command = new ArrayList<>();
         String filename;
 
-        command.addElement("tube");
+        command.add("tube");
         filename = "tubetypes";
 
-        command.addElement(Integer.toString(offset1Control.getValue()));
-        command.addElement(Integer.toString(offset2Control.getValue()));
+        command.add(Integer.toString(offset1Control.getValue()));
+        command.add(Integer.toString(offset2Control.getValue()));
         filename += "_l" + offset1Control.getValue();
         filename += "_m" + offset2Control.getValue();
-        command.addElement("tube");
-        command.addElement(Integer.toString(tubelengthSlider.getValue()));
+        command.add("tube");
+        command.add(Integer.toString(tubelengthSlider.getValue()));
         filename += "_t" + tubelengthSlider.getValue();
 
         if (ipr.isSelected()) {
-            command.addElement("ipr");
+            command.add("ipr");
             filename += "_ip";
         }
 
-        String[][] generator = new String[1][command.size()];
-        command.copyInto(generator[0]);
+        String[][] generator = new String[1][];
+        generator[0] = command.toArray(new String[command.size()]);
 
         String[][] embed2D = {{"embed"}};
         String[][] embed3D = {{"java", "-cp", "CaGe.jar", "cage.embedder.NanotubeEmbedder"}};

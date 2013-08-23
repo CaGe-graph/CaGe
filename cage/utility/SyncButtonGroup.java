@@ -1,7 +1,7 @@
 package cage.utility;
 
 import java.awt.event.ItemEvent;
-import java.util.Enumeration;
+import java.util.ListIterator;
 import javax.swing.AbstractButton;
 
 /**
@@ -16,7 +16,7 @@ public class SyncButtonGroup extends AbstractButtonGroup {
     public void add(AbstractButton button) {
         if (buttons.size() > 0) {
             boolean selected = button.isSelected();
-            AbstractButton otherButton = (AbstractButton) buttons.elementAt(0);
+            AbstractButton otherButton = buttons.get(0);
             //We only need to check the first button.
             //If this button has the same selection state as the new button,
             //then all the buttons will have this. Otherwise the change of
@@ -36,9 +36,9 @@ public class SyncButtonGroup extends AbstractButtonGroup {
         }
         AbstractButton button = (AbstractButton) e.getSource();
         boolean selected = button.isSelected();
-        Enumeration btns = buttons.elements();
-        while (btns.hasMoreElements()) {
-            AbstractButton otherButton = (AbstractButton) btns.nextElement();
+        ListIterator<AbstractButton> btns = buttons.listIterator();
+        while (btns.hasNext()) {
+            AbstractButton otherButton = (AbstractButton) btns.next();
             if (otherButton.isSelected() == selected) {
                 continue;
             }

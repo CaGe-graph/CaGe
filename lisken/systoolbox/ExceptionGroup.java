@@ -2,30 +2,31 @@ package lisken.systoolbox;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ExceptionGroup extends Exception {
 
     private static final String EMPTY_MSG = "empty ExceptionGroup";
-    private Vector exceptionV = new Vector();
+    private List<Exception> exceptionV = new ArrayList<>();
 
     public void add(Exception ex) {
-        exceptionV.addElement(ex);
+        exceptionV.add(ex);
     }
 
     @Override
     public String getMessage() {
         if (exceptionV.size() > 0) {
             StringBuilder messages = new StringBuilder();
-            Enumeration exceptions = exceptionV.elements();
+            ListIterator<Exception> exceptions = exceptionV.listIterator();
             int e = 0;
-            while (exceptions.hasMoreElements()) {
+            while (exceptions.hasNext()) {
                 if (e++ > 0) {
                     messages.append(", ");
                 }
                 messages.append(e).append(". ");
-                messages.append(((Exception) exceptions.nextElement()).getMessage());
+                messages.append(exceptions.next().getMessage());
             }
             return messages.toString();
         } else {
@@ -37,14 +38,14 @@ public class ExceptionGroup extends Exception {
     public String toString() {
         if (exceptionV.size() > 0) {
             StringBuilder encodings = new StringBuilder();
-            Enumeration exceptions = exceptionV.elements();
+            ListIterator<Exception> exceptions = exceptionV.listIterator();
             int e = 0;
-            while (exceptions.hasMoreElements()) {
+            while (exceptions.hasNext()) {
                 if (e++ > 0) {
                     encodings.append("\n\n");
                 }
                 encodings.append(e).append(". ");
-                encodings.append(((Exception) exceptions.nextElement()).toString());
+                encodings.append(exceptions.next().toString());
             }
             return encodings.toString();
         } else {
@@ -60,13 +61,13 @@ public class ExceptionGroup extends Exception {
     @Override
     public void printStackTrace(PrintStream s) {
         if (exceptionV.size() > 0) {
-            Enumeration exceptions = exceptionV.elements();
+            ListIterator<Exception> exceptions = exceptionV.listIterator();
             int e = 0;
-            while (exceptions.hasMoreElements()) {
+            while (exceptions.hasNext()) {
                 if (e++ > 0) {
                     s.print("\n");
                 }
-                ((Exception) exceptions.nextElement()).printStackTrace(s);
+                exceptions.next().printStackTrace(s);
             }
         } else {
             s.println(EMPTY_MSG);
@@ -76,13 +77,13 @@ public class ExceptionGroup extends Exception {
     @Override
     public void printStackTrace(PrintWriter s) {
         if (exceptionV.size() > 0) {
-            Enumeration exceptions = exceptionV.elements();
+            ListIterator<Exception> exceptions = exceptionV.listIterator();
             int e = 0;
-            while (exceptions.hasMoreElements()) {
+            while (exceptions.hasNext()) {
                 if (e++ > 0) {
                     s.print("\n");
                 }
-                ((Exception) exceptions.nextElement()).printStackTrace(s);
+                exceptions.next().printStackTrace(s);
             }
         } else {
             s.println(EMPTY_MSG);
@@ -95,9 +96,7 @@ public class ExceptionGroup extends Exception {
             return null;
         }
         for (int i = 0; i < exceptionV.size(); ++i) {
-            exceptionV.setElementAt(
-                    ((Exception) exceptionV.elementAt(i)).fillInStackTrace(),
-                    i);
+            exceptionV.set(i, (Exception)(exceptionV.get(i).fillInStackTrace()));
         }
         return this;
     }

@@ -16,9 +16,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -209,7 +211,7 @@ public class CGFPanel extends GeneratorPanel {
         int maxFacesize = 0;
 
         String c;
-        Vector genV = new Vector(), fileV = new Vector();
+        List<String> genV = new ArrayList<>(), fileV = new ArrayList<>();
 
         int min = dual ? minAtomsSlider.getValue()*2-4 : minAtomsSlider.getValue();
         int max = dual ? maxAtomsSlider.getValue()*2-4 : maxAtomsSlider.getValue();
@@ -303,19 +305,19 @@ public class CGFPanel extends GeneratorPanel {
             
             filename = Systoolbox.join(fileArray, "");
         } else if(useCgf){
-            Systoolbox.addArray(genV, new String[]{
+            genV.addAll(Arrays.asList(
                         "cgf", "-g", "0", "-output", "stdout", "-logfile", "stderr",
                         "-save", "0", "-no_recover", "-topdown", "-memory", "1610612736",
-                        "-outputmem", "0", "0"});
-            genV.addElement("-v");
-            genV.addElement(Integer.toString(max));
-            fileV.addElement("cgf");
-            fileV.addElement("n" + max);
+                        "-outputmem", "0", "0"));
+            genV.add("-v");
+            genV.add(Integer.toString(max));
+            fileV.add("cgf");
+            fileV.add("n" + max);
 
             if (min != max) {
-                genV.addElement("-vs");
-                genV.addElement(Integer.toString(min));
-                fileV.addElement("s" + min);
+                genV.add("-vs");
+                genV.add(Integer.toString(min));
+                fileV.add("s" + min);
             }
 
             Iterator it = sizeOptionsMap.values().iterator();
@@ -324,14 +326,14 @@ public class CGFPanel extends GeneratorPanel {
                 if (!sizeOption.isActive()) {
                     continue;
                 }
-                genV.addElement("-f");
-                genV.addElement(Integer.toString(sizeOption.getSize()));
+                genV.add("-f");
+                genV.add(Integer.toString(sizeOption.getSize()));
                 String s = "f" + sizeOption.getSize();
                 if (sizeOption.isLimited()) {
-                    genV.addElement("l" + sizeOption.getMin() + "-" + sizeOption.getMax() + "u");
+                    genV.add("l" + sizeOption.getMin() + "-" + sizeOption.getMax() + "u");
                     s = s + "+" + sizeOption.getMin() + "-" + sizeOption.getMax();
                 }
-                fileV.addElement(s);
+                fileV.add(s);
             }
 
             if(dual) genV.add("-dual");
@@ -351,44 +353,42 @@ public class CGFPanel extends GeneratorPanel {
                     c = c + "3";
                 }
             }
-            genV.addElement("-mapcon");
-            genV.addElement(c);
+            genV.add("-mapcon");
+            genV.add(c);
             if (c.length() < 4) {
-                fileV.addElement("c" + c);
+                fileV.add("c" + c);
             }
 
             if(dual) fileV.add("dual");
 
-            generator = new String[1][genV.size()];
-            genV.copyInto(generator[0]);
-            String[] array = new String[fileV.size()];
-            fileV.copyInto(array);
+            generator = new String[1][];
+            generator[0] = genV.toArray(new String[genV.size()]);
+            String[] array = fileV.toArray(new String[fileV.size()]);
             filename = Systoolbox.join(array, "_");
 
         } else {
             int vertices = dual ? minAtomsSlider.getValue() : minAtomsSlider.getValue()/2+2;
             generator = new String[1][dual ? 3 : 4];
             Iterator it = sizeOptionsMap.values().iterator();
-            genV.addElement("-");
-            fileV.addElement("plantri_ad_");
+            genV.add("-");
+            fileV.add("plantri_ad_");
             while (it.hasNext()) {
                 SizeOption sizeOption = (SizeOption) it.next();
                 if (!sizeOption.isActive()) {
                     continue;
                 }
-                genV.addElement("F");
-                fileV.addElement("F");
-                genV.addElement(Integer.toString(sizeOption.getSize()));
-                fileV.addElement(Integer.toString(sizeOption.getSize()));
+                genV.add("F");
+                fileV.add("F");
+                genV.add(Integer.toString(sizeOption.getSize()));
+                fileV.add(Integer.toString(sizeOption.getSize()));
                 if (sizeOption.isLimited()) {
-                    genV.addElement("_" + sizeOption.getMin() + "^" + sizeOption.getMax());
-                    fileV.addElement("m" + sizeOption.getMin() + "M" + sizeOption.getMax());
+                    genV.add("_" + sizeOption.getMin() + "^" + sizeOption.getMax());
+                    fileV.add("m" + sizeOption.getMin() + "M" + sizeOption.getMax());
                 }
             }
-            if(!dual) fileV.addElement("_d");
-            fileV.addElement("_" + vertices);
-            String[] array = new String[genV.size()];
-            genV.copyInto(array);
+            if(!dual) fileV.add("_d");
+            fileV.add("_" + vertices);
+            String[] array = genV.toArray(new String[genV.size()]);
             String restrict = Systoolbox.join(array, "");
             int j = 0;
             generator[0][j++] = "plantri_ad";
@@ -396,8 +396,7 @@ public class CGFPanel extends GeneratorPanel {
             if(!dual)
                 generator[0][j++] = "-d";
             generator[0][j++] = Integer.toString(vertices);
-            String[] fileArray = new String[fileV.size()];
-            fileV.copyInto(fileArray);
+            String[] fileArray = fileV.toArray(new String[fileV.size()]);
             filename = Systoolbox.join(fileArray, "");
         }
 

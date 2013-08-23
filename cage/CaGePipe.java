@@ -2,7 +2,8 @@ package cage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import lisken.systoolbox.Pipe;
 
@@ -70,13 +71,13 @@ public abstract class CaGePipe extends Pipe
         this.running = running;
     }
 
-    protected final Vector propertyChangeListeners = new Vector(0);
+    protected final List<PropertyChangeListener> propertyChangeListeners = new ArrayList<>();
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
                 if (!propertyChangeListeners.contains(listener)) {
-                    propertyChangeListeners.addElement(listener);
+                    propertyChangeListeners.add(listener);
                 }
             }
         }
@@ -85,7 +86,7 @@ public abstract class CaGePipe extends Pipe
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
-                propertyChangeListeners.removeElement(listener);
+                propertyChangeListeners.remove(listener);
             }
         }
     }
@@ -93,7 +94,7 @@ public abstract class CaGePipe extends Pipe
     synchronized void removeAllPropertyChangeListeners() {
         if (propertyChangeListeners != null) {
             synchronized (propertyChangeListeners) {
-                propertyChangeListeners.setSize(0);
+                propertyChangeListeners.clear();
             }
         }
     }
@@ -119,13 +120,8 @@ public abstract class CaGePipe extends Pipe
 
     protected void firePropertyChange(PropertyChangeEvent e) {
         if (propertyChangeListeners != null) {
-            Vector listeners;
-            synchronized (propertyChangeListeners) {
-                listeners = (Vector) propertyChangeListeners.clone();
-            }
-            int count = listeners.size();
-            for (int i = 0; i < count; i++) {
-                ((PropertyChangeListener) listeners.elementAt(i)).propertyChange(e);
+            for (PropertyChangeListener listener : propertyChangeListeners) {
+                listener.propertyChange(e);
             }
         }
     }

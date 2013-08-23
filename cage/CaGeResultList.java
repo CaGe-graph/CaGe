@@ -1,7 +1,8 @@
 package cage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Vector;
 
 /**
  * A result "collection" of CaGe's production process, with
@@ -25,7 +26,7 @@ import java.util.Vector;
  */
 public class CaGeResultList {
 
-    private Vector results = new Vector(0);
+    private List<CaGeResult> results = new ArrayList<>();
     private CaGeResult result = null;
     private int cursor = 0,  found,  highestGraphNo = 0,  highestGraphNoIndex = -1;
 
@@ -43,7 +44,7 @@ public class CaGeResultList {
             highestGraphNoIndex = cursor;
         }
         this.result = result;
-        results.addElement(result);
+        results.add(result);
     }
 
     public EmbeddableGraph getGraph() {
@@ -56,8 +57,8 @@ public class CaGeResultList {
 
     public CaGeResult getResult() {
         try {
-            result = (CaGeResult) results.elementAt(cursor);
-        } catch (ArrayIndexOutOfBoundsException e) {
+            result = results.get(cursor);
+        } catch (IndexOutOfBoundsException e) {
             return null;
         }
         return result;
@@ -67,7 +68,7 @@ public class CaGeResultList {
         int n;
         n = results.size();
         for (found = 0; found < n; ++found) {
-            if (((CaGeResult) results.elementAt(found)).getGraphNo() == no) {
+            if (results.get(found).getGraphNo() == no) {
                 return true;
             }
         }
@@ -99,7 +100,7 @@ public class CaGeResultList {
 
     public int nextGraphNo() {
         try {
-            return ((CaGeResult) results.elementAt(nextIndex())).getGraphNo();
+            return results.get(nextIndex()).getGraphNo();
         } catch (Exception e) {
             throw new NoSuchElementException();
         }
@@ -125,7 +126,7 @@ public class CaGeResultList {
 
     public int previousGraphNo() {
         try {
-            return ((CaGeResult) results.elementAt(previousIndex())).getGraphNo();
+            return results.get(previousIndex()).getGraphNo();
         } catch (Exception e) {
             throw new NoSuchElementException();
         }

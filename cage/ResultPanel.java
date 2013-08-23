@@ -25,9 +25,9 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Array;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
-import java.util.Vector;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoundedRangeModel;
@@ -184,7 +184,7 @@ public class ResultPanel extends JPanel {
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public ResultPanel(CaGePipe gen, GeneratorInfo info,
             boolean doEmbed2D, boolean doEmbed3D,
-            Vector viewerV, Vector writerV) {
+            List<CaGeViewer> viewerV, List<CaGeWriter> writerV) {
         setLayout(new GridBagLayout());
 
         pipeGraphNo = new JTextField(CaGe.graphNoDigits);
@@ -425,10 +425,10 @@ public class ResultPanel extends JPanel {
         foldnetButton.addActionListener(actionListener);
     }
 
-    static <T> T[] createArray(boolean hasElements, Vector vector, Class<T> type) {
+    static <T> T[] createArray(boolean hasElements, List<T> vector, Class<T> type) {
         if (hasElements) {
             T[] array = (T[]) Array.newInstance(type, vector.size());
-            vector.copyInto(array);
+            vector.toArray(array);
             return array;
         } else {
             return null;

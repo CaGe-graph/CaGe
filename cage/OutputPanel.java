@@ -25,9 +25,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
+import java.util.ListIterator;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -53,7 +53,7 @@ public class OutputPanel extends JPanel {
 
     private GeneratorInfo generatorInfo;
     private String generatorName;
-    private Vector viewersXD;
+    private List<String> viewersXD;
     private StringBuffer viewerErrors;
     private JButton defaultButton;
     private JLabel expertLabel = new JLabel();
@@ -532,7 +532,7 @@ public class OutputPanel extends JPanel {
                 defaultButton.isEnabled() ? "start generation process (Return)" : someFile | someViewer ? "don't mix viewer and file output" : "choose some output options and press Return");
     }
 
-    Vector createViewerNames(String dimension, Vector viewersDim) {
+    List<String> createViewerNames(String dimension, List<String> viewersDim) {
         if (viewersDim == null) {
             viewersDim = Systoolbox.stringToVector(
                     CaGe.config.getProperty(generatorName + ".Viewers." + dimension));
@@ -540,17 +540,17 @@ public class OutputPanel extends JPanel {
         return viewersDim;
     }
 
-    final int addViewers(String dimName, Vector viewersDim,
+    final int addViewers(String dimName, List<String> viewersDim,
             GenericButtonGroup buttonGroup, JComponent component) {
         int dimension = dimName.charAt(0) - '0';
         viewersDim = createViewerNames(dimName, viewersDim);
         viewersXD = createViewerNames("xD", viewersXD);
-        Vector[] vector = new Vector[]{viewersDim, viewersXD};
+        List<List<String>> vector = new ArrayList<>(Arrays.asList(viewersDim, viewersXD));
         int n = 0;
-        for (int i = 0; i < vector.length; ++i) {
-            Enumeration viewerNames = vector[i].elements();
-            while (viewerNames.hasMoreElements()) {
-                String viewerName = (String) viewerNames.nextElement();
+        for (int i = 0; i < vector.size(); ++i) {
+            ListIterator<String> viewerNames = vector.get(i).listIterator();
+            while (viewerNames.hasNext()) {
+                String viewerName = viewerNames.next();
                 if (!ViewerFactory.checkAvailability(viewerName, dimension)) {
                     continue;
                 }
@@ -584,9 +584,9 @@ public class OutputPanel extends JPanel {
         return out3DCheckBox.isSelected();
     }
 
-    public Vector getViewers() {
+    public List<CaGeViewer> getViewers() {
         ButtonModel dest;
-        Vector viewers = new Vector();
+        List<CaGeViewer> viewers = new ArrayList<>();
         viewerErrors = new StringBuffer();
         dest = out2DDestGroup.getSelection();
         if (dest == out2DViewer.getModel()) {
@@ -599,10 +599,10 @@ public class OutputPanel extends JPanel {
         return viewers;
     }
 
-    void addSelectedViewers(Vector viewers, GenericButtonGroup buttonGroup, int dimension) {
-        Enumeration buttons = buttonGroup.getElements();
-        while (buttons.hasMoreElements()) {
-            AbstractButton button = (AbstractButton) buttons.nextElement();
+    void addSelectedViewers(List<CaGeViewer> viewers, GenericButtonGroup buttonGroup, int dimension) {
+        ListIterator<AbstractButton> buttons = buttonGroup.getElements();
+        while (buttons.hasNext()) {
+            AbstractButton button = (AbstractButton) buttons.next();
             String viewerName = button.getActionCommand();
             if (button.isSelected()) {
                 CaGeViewer viewer = ViewerFactory.getCaGeViewer(
@@ -616,7 +616,7 @@ public class OutputPanel extends JPanel {
                 }
                 if (!viewers.contains(viewer)) {
                     viewer.setGeneratorInfo(getGeneratorInfo());
-                    viewers.addElement(viewer);
+                    viewers.add(viewer);
                 }
             }
         }
@@ -630,9 +630,9 @@ public class OutputPanel extends JPanel {
         }
     }
 
-    public Vector getWriters() {
+    public List<CaGeWriter> getWriters() {
         ButtonModel dest;
-        Vector writers = new Vector();
+        List<CaGeWriter> writers = new ArrayList<>();
         dest = outAdjDestGroup.getSelection();
         if (outAdjFile.getModel().equals(dest)) {
             addWriter(writers, outAdjFilePanel, 0);
@@ -654,38 +654,38 @@ public class OutputPanel extends JPanel {
         return writers;
     }
 
-    void addWriter(Vector writers, FileFormatBox format, int dimension) {
+    void addWriter(List<CaGeWriter> writers, FileFormatBox format, int dimension) {
         CaGeWriter writer = format.getCaGeWriter();
         writer.setGeneratorInfo(getGeneratorInfo());
-        writers.addElement(writer);
+        writers.add(writer);
     }
 
-    void addWriter(Vector writers, TargetPanel filePanel, int dimension) {
+    void addWriter(List<CaGeWriter> writers, TargetPanel filePanel, int dimension) {
         CaGeWriter writer = filePanel.getCaGeWriter();
         writer.setGeneratorInfo(getGeneratorInfo());
-        writers.addElement(writer);
+        writers.add(writer);
     }
 
-    public Vector getWriteDestinations() {
+    public List<String> getWriteDestinations() {
         ButtonModel dest;
-        Vector writeDests = new Vector();
+        List<String> writeDests = new ArrayList<>();
         dest = outAdjDestGroup.getSelection();
         if (outAdjFile.getModel().equals(dest)) {
-            writeDests.addElement(outAdjFilePanel.getTargetName());
+            writeDests.add(outAdjFilePanel.getTargetName());
         } else if(outAdjPipe.getModel().equals(dest)){
-            writeDests.addElement(outAdjPipePanel.getTargetName());
+            writeDests.add(outAdjPipePanel.getTargetName());
         }
         dest = out2DDestGroup.getSelection();
         if (out2DFile.getModel().equals(dest)) {
-            writeDests.addElement(out2DFilePanel.getTargetName());
+            writeDests.add(out2DFilePanel.getTargetName());
         } else if(out2DPipe.getModel().equals(dest)){
-            writeDests.addElement(out2DPipePanel.getTargetName());
+            writeDests.add(out2DPipePanel.getTargetName());
         }
         dest = out3DDestGroup.getSelection();
         if (out3DFile.getModel().equals(dest)) {
-            writeDests.addElement(out3DFilePanel.getTargetName());
+            writeDests.add(out3DFilePanel.getTargetName());
         } else if(out3DPipe.getModel().equals(dest)){
-            writeDests.addElement(out3DPipePanel.getTargetName());
+            writeDests.add(out3DPipePanel.getTargetName());
         }
         return writeDests;
     }

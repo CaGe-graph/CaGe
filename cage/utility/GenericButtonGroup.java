@@ -1,6 +1,6 @@
 package cage.utility;
 
-import java.util.Enumeration;
+import java.util.ListIterator;
 import javax.swing.AbstractButton;
 
 /**
@@ -26,5 +26,5 @@ public interface GenericButtonGroup {
      * Returns an enumeration of the buttons in this group.
      * @return An enumeration of the buttons in this group.
      */
-    Enumeration getElements();
+    ListIterator<AbstractButton> getElements();
 }
