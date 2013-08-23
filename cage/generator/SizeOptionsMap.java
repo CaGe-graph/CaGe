@@ -84,7 +84,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
         this.sizesModel.addChangeListener(this);
         this.includedButton.addActionListener(this);
         this.optionsPanel.setLayout(new GridBagLayout());
-        stateChanged(new ChangeEvent(sizesModel));
+        handleStateChanged();
     }
 
     public void setSizeIncluded(int size, boolean included) {
@@ -117,9 +117,8 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
             stateChanged(new ChangeEvent(this));
         }
     }
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
+    
+    private void handleStateChanged(){
         int faces = sizesModel.getValue();
         SizeOption sizeOption = (SizeOption) this.get(new MutableInteger(faces));
         boolean included = sizeOption == null ? false : sizeOption.isActive();
@@ -128,6 +127,11 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
             includedButton.setText((included ? "discard " : "include ") + faces + "-gons");
         else
             includedButton.setText((included ? "discard " : "include ") + "degree " + faces);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        handleStateChanged();
     }
 
     @Override
