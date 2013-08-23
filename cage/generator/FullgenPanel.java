@@ -243,7 +243,7 @@ public class FullgenPanel extends GeneratorPanel {
         warningText.setLineWrap(true);
         warningText.setEnabled(false);
         warningText.setDisabledTextColor(Color.RED);
-        final RevealableComponent<JTextArea> warningField = new RevealableComponent<JTextArea>(warningText, false);
+        final RevealableComponent<JTextArea> warningField = new RevealableComponent<>(warningText, false);
         warningText.setBackground(warningField.getBackground());
         
         //impose some restrictions when atlas order is chosen
@@ -350,7 +350,7 @@ public class FullgenPanel extends GeneratorPanel {
 
     private StaticGeneratorInfo getFullgenGeneratorInfo(String[][] embed2D, String[][] embed3D, int maxFacesize, ElementRule rule) {
         String filename = "";
-        ArrayList<String> command = new ArrayList<String>();
+        ArrayList<String> command = new ArrayList<>();
         int min = minAtomsSlider.getValue();
         int max = maxAtomsSlider.getValue();
         command.add("fullgen");
@@ -415,7 +415,7 @@ public class FullgenPanel extends GeneratorPanel {
 
     private StaticGeneratorInfo getBuckygenGeneratorInfo(String[][] embed2D, String[][] embed3D, int maxFacesize, ElementRule rule) {
         String filename = "";
-        ArrayList<String> command = new ArrayList<String>();
+        ArrayList<String> command = new ArrayList<>();
         //calculated the number of vertices in the dual
         int min = (minAtomsSlider.getValue()+4)/2;
         int max = (maxAtomsSlider.getValue()+4)/2;
