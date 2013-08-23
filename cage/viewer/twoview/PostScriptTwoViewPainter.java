@@ -21,7 +21,7 @@ import lisken.uitoolbox.UItoolbox;
 public class PostScriptTwoViewPainter extends TwoViewPainter {
 
     private OutputStream savePostScriptStream;
-    private Map<String, Integer> pageNumbers = new HashMap<String, Integer>();
+    private Map<String, Integer> pageNumbers = new HashMap<>();
 
     public PostScriptTwoViewPainter(TwoViewModel model) {
         super(model);
@@ -165,7 +165,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         savePS("\n\nbegin_edges\n\n");
     }
 
-    private List<String> coloredEdges = new ArrayList<String>();
+    private List<String> coloredEdges = new ArrayList<>();
 
     protected void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         if(useSpecialColour){

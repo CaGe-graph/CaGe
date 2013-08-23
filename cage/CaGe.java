@@ -63,7 +63,7 @@ public class CaGe implements ActionListener {
     private static FoldnetThread foldnetThread;
     // private static CaGeFoldnetDialog foldnetDialog;
     private static BackgroundWindow backgroundWindow;
-    private static List<EmbeddingTypeFactory> embeddingTypeFactories = new ArrayList<EmbeddingTypeFactory>();
+    private static List<EmbeddingTypeFactory> embeddingTypeFactories = new ArrayList<>();
 
 
     static {

@@ -108,7 +108,7 @@ public class BrowseComponent extends JPanel {
         return fileTextField.isEditable();
     }
     
-    private List<ChangeListener> listeners = new ArrayList<ChangeListener>();
+    private List<ChangeListener> listeners = new ArrayList<>();
     private ChangeEvent event = new ChangeEvent(this);
     
     public void addChangeListener(ChangeListener listener){

@@ -698,7 +698,7 @@ public class OutputPanel extends JPanel {
         return batchTwoViewModel;
     }
     
-    private List<OutputSettingsListener> outputSettingsListeners = new ArrayList<OutputSettingsListener>();
+    private List<OutputSettingsListener> outputSettingsListeners = new ArrayList<>();
     
     public final void addOutputSettingsListener(OutputSettingsListener l){
         outputSettingsListeners.add(l);

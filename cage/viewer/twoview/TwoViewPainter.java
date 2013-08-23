@@ -101,13 +101,13 @@ public abstract class TwoViewPainter {
 
     private void determineHighlightedFaces() {
         //The neighbours of each vertex
-        List<List<Integer>> embedding = new ArrayList<List<Integer>>();
+        List<List<Integer>> embedding = new ArrayList<>();
 
         //For i = 0
         embedding.add(new ArrayList<Integer>());
         for (int i = 1; i <= graphSize; i++) {
             EdgeIterator it = graph.getEdgeIterator(i);
-            List<Integer> neighbours = new ArrayList<Integer>();
+            List<Integer> neighbours = new ArrayList<>();
             while(it.hasNext()) {
                 neighbours.add(it.nextEdge());
             }

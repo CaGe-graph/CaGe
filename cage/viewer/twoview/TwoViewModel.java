@@ -194,7 +194,7 @@ public class TwoViewModel {
         }
     }
 
-    private List<TwoViewListener> listeners = new ArrayList<TwoViewListener>();
+    private List<TwoViewListener> listeners = new ArrayList<>();
 
     public void addTwoViewListener(TwoViewListener listener){
         listeners.add(listener);

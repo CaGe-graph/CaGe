@@ -77,7 +77,7 @@ public class TwoView implements ActionListener, CaGeViewer {
     private Hashtable psFilenames = new Hashtable();
     private PostScriptTwoViewPainter psTwoViewPainter;
     private TwoViewModel model;
-    private List<JToggleButton> saveButtons = new ArrayList<JToggleButton>();
+    private List<JToggleButton> saveButtons = new ArrayList<>();
     private JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL, -180, 180, 0);
 
     public TwoView() {

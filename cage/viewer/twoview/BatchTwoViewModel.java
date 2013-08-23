@@ -70,7 +70,7 @@ public class BatchTwoViewModel {
     }
     
     private List<BatchTwoViewConfigurationListener> listeners = 
-            new ArrayList<BatchTwoViewConfigurationListener>();
+            new ArrayList<>();
     
     public void addBatchTwoViewConfigurationListener(BatchTwoViewConfigurationListener l){
         listeners.add(l);

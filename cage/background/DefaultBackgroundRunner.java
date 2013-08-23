@@ -29,8 +29,8 @@ public class DefaultBackgroundRunner extends AbstractBackgroundRunner {
             List<CaGeWriter> writers, List<String> writeDests) {
         super("BackgroundRunner " + ++threadCount, generator, generatorInfo, doEmbed2D, doEmbed3D);
         //TODO: does this really has to be the same Vector or could we copy the writers in a List?
-        this.writers = new ArrayList<CaGeWriter>(writers);
-        this.writeDests = new ArrayList<String>(writeDests);
+        this.writers = new ArrayList<>(writers);
+        this.writeDests = new ArrayList<>(writeDests);
         writer = new CaGeWriter[writers.size()];
         
         writer = writers.toArray(writer);
