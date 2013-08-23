@@ -163,7 +163,7 @@ public class TubetypePanel extends GeneratorPanel {
                 new Insets(30, 5, 0, 0), 0, 0));
     }
 
-    void adjustTubelength() {
+    private void adjustTubelength() {
         if (!adjusting) {
             adjusting = true;
             int l = Math.max(offset1Control.getValue(), offset2Control.getValue()) - 1;
