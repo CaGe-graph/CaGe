@@ -165,11 +165,7 @@ public class CaGe implements ActionListener {
                 Object o = Class.forName(embeddingTypeFactoryVector.get(i).toString()).newInstance();
                 if(o instanceof EmbeddingTypeFactory)
                     embeddingTypeFactories.add((EmbeddingTypeFactory)o);
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (InstantiationException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                 ex.printStackTrace();
             }
         }
