@@ -68,9 +68,9 @@ public class RasmolViewer implements CaGeViewer {
                     rasmolInput.write("quit\n");
                 }
                 int status = trialPipe.waitForExit();
-                rasmolTrialResult = new Boolean(status <= 0);
+                rasmolTrialResult = (status <= 0);
             } catch (Exception ex) {
-                rasmolTrialResult = new Boolean(false);
+                rasmolTrialResult = false;
             }
         }
         return rasmolTrialResult.booleanValue();
