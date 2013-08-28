@@ -42,20 +42,20 @@ import util.SysInfo;
 
 public class CaGe implements ActionListener {
 
-    public static final String title = " CaGe - Chemical & abstract Graph environment ";
-    public static final String configFile = "CaGe.ini";
+    private static final String title = " CaGe - Chemical & abstract Graph environment ";
+    private static final String configFile = "CaGe.ini";
     public static final boolean expertMode;
     public static final boolean debugMode;
     public static final boolean nativesAvailable;
-    public static final String osName;
+    private static final String osName;
     public static int graphNoDigits = 6;
-    static final String installDirProperty = "CaGe.InstallDir";
-    public static Properties config;
-    static Map<String, String> substitutedNames;
-    static Properties systemProperties;
-    static Wizard wizard;
+    private static final String installDirProperty = "CaGe.InstallDir";
+    public static final Properties config = new Properties();
+    private static Map<String, String> substitutedNames;
+    private static final Properties systemProperties = new Properties();
+    private static Wizard wizard;
     static CaGeListener listener = new CaGeListener();
-    static public int generators;
+    private static int generators;
     static public int lastGeneratorChoice = -1;
     static public String[] generator;
     static AbstractButton[] generatorButton;
@@ -65,7 +65,7 @@ public class CaGe implements ActionListener {
     private static FoldnetThread foldnetThread;
     // private static CaGeFoldnetDialog foldnetDialog;
     private static BackgroundWindow backgroundWindow;
-    private static List<EmbeddingTypeFactory> embeddingTypeFactories = new ArrayList<>();
+    private static final List<EmbeddingTypeFactory> embeddingTypeFactories = new ArrayList<>();
 
 
     static {
@@ -76,7 +76,6 @@ public class CaGe implements ActionListener {
             osNameValue = SysInfo.get("os.name");
 
             // Get configuration
-            config = new Properties();
             try {
                 InputStream configInput =
                         ClassLoader.getSystemResourceAsStream(configFile);
@@ -98,7 +97,6 @@ public class CaGe implements ActionListener {
             } else {
                 installDir = Systoolbox.makeAbsolutePath(installDir);
             }
-            systemProperties = new Properties();
             systemProperties.put(installDirProperty, installDir);
 
             // load CaGe's native library
