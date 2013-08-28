@@ -530,7 +530,7 @@ public class TwoView implements ActionListener, CaGeViewer {
     }
 
     public static void main(String[] argv) throws Exception {
-        CaGe.config = new Properties();
+        CaGe.config.clear();
         CaGe.config.load(new FileInputStream("CaGe.ini"));
         TwoView t;
         t = new TwoView();
