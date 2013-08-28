@@ -33,11 +33,11 @@ import lisken.uitoolbox.UItoolbox;
 
 public class RasmolViewer implements CaGeViewer {
 
-    static private AbstractChemicalWriter pdbWriter;
-    static private Boolean rasmolTrialResult = null;
-    static private String runDir,  initCmd;
-    static private final String rasmolFilename = ".rasmol.input";
-    static private final File rasmolFile;
+    private static final AbstractChemicalWriter pdbWriter;
+    private static final String runDir,  initCmd;
+    private static final String rasmolFilename = ".rasmol.input";
+    private static final File rasmolFile;
+    private static Boolean rasmolTrialResult = null;
 
 
     static {
