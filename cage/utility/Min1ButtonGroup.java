@@ -6,8 +6,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Hashtable;
+import java.util.HashSet;
 import java.util.ListIterator;
+import java.util.Set;
 import javax.swing.AbstractButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -23,7 +24,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
     String id;
     boolean active;
     AbstractButton deactivateButton;
-    Hashtable selections;
+    Set<AbstractButton> selections;
     int lastModifiers;
 
     public Min1ButtonGroup() {
@@ -43,7 +44,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         this.active = active;
         this.deactivateButton = deactivateButton;
         deactivateButton.addChangeListener(this);
-        selections = new Hashtable();
+        selections = new HashSet<>();
     }
 
     @Override
@@ -52,7 +53,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
         button.addKeyListener(this);
         button.addMouseListener(this);
         if (button.isSelected()) {
-            selections.put(button, this);
+            selections.add(button);
         }
     }
 
@@ -70,7 +71,7 @@ public class Min1ButtonGroup extends AbstractButtonGroup
     public void itemStateChanged(ItemEvent e) {
         AbstractButton button = (AbstractButton) e.getSource();
         if (button.isSelected()) {
-            selections.put(button, this);
+            selections.add(button);
         } else {
             selections.remove(button);
         }

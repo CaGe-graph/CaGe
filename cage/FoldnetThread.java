@@ -7,9 +7,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import lisken.systoolbox.BufferedFDOutputStream;
 import lisken.systoolbox.MutableInteger;
@@ -22,7 +23,7 @@ public class FoldnetThread extends Thread {
     public FoldnetThread() {
         super("Foldnet-Maker");
         Systoolbox.lowerPriority(this, 3);
-        foldnetPageNos = new Hashtable();
+        foldnetPageNos = new HashMap<>();
     }
 
     public void setRunDir(String runDir) {
@@ -61,7 +62,7 @@ public class FoldnetThread extends Thread {
 
     private void processTask() {
         MutableInteger pageNo;
-        if ((pageNo = (MutableInteger) foldnetPageNos.get(task.filename)) == null) {
+        if ((pageNo = foldnetPageNos.get(task.filename)) == null) {
             pageNo = new MutableInteger(0);
             foldnetPageNos.put(task.filename, pageNo);
         }
@@ -128,10 +129,10 @@ public class FoldnetThread extends Thread {
     }
 
     private void finishFiles() {
-        Enumeration files = foldnetPageNos.keys();
-        while (files.hasMoreElements()) {
-            String filename = (String) files.nextElement();
-            MutableInteger pages = (MutableInteger) foldnetPageNos.get(filename);
+        Iterator<String> files = foldnetPageNos.keySet().iterator();
+        while (files.hasNext()) {
+            String filename = files.next();
+            MutableInteger pages = foldnetPageNos.get(filename);
             if (pages.intValue() > 0) {
                 FileWriter file = null;
                 try {
@@ -236,7 +237,7 @@ public class FoldnetThread extends Thread {
     private int tasksGiven = 0,  tasksCompleted = 0,  tasksFailed = 0;
     private final List<PropertyChangeListener> propertyChangeListeners = new ArrayList<>();
     private String runDir,  path;
-    private Hashtable foldnetPageNos;
+    private Map<String, MutableInteger> foldnetPageNos;
 
     private class FoldnetTask {
 

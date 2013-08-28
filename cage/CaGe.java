@@ -23,8 +23,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -50,7 +51,7 @@ public class CaGe implements ActionListener {
     public static int graphNoDigits = 6;
     static final String installDirProperty = "CaGe.InstallDir";
     public static Properties config;
-    static Hashtable substitutedNames;
+    static Map<String, String> substitutedNames;
     static Properties systemProperties;
     static Wizard wizard;
     static CaGeListener listener = new CaGeListener();
@@ -59,7 +60,8 @@ public class CaGe implements ActionListener {
     static public String[] generator;
     static AbstractButton[] generatorButton;
     static boolean rememberPanels;
-    static Hashtable generatorPanels,  outputPanels;
+    static Map<String, GeneratorPanel> generatorPanels;
+    static Map<String, OutputPanel> outputPanels;
     private static FoldnetThread foldnetThread;
     // private static CaGeFoldnetDialog foldnetDialog;
     private static BackgroundWindow backgroundWindow;
@@ -89,7 +91,7 @@ public class CaGe implements ActionListener {
             }
 
             // prepare config substitution mechanism
-            substitutedNames = new Hashtable();
+            substitutedNames = new HashMap<>();
             String installDir = System.getProperty(installDirProperty);
             if (installDir == null) {
                 installDir = System.getProperty("user.dir");
@@ -298,8 +300,8 @@ public class CaGe implements ActionListener {
         // set a few static variables
         rememberPanels = Systoolbox.parseBoolean(config.getProperty("CaGe.RememberSettings"), false);
         if (rememberPanels) {
-            generatorPanels = new Hashtable();
-            outputPanels = new Hashtable();
+            generatorPanels = new HashMap<>();
+            outputPanels = new HashMap<>();
         }
         foldnetThread = new FoldnetThread();
         foldnetThread.setRunDir(config.getProperty("CaGe.Generators.RunDir"));

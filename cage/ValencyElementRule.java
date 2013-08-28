@@ -1,6 +1,7 @@
 package cage;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import lisken.systoolbox.MutableInteger;
 import lisken.systoolbox.Systoolbox;
@@ -12,7 +13,7 @@ import lisken.systoolbox.Systoolbox;
 public class ValencyElementRule implements ElementRule {
 
     //The table containing the elements
-    private Hashtable elements = new Hashtable();
+    private Map<MutableInteger, String> elements = new HashMap<>();
 
     /**
      * Create a new <code>ValencyElementRule</code> object based on
@@ -59,7 +60,7 @@ public class ValencyElementRule implements ElementRule {
     @Override
     public String getElement(EmbeddableGraph graph, int vertex) {
         int valency = graph.getValency(vertex);
-        return (String) elements.get(new MutableInteger(valency));
+        return elements.get(new MutableInteger(valency));
     }
 
     static public void main(String[] argv) {

@@ -21,7 +21,7 @@ public class GeneratorChoiceListener implements ActionListener {
         try {
             GeneratorPanel configPanel;
             if (CaGe.rememberPanels) {
-                configPanel = (GeneratorPanel) CaGe.generatorPanels.get(configPanelName);
+                configPanel = CaGe.generatorPanels.get(configPanelName);
             } else {
                 configPanel = null;
             }

@@ -2,7 +2,8 @@ package cage.writer;
 
 import cage.CaGe;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Utility class for the creation of {@link CaGeWriter} objects.
@@ -10,7 +11,7 @@ import java.util.Hashtable;
 public class WriterFactory {
 
     /** <code>CaGeWriter</code>s are cached with this table */
-    private static Hashtable writerClasses = new Hashtable();
+    private static Map<String, Class> writerClasses = new HashMap<>();
 
     //this class shouldn't be instantiated.
     private WriterFactory() {
@@ -45,7 +46,7 @@ public class WriterFactory {
     public static CaGeWriter createCaGeWriter(String format) {
         Class writerClass;
         CaGeWriter result = null;
-        writerClass = (Class) writerClasses.get(format);
+        writerClass = writerClasses.get(format);
         if (writerClass != null) {
             try {
                 result = (CaGeWriter) writerClass.newInstance();

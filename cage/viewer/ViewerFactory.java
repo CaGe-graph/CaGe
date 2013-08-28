@@ -5,18 +5,19 @@ import cage.utility.Debug;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewerFactory {
 
-    private static Hashtable viewerClasses = new Hashtable();
-    private static Hashtable viewers = new Hashtable();
+    private static Map<String, Class> viewerClasses = new HashMap<>();
+    private static Map<String, CaGeViewer> viewers = new HashMap<>();
     private static String lastErrorMessage;
 
     public static CaGeViewer getCaGeViewer(String viewerName, int dimension) {
         CaGeViewer result = null;
         try {
-            result = (CaGeViewer) viewers.get(viewerName);
+            result = viewers.get(viewerName);
             result.setDimension(dimension);
             return result;
         } catch (Exception ex) {
@@ -119,7 +120,7 @@ public class ViewerFactory {
     private static Class getViewerClass(String viewerName)
             throws Exception {
         Class viewerClass;
-        viewerClass = (Class) viewerClasses.get(viewerName);
+        viewerClass = viewerClasses.get(viewerName);
         if (viewerClass == null) {
             String viewerClassName = CaGe.config.getProperty(viewerName + ".Class");
             viewerClass = Class.forName(viewerClassName);

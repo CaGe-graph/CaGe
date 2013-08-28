@@ -32,7 +32,7 @@ public class GeneratorParamsListener implements ActionListener {
                     CaGe.generatorButton[CaGe.lastGeneratorChoice].getText());
             OutputPanel outputPanel;
             if (CaGe.rememberPanels) {
-                outputPanel = (OutputPanel) CaGe.outputPanels.get(generatorName);
+                outputPanel = CaGe.outputPanels.get(generatorName);
             } else {
                 outputPanel = null;
             }

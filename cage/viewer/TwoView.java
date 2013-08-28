@@ -35,8 +35,9 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -74,7 +75,7 @@ public class TwoView implements ActionListener, CaGeViewer {
     private JSlider edgeBrightnessSlider;
     private JToggleButton savePSButton;
     private SavePSDialog savePSDialog;
-    private Hashtable psFilenames = new Hashtable();
+    private Map<MutableInteger, String> psFilenames = new HashMap<>();
     private PostScriptTwoViewPainter psTwoViewPainter;
     private TwoViewModel model;
     private List<JToggleButton> saveButtons = new ArrayList<>();
@@ -482,12 +483,12 @@ public class TwoView implements ActionListener, CaGeViewer {
         int graphNo = result.getGraphNo();
         savePSButton.setSelected(result.getSaved2DPS() > 0);
 
-        String filename = (String) psFilenames.get(new MutableInteger(graphNo));
+        String filename = psFilenames.get(new MutableInteger(graphNo));
         if (filename == null && previousResult != null) {
             String previousFilename, previousNumber;
             int p;
             previousFilename =
-                    (String) psFilenames.get(new MutableInteger(previousResult.getGraphNo()));
+                    psFilenames.get(new MutableInteger(previousResult.getGraphNo()));
             if (previousFilename == null) {
                 previousFilename = savePSDialog.getFilename();
             }
@@ -524,7 +525,7 @@ public class TwoView implements ActionListener, CaGeViewer {
     @Override
     public void stop() {
         psTwoViewPainter.finishPostScriptFiles();
-        psFilenames = new Hashtable();
+        psFilenames = new HashMap<>();
         setVisible(false);
     }
 
