@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import lisken.systoolbox.BufferedFDOutputStream;
 import lisken.systoolbox.MutableInteger;
@@ -80,7 +82,6 @@ public class FoldnetThread extends Thread {
             foldnetPipe.setPath(path);
             foldnetPipe.start();
             EmbeddableGraph graph = task.result.getGraph();
-            BufferedFDOutputStream foldnetData = foldnetPipe.getOutputStream();
             String graphEncoding = "";
             float[][] coordinate = graph.get3DCoordinates();
             int graphSize = graph.getSize();
@@ -96,8 +97,9 @@ public class FoldnetThread extends Thread {
                 graphEncoding += "\n";
             }
             graphEncoding += "0\n";
-            foldnetData.write(graphEncoding);
-            foldnetData.close();
+            try (BufferedFDOutputStream foldnetData = foldnetPipe.getOutputStream()) {
+                foldnetData.write(graphEncoding);
+            }
         } catch (Exception ex) {
             setFoldnetPipe(null);
         }
@@ -134,12 +136,10 @@ public class FoldnetThread extends Thread {
             String filename = files.next();
             MutableInteger pages = foldnetPageNos.get(filename);
             if (pages.intValue() > 0) {
-                FileWriter file = null;
-                try {
-                    file = new FileWriter(filename, true);
+                try (FileWriter file = new FileWriter(filename, true)) {
                     file.write("\n%%Pages: " + pages.intValue() + "\n%%EOF\n\n");
-                    file.close();
                 } catch (IOException ex) {
+                    Logger.getLogger(FoldnetThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

@@ -31,10 +31,8 @@ public class SvgTwoViewSaver implements TwoViewSaver {
                     Integer.parseInt(CaGe.config.getProperty("TwoView.Height"))));
         svgTwoViewPainter.setRotation(0);
         svgTwoViewPainter.paintGraph();
-        try {
-            FileWriter writer = new FileWriter(file);
+        try (FileWriter writer = new FileWriter(file)) {
             writer.write(svgTwoViewPainter.getSvgContent());
-            writer.close();
         } catch (IOException ex) {
             Debug.reportException(ex);
         }

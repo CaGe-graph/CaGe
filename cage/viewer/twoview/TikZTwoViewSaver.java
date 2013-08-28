@@ -24,10 +24,8 @@ public class TikZTwoViewSaver implements TwoViewSaver {
     public void saveFile(File file) {
         tikzTwoViewPainter.setGraph(model.getResult().getGraph());
         tikzTwoViewPainter.paintGraph();
-        try {
-            FileWriter writer = new FileWriter(file);
+        try (FileWriter writer = new FileWriter(file)) {
             writer.write(tikzTwoViewPainter.getTikzContent());
-            writer.close();
         } catch (IOException ex) {
             Debug.reportException(ex);
         }

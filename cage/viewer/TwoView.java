@@ -342,10 +342,8 @@ public class TwoView implements ActionListener, CaGeViewer {
                     svgTwoViewPainter.setSvgDimension(twoViewPanel.getSize());
                     svgTwoViewPainter.setRotation(twoViewPanel.getRotation());
                     svgTwoViewPainter.paintGraph();
-                    try {
-                        FileWriter writer = new FileWriter(file);
+                    try (FileWriter writer = new FileWriter(file)) {
                         writer.write(svgTwoViewPainter.getSvgContent());
-                        writer.close();
                     } catch (IOException ex) {
                         Debug.reportException(ex);
                     }
@@ -363,10 +361,8 @@ public class TwoView implements ActionListener, CaGeViewer {
                     //TODO: throws nullpointer exception because paint area is not initialized
                     tikzTwoViewPainter.setRotation(twoViewPanel.getRotation());
                     tikzTwoViewPainter.paintGraph();
-                    try {
-                        FileWriter writer = new FileWriter(file);
+                    try (FileWriter writer = new FileWriter(file)) {
                         writer.write(tikzTwoViewPainter.getTikzContent());
-                        writer.close();
                     } catch (IOException ex) {
                         Debug.reportException(ex);
                     }

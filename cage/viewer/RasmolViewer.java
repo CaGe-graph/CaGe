@@ -64,9 +64,9 @@ public class RasmolViewer implements CaGeViewer {
                         null, "/dev/null", "/dev/null");
                 trialPipe.setRunDir(runDir);
                 trialPipe.start();
-                BufferedFDOutputStream rasmolInput = trialPipe.getOutputStream();
-                rasmolInput.write("quit\n");
-                rasmolInput.close();
+                try (BufferedFDOutputStream rasmolInput = trialPipe.getOutputStream()) {
+                    rasmolInput.write("quit\n");
+                }
                 int status = trialPipe.waitForExit();
                 rasmolTrialResult = new Boolean(status <= 0);
             } catch (Exception ex) {
@@ -124,10 +124,10 @@ public class RasmolViewer implements CaGeViewer {
                 rasmolOutput = rasmolPipe.getInputStream();
                 rasmolWatcher = new RasmolWatcher(rasmolOutput, rasmolInput);
             }
-            OutputStream rasmolData = new FileOutputStream(rasmolFile);
-            pdbWriter.setOutputStream(rasmolData);
-            pdbWriter.outputResult(result);
-            rasmolData.close();
+            try (OutputStream rasmolData = new FileOutputStream(rasmolFile)) {
+                pdbWriter.setOutputStream(rasmolData);
+                pdbWriter.outputResult(result);
+            }
             rasmolWatcher.abort();
             rasmolInput.write("\nzap\n");
             rasmolInput.write(initCmd);

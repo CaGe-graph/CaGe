@@ -54,25 +54,19 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         }
 
         if (!append) {
-            try {
-                InputStream prolog = new BufferedInputStream(ClassLoader.getSystemResource("cage/viewer/TwoViewProlog.ps").openStream());
+            try (InputStream prolog = new BufferedInputStream(ClassLoader.getSystemResource("cage/viewer/TwoViewProlog.ps").openStream())) {
                 int c;
                 while ((c = prolog.read()) >= 0) {
                     savePostScriptStream.write(c);
                 }
-                prolog.close();
             } catch (IOException ex1) {
                 UItoolbox.showTextInfo("Error reading prolog",
                         Systoolbox.getStackTrace(ex1));
-                try {
-                    savePostScriptStream.close();
-                } catch (IOException ex2) {
-                } finally {
-                    //something went wrong while outputting prolog section to ps
-                    //aborting...
-                    savePostScriptStream = null; //set field to null
-                    return false;
-                }
+            } finally {
+                //something went wrong while outputting prolog section to ps
+                //aborting...
+                savePostScriptStream = null; //set field to null
+                return false;
             }
         }
 
