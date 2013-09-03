@@ -135,12 +135,12 @@ class NativeEmbedEmbedder extends Embedder {
         return embeddedMode;
     }
 
-    void computeEmbedders() {
+    private void computeEmbedders() {
         compute2DEmbedders();
         compute3DEmbedders();
     }
 
-    void compute2DEmbedders() {
+    private void compute2DEmbedders() {
         embed2DNewCmd = setIntensity(embed2DOrigCmd, intensityFactor);
         nFinalize(nEmbed2DNew);
         nEmbed2DNew = nCompileCommands(Systoolbox.stringsToBytes(embed2DNewCmd),
@@ -148,7 +148,7 @@ class NativeEmbedEmbedder extends Embedder {
         prepareReembed2D(embed2DNewCmd);
     }
 
-    void compute3DEmbedders() {
+    private void compute3DEmbedders() {
         if (nEmbed3DEmbedded == nEmbed3DNew) {
             nEmbed3DEmbedded = 0;
         }
@@ -159,7 +159,7 @@ class NativeEmbedEmbedder extends Embedder {
         computeEmbeddedEmbedders();
     }
 
-    void computeEmbeddedEmbedders() {
+    private void computeEmbeddedEmbedders() {
         nFinalize(nEmbed3DEmbedded);
         nEmbed3DEmbedded = nEmbed3DNew;
         embed3DEmbeddedCmd = embed3DNewCmd;
@@ -205,7 +205,7 @@ class NativeEmbedEmbedder extends Embedder {
         return embed3DEmbeddedCmd;
     }
 
-    static String[][] setIntensity(String[][] embed, float factor) {
+    private static String[][] setIntensity(String[][] embed, float factor) {
         if (factor == 1.0f) {
             return embed;
         }
@@ -245,7 +245,7 @@ class NativeEmbedEmbedder extends Embedder {
         return new String[][]{embedCmd};
     }
 
-    static String[][] setRefine(String[][] embed) {
+    private static String[][] setRefine(String[][] embed) {
         Debug.print("{ setRefine");
         String[] embedCmd = embed[0];
         boolean addInitial = true;
@@ -287,7 +287,7 @@ class NativeEmbedEmbedder extends Embedder {
         nEmbed3D(nGraph.nGraph, nEmbed3DNew, nEmbed3DEmbedded);
     }
 
-    void prepareReembed2D(String[][] embed2D) {
+    private void prepareReembed2D(String[][] embed2D) {
         nFinalize(nReembed2D);
         nReembed2D = 0;
         if (embed2D.length == 1 && embed2D[0].length >= 1 && embed2D[0][0].equals("embed")) {
