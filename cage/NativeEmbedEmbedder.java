@@ -329,7 +329,6 @@ class NativeEmbedEmbedder extends Embedder {
 
     @Override
     public void finalize() throws Throwable {
-        super.finalize();
         nFinalize(nEmbed2DNew);
         nFinalize(nReembed2D);
         nFinalize(nEmbed3DNew);
@@ -337,5 +336,6 @@ class NativeEmbedEmbedder extends Embedder {
             nFinalize(nEmbed3DEmbedded);
         }
         nEmbed2DNew = nReembed2D = nEmbed3DNew = nEmbed3DEmbedded = 0;
+        super.finalize();
     }
 }
