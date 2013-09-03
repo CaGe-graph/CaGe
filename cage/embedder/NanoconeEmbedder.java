@@ -382,38 +382,23 @@ public class NanoconeEmbedder {
     }
 
     /**
-     * Check wether the given vertices are neighbours in the current graph
+     * Check whether the given vertices are neighbours in the current graph
      */
     private boolean areNeighbours(int vertex, int neighbour) {
-        //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-
-        //for (int n : currentGraph[vertex])
-        //    if (n == neighbour)
-        //        return true;
-        for (int i = 0; i < currentGraph[vertex].length; i++){
-            int n = currentGraph[vertex][i];
+        for (int n : currentGraph[vertex])
             if (n == neighbour)
                 return true;
-        }
         return false;
     }
 
     /**
-     * Check wether the given vertices have a common neighbour in the current graph
+     * Check whether the given vertices have a common neighbour in the current graph
      */
     private boolean haveCommonNeighbour(int v1, int v2) {
-        //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-
-        //for (int n : currentGraph[v1]) {
-        //    for (int j : currentGraph[v2])
-        //        if (n != 0 && n == j)
-        //            return true;
-        //}
-        for(int i=0; i<currentGraph[v1].length; i++){
-            for (int j = 0; j < currentGraph[v2].length; j++) {
-                if (currentGraph[v1][i] != 0 && currentGraph[v1][i] == currentGraph[v2][j])
+        for (int n : currentGraph[v1]) {
+            for (int j : currentGraph[v2])
+                if (n != 0 && n == j)
                     return true;
-            }
         }
         return false;
     }
@@ -685,11 +670,7 @@ public class NanoconeEmbedder {
 
         // Calculate forces applied to the vertex by it's neighbours and it's neighbours' neighbours.
 
-        //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-
-        //for (int n : currentGraph[vertex]) {
-        for (int i = 0; i< currentGraph[vertex].length; i++) {
-            int n = currentGraph[vertex][i];
+        for (int n : currentGraph[vertex]) {
             if (n != 0) {
                 d = getDistance(vertex, n - 1);
                 if (d > epsilon) {
@@ -702,9 +683,7 @@ public class NanoconeEmbedder {
                     x += d*(graphCoords[vertex][0] - graphCoords[n - 1][0]);
                     y += d*(graphCoords[vertex][1] - graphCoords[n - 1][1]);
                     z += d*(graphCoords[vertex][2] - graphCoords[n - 1][2]);
-                    //for (int nn : currentGraph[n-1]) {
-                    for (int j = 0; j < currentGraph[n-1].length; j++) {
-                        int nn = currentGraph[n-1][j];
+                    for (int nn : currentGraph[n-1]) {
                         if (nn != 0 && nn - 1 != n) {
                             d = getDistance(vertex, nn - 1);
                             if (d > epsilon) {
@@ -922,7 +901,7 @@ public class NanoconeEmbedder {
                 "               If you specify less then 3, the following phases will print as many graphs\n" +
                 "               as specified by the last number." +
                 "   -l d        the value for the length between 2 atoms, in double format (x.xxx)\n" +
-                "   -print n    decide wether the final graph should be printed to the output, should be 0 or 1\n" +
+                "   -print n    decide whether the final graph should be printed to the output, should be 0 or 1\n" +
                 "   -layers n   the minimum amount of layers needed to calculate the embedding.\n" +
                 "               If the graph has less layers, layers will be added. \n" +
                 "               Then the embedding will be calculated.\n" +
@@ -951,27 +930,21 @@ public class NanoconeEmbedder {
         this.minLayers = layers;
     }
 
-    //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-    //private void setFactors(double ... factors) {
-    private void setFactors(double[] factors) {
+    private void setFactors(double ... factors) {
         System.arraycopy(factors, 0, this.factors, 0, factors.length);
         if (factors.length < this.factors.length)
             for (int i=factors.length; i<this.factors.length; i++)
                 this.factors[i] = factors[factors.length - 1];
     }
 
-    //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-    //private void setMaxSteps(int ... steps) {
-    private void setMaxSteps(int[] steps) {
+    private void setMaxSteps(int ... steps) {
         System.arraycopy(steps, 0, this.steps, 0, steps.length);
         if (steps.length < this.steps.length)
             for (int i=steps.length; i<this.steps.length; i++)
                 this.steps[i] = steps[steps.length - 1];
     }
 
-    //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-    //private void setShowPerPhase(int ... show) {
-    private void setShowPerPhase(int[] show) {
+    private void setShowPerPhase(int ... show) {
         System.arraycopy(show, 0, this.show, 0, show.length);
         if (show.length < this.show.length)
             for (int i=show.length; i<this.show.length; i++)

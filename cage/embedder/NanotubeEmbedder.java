@@ -483,10 +483,7 @@ public class NanotubeEmbedder {
          We try to fix this locally.
          **/
         while (i < nrVertices) {
-            //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-            //for (int n : currentGraph[vertDepth[0][i]]) {
-            for (int j=0; j < currentGraph[vertDepth[0][i]].length; j++) {
-                int n = currentGraph[vertDepth[0][i]][j];
+            for (int n : currentGraph[vertDepth[0][i]]) {
                 if (n != 0 && getDistance(vertDepth[0][i], n - 1) > vertexDistanceInHexagon) {
                     moveTowards(vertDepth[0][i], n - 1, beginX);
                 }
@@ -499,10 +496,7 @@ public class NanotubeEmbedder {
          * vertices towards eachother.
          */
         while (i < nrVertices) {
-            //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-            //for (int n : currentGraph[vertDepth[0][i]]) {
-            for (int j=0; j < currentGraph[vertDepth[0][i]].length; j++) {
-                int n = currentGraph[vertDepth[0][i]][j];
+            for (int n : currentGraph[vertDepth[0][i]]) {
                 if (n != 0 && getDistance(vertDepth[0][i], n - 1) > vertexDistanceInHexagon) {
                     moveTowardsEachother(vertDepth[0][i], n - 1, l);
                 }
@@ -572,10 +566,7 @@ public class NanotubeEmbedder {
 
         // Calculate forces applied to the vertex by it's neighbours and it's neighbours' neighbours.
 
-        //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-        //for (int n : currentGraph[vertex]) {
-        for (int i = 0; i < currentGraph[vertex].length; i++) {
-            int n = currentGraph[vertex][i];
+        for (int n : currentGraph[vertex]) {
             if (n != 0) {
                 d = getDistance(vertex, n - 1);
                 if (d > epsilon) {
@@ -588,10 +579,7 @@ public class NanotubeEmbedder {
                     x += d*(graphCoords[vertex][0] - graphCoords[n - 1][0]);
                     y += d*(graphCoords[vertex][1] - graphCoords[n - 1][1]);
                     z += d*(graphCoords[vertex][2] - graphCoords[n - 1][2]);
-                    //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-                    //for (int nn : currentGraph[n-1]) {
-                    for (int j = 0; j < currentGraph[n-1].length; j++) {
-                        int nn = currentGraph[n-1][j];
+                    for (int nn : currentGraph[n-1]) {
                         if (nn != 0 && nn - 1 != n) {
                             d = getDistance(vertex, nn - 1);
                             if (d > epsilon) {
@@ -699,32 +687,22 @@ public class NanotubeEmbedder {
     }
 
     /**
-     * Check wether the given vertices are neighbours in the current graph
+     * Check whether the given vertices are neighbours in the current graph
      */
     private boolean areNeighbours(int vertex, int neighbour) {
-        //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-        //for (int n : currentGraph[vertex])
-        //    if (n == neighbour)
-        //        return true;
-        for (int i = 0; i < currentGraph[vertex].length; i++)
-            if (currentGraph[vertex][i] == neighbour)
+        for (int n : currentGraph[vertex])
+            if (n == neighbour)
                 return true;
         return false;
     }
 
     /**
-     * Check wether the given vertices have a common neighbour in the current graph
+     * Check whether the given vertices have a common neighbour in the current graph
      */
     private boolean haveCommonNeighbour(int v1, int v2) {
-        //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-        //for (int n : currentGraph[v1]) {
-        //    for (int j : currentGraph[v2])
-        //        if (n != 0 && n == j)
-        //            return true;
-        //}
-        for (int i = 0; i < currentGraph[v1].length; i++) {
-            for (int j = 0; j < currentGraph[v2].length; j++)
-                if (currentGraph[v1][i] != 0 && currentGraph[v1][i] == currentGraph[v2][j])
+        for (int n : currentGraph[v1]) {
+            for (int j : currentGraph[v2])
+                if (n != 0 && n == j)
                     return true;
         }
         return false;
@@ -761,41 +739,31 @@ public class NanotubeEmbedder {
      * @return the amount of vertices between the two given vertices
      */
     private int getLengthBetween(int v1, int v2) {
-        //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
 
         List<Integer> list = new ArrayList<>();
         int [] notSeen = new int [nrVertices];
         int [] length = new int [nrVertices];
-        //for (int n : currentGraph[v1]) {
-        for (int j = 0; j < currentGraph[v1].length; j++) {
-            int n = currentGraph[v1][j];
+        for (int n : currentGraph[v1]) {
             if (n == 0)
                 continue;
             if (n - 1 == v2)
                 return 0;
-            //list.add(n-1);
-            list.add(Integer.valueOf(n - 1));
+            list.add(n-1);
         }
         notSeen[v1] = 1;
         int i = 0;
         while (i < list.size()) {
-            //for (int n : currentGraph[list.get(i)]) {
-            for (int j = 0; j < currentGraph[((Integer)list.get(i)).intValue()].length; j++) {
-                int n = currentGraph[((Integer)list.get(i)).intValue()][j];
+            for (int n : currentGraph[list.get(i)]) {
                 if (n == 0)
                     continue;
                 if (n - 1 == v2)
-                    //return length[list.get(i)] + 1;
-                    return length[((Integer)list.get(i)).intValue()] + 1;
+                    return length[list.get(i)] + 1;
                 if (notSeen[n - 1] == 0) {
-                    //list.add(n - 1);
-                    list.add(Integer.valueOf(n - 1));
-                    //length[n - 1] = length[list.get(i)] + 1;
-                    length[n - 1] = length[((Integer)list.get(i)).intValue()] + 1;
+                    list.add(n - 1);
+                    length[n - 1] = length[list.get(i)] + 1;
                 }
             }
-            //notSeen[list.get(i)] = 1;
-            notSeen[((Integer)list.get(i)).intValue()] = 1;
+            notSeen[list.get(i)] = 1;
             i++;
         }
         return -1;
@@ -833,9 +801,7 @@ public class NanotubeEmbedder {
         this.phases = p;
     }
 
-    //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
-    //private void setFactors(double ... factors) {
-    private void setFactors(double[] factors) {
+    private void setFactors(double ... factors) {
         System.arraycopy(factors, 0, this.factors, 0, factors.length);
         if (factors.length < this.factors.length)
             for (int i=factors.length; i<this.factors.length; i++)
