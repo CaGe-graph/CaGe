@@ -15,7 +15,7 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
 
-public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionListener {
+public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implements ChangeListener, ActionListener {
 
     //the panel on which the options for the allowed sizes are shown
     private JPanel optionsPanel;
@@ -90,7 +90,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
     public void setSizeIncluded(int size, boolean included) {
         //TODO: this uses a mutable object as a key in a map!!! Why?
         MutableInteger key = new MutableInteger(size);
-        SizeOption sizeOption = (SizeOption) this.get(key);
+        SizeOption sizeOption = this.get(key);
         if (included) {
             if (sizeOption == null) {
                 sizeOption = new SizeOption(size, this);
@@ -120,7 +120,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
     
     private void handleStateChanged(){
         int faces = sizesModel.getValue();
-        SizeOption sizeOption = (SizeOption) this.get(new MutableInteger(faces));
+        SizeOption sizeOption = this.get(new MutableInteger(faces));
         boolean included = sizeOption == null ? false : sizeOption.isActive();
         includedButton.setSelected(included);
         if(!dual)
@@ -151,7 +151,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
             included = e.getID() != 0;
         }
         setSizeIncluded(size, included);
-        sizeOption = (SizeOption) this.get(key);
+        sizeOption = this.get(key);
         if (included) {
             sizeOption.focusToLimitControl();
         } else {
@@ -159,7 +159,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
         }
     }
 
-    private List changeListenersList = new ArrayList();
+    private List<ChangeListener> changeListenersList = new ArrayList<>();
     private ChangeEvent e = new ChangeEvent(this);
 
     /**
@@ -183,7 +183,7 @@ public class SizeOptionsMap extends TreeMap implements ChangeListener, ActionLis
      */
     private void fireStateChanged(){
         for (int i = 0; i < changeListenersList.size(); i++) {
-            ((ChangeListener)changeListenersList.get(i)).stateChanged(e);
+            changeListenersList.get(i).stateChanged(e);
         }
     }
 }

@@ -249,8 +249,8 @@ public class UItoolbox {
     }
 
     public static void addLabel(JSlider slider, int value) {
-        Dictionary table = slider.getLabelTable();
-        table.put(new Integer(value), new JLabel(Integer.toString(value)));
+        Dictionary<Integer,JLabel> table = slider.getLabelTable();
+        table.put(value, new JLabel(Integer.toString(value)));
         slider.setLabelTable(table);
     }
 

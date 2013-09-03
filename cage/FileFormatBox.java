@@ -19,7 +19,7 @@ import lisken.systoolbox.Systoolbox;
  * with a textfield of which the name is altered based on the selected
  * file format.
  */
-public class FileFormatBox extends JComboBox implements ActionListener {
+public class FileFormatBox extends JComboBox<String> implements ActionListener {
 
     private List<CaGeWriter> writers = new ArrayList<>();
     private int dimension = 0;

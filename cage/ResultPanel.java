@@ -83,7 +83,7 @@ public class ResultPanel extends JPanel {
     private JPanel statusPanel;
     private Font statusFont;
     private JLabel status;
-    private TreeMap statusMap;
+    private TreeMap<MutableInteger, String> statusMap;
     private ActionListener stopListener;
     private AbstractButton saveAdjButton, save2DButton, save3DButton;
     private CaGeWriter saveAdjWriter, save2DWriter, save3DWriter;
@@ -350,7 +350,7 @@ public class ResultPanel extends JPanel {
                 new GridBagConstraints(0, 6, 5, 1, 1.0, 1.0,
                 GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
                 new Insets(5, 5, 5, 5), 0, 0));
-        statusMap = new TreeMap();
+        statusMap = new TreeMap<>();
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createCompoundBorder(
@@ -496,15 +496,14 @@ public class ResultPanel extends JPanel {
     }
 
     void clearStatus() {
-        statusMap = new TreeMap();
+        statusMap = new TreeMap<>();
         updateStatus();
     }
 
     void updateStatus() {
-        Object currentLevel;
         try {
-            currentLevel = statusMap.firstKey();
-            status.setText((String) statusMap.get(currentLevel));
+            MutableInteger currentLevel = statusMap.firstKey();
+            status.setText(statusMap.get(currentLevel));
         } catch (NoSuchElementException ex) {
             status.setText("\u00a0");
         }

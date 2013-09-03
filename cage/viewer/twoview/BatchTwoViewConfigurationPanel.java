@@ -76,7 +76,7 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
         
         add(folderSelector);
         add(filenameField);
-        add(new JComboBox(comboBoxModel));
+        add(new JComboBox<>(comboBoxModel));
     }
     
     public void setFilenameTemplate(String template){
@@ -85,7 +85,7 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
         }
     }
     
-    private class SaverComboBoxModel extends AbstractListModel implements ComboBoxModel, BatchTwoViewConfigurationListener {
+    private class SaverComboBoxModel extends AbstractListModel<TwoViewSavers> implements ComboBoxModel<TwoViewSavers>, BatchTwoViewConfigurationListener {
         
 
         @Override
@@ -109,7 +109,7 @@ public class BatchTwoViewConfigurationPanel extends JPanel{
         }
 
         @Override
-        public Object getElementAt(int index) {
+        public TwoViewSavers getElementAt(int index) {
             return TwoViewSavers.values()[index];
         }
 

@@ -36,19 +36,19 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
     private JButton removeButton;
     private JButton upButton;
     private JButton downButton;
-    private JList choiceList;
-    private JList selectionList;
+    private JList<String> choiceList;
+    private JList<String> selectionList;
     private Dimension listSize;
     private JScrollPane choicePane;
     private JScrollPane selectionPane;
-    private Object[] choices;
+    private String[] choices;
     private int[] position;
     private List<MutableInteger> choice, selection, highlight;
     private boolean dialogCompleted;
     private boolean noEmptySelection;
     private boolean building;
 
-    public OrderedChoice(Object[] choices) {
+    public OrderedChoice(String[] choices) {
         this.choices = choices;
         position = new int[choices.length];
         choice = new ArrayList<>(choices.length);
@@ -97,10 +97,10 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
                 downInSelection();
             }
         });
-        choiceList = new JList();
+        choiceList = new JList<>();
         choiceList.setVisibleRowCount(Math.min(10, choices.length));
         choiceList.addListSelectionListener(this);
-        selectionList = new JList();
+        selectionList = new JList<>();
         selectionList.setVisibleRowCount(choiceList.getVisibleRowCount());
         listSize = null;
         buildLists();
@@ -258,7 +258,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
     private void buildChoiceList() {
         building = true;
         int choiceSize = choice.size();
-        Object[] choiceData = new Object[choiceSize];
+        String[] choiceData = new String[choiceSize];
         for (int i = 0; i < choiceSize; ++i) {
             choiceData[i] = choices[choice.get(i).intValue()];
         }
@@ -272,7 +272,7 @@ public class OrderedChoice extends JPanel implements ListSelectionListener {
     private void buildSelectionList() {
         building = true;
         int selectionSize = selection.size();
-        Object[] selectionData = new Object[selectionSize];
+        String[] selectionData = new String[selectionSize];
         for (int i = 0; i < selectionSize; ++i) {
             selectionData[i] = choices[selection.get(i).intValue()];
         }

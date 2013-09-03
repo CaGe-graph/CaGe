@@ -236,12 +236,12 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         slider.setLabelTable(labels);
     }
 
-    public Hashtable createStandardLabels(int increment) {
-        return slider.createStandardLabels(increment);
+    public Hashtable<Integer, JLabel> createStandardLabels(int increment) {
+        return (Hashtable<Integer, JLabel>)slider.createStandardLabels(increment);
     }
 
-    public Hashtable createStandardLabels(int increment, int start) {
-        return slider.createStandardLabels(increment, start);
+    public Hashtable<Integer, JLabel> createStandardLabels(int increment, int start) {
+        return (Hashtable<Integer, JLabel>)slider.createStandardLabels(increment, start);
     }
 
     public boolean getInverted() {

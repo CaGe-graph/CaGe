@@ -63,7 +63,7 @@ public class ViewerFactory {
      * @throws java.lang.Exception If this class of viewers is not available for the given
      * dimension.
      */
-    private static void checkAvailability(Class viewerClass, int dimension)
+    private static void checkAvailability(Class<?> viewerClass, int dimension)
             throws Exception {
         //TODO: this looks like the misuse of an Exception. This method should return a boolean
         //also: is there no way to get rid of this reflection?

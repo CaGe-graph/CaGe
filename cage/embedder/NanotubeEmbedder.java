@@ -763,8 +763,7 @@ public class NanotubeEmbedder {
     private int getLengthBetween(int v1, int v2) {
         //code in comments is Java 5, when switching to this version these lines should be used (nvcleemp)
 
-        //List<Integer> list = new ArrayList<Integer>();
-        List list = new ArrayList();
+        List<Integer> list = new ArrayList<>();
         int [] notSeen = new int [nrVertices];
         int [] length = new int [nrVertices];
         //for (int n : currentGraph[v1]) {

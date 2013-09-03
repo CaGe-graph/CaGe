@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ComponentLogicalGroup {
 
-    private List components = new ArrayList();
+    private List<Component> components = new ArrayList<>();
 
     /**
      * Constructs an empty <code>ComponentLogicalGroup</code> object.
@@ -49,7 +49,7 @@ public class ComponentLogicalGroup {
      */
     public void setVisible(boolean visible){
         for(int i=0; i<components.size(); i++){
-            ((Component)components.get(i)).setVisible(visible);
+            components.get(i).setVisible(visible);
         }
     }
 
@@ -61,7 +61,7 @@ public class ComponentLogicalGroup {
      */
     public void setEnabled(boolean enabled){
         for(int i=0; i<components.size(); i++){
-            ((Component)components.get(i)).setEnabled(enabled);
+            components.get(i).setEnabled(enabled);
         }
     }
 
