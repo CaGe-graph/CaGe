@@ -132,6 +132,7 @@ public class Wizard implements ActionListener {
     }
 
     public void toStage(int n, boolean forgetLaterStages) {
+        //n and stageNo are 1-based and not 0-based!
         if (n <= 0) {
             throw new RuntimeException("Illegal stage number (minimum 1): " + n);
         } else if (stageVector.size() < n) {
@@ -139,7 +140,7 @@ public class Wizard implements ActionListener {
         }
         stageNo = n;
         if (forgetLaterStages) {
-            stageVector = new ArrayList<>(stageVector.subList(0, stageNo-1));
+            stageVector = new ArrayList<>(stageVector.subList(0, stageNo));
         }
         activate();
     }
