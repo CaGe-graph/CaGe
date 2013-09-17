@@ -465,7 +465,6 @@ public class OutputPanel extends JPanel {
             expertLabelText += "generator";
         }
         generatorControlsGroup.setVisible(showGeneratorControls);
-        System.out.println(embedder);
         if (showEmbedControls) {
             if (embed2DCmdLine.getText().length() == 0 || !embedder.isConstant()) {
                 embed2DCmdLine.setText(Systoolbox.makeCmdLine(embedder.getEmbed2DNew()));
