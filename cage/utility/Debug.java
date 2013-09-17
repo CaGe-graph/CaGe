@@ -23,7 +23,7 @@ public class Debug {
 
     @SuppressWarnings("CallToThreadDumpStack")
     public static void reportException(Throwable e){
-        Logger.getLogger(Debug.class.getName()).log(Level.INFO, "Exception reported", e);
+        Logger.getLogger(Debug.class.getName()).log(Level.CONFIG, "Exception reported", e);
         if(CaGe.debugMode){
             e.printStackTrace();
         }
