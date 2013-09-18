@@ -1,5 +1,7 @@
 package cage.viewer.twoview;
 
+import java.util.Locale;
+
 /**
  * An implementation of {@code TwoViewPainter} that creates a TikZ picture 
  * containing the graph.
@@ -40,12 +42,12 @@ public class TikzTwoViewPainter extends TwoViewPainter {
     protected void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         if(useSpecialColour){
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "    \\draw [marked] (%s) to (%s);\n",
                         Integer.toString(v1), Integer.toString(v2)));
         } else {
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "    \\draw [black] (%s) to (%s);\n",
                         Integer.toString(v1), Integer.toString(v2)));
         }
@@ -60,12 +62,12 @@ public class TikzTwoViewPainter extends TwoViewPainter {
     protected void paintVertex(double x, double y, int number) {
         if(model.getShowNumbers()){
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "    \\node [circle,draw] (%s) at (%f,%f) {%s};\n",
                         Integer.toString(number), x, y, Integer.toString(number)));
         } else {
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "    \\node [circle,fill] (%s) at (%f,%f) {};\n",
                         Integer.toString(number), x, y));
         }

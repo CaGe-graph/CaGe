@@ -1,6 +1,7 @@
 package cage.viewer.twoview;
 
 import java.awt.Dimension;
+import java.util.Locale;
 
 /**
  * An implementation of {@code TwoViewPainter} that creates a SVG document 
@@ -33,7 +34,7 @@ public class SvgTwoViewPainter extends TwoViewPainter {
     protected void beginGraph() {
         builder = new StringBuilder();
         builder.append(
-                String.format(
+                String.format(Locale.ENGLISH,
                     "<svg width=\"%d\" height=\"%d\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n",
                     svgDimension.width, svgDimension.height));
     }
@@ -47,12 +48,12 @@ public class SvgTwoViewPainter extends TwoViewPainter {
     protected void paintEdge(double x1, double y1, double x2, double y2, int v1, int v2, boolean useSpecialColour) {
         if(useSpecialColour){
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "  <line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:rgb(60,150,60);stroke-width:%d\"/>\n",
                         x1, y1, x2, y2, model.getEdgeWidth()));
         } else {
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "  <line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:rgb(0,0,0);stroke-width:%d\"/>\n",
                         x1, y1, x2, y2, model.getEdgeWidth()));
         }
@@ -68,11 +69,11 @@ public class SvgTwoViewPainter extends TwoViewPainter {
         if(model.getShowNumbers()){
             builder.append("<g>\n");
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "  <circle cx=\"%f\" cy=\"%f\" r=\"%d\" style=\"fill:rgb(255,200,100);stroke:rgb(0,0,0);stroke-width:1\"/>\n",
                         x, y, model.getVertexSize()));
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "<text x=\"%f\" y=\"%f\" dy=\"%d\" style=\"font-size:%dpx;text-anchor:middle;alignment-baseline:middle\">",
                         x, y, model.getVertexSize()/2, model.getVertexSize()));
             builder.append(Integer.toString(number));
@@ -80,7 +81,7 @@ public class SvgTwoViewPainter extends TwoViewPainter {
             builder.append("</g>\n");
         } else {
             builder.append(
-                    String.format(
+                    String.format(Locale.ENGLISH,
                         "  <circle cx=\"%f\" cy=\"%f\" r=\"%d\" style=\"fill:rgb(255,200,100);stroke:rgb(0,0,0);stroke-width:1\"/>\n",
                         x, y, model.getVertexSize()));
         }
