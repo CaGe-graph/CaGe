@@ -253,11 +253,15 @@ SPLAYNODE *worklist = NULL;
 /* what scan procedure should do for each node p */
 #define ACTION(p) outputnode(p)
 
+outputnode(SPLAYNODE *liste);
+
 /* extra arguments for the insertion procedure */
 #define INSERT_ARGS , unsigned char *canong, int codelength, int type, int *is_new_node
 
 /* how to compare the key of INSERT_ARGS to the key of node p */
 #define COMPARE(p) comparenodes(canong, codelength, type, p)
+
+int comparenodes(unsigned char *canong, int codelength, int type, SPLAYNODE *list);
 
 /* what to do for a new node p */
 #define NOT_PRESENT(p) new_splaynode(p, canong, codelength, type, is_new_node)
