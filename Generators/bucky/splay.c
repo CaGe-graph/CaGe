@@ -343,7 +343,7 @@ SPLAY_LOOKUP(SPLAYNODE **to_root  LOOKUP_ARGS)
 
 /*********************************************************************/
 
-static SPLAYNODE*
+static void
 SPLAY_DELETE(SPLAYNODE **to_root, SPLAYNODE *p)
 /* Remove node p from the tree and free it. */
 {
