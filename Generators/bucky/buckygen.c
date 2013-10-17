@@ -253,7 +253,7 @@ SPLAYNODE *worklist = NULL;
 /* what scan procedure should do for each node p */
 #define ACTION(p) outputnode(p)
 
-outputnode(SPLAYNODE *liste);
+void outputnode(SPLAYNODE *liste);
 
 /* extra arguments for the insertion procedure */
 #define INSERT_ARGS , unsigned char *canong, int codelength, int type, int *is_new_node
@@ -944,7 +944,7 @@ int comparenodes(unsigned char *canong, int codelength, int type, SPLAYNODE *lis
 
 /****************************************/
 
-outputnode(SPLAYNODE *liste)
+void outputnode(SPLAYNODE *liste)
  {
     fprintf(stderr, "Error: outputting of nodes not allowed\n");
     exit(1);
