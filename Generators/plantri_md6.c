@@ -2875,7 +2875,7 @@ int main(int argc, char *argv[])
 	    exit(2);
 	}
 	
-	if (maxnv < 4 || fswitch && maxnv < 6 || maxnv > MAXN)
+	if (maxnv < 4 || (fswitch && maxnv < 6) || maxnv > MAXN)
 	{
 	    fprintf(stderr,">E %s: n must be 4..%d (6..%d with -f)\n",
                     cmdname,MAXN,MAXN);
@@ -2910,9 +2910,9 @@ int main(int argc, char *argv[])
         if (!uswitch)
 	{
 	    nvf = dswitch ? 2*maxnv-4 : maxnv;
-            if (aswitch && nvf > 99 ||
-	        Aswitch && nvf > 4094 ||
-               !aswitch && !Aswitch && !Sswitch && nvf > 255)
+            if ((aswitch && nvf > 99) ||
+	        (Aswitch && nvf > 4094) ||
+               (!aswitch && !Aswitch && !Sswitch && nvf > 255))
 	    {
 	        fprintf(stderr,
                     ">E %s: n is too large for that output format\n",
@@ -2978,12 +2978,12 @@ int main(int argc, char *argv[])
 
 	    if (!uswitch && !aswitch)
 	    {
-		if (!hswitch && !Aswitch && !Sswitch &&
-	            fwrite(PCODE,(size_t)1,PCODELEN,outfile) != PCODELEN
-		  || hswitch && Sswitch &&
-                    fwrite(S6CODE,(size_t)1,S6CODELEN,outfile) != S6CODELEN
-		  || hswitch && Aswitch &&
-                    fwrite(G6CODE,(size_t)1,G6CODELEN,outfile) != G6CODELEN)
+		if ((!hswitch && !Aswitch && !Sswitch &&
+	            fwrite(PCODE,(size_t)1,PCODELEN,outfile) != PCODELEN)
+		  || (hswitch && Sswitch &&
+                    fwrite(S6CODE,(size_t)1,S6CODELEN,outfile) != S6CODELEN)
+		  || (hswitch && Aswitch &&
+                    fwrite(G6CODE,(size_t)1,G6CODELEN,outfile) != G6CODELEN))
                 {
                     fprintf(stderr,">E %s: error writing header\n",cmdname);
                     perror(">E ");
