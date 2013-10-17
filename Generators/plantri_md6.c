@@ -822,7 +822,7 @@ testcanon_first_init(EDGE *givenedge, int representation[], int colour[])
    for obviously necessary changes, so for extensive comments see testcanon */
 {
 	register EDGE *run;
-	register vertex;
+	register int vertex;
 	EDGE *temp;  
 	EDGE *startedge[MAXN]; 
 	int number[MAXN], i; 
@@ -2749,7 +2749,7 @@ int read_next_fullerene(int which_case, int res, int mod)
 
 /****************************************************************************/
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	char *arg,*outfilename;
 	int badargs,argsgot;
