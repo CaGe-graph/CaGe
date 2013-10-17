@@ -683,7 +683,7 @@ static int calculate_the_degree_error(void)
 	int error_of_graph = calculate_the_graph_error();
 	int number_of_remaining_steps = maxnv - nv;
 
-	if ((error_of_graph == (3 * number_of_remaining_steps)))
+	if (error_of_graph == (3 * number_of_remaining_steps))
 	{
 #ifdef USE_LOCAL_METHOD_OF_RELATION
 		if (use_local_method_of_relation())
