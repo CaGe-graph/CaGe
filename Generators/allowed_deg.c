@@ -271,7 +271,9 @@ list_of_allowed_degrees(char arg[], int *pj )
       if (n>maxdegree) {fprintf(stderr,"Maximum degree is %d!\n",maxdegree);exit(0);}
       LISTE |= mask[n];
       maxnumber[n]=MAXN; minnumber[n]=0;
-      for (run=0; facelist[run]; run++); facelist[run]=n;
+      for (run=0; facelist[run]; run++)
+          ;
+      facelist[run]=n;
       if(n>maxdeg) maxdeg = n;
       for (i=3; i<=n; i++){
 	if ( error_up[i] > (n-i)) error_up[i]=n-i;
