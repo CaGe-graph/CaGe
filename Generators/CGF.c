@@ -2395,7 +2395,7 @@ void lies_dumpfile(void) {
   static int dummy;
   static FILE *fbsy;
 
-  if (fbsy = fopen(recoverreadflagfilename,"rb")) {
+  if ((fbsy = fopen(recoverreadflagfilename,"rb"))) {
     logfile_entry((char *)"Warning:  Found file ",True,False,True);
     logfile_entry(recoverreadflagfilename,False,False,True);
     logfile_entry((char *)".\nLoading backup dump file ",False,False,
@@ -3313,7 +3313,7 @@ void speichere_graphen_aus_outputliste_in_files(POSTYP hislen,unsigned char
           if (f==nil) { 
             fprintf(stderr,"Can't open output file %s!\n",outputfilename[j]);
             perror((char *)"Error description"); 
-            if (logfile = repeated_fopen(logfilename,"a",5)) {
+            if ((logfile = repeated_fopen(logfilename,"a",5))) {
               fprintf(logfile,"Can't open output file %s!\n",
                       outputfilename[j]);
               fclose(logfile);
@@ -3339,7 +3339,7 @@ void speichere_graphen_aus_outputliste_in_files(POSTYP hislen,unsigned char
             fprintf(stderr,"Error while writing into file %s!\n",
                     outputfilename[j]);
             perror((char *)"Error description");
-            if (logfile = repeated_fopen(logfilename,"a",5)) {
+            if ((logfile = repeated_fopen(logfilename,"a",5))) {
               fprintf(logfile,"Error while writing into file %s!\n",
                       outputfilename[j]);
               fclose(logfile);
@@ -3350,7 +3350,7 @@ void speichere_graphen_aus_outputliste_in_files(POSTYP hislen,unsigned char
             fprintf(stderr,"Error while closing file %s!\n",
                     outputfilename[j]);
             perror((char *)"Error description");
-            if (logfile = repeated_fopen(logfilename,"a",5)) {
+            if ((logfile = repeated_fopen(logfilename,"a",5))) {
               fprintf(logfile,"Error while closing file %s!\n",
                       outputfilename[j]);
               fclose(logfile);
@@ -6262,7 +6262,7 @@ BOOL berechne_umrandungen(POSTYP index) {
   if (e->art==DURCHSCHNITT) {       /* Durchschnitt */
     restentfernung = e->ziellen;
     pos = bordercode[1];    /* Beginn des Randcodes von Rand 1 */
-    if (bb = (bordercode[pos]==BB_KENNUNG)) {pos++;}  /*Kennung ueberspringen*/
+    if ((bb = (bordercode[pos]==BB_KENNUNG))) {pos++;}  /*Kennung ueberspringen*/
  
     /* Rand 2: */
     len2 = 0;
@@ -6297,7 +6297,7 @@ BOOL berechne_umrandungen(POSTYP index) {
 
   else if (e->art==EINSCHLUSS) {      /* Einschluss */        
     pos = bordercode[1];    /* Beginn des Randcodes von Rand 1 */
-    if (bb = (bordercode[pos]==BB_KENNUNG)) {pos++;}  /*Kennung ueberspringen*/
+    if ((bb = (bordercode[pos]==BB_KENNUNG))) {pos++;}  /*Kennung ueberspringen*/
     len1 = 0;
     randcode1[len1++] = 0; 
     if (e->nahtlen&1) {           /* Arten 4 und 5 */
@@ -6344,7 +6344,7 @@ BOOL berechne_umrandungen(POSTYP index) {
   else {            /* Fall 1 */
     restentfernung = e->ziellen;
     pos = bordercode[e->zielrand+1];     /* Beginn des Randcodes von Rand 2 */
-    if (bb = (bordercode[pos]==BB_KENNUNG)) {pos++;} /*Kennung ueberspringen*/
+    if ((bb = (bordercode[pos]==BB_KENNUNG))) {pos++;} /*Kennung ueberspringen*/
  
     /* Rand 2: Position suchen */
     while ((i = (bordercode[pos]<<1)+(!bb)) < restentfernung)
@@ -6375,7 +6375,7 @@ BOOL berechne_umrandungen(POSTYP index) {
 
     /* Rand 1: */
     pos = bordercode[1];
-    if (bb = (bordercode[pos]==BB_KENNUNG)) {pos++;}  /*Kennung ueberspringen*/
+    if ((bb = (bordercode[pos]==BB_KENNUNG))) {pos++;}  /*Kennung ueberspringen*/
     randcode1[len1++] = bordercode[pos++]-1;
     memcpy(&randcode1[len1],&bordercode[pos],sizeof(KNOTENTYP)*
            (bordercode[2]-pos));
@@ -7744,8 +7744,8 @@ void bilde_graphen_aus_bauchbindenpatches1_in_rekursion(KNOTENTYP g,
                   nebenzweig[0]++;
                   if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                 }    /* while e1 */
-              } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                           pco));
+              } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                           pco)));
               /* Ende des Einrueckens */     
          
 	        }   /* if (t5) */
@@ -7823,7 +7823,7 @@ void bilde_graphen_aus_bauchbindenpatches2_in_rekursion(KNOTENTYP g,
          {recover = False;   count = recovercount;}
       nebenzweig[0]++;
       if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
-    } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco));
+    } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco)));
   }
 }         
 
@@ -8892,7 +8892,7 @@ void bruchkanten_moeglichkeit4_in_rekursion(char perm1,char perm2,char perm3,
          {recover = False;   count = recovercount;}
       nebenzweig[0]++;
       if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
-    } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco));
+    } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco)));
   }     /* if passen Sandwichcodes */
  
   if (do_brille && !loop_brille && !digon_brille &&
@@ -8945,7 +8945,7 @@ void bruchkanten_moeglichkeit4_in_rekursion(char perm1,char perm2,char perm3,
          {recover = False;   count = recovercount;}
       nebenzweig[0]++;
       if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
-    } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco));
+    } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco)));
   }     /* if passen Brillencodes */
 }
 
@@ -9012,7 +9012,7 @@ void sandwich_moeglichkeit5_in_rekursion(unsigned char fall,KNOTENTYP n,
 
   erg = his_anz;
   l = 1;
-  if (pco = patchcheck && !overflow[his_anz-1]) {
+  if ((pco = (patchcheck && !overflow[his_anz-1]))) {
     for (i=0; i<his_anz; i++) {his_check_pos[i] = 0;}
     starte_history(his_anz);
   }
@@ -9041,7 +9041,7 @@ void sandwich_moeglichkeit5_in_rekursion(unsigned char fall,KNOTENTYP n,
        {recover = False;   count = recovercount;}
     nebenzweig[0]++;
     if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
-  } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco));
+  } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco)));
 }
 
 /***********BILDE_GRAPHEN_AUS_BRUCHKANTENPATCHES****************************/
@@ -9214,7 +9214,7 @@ void bilde_graphen_aus_bruchkantenpatches(KNOTENTYP g,KNOTENTYP n) {
                  nach dem Aufruf der Funktion "suche_randcode" sind nur 
                  noch die Eintraege code3[i] bis code3[i+codelen3-1] 
                  korrekt) */
-              while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+              while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
                 /* Patch 3 gefunden */ 
                 len2 = MIN(len23,len12);
                 len2 -= (1+(len2&1));    /* groesste Laenge fuer Naht 2 */ 
@@ -9289,7 +9289,7 @@ void bilde_graphen_aus_bruchkantenpatches(KNOTENTYP g,KNOTENTYP n) {
               /* Patches mit passenden Randcodes suchen:  (beachte:
                  nach dem Aufruf der Funktion "suche_randcode" sind nur noch 
                  die Eintraege code3[i] bis code3[i+codelen3-1] korrekt) */
-              while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+              while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
                 /* Patch 3 gefunden */
                 len = (k<<1)+(fall<5);       /* mittlere Naht */
                 if (!recover || len==l2_rec) {
@@ -9471,7 +9471,7 @@ void bilde_graphen_aus_bruchkantenpatches(KNOTENTYP g,KNOTENTYP n) {
                                         &aend,&i);
               gleiche_randcodes = (len12==len23); /* Raender 1 und 2 gleich? */
                              /* <=> codelen1==codelen2 && code1[0]==code2[0] */
-              while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+              while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
                 /* Patch 3 gefunden */ 
                 len2 = MIN(len23,len12);
                 len2 -= (1+(len2&1));    /* groesste Laenge fuer Naht 2 */ 
@@ -9563,7 +9563,7 @@ void bilde_graphen_aus_bruchkantenpatches(KNOTENTYP g,KNOTENTYP n) {
               bereite_brillencodes_vor(fall,code1,code2,code3,&aend,&i,
                                        1+(fall>4));
               gleiche_randcodes = (codelen1==codelen2 && code1[0]==code2[0]); 
-              while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+              while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
                 /* Patch 3 gefunden */
                 len = (k<<1)+(fall<5);       /* mittlere Naht */
                 if (!recover || len==l2_rec) { 
@@ -9741,7 +9741,7 @@ void bilde_graphen_aus_bruchkantenpatches(KNOTENTYP g,KNOTENTYP n) {
           if (t3[3]) {        
             bereite_sandwichcodes_vor(fall,len12-len2,len23-len2,code3,
                                       &aend,&i);
-            while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+            while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
               /* Rand 3 gefunden */ 
               len2 = MIN(len23,len12);
               len2 -= (1+(len2&1));    /* groesste Laenge fuer Naht 2 */ 
@@ -9847,8 +9847,8 @@ void bilde_graphen_aus_bruchkantenpatches(KNOTENTYP g,KNOTENTYP n) {
            (len23 = (code2[0]<<1)+codelen2)>1 &&
            (!recover || (pfadtyp_rec==2 && submgl_rec==2 && len23==l3_rec &&
             (code1[0]<<1)+codelen1==l1_rec))) {
-          if (fall = passen_sandwichcodes(code1,codelen1,code2,codelen2,
-              code3,codelen3,&i,&k)) {    /* Codes passen zusammen */
+          if ((fall = passen_sandwichcodes(code1,codelen1,code2,codelen2,
+              code3,codelen3,&i,&k))) {    /* Codes passen zusammen */
             len12 = (code1[0]<<1)+codelen1;
             len2 = (k<<1)+1;
             if (!recover || len2==l2_rec) {
@@ -9907,8 +9907,8 @@ void bilde_graphen_aus_bruchkantenpatches(KNOTENTYP g,KNOTENTYP n) {
             code2[0]==0)) && (!recover || (pfadtyp_rec==3 &&
             (code1[0]<<1)+codelen1==l1_rec &&
             (code2[0]<<1)+codelen2==l3_rec))) {
-          if (fall = passen_brillencodes(code1,codelen1,code2,codelen2,
-              code3,codelen3,&i,&k)) {    /* Codes passen zusammen */
+          if ((fall = passen_brillencodes(code1,codelen1,code2,codelen2,
+              code3,codelen3,&i,&k))) {    /* Codes passen zusammen */
             /* Die Randcodes von Patch 1 sind nicht gleich, da bei der
                Brille Haupt- und Nebenrand nicht gleich sein koennen. */
             len = (k<<1)+(fall<5);        /* mittlere Naht */
@@ -10298,7 +10298,7 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                  nach dem Aufruf der Funktion "suche_randcode" sind nur 
                  noch die Eintraege code3[i] bis code3[i+codelen3-1] 
                  korrekt) */
-              while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+              while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
                 /* Patch 3 gefunden */ 
                 len2 = MIN(len23,len12);
                 len2 -= (1+(len2&1));    /* groesste Laenge fuer Naht 2 */ 
@@ -10362,8 +10362,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                          2mal verknuepfen, da "e3" Hauptpatch und "e1"
                          Nebenpatch ist */
                     }    /* while e1 */
-                  } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                    pco));
+                  } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                    pco)));
                 }     /* if len2>k*2 */
               }      /* while t3e */
             }       /* if t3[3] */
@@ -10384,7 +10384,7 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                  nach dem Aufruf der Funktion "suche_randcode" sind nur 
                  noch die Eintraege code3[i] bis code3[i+codelen3-1] 
                  korrekt) */
-              while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+              while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
                 /* Patch 3 gefunden */ 
                 len = (k<<1)+(fall<5);
                 if (!recover || len==l2_rec) {
@@ -10445,8 +10445,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                       if (e1) {e1 = e1->next;}  /* Patches aus gleicher Liste
                                                2mal verknuepfen (siehe oben) */
                     }    /* while e1 */
-                  } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                    pco));
+                  } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                    pco)));
                 }    /* if */
               }      /* while t3e */
               if (fall<5)   /* Faelle 5-8 starten (k ist mindestens 1) */
@@ -10609,8 +10609,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                     if (e1) {e1 = e1->next;} /* Patches aus gleicher Liste 2mal
                                                 verknuepfen (siehe oben) */
                   }    /* while e1 */
-                } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                  pco));
+                } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                  pco)));
               }       /* if */
             }       /* if passen Sandwichcodes */
   
@@ -10678,8 +10678,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                     if (e1) {e1 = e1->next;} /* Patches aus gleicher Liste 2mal
                                                 verknuepfen (siehe oben) */
                   }    /* while e1 */
-                } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                  pco));
+                } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                  pco)));
               }     /* if */
             }       /* if passen Brillencodes */
             /* Ende des um 22 Stellen eingerueckten Textes */
@@ -10849,8 +10849,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                   nebenzweig[0]++;
                   if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                 }    /* while e1 */
-              } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                pco));
+              } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                pco)));
             }    /* if */
           }      /* if passen Sandwichcodes */
 
@@ -10936,8 +10936,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                   nebenzweig[0]++;
                   if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                 }    /* while e1 */
-              } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                pco));
+              } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                pco)));
             }    /* if */
           }      /* if passen Brillencodes */
           /* Ende des um 14 Stellen eingerueckten Textes */
@@ -11019,7 +11019,7 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
           if (t3[3]) {        
             bereite_sandwichcodes_vor(fall,len12-len2,len23-len2,code3,
                                       &aend,&i);
-            while (t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k)) {
+            while ((t3e = suche_randcode(&code3[i],codelen3,aend,&t3[3],&k))) {
               /* Rand 3 gefunden */ 
               len2 = MIN(len23,len12);
               len2 -= (1+(len2&1));    /* groesste Laenge fuer Naht 2 */ 
@@ -11079,8 +11079,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                     nebenzweig[0]++;
                     if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                   }   /* while e1 */ 
-                } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                  pco));
+                } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                  pco)));
               }     /* if len2>k*2 */
             }    /* while t3e */
           }     /* if t3[3] */
@@ -11196,8 +11196,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                   nebenzweig[0]++;
                   if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                 }    /* while e1 */
-              } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                pco));
+              } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                pco)));
             }   /* if */
           }     /* if passen Sandwichcodes */
 
@@ -11262,8 +11262,8 @@ void bilde_graphen_aus_bruchkantenpatches1_in_rekursion(KNOTENTYP g,
                   nebenzweig[0]++;
                   if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                 }    /* while e1 */
-              } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
-                                                pco));
+              } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),
+                                                pco)));
             }   /* if */
           }     /* if passen Brillencodes */
           /* Ende des um 14 Stellen eingerueckten Textes */
@@ -11402,8 +11402,8 @@ void bilde_graphen_aus_bruchkantenpatches2_in_rekursion(KNOTENTYP g,
                                           &aend,&i);
                 gleiche_randcodes = (len12==len23); /* Raender 1 und 2 gleich?
                                <=> codelen2==codelen3 && code2[0]==code3[0] */
-                while (t3e = suche_randcode(&code1[i],codelen1,aend,&t3[3],
-                       &k)) {  /* Patch 1 gefunden */ 
+                while ((t3e = suche_randcode(&code1[i],codelen1,aend,&t3[3],
+                       &k))) {  /* Patch 1 gefunden */ 
                   len2 = MIN(len23,len12);
                   len2 -= (1+(len2&1));    /* groesste Laenge fuer Naht 2 */ 
                   if (len2 > (k<<1) &&     /* k ist klein genug */
@@ -11480,8 +11480,8 @@ void bilde_graphen_aus_bruchkantenpatches2_in_rekursion(KNOTENTYP g,
                         nebenzweig[0]++;
                         if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                       }  /* while e1 */ 
-                    } while (l = setze_history_weiter(his_anz,
-                                 MIN(erg,his_anz-1),pco));
+                    } while ((l = setze_history_weiter(his_anz,
+                                 MIN(erg,his_anz-1),pco)));
                   }   /* if len2>k*2 */
                 }    /* while t3e */
               }     /* if t3[3] */
@@ -11499,8 +11499,8 @@ void bilde_graphen_aus_bruchkantenpatches2_in_rekursion(KNOTENTYP g,
                 bereite_brillencodes_vor(fall,code2,code3,code1,&aend,&i,
                                          1+(fall>4));
                 gleiche_randcodes = (codelen2==codelen3 && code2[0]==code3[0]);
-                while (t3e = suche_randcode(&code1[i],codelen1,aend,&t3[3],
-                       &k)) {    /* Patch 1 gefunden */ 
+                while ((t3e = suche_randcode(&code1[i],codelen1,aend,&t3[3],
+                       &k))) {    /* Patch 1 gefunden */ 
                   len = (k<<1) + (fall<5);
                   if (!recover || len==l2_rec) {
                     l = 1;
@@ -11572,8 +11572,8 @@ void bilde_graphen_aus_bruchkantenpatches2_in_rekursion(KNOTENTYP g,
                         nebenzweig[0]++;
                         if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
                       }  /* while e1 */ 
-                    } while (l = setze_history_weiter(his_anz,
-                                 MIN(erg,his_anz-1),pco));
+                    } while ((l = setze_history_weiter(his_anz,
+                                 MIN(erg,his_anz-1),pco)));
                   }        /* if */
                 }    /* while t3e */
                 if (fall<5) {fall += 4;  t3[3] = t3[2]->weiter.nextlevel;  
@@ -11698,7 +11698,7 @@ void bilde_graphen_aus_bruchkantenpatches2_in_rekursion(KNOTENTYP g,
                 nebenzweig[0]++;
                 if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
               }    /* while e1 */
-            } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco));
+            } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco)));
           }    /* if */
         }      /* if passen Sandwichcodes */
 
@@ -11771,7 +11771,7 @@ void bilde_graphen_aus_bruchkantenpatches2_in_rekursion(KNOTENTYP g,
                 nebenzweig[0]++;
                 if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
               }    /* while e1 */
-            } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco));
+            } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco)));
           }    /* if */
         }      /* if passen Sandwichcodes */
 
@@ -11834,7 +11834,7 @@ void bilde_graphen_aus_bruchkantenpatches2_in_rekursion(KNOTENTYP g,
                 nebenzweig[0]++;
                 if (nebenzweig[0]==ULONG_MAX) {zweig_error(-1);}
               }    /* while e1 */
-            } while (l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco));
+            } while ((l = setze_history_weiter(his_anz,MIN(erg,his_anz-1),pco)));
           }      /* if */
         }        /* if passen Brillencodes */
         /* Ende des um 10 Stellen eingerueckten Textes */
@@ -12952,7 +12952,7 @@ void suche_passende_patches_rek2_in_rekursion(KNOTENTYP *bordercode1,
     bordercode2[len2] = root2->code;   /* ab hier ist "len2" um 1 zu niedrig */
     eulerkrit1 = eulerkrit2 = True;  
                  /* kann fuer jeden Zweig unterschiedlich sein */
-    if (bb_in2_new = (bordercode2[len2]==BB_KENNUNG)) {
+    if ((bb_in2_new = (bordercode2[len2]==BB_KENNUNG))) {
       if (anz_bb_in2>0) {eulerkrit1 = False;}
       else {
         r = bordercode1[0]+bordercode2[0]-1; 
@@ -14579,8 +14579,8 @@ KNOTENTYP gehe_patchbaum_durch(TREENODE **root1,TREENODE *root2,
         (Codeende erreicht  =>  bb_neu==False, denn
          der letzte Eintrag des BB-Codes ist NICHT BB_KENNUNG) */ 
       generiere_bind_tabelle(bordercode,&expand,&typ89,True);
-      if (erg = suche_passende_patches(root1,root2,bordercode,len,g,fl,expand,
-          krit,bordercode[bordercode[0]+1]-bordercode[0]-2-2*anz_bb,typ89))
+      if ((erg = suche_passende_patches(root1,root2,bordercode,len,g,fl,expand,
+          krit,bordercode[bordercode[0]+1]-bordercode[0]-2-2*anz_bb,typ89)))
          {return(erg);}
       for (i=2+(maxentry<<1); i>0; i--)
         {anz[0][i] = anz[1][i] = anz[2][i] = anz[3][i] = anz[4][i] =
@@ -14594,8 +14594,8 @@ KNOTENTYP gehe_patchbaum_durch(TREENODE **root1,TREENODE *root2,
     }
     else {    /* Codeende noch nicht erreicht */
       root1[len] = root1[len-1]->weiter.nextlevel;   /* ist definiert */
-      if (erg = gehe_patchbaum_durch(root1,root2,bordercode,len,g,fl,
-                krit,anz_bb+(bb_neu==True),maxentry)) {return(erg);}
+      if ((erg = gehe_patchbaum_durch(root1,root2,bordercode,len,g,fl,
+                krit,anz_bb+(bb_neu==True),maxentry))) {return(erg);}
     }
     len--;
     root1[len] = root1[len]->next;
@@ -14659,8 +14659,8 @@ KNOTENTYP gehe_patchbaum_durch2(TREENODE *root1,KNOTENTYP *bordercode,
                     0;    /* fuer Ein- und Zweiecke */
       }
       else {       /* root1->weiter.nextlevel verfolgen */
-        if (erg = gehe_patchbaum_durch2(root1->weiter.nextlevel,bordercode,len,
-            g,fl,krit1,anz_bb+(bb_neu==True),maxentry)) {return(erg);}
+        if ((erg = gehe_patchbaum_durch2(root1->weiter.nextlevel,bordercode,len,
+            g,fl,krit1,anz_bb+(bb_neu==True),maxentry))) {return(erg);}
       }
       len--;
     }
@@ -14711,8 +14711,8 @@ KNOTENTYP gehe_patchbaum_durch3(TREENODE *root1,KNOTENTYP *bordercode,
           krit1)) {return(bordercode[0]+1);}  /*Anzahl Raender in Zielpatches*/
     }
     else {   /* root1->weiter.nextlevel weiterverfolgen */
-      if (erg = gehe_patchbaum_durch3(root1->weiter.nextlevel,bordercode,len,
-                g,fl,krit1,anz_bb+(bb_neu==True))) {return(erg);}
+      if ((erg = gehe_patchbaum_durch3(root1->weiter.nextlevel,bordercode,len,
+                g,fl,krit1,anz_bb+(bb_neu==True)))) {return(erg);}
     }
     root1 = root1->next;  len--;
   }
@@ -14893,8 +14893,8 @@ void generiere_patches(void) {
                            krit1 kritischen Punkten sowie Genus g2, fl2 
                            Flaechen und krit2 kritischen Punkten */
                         pfad1[0] = t1->weiter.nextlevel;
-                        if (b = gehe_patchbaum_durch(pfad1,
-                            t2->weiter.nextlevel,bordercode,0,g,fl,j,0,0)) 
+                        if ((b = gehe_patchbaum_durch(pfad1,
+                            t2->weiter.nextlevel,bordercode,0,g,fl,j,0,0))) 
                            {lege_bottom_up_grenzen_fest(fl,g,1,j); 
                             ende = True;}  /* b=1 uebergeben, weil bei 3.1
                             selbst und bei 3.2 evtl. noch Patches mit einem 
@@ -14922,8 +14922,8 @@ void generiere_patches(void) {
               while (t1 && t1->code<j) {t1 = t1->next;}
               if (t1 && t1->code==krit1) { /* es gibt Patches mit Genus g-1, 
                                         fl Flaechen und j kritischen Punkten */
-                if (b = gehe_patchbaum_durch2(t1->weiter.nextlevel,bordercode,
-                        0,g,fl,j,0,0)) 
+                if ((b = gehe_patchbaum_durch2(t1->weiter.nextlevel,bordercode,
+                        0,g,fl,j,0,0))) 
                    {lege_bottom_up_grenzen_fest(fl,g,MIN(b,2),j); ende = True;}
                    /* b<=2 uebergeben, weil bei 3.3 evtl. noch Patches mit  
                       zwei Raendern generiert werden */
@@ -14952,8 +14952,8 @@ void generiere_patches(void) {
             while (t1 && t1->code<j) {t1 = t1->next;}
             if (t1 && t1->code==j) {   /* es gibt Patches mit Genus g, 
                                         fl Flaechen und j kritischen Punkten */
-              if (b = gehe_patchbaum_durch3(t1->weiter.nextlevel,bordercode,0,
-                  g,fl,j,0)) 
+              if ((b = gehe_patchbaum_durch3(t1->weiter.nextlevel,bordercode,0,
+                  g,fl,j,0))) 
                  {lege_bottom_up_grenzen_fest(fl,g,b,j);  ende=True;}
             }
           }
@@ -15947,7 +15947,7 @@ BOOL suche_patch(POSTYP top_level,POSTYP *hislen,BOOL neu_vor1_art0,BOOL *pc,
         *pc = True;  return(False);
       }
     }
-    if (e2 = finde_patch(bordercode,g,fl,krit)) {    /* erfolgreich gefunden */
+    if ((e2 = finde_patch(bordercode,g,fl,krit))) {    /* erfolgreich gefunden */
       bestimme_gute_basen(e2);
       *e = *e2;   /* Informationen muessen kopiert werden, denn
              fuer den Fall, dass ein Patch an zwei Stellen eingesetzt wird,
@@ -16984,7 +16984,7 @@ void bilde_bordercode3(KNOTENTYP *randcode1,KNOTENTYP codelen1,
   static signed char erg;
 
   /* Reihenfolge festlegen: */
-  if (erg = vergleiche_codes(randcode1,codelen1,randcode2,codelen2)<0) 
+  if ((erg = vergleiche_codes(randcode1,codelen1,randcode2,codelen2)<0)) 
        {c1 = 2;  c2 = 1;}   
   else {c1 = 1;  c2 = 2;}
   if (vergleiche_codes(randcode1,codelen1,randcode3,codelen3)<0) {
