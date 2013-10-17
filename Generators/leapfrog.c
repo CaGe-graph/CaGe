@@ -344,7 +344,8 @@ for (;fread(&ucharpuffer,sizeof(unsigned char),1,stdin);)
 	lauf=3;
 	/* jetzt wurden 3 Zeichen gelesen */
 	if ((code[1]=='>') && (code[2]=='p')) /*garantiert header*/
-	  { while ((ucharpuffer=getc(stdin)) != '<');
+	  { while ((ucharpuffer=getc(stdin)) != '<')
+              ;
 	    /* noch zweimal: */ ucharpuffer=getc(stdin);
 	    if (ucharpuffer!='<') { fprintf(stderr,"Problems with header -- single '<'\n"); exit(1); }
 	    if (!fread(&ucharpuffer,sizeof(unsigned char),1,stdin)) exit(0);
