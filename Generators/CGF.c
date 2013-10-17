@@ -296,7 +296,7 @@
   /*  Errechnet die Anzahl der inneren Knoten eines Patches mit "fl" Flaechen,
       Genus "g", "r" Raendern und "anz3" 3-valenten Randknoten.
       Der Cast-Operator ist oberwichtig! */
-#define FLAECHEN(g,r,n1,n3) ((EULERTYP)(((n1)+(n3)>>1) + 2 - (r) - ((g)<<1)))
+#define FLAECHEN(g,r,n1,n3) ((EULERTYP)((((n1)+(n3))>>1) + 2 - (r) - ((g)<<1)))
   /* Errechnet die Anzahl der Flaechen eines Patches mit Geschlecht "g",
      "r" Raendern, "n1" inneren Knoten und "n3" 3-valenten Randknoten.
      Der Cast-Operator ist oberwichtig! */
