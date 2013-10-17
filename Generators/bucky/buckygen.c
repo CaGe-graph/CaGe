@@ -14278,7 +14278,7 @@ check_switch(char sw, char *ok_switches)
 /* If ok_switches[sw] is zero, write an error message and exit. */
 
 {
-    if (!ok_switches[sw])
+    if (!ok_switches[(int)sw])
     {
 	fprintf(stderr,">E %s:  -%c is not permitted\n",cmdname,sw);
 	exit(1);
@@ -14314,10 +14314,10 @@ decode_command_line(int argc, char *argv[])
     cmdname = argv[0];
 
     for (i = 0; i < 256; ++i) ok_switches[i] = 0;
-    for (as = SWITCHES; *as != '\0'; ++as) ok_switches[*as] = 1;
+    for (as = SWITCHES; *as != '\0'; ++as) ok_switches[(int)(*as)] = 1;
     ok_switches['['] = ok_switches[']'] = ok_switches[' '] = 0;
     ok_switches[':'] = ok_switches['-'] = ok_switches['#'] = 0;
-    for (as = SECRET_SWITCHES; *as != '\0'; ++as) ok_switches[*as] = 1;
+    for (as = SECRET_SWITCHES; *as != '\0'; ++as) ok_switches[(int)(*as)] = 1;
 
     argsgot = 0;
     badargs = FALSE;
