@@ -278,7 +278,7 @@ echo ""
 (
 cd Native/src &&
 mkdir -p ../$sysname &&
-CPPFLAGS="$CPPFLAGS -I$javadir/include$include_other_dir" make "$sysname"
+CPPFLAGS="$CPPFLAGS -I$javadir/include$include_other_dir -w" make "$sysname"
 ) || error_exit "-  'make' failure, aborting."
 echo ""
 echo "   Ok."
