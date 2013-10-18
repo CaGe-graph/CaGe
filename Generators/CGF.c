@@ -18805,7 +18805,7 @@ void top_down_generierung(KNOTENTYP g,KNOTENTYP n) {
             n_td[0][0] = innere;
             if (innere != INNERE_KNOTEN(g-1,fl,1,anz3_td[0][0]))
 	       {fprintf(stderr,"Logischer Fehler 10 in " 
-                               "top_down_generierung!\n",innere);  exit(106);} 
+                               "top_down_generierung!\n");  exit(106);} 
             for (kriti = recover ? (EULERTYP)krit1_rec : kpk_anz[arraypos]-1;  
                  kriti>=0;  kriti--) {    /* diese Schleife kann kurz sein */
               p13 = (KNOTENTYP)kriti;
