@@ -57,6 +57,9 @@ int minboundary,maxboundary;
 
 long long int pos=0LL, impos=0LL;
 
+//declaration of main function
+MAINFUNCTION;
+
 void runtest(char string[], int position, int lengte, unsigned long long int bitstring)
 {
   static char dummy[]="getyesno";
