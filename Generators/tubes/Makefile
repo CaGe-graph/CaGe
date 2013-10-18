@@ -1,4 +1,4 @@
-CFLAGS = -Wall -O4
+CFLAGS = -w -O4
 
 TARG = tube$(SUFFIX)
 OBJS = tube.o

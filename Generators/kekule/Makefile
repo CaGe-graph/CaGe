@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -O4
+CFLAGS = -O4 -w
 
 TARG = fusgen$(SUFFIX)
 OBJS = fusgen.o kekule.o kekule_benz.o match.o modes.o label.o label_benz.o horloge.o

@@ -4,7 +4,7 @@
 # Sebastian Lisken, Gunnar Brinkmann, Olaf Delgado, Thomas Harmuth
 
 
-CFLAGS=-O4
+CFLAGS=-O4 -w
 # Under Windows, set SUFFIX to .exe
 SUFFIX=
 

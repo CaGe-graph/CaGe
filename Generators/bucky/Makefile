@@ -1,4 +1,4 @@
-CFLAGS = -Wall -O4
+CFLAGS = -w -O4
 
 TARG = buckygen$(SUFFIX)
 OBJS = buckygen.c
