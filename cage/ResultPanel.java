@@ -728,7 +728,6 @@ public class ResultPanel extends JPanel {
 
     CaGeWriter saveResult(CaGeResult result, CaGeWriter saveWriter,
             AbstractButton saveButton, String variety, String dialogTitle) {
-        saveButton.getModel().setPressed(true);
         String shortVariety = saveButton.getText();
         if (saveWriter == null) {
             SaveDialog saveDialog =
