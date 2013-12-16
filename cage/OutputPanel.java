@@ -184,7 +184,7 @@ public class OutputPanel extends JPanel {
             @Override
             public void update() {
                 Embedder embedder = generatorInfo.getEmbedder();
-                if (embed2DCmdLine.isVisible()) {
+                if (embed2DCmdLine.isVisible() && embed2DCmdLine.getText().trim().length() > 0) {
                     String cmdLine2D = embed2DCmdLine.getText();
                     embedder.setEmbed2D(Systoolbox.parseCmdLine(cmdLine2D));
                 }
@@ -210,7 +210,7 @@ public class OutputPanel extends JPanel {
             @Override
             public void update() {
                 Embedder embedder = generatorInfo.getEmbedder();
-                if (embed3DCmdLine.isVisible()) {
+                if (embed3DCmdLine.isVisible() && embed3DCmdLine.getText().trim().length() > 0) {
                     String cmdLine3D = embed3DCmdLine.getText();
                     embedder.setEmbed3D(Systoolbox.parseCmdLine(cmdLine3D));
                 }
