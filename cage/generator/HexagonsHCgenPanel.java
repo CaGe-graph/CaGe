@@ -93,7 +93,7 @@ public class HexagonsHCgenPanel extends GeneratorPanel {
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine(generator + numberOfHexagons + "p " + catacondensed + bezenoid + kekule),
                 EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
-                "test",
+                (generator + numberOfHexagons + "p" + catacondensed + bezenoid + kekule).replace(' ', '_'),
                 6);
     }
 
