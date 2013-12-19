@@ -90,11 +90,19 @@ public class HexagonsHCgenPanel extends GeneratorPanel {
 
         //String preComputedPath = " p" + CaGe.getSystemProperty("CaGe.InstallDir") + "/PreCompute";
 
-        return new StaticGeneratorInfo(
-                Systoolbox.parseCmdLine(generator + numberOfHexagons + "p " + catacondensed + bezenoid + kekule),
-                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
-                (generator + numberOfHexagons + "p" + catacondensed + bezenoid + kekule).replace(' ', '_'),
-                6);
+        if(benzenoidBox.isSelected()){
+            return new StaticGeneratorInfo(
+                    Systoolbox.parseCmdLine(generator + numberOfHexagons + "p " + catacondensed + bezenoid + kekule),
+                    EmbedFactory.createEmbedder(new String[][]{{"java", "-cp", "CaGe.jar", "cage.embedder.BenzenoidEmbedder"}}, new String[][]{{"embed", "-d3"}}),
+                    (generator + numberOfHexagons + "p" + catacondensed + bezenoid + kekule).replace(' ', '_'),
+                    6);
+        } else {
+            return new StaticGeneratorInfo(
+                    Systoolbox.parseCmdLine(generator + numberOfHexagons + "p " + catacondensed + bezenoid + kekule),
+                    EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3"}}),
+                    (generator + numberOfHexagons + "p" + catacondensed + bezenoid + kekule).replace(' ', '_'),
+                    6);
+        }
     }
 
     @Override
