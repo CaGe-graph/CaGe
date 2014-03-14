@@ -112,7 +112,6 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
 
         //output the graph
         paintGraph();
-        System.out.println("here");
 
         //finalize this page
         savePS("\n\n\ngrestore\n\nshowpage\n");
@@ -158,7 +157,6 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
 
     @Override
     protected void beginEdges() {
-        System.out.println("edges");
         savePS("\n\nbegin_edges\n\n");
     }
 
