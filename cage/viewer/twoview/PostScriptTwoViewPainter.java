@@ -60,11 +60,10 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
                     savePostScriptStream.write(c);
                 }
             } catch (IOException ex1) {
-                UItoolbox.showTextInfo("Error reading prolog",
-                        Systoolbox.getStackTrace(ex1));
-            } finally {
                 //something went wrong while outputting prolog section to ps
                 //aborting...
+                UItoolbox.showTextInfo("Error reading prolog",
+                        Systoolbox.getStackTrace(ex1));
                 savePostScriptStream = null; //set field to null
                 return false;
             }
@@ -113,6 +112,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
 
         //output the graph
         paintGraph();
+        System.out.println("here");
 
         //finalize this page
         savePS("\n\n\ngrestore\n\nshowpage\n");
@@ -158,6 +158,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
 
     @Override
     protected void beginEdges() {
+        System.out.println("edges");
         savePS("\n\nbegin_edges\n\n");
     }
 
