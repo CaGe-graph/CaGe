@@ -273,6 +273,7 @@ public abstract class TwoViewPainter {
      * Returns the coordinates of vertex <i>n</i>. The first vertex has
      * number 1.
      *
+     * @param n the index of the vertex
      * @return the coordinates of vertex <i>n</i>
      */
     protected FloatingPoint getCoordinatePoint(int n) {
