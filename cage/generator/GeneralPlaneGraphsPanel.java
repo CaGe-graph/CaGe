@@ -254,6 +254,97 @@ public class GeneralPlaneGraphsPanel extends GeneratorPanel
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
+        int n = verticesSlider.getValue();
+        int minDegree = Integer.parseInt(minDegGroup.getSelection().getActionCommand());
+        int minConn = Integer.parseInt(minConnGroup.getSelection().getActionCommand());
+        int maxEdgeCount = maxEdges.getValue();
+        if((defaultMaxFacesize.isSelected() || minDegree == 5) && 
+                minDegree > 2 &&
+                minDegree*n == 2*maxEdgeCount &&
+                !(minDegree == 4 && minConn < 3)){
+            return getGeneratorInfoRegular(minDegree);
+        } else {
+            return getGeneratorInfoNonRegular();
+        }
+    }
+    
+    public GeneratorInfo getGeneratorInfoRegular(int degree) {
+        List<String> genCmd = new ArrayList<>();
+        String filename = "";
+        
+        if(degree == 3){
+            genCmd.add("plantri");
+            filename += "genplan_3reg";
+            String v = Integer.toString(verticesSlider.getValue()/2+2);
+            filename += "_" + v;
+            if (!dual.isSelected()) {
+                genCmd.add("-d");
+            } else {
+                filename += "_d";
+            }
+            
+            String minConn = minConnGroup.getSelection().getActionCommand();
+            genCmd.add("-c" + minConn + (exactConn.isSelected() ? "x" : ""));
+            filename += "_c" + minConn + (exactConn.isSelected() ? "x" : "");
+            
+            genCmd.add(v);
+        } else if(degree == 4){
+            genCmd.add("plantri");
+            genCmd.add("-q");
+            genCmd.add("-c3m3");
+            filename += "genplan_4reg";
+            String v = Integer.toString(verticesSlider.getValue()+2);
+            filename += "_" + v;
+            if (!dual.isSelected()) {
+                genCmd.add("-d");
+            } else {
+                filename += "_d";
+            }
+            
+            genCmd.add(v);
+        } else { //degree == 5
+            genCmd.add("plantri_preg");
+            genCmd.add("-p");
+            genCmd.add("-m5");
+            genCmd.add("-e" + verticesSlider.getValue()*5/2);
+            filename += "genplan_5reg";
+            String v = Integer.toString(verticesSlider.getValue());
+            filename += "_" + v;
+            
+            String minConn = minConnGroup.getSelection().getActionCommand();
+            genCmd.add("-c" + minConn + (exactConn.isSelected() ? "x" : ""));
+            filename += "_c" + minConn + (exactConn.isSelected() ? "x" : "");
+            
+            if (!defaultMaxFacesize.isSelected()) {
+                genCmd.add("-f" + maxFacesize.getValue());
+                filename += "_f" + maxFacesize.getValue();
+            }
+        
+            if (dual.isSelected()) {
+                genCmd.add("-d");
+                filename += "_d";
+            }
+            
+            genCmd.add(v);
+        }
+
+        String[][] generator = new String[1][];
+        generator[0] = genCmd.toArray(new String[genCmd.size()]);
+        if (CaGe.debugMode) {
+            System.err.println(Systoolbox.makeCmdLine(generator));
+        }
+
+        String[][] embed2D = {{"embed"}};
+        String[][] embed3D = {{"embed", "-d3", "-it"}};
+
+        return new StaticGeneratorInfo(
+                generator,
+                EmbedFactory.createEmbedder(true, embed2D, embed3D),
+                filename,
+                dual.isSelected() ? verticesSlider.getValue() - 1 : maxFacesize.getValue());
+    }
+    
+    public GeneratorInfo getGeneratorInfoNonRegular() {
         List<String> genCmd = new ArrayList<>();
         String filename = "";
 
