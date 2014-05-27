@@ -46,12 +46,6 @@ cgf$(SUFFIX) : CGF.c
 hcgen$(SUFFIX) : HCgen.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
 
-# Old plantri plugin "min4.c" now deleted.
-# Functionality integrated since v3.1, use plantri -m4.
-# More info: see the plantri/fullgen page, http://cs.anu.edu.au/~bdm/plantri/
-# plantri_min4$(SUFFIX) : plantri.c min4.c
-# 	$(CC) $(CFLAGS) $(CPPFLAGS) -o plantri_min4 -O '-DPLUGIN="min4.c"' plantri.c
-
 plantri$(SUFFIX) : plantri.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
 
