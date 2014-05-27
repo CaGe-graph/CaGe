@@ -16,7 +16,7 @@ generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
 	    kekule_all cone_all tube_all quad_restrict$(SUFFIX) \
-	    leapfrog$(SUFFIX) buckygen_all
+	    leapfrog$(SUFFIX) buckygen_all plantri_preg$(SUFFIX)
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
@@ -60,6 +60,9 @@ plantri_md6$(SUFFIX) : plantri_md6.c
 
 plantri_ad$(SUFFIX) : plantri.c allowed_deg.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="allowed_deg.c"' plantri.c
+
+plantri_preg$(SUFFIX) : plantri.c regfilt.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -O '-DPLUGIN="regfilt.c"' plantri.c
 
 embed$(SUFFIX) : embed.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -lm
