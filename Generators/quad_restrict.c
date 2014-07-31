@@ -119,115 +119,104 @@ static int mycounter = 0;
 /* At first the function checks if there is any quadrangulation left, that has vertex degrees that are not allowed.*/
 /* Then it checks if there are to many or not enough vertices of a specific degree. */
 
-static int ad_filter(int nbtot, int nbop, int doflip)
-/****************************************************/
-{
-  	int i, 												/* counter from 0 to the number of vertices of the graph G */
-		j,												/* counter from 0 to number_of_allowed_degrees */ 
-		number_of_degree_x_in_G[MAXN];					/* counts how many vertices of the graph G are of the degree x */
+static int ad_filter(int nbtot, int nbop, int doflip){
+    int i,          /* counter from 0 to the number of vertices of the graph G */
+	j,          /* counter from 0 to number_of_allowed_degrees */ 
+	number_of_degree_x_in_G[MAXN];  /* counts how many vertices of the graph G are of the degree x */
 
-	for(i = 0; i < nv; i++) 							/* If there is any degree error left the graph is rejected. */
-	{
-		if (error_of_degree[degree[i]]) 
-		{
-			return(0);
-		}
-	}
-	
-	if (bounds)											/* If the user is only interested in quadrangulations with a special amount of vertices of a specific degree, */
-  	{ 													/* the bounds-Variable is equal one. */
-	
-    	for (j = 0; allowed_degrees[j]; j++) 					/* Here it is important that the list of allowed degrees terminates with a null! */  
-			number_of_degree_x_in_G[allowed_degrees[j]] = 0;	/* The numbers of all the allowed degrees is initialized with null. */
+    for(i = 0; i < nv; i++){
+        if (error_of_degree[degree[i]]){
+            return(0);
+        }
+    }
+    
+    if (bounds){
+        /* Here it is important that the list of allowed degrees terminates with a null! */
+        for (j = 0; allowed_degrees[j]; j++)
+            /* The numbers of all the allowed degrees is initialized with null. */
+            number_of_degree_x_in_G[allowed_degrees[j]] = 0;
 			
-    	for(i = 0; i < nv ; i++) 								/* For each vertex i look at his degree and */ 
-			(number_of_degree_x_in_G[degree[i]])++; 			/* increase number_of_degree_x_in_G[i] with one. */
+    	for(i = 0; i < nv ; i++)
+            /* increase number_of_degree_x_in_G[i] with one. */
+            (number_of_degree_x_in_G[degree[i]])++;
 			
-    	for (j = 0; allowed_degrees[j]; j++) 
-      		if ((number_of_degree_x_in_G[allowed_degrees[j]]<minnumber[allowed_degrees[j]]) || 
-	  			(number_of_degree_x_in_G[allowed_degrees[j]]>maxnumber[allowed_degrees[j]])) 
-				return(0);
+    	for (j = 0; allowed_degrees[j]; j++)
+            if ((number_of_degree_x_in_G[allowed_degrees[j]]<minnumber[allowed_degrees[j]]) ||
+                    (number_of_degree_x_in_G[allowed_degrees[j]]>maxnumber[allowed_degrees[j]]))
+                return(0);
   	}
-	
-	return(1);											/* If the quadrangulation goes through the tests above it is accepted. */
+
+    /* If the quadrangulation goes through the tests above it is accepted. */
+    return(1);
 }
 
-static void check_for_bounding_arguments(char *arg, int *j, int *min_max)
-/************************************************************************/
-{
-	int k = (*j);
+static void check_for_bounding_arguments(char *arg, int *j, int *min_max){
+    int k = (*j);
 
-	if (arg[k+1] == '_')
-	{
-		bounds = bounds + 1;
-		k+=2;
-		*min_max = atoi(arg+k);
-		while ((arg[k] >= '0') && (arg[k] <= '9'))
-			k++;
-		k--;	
-	}
-	else
-	{
-		if (arg[k+1] == '^')
-			{
-				bounds = bounds + 2;
-				k+=2;
-				*min_max = atoi(arg+k);
-				while ((arg[k] >= '0') && (arg[k] <= '9'))
-					k++;
-				k--;	
-			}
-	}
+    if (arg[k+1] == '_'){
+        bounds = bounds + 1;
+        k+=2;
+        *min_max = atoi(arg+k);
+        while ((arg[k] >= '0') && (arg[k] <= '9'))
+            k++;
+        k--;
+    } else {
+        if (arg[k+1] == '^'){
+            bounds = bounds + 2;
+            k+=2;
+            *min_max = atoi(arg+k);
+            while ((arg[k] >= '0') && (arg[k] <= '9'))
+                k++;
+            k--;
+        }
+    }
 
-	*j = k;		
+    *j = k;		
 }
 
-static void recalculate_error_up(int k)            	/* The number k is out of the set S of allowed degrees */
-/**************************************/           	/* The (not yet minimal) upper error of each degree between 3 (the minimal possible) and k is calculated. (k-i) */
-{													/* If this upper error is smaller than before (for another k out of the set S) it is replaced. */
-	int i;
-	
-	for (i = 3; i <= k; i++)
-		if ( error_up[i] > (k-i)) 
-			error_up[i] = k-i;
+/* The number k is out of the set S of allowed degrees */
+/* The (not yet minimal) upper error of each degree between 3 (the minimal possible) and k is calculated. (k-i) */
+/* If this upper error is smaller than before (for another k out of the set S) it is replaced. */
+static void recalculate_error_up(int k){
+    int i;
+    
+    for (i = 3; i <= k; i++)
+        if ( error_up[i] > (k-i))
+            error_up[i] = k-i;
 }
 
-static void recalculate_error_down(int k)			/* The number k is out of the set S of allowed degrees */ 
-/****************************************/			/* The (not yet minimal) down error of each degree between k (greater 3) (the minimal possible) and MAXN is calculated. */  
-{													/* If this down error is smaller than before (for another k out of the set S) it is replaced. */
-	int i;											/* ATTENTION: The function makes the assumption that k is greater or equal to 3! (Another 'if' would cost to much.) */
-	
-	for(i = k; i < MAXN; i++)
-  		if (error_down[i] > (i-k))
-   			error_down[i] = i-k;
+/* The number k is out of the set S of allowed degrees */
+/* The (not yet minimal) down error of each degree between k (greater 3) (the minimal possible) and MAXN is calculated. */
+/* If this down error is smaller than before (for another k out of the set S) it is replaced. */
+/* ATTENTION: The function makes the assumption that k is greater or equal to 3! (Another 'if' would cost to much.) */
+static void recalculate_error_down(int k){
+    int i;
+    
+    for(i = k; i < MAXN; i++)
+        if (error_down[i] > (i-k))
+            error_down[i] = i-k;
 }
 
-static void recalculate_error_of_degree(int x)
-/*********************************************/
-{
-	int i;
-	int a, b;
-	
-   	for(i = 3; i < MAXN; i++)
-	{
-		a = error_up[i];
-		b = (1+x)*error_down[i];
-		
-		if (a < b)
-		{
-			up_or_down[i] = 1;
-		}
-		if (a > b)	
-		{
-			up_or_down[i] = -1;
-		}
-		if (a == b)
-		{
-			up_or_down[i] = 0;
-		}
-		
-		error_of_degree[i] = MIN(error_up[i], (1+x)*error_down[i]);
-	}
+static void recalculate_error_of_degree(int x){
+    int i;
+    int a, b;
+    
+    for(i = 3; i < MAXN; i++){
+        a = error_up[i];
+        b = (1+x)*error_down[i];
+        
+        if (a < b){
+            up_or_down[i] = 1;
+        }
+        if (a > b){
+            up_or_down[i] = -1;
+        }
+        if (a == b){
+            up_or_down[i] = 0;
+        }
+        
+        error_of_degree[i] = MIN(error_up[i], (1+x)*error_down[i]);
+    }
 }
 
 /************************** list_of_allowed_degrees ***********************/
@@ -248,176 +237,157 @@ static void recalculate_error_of_degree(int x)
 
 */
 
-static void list_of_allowed_degrees(char arg[], int *pj )
-/********************************************************/
-{  
-  	static int init = 1;
-  
-  	int i, n, j;  
-	int distance;
+static void list_of_allowed_degrees(char arg[], int *pj ){
+    static int init = 1;
+    
+    int i, n, j;
+    int distance;
 
-  if (init) 
-  	{
-    	init 				= 0;
-    	mask[0] 			= 1;
-    	error_up[0] 		= error_down[0] = error_of_degree[0] = INFTY_AD;
-		allowed_degrees[0] 	= 0;
-		buffer[0] 			= 0;
+    if (init){
+    	init = 0;
+    	mask[0] = 1;
+    	error_up[0] = error_down[0] = error_of_degree[0] = INFTY_AD;
+        allowed_degrees[0] = 0;
+        buffer[0] = 0;
 		
-    	for(i = 1; i < MAXN; i++)		
-		{
-			mask[i] = mask[i-1]<<1;
-       		error_up[i] = error_down[i] = error_of_degree[i] = INFTY_AD;		/* All upper, down and degree errors are initialized with the infinity. */
-			allowed_degrees[i] = 0;												/* At the beginning no degree is allowed. */
-			buffer[i] = 0;	
-		}
-
-  	}
-	
-  j = *pj;
- 
-  if (!isdigit(arg[j+1]))
-    {
-		fprintf(stderr,"No degrees given! Problem: %s\n",arg+j);
-		exit(0);
-	} 
-  else 
-    {  /* get the switch values of option -F */
-		j++;
-		
-		n = atoi (arg + j);
-
-		if (n >= (MAXN-1))
-			{
-				fprintf(stderr,"Maximum n is %d!\n", MAXN-1);
-				exit(0);
-			}
-			
-	 	if (n < 3)
-			{
-				fprintf(stderr,"Minimum n is 3!\n");
-				exit(0);
-			}
-	  
-      	LIST 	   		|= mask[n];
-      	maxnumber[n] 	 = MAXN; 
-	  	minnumber[n] 	 = 0;
-			
-		number_of_allowed_degrees = 0;											/* the list allowed_degrees will be initialized for each allowed degree to get the right order */ 
-		buffer[n] = 1;															/* each allowed degree is listed only one time */
-		for (i = MAXN-1;i >= 3; i--)											/* the allowed degrees will be listed in decreasing order */
-			if (buffer[i])
-				allowed_degrees[number_of_allowed_degrees++] = i;
-		
-		all_allowed_degrees_are_odd = 1;
-	
-		if (!(allowed_degrees[0]%2))
-			all_allowed_degrees_are_odd = 0;
-		
-		maxdeg = allowed_degrees[0];											/* the biggest allowed degree is allowed_degrees[0] */
-		
-		maximal_distance_between_allowed_degrees = 0; 
-		for (i = 1; i < number_of_allowed_degrees; i++)
-		{
-			distance = (allowed_degrees[i-1] - allowed_degrees[i]);	
-			if (distance > maximal_distance_between_allowed_degrees)
-				maximal_distance_between_allowed_degrees = distance;
-			if (!(allowed_degrees[i]%2))										/* if there is one even allowed degree not all degrees are odd */
-				all_allowed_degrees_are_odd = 0;		 	
-		}
-
-		for(i = number_of_allowed_degrees-1; i >= 0; i--)
-		{
-			if ((allowed_degrees[i]%2) == 0)
-			{
-				smallest_even_allowed_degree = allowed_degrees[i];
-				i = 0;
-			}
-		}
-
-		if (number_of_allowed_degrees > 2)
-		{
-			if (allowed_degrees[number_of_allowed_degrees-2] >= 6)
-				{
-					use_maximal_upper_degree_error = 1;
-					for (i = 0; i < number_of_allowed_degrees-2; i++)
-				    	{
-					    	if (allowed_degrees[i]-allowed_degrees[i+1] > 1)
-					    		use_maximal_upper_degree_error = 0;
-					    }
-				}
-
-		}
-
-		recalculate_error_up(n);  
-     	recalculate_error_down(n); 
-		recalculate_error_of_degree(x_param);  
-			
-      	while ((arg[j] >= '0') && (arg[j] <= '9'))						/* for allowed degrees greater than 9 */	
-		 {
-			j++;
-		 }
-      	j--;
-      
-	  	/* Two times the same to  be independent of the order */
-	
-		check_for_bounding_arguments(arg, &j, &minnumber[n]);
-	 	check_for_bounding_arguments(arg, &j, &maxnumber[n]);
-		
-		if ((bounds != 3) && (bounds))
-			{
-				fprintf(stderr,"You must define both bounds, i.e. either the upper and the lower bound!\n");
-				exit(0);
-			}
-				
-      	*pj = j;
+    	for(i = 1; i < MAXN; i++){
+            mask[i] = mask[i-1]<<1;
+            /* All upper, down and degree errors are initialized with the infinity. */
+            error_up[i] = error_down[i] = error_of_degree[i] = INFTY_AD;
+            /* At the beginning no degree is allowed. */
+            allowed_degrees[i] = 0;
+            buffer[i] = 0;
+        }
+    
     }
-	mx = MAX(x_param + 3, 1);
-} 
+
+    j = *pj;
+
+    if (!isdigit(arg[j+1])){
+        fprintf(stderr,"No degrees given! Problem: %s\n",arg+j);
+        exit(0);
+    } else {
+        /* get the switch values of option -F */
+        j++;
+        
+        n = atoi (arg + j);
+        
+        if (n >= (MAXN-1)){
+            fprintf(stderr,"Maximum n is %d!\n", MAXN-1);
+            exit(0);
+        }
+        
+        if (n < 3){
+            fprintf(stderr,"Minimum n is 3!\n");
+            exit(0);
+        }
+        
+        LIST |= mask[n];
+      	maxnumber[n] = MAXN;
+        minnumber[n] = 0;
+        
+        /* the list allowed_degrees will be initialized for each allowed degree to get the right order */ 
+        /* each allowed degree is listed only one time */
+        /* the allowed degrees will be listed in decreasing order */
+        number_of_allowed_degrees = 0;
+        buffer[n] = 1;
+        for (i = MAXN-1;i >= 3; i--)
+            if (buffer[i])
+                allowed_degrees[number_of_allowed_degrees++] = i;
+        
+        all_allowed_degrees_are_odd = 1;
+        
+        if (!(allowed_degrees[0]%2))
+            all_allowed_degrees_are_odd = 0;
+        
+        maxdeg = allowed_degrees[0];
+        
+        maximal_distance_between_allowed_degrees = 0;
+        for (i = 1; i < number_of_allowed_degrees; i++){
+            distance = (allowed_degrees[i-1] - allowed_degrees[i]);
+            if (distance > maximal_distance_between_allowed_degrees)
+                maximal_distance_between_allowed_degrees = distance;
+            /* if there is one even allowed degree not all degrees are odd */
+            if (!(allowed_degrees[i]%2))
+                all_allowed_degrees_are_odd = 0;
+        }
+        
+        for(i = number_of_allowed_degrees-1; i >= 0; i--){
+            if ((allowed_degrees[i]%2) == 0){
+                smallest_even_allowed_degree = allowed_degrees[i];
+                i = 0;
+            }
+        }
+        
+        if (number_of_allowed_degrees > 2){
+            if (allowed_degrees[number_of_allowed_degrees-2] >= 6){
+                use_maximal_upper_degree_error = 1;
+                for (i = 0; i < number_of_allowed_degrees-2; i++){
+                    if (allowed_degrees[i]-allowed_degrees[i+1] > 1)
+                        use_maximal_upper_degree_error = 0;
+                }
+            }
+        }
+        
+        recalculate_error_up(n);
+        recalculate_error_down(n);
+        recalculate_error_of_degree(x_param);
+        
+        while ((arg[j] >= '0') && (arg[j] <= '9')){
+            j++;
+        }
+        j--;
+        
+        /* Two times the same to  be independent of the order */
+        
+        check_for_bounding_arguments(arg, &j, &minnumber[n]);
+        check_for_bounding_arguments(arg, &j, &maxnumber[n]);
+        
+        if ((bounds != 3) && (bounds)){
+            fprintf(stderr,"You must define both bounds, i.e. either the upper and the lower bound!\n");
+            exit(0);
+        }
+        
+        *pj = j;
+    }
+    mx = MAX(x_param + 3, 1);
+}
 
 /**************************************Some Auxiliary Functions **************************************/
 
-static int calculate_faculty_of_n(int n)
-/**************************************/
-{
-	int i;
-	int result = 1;
-	
-	for (i = 2; i <= n; i++)
-		result *= i; 
-	
-	return result;
+static int calculate_faculty_of_n(int n){
+    int i;
+    int result = 1;
+    
+    for (i = 2; i <= n; i++)
+        result *= i;
+    
+    return result;
 }
 
-static int power(int x, int y)
-/****************************/
-{
-	int i;
-	int result = 1;
-
-	for (i = 0; i < y; i++)
-		result *= x;	
-	
-	return result;
+static int power(int x, int y){
+    int i;
+    int result = 1;
+    
+    for (i = 0; i < y; i++)
+        result *= x;
+    
+    return result;
 }
 
 /**************************************Pre Filter Quadrangulations************************************/
 
 /************************************* UPPER DEGRREE ERROR METHOD *********************************/
 
-static int calculate_the_upper_degree_error(void)
-/*****************************************/
-{
-	int i, upper_error_of_graph = 0;
-	int difference = 0;
-
-	
-	for (i = 0; i < nv; i++)
-	{
-		difference = (degree[i] - maxdeg);
-		if (difference > 0)
-			upper_error_of_graph += difference; 
-	}
+static int calculate_the_upper_degree_error(){
+    int i, upper_error_of_graph = 0;
+    int difference = 0;
+    
+    for (i = 0; i < nv; i++){
+        difference = (degree[i] - maxdeg);
+        if (difference > 0)
+            upper_error_of_graph += difference;
+    }
 
 /*
 	if (upper_error_of_graph == (maxnv - nv))
@@ -444,478 +414,407 @@ static int calculate_the_upper_degree_error(void)
 	}
 
 */
-	return !(upper_error_of_graph > (maxnv - nv));	
+    return !(upper_error_of_graph > (maxnv - nv));	
 }
 
 /*********************************** METHODS OF RELATION ********************************************/
 
-static int use_global_method_of_relation(void)
-/*********************************************/
-{
-	int i = 0;
-	int j = 0;
-	int fj = 0;
-	int e_up 	= 0, 
-		e_down 	= 0;
-	int up_equal_down[MAXN];
-	int number_of_equals = 0;
-	int sum = 0;
-	int tmp;
-	int j_exist = 0;
+static int use_global_method_of_relation(){
+    int i = 0;
+    int j = 0;
+    int fj = 0;
+    int e_up = 0, e_down = 0;
+    int up_equal_down[MAXN];
+    int number_of_equals = 0;
+    int sum = 0;
+    int tmp;
+    int j_exist = 0;
 
-	for (i = 0; i < nv; i++)
-	{
-		e_up 	= error_up[degree[i]]; 
-		e_down 	= error_down[degree[i]];
-
-		if (e_up < e_down)
-			sum -= e_up;
-		if (e_up > e_down)
-			sum += 2*e_down;
-		if (e_up == e_down)		   
-		{
-			if (e_up)
-				up_equal_down[j++] = e_up;		
-		}
-	}
-
-
-	number_of_equals = j;
-
-	if (number_of_equals == 0)
-		return sum;
-
-	if (number_of_equals <= 3)
-	{
-		fj = calculate_faculty_of_n(j);
-
-		for (j = 0; j <= fj + 1; j++)
-		{
-			tmp = sum;
-			
-			for (i = 0; i < number_of_equals; i++)
-			{
-				if (power(2,i) & j)
-					sum -= up_equal_down[i];
-				else
-					sum += 2 * up_equal_down[i];	
-			}
-			
-			if (!sum)
-				j_exist = 1;
-			
-			sum = tmp;	
-		}
-
-		if (!j_exist)
-			return 1;
-	}
-	
-	return 0;
+    for (i = 0; i < nv; i++){
+        e_up = error_up[degree[i]];
+        e_down = error_down[degree[i]];
+        
+        if (e_up < e_down)
+            sum -= e_up;
+        if (e_up > e_down)
+            sum += 2*e_down;
+        if (e_up == e_down){
+            if (e_up)
+                up_equal_down[j++] = e_up;
+        }
+    }
+    
+    number_of_equals = j;
+    
+    if (number_of_equals == 0)
+        return sum;
+    
+    if (number_of_equals <= 3){
+        fj = calculate_faculty_of_n(j);
+        
+        for (j = 0; j <= fj + 1; j++){
+            tmp = sum;
+            
+            for (i = 0; i < number_of_equals; i++){
+                if (power(2,i) & j)
+                    sum -= up_equal_down[i];
+                else
+                    sum += 2 * up_equal_down[i];
+            }
+            
+            if (!sum)
+                j_exist = 1;
+            
+            sum = tmp;
+        }
+        
+        if (!j_exist)
+            return 1;
+    }
+    
+    return 0;
 }
 
-static int use_local_method_of_relation(void)
-/********************************************/
-{
-	int i		= 0;
-	int e_up	= 0;
-	int e_down	= 0;
-	int z		= 0;
-	
-	int degree_of_neighbour 	= 0;
-	int up_error_of_neighbour 	= 0;
-	int down_error_of_neighbour = 0;
-
-	int whole_error_of_neighbours = 0;
-
-	EDGE *run;
-	EDGE *start;
-	EDGE *last;
-
-	for (i = 0; i < nv; i++)
-	{
-		start   = firstedge[i];
-	    last    = firstedge[i];
-		
-		e_up    = error_up[degree[i]];
-		e_down  = error_down[degree[i]];
-
-		z = e_up - e_down;
-		
-		if (z < 0)
-		{
-			whole_error_of_neighbours = 0;
-			run = start;
-			do
-				{
-					degree_of_neighbour 	= degree[run->end];		
-					up_error_of_neighbour 	= error_up[degree_of_neighbour];
-					down_error_of_neighbour = error_down[degree_of_neighbour];
-					 
-					if (down_error_of_neighbour > 0)
-					{
-						if (down_error_of_neighbour <= up_error_of_neighbour)
-						{
-							whole_error_of_neighbours += down_error_of_neighbour;
-						}
-					}
-
-         			run = run->next;
-
-   				} while (run != last);
-
-        	if (whole_error_of_neighbours < e_up)
-			{
-            	return 1;
-			}
-		}
-		
-		if (z > 0)
-		{
-			whole_error_of_neighbours = 0;
-			run = start;
-			do
-				{
-					degree_of_neighbour     = degree[run->end];
-					up_error_of_neighbour   = error_up[degree_of_neighbour];
-					down_error_of_neighbour = error_down[degree_of_neighbour];
-					
-					if (up_error_of_neighbour > 0)
-					{
-						if (up_error_of_neighbour <= down_error_of_neighbour)
-						{
-							whole_error_of_neighbours += up_error_of_neighbour;
-						}
-					}
-								
-					run = run->next;
-					
-				} while (run != last);
-
-			if (whole_error_of_neighbours < 2*e_down)
-			{
-				return 1;	
-			}
-			
-		}
-		
-		if (z == 0)
-		{
-			whole_error_of_neighbours = 0;
-			run = start;
-			do
-				{
-					degree_of_neighbour     = degree[run->end];
-			        up_error_of_neighbour   = error_up[degree_of_neighbour];
-			        down_error_of_neighbour = error_down[degree_of_neighbour];
-
-					if (up_error_of_neighbour > 0)
-					{
-						if (up_error_of_neighbour <= down_error_of_neighbour)
-						{
-							whole_error_of_neighbours += up_error_of_neighbour;
-						}
-					}
-
-					run = run->next;
-				} while (run != last);
-
-			if (whole_error_of_neighbours < 2*e_down)
-				{
-					whole_error_of_neighbours = 0;
-					run = start;
-					do
-						{
-							degree_of_neighbour     = degree[run->end];
-		            		up_error_of_neighbour   = error_up[degree_of_neighbour];
-		            		down_error_of_neighbour = error_down[degree_of_neighbour];
-			
-								if (down_error_of_neighbour > 0)
-									{
-										if (down_error_of_neighbour <= up_error_of_neighbour)
-										{
-											whole_error_of_neighbours += down_error_of_neighbour;
-										}
-									}
-								
-							run = run->next;		
-						} while (run != last);
-
-					if (whole_error_of_neighbours < e_up)
-					{
-				   		return 1;
-					}
-				}
-		}
-	}
-	return 0;
+static int use_local_method_of_relation(){
+    int i = 0;
+    int e_up = 0;
+    int e_down = 0;
+    int z = 0;
+    
+    int degree_of_neighbour = 0;
+    int up_error_of_neighbour = 0;
+    int down_error_of_neighbour = 0;
+    
+    int whole_error_of_neighbours = 0;
+    
+    EDGE *run;
+    EDGE *start;
+    EDGE *last;
+    
+    for (i = 0; i < nv; i++){
+        start = firstedge[i];
+        last = firstedge[i];
+        
+        e_up = error_up[degree[i]];
+        e_down = error_down[degree[i]];
+        
+        z = e_up - e_down;
+        
+        if (z < 0){
+            whole_error_of_neighbours = 0;
+            run = start;
+            do {
+                degree_of_neighbour = degree[run->end];
+                up_error_of_neighbour = error_up[degree_of_neighbour];
+                down_error_of_neighbour = error_down[degree_of_neighbour];
+                
+                if (down_error_of_neighbour > 0){
+                    if (down_error_of_neighbour <= up_error_of_neighbour){
+                        whole_error_of_neighbours += down_error_of_neighbour;
+                    }
+                }
+                
+                run = run->next;
+            
+            } while (run != last);
+            
+            if (whole_error_of_neighbours < e_up){
+                return 1;
+            }
+        }
+        
+        if (z > 0){
+            whole_error_of_neighbours = 0;
+            run = start;
+            do {
+                degree_of_neighbour = degree[run->end];
+                up_error_of_neighbour = error_up[degree_of_neighbour];
+                down_error_of_neighbour = error_down[degree_of_neighbour];
+                
+                if (up_error_of_neighbour > 0){
+                    if (up_error_of_neighbour <= down_error_of_neighbour){
+                        whole_error_of_neighbours += up_error_of_neighbour;
+                    }
+                }
+                
+                run = run->next;
+            
+            } while (run != last);
+            
+            if (whole_error_of_neighbours < 2*e_down){
+                return 1;
+            }
+        
+        }
+        
+        if (z == 0){
+            whole_error_of_neighbours = 0;
+            run = start;
+            do {
+                degree_of_neighbour = degree[run->end];
+                up_error_of_neighbour = error_up[degree_of_neighbour];
+                down_error_of_neighbour = error_down[degree_of_neighbour];
+                
+                if (up_error_of_neighbour > 0){
+                    if (up_error_of_neighbour <= down_error_of_neighbour){
+                        whole_error_of_neighbours += up_error_of_neighbour;
+                    }
+                }
+                
+                run = run->next;
+            } while (run != last);
+            
+            if (whole_error_of_neighbours < 2*e_down){
+                whole_error_of_neighbours = 0;
+                run = start;
+                do {
+                    degree_of_neighbour = degree[run->end];
+                    up_error_of_neighbour = error_up[degree_of_neighbour];
+                    down_error_of_neighbour = error_down[degree_of_neighbour];
+                    
+                    if (down_error_of_neighbour > 0){
+                        if (down_error_of_neighbour <= up_error_of_neighbour){
+                            whole_error_of_neighbours += down_error_of_neighbour;
+                        }
+                    }
+                    
+                    run = run->next;
+                } while (run != last);
+                
+                if (whole_error_of_neighbours < e_up) {
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
 }
 
 /*************************************DEGREE ERROR METHOD ***************************/
 
-static int calculate_the_graph_error(void)
-/******************************************/
-{
-	int i, error_of_graph = 0;
-
-	for (i = 0; i < nv; i++)
-	{ 
-		if (up_or_down[degree[i]])
-		{
-			if (up_or_down[degree[i]] > 0)
-				number_of_up_errors += error_of_degree[degree[i]];
-			else
-				number_of_down_errors += error_of_degree[degree[i]];
-		}
-		else
-		{
-			number_of_down_equal_up_errors += error_of_degree[degree[i]];
-		}
-		error_of_graph += error_of_degree[degree[i]];
-	}
-	
-	return error_of_graph;	 
+static int calculate_the_graph_error(){
+    int i, error_of_graph = 0;
+    
+    for (i = 0; i < nv; i++){
+        if (up_or_down[degree[i]]){
+            if (up_or_down[degree[i]] > 0)
+                number_of_up_errors += error_of_degree[degree[i]];
+            else
+                number_of_down_errors += error_of_degree[degree[i]];
+        } else {
+            number_of_down_equal_up_errors += error_of_degree[degree[i]];
+        }
+        error_of_graph += error_of_degree[degree[i]];
+    }
+    
+    return error_of_graph;	 
 }
 
-static int calculate_the_degree_error(void)
-/******************************************/
-{
-	int error_of_graph = calculate_the_graph_error();
-	int number_of_remaining_steps = maxnv - nv;
-
-	if (error_of_graph == (3 * number_of_remaining_steps))
-	{
+static int calculate_the_degree_error(){
+    int error_of_graph = calculate_the_graph_error();
+    int number_of_remaining_steps = maxnv - nv;
+    
+    if (error_of_graph == (3 * number_of_remaining_steps)){
 #ifdef USE_LOCAL_METHOD_OF_RELATION
-		if (use_local_method_of_relation())
-			return 0;	
+        if (use_local_method_of_relation())
+            return 0;	
 #endif				
-#ifdef USE_GLOBAL_METHOD_OF_RELATION		
-		if (use_global_method_of_relation())
-		return 0;
+#ifdef USE_GLOBAL_METHOD_OF_RELATION
+        if (use_global_method_of_relation())
+            return 0;
 #endif
-		return 1;
-	}
-
-	return !(error_of_graph > (mx * number_of_remaining_steps));
+        return 1;
+    }
+    
+    return !(error_of_graph > (mx * number_of_remaining_steps));
 }
 
-/****************************************************** METHOD OF MAXIMAL UPPER DEGREE ERROR ********************************/
+/************** METHOD OF MAXIMAL UPPER DEGREE ERROR **********/
 
-static int calculate_the_maximal_upper_degree_error(void)
-/********************************************************/
-{
-	int i = 0;
-	int j = 0;
-	int k = 0;
-	int ordered_degrees[MAXN];						/* list of ordered degrees of the actual quadrangulation */
-	int diff = 0;
-	static int init = 1;
-	int start 	= 0;
-	int end 	= 0;
-	int number_of_ops_for_down_correction = 0;
+static int calculate_the_maximal_upper_degree_error(){
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int ordered_degrees[MAXN]; /* list of ordered degrees of the actual quadrangulation */
+    int diff = 0;
+    static int init = 1;
+    int start = 0;
+    int end = 0;
+    int number_of_ops_for_down_correction = 0;
+    
+    int min_number_of_needed_operations = 0;
+    
+    special_case_for_mude = ((maxnv % 2) && (maxdeg % 2) && (smallest_even_allowed_degree != 0));
 
-	int min_number_of_needed_operations = 0;
-
-	special_case_for_mude = ((maxnv % 2) && (maxdeg % 2) && (smallest_even_allowed_degree != 0));
-
-	/******************** BEGIN: some inits for calculate_the_maximal_upper_degree_error(). *****************************/
-
-	if (init)
-	{
-		for (i = 0; i < MAXN; i++)
-			b[i] = 0;	
-		
-		if (special_case_for_mude) 
-			b[1] = floor(((float)(maxnv-8-(smallest_even_allowed_degree-3)))/((float)(maxdeg-3)));
-		else	
-			b[1] = floor(((float)(maxnv-8))/((float)(maxdeg-3)));
-		
-		for (k = 2; k < number_of_allowed_degrees; k++)
-		{
-			b[k] = MIN(maxnv, floor(((float)(maxnv-8))/((float)(allowed_degrees[k-1]-3)))); 
-		}
-		b[number_of_allowed_degrees] = maxnv;			
-
-		init = 0;
-	}
-	
-	/******************** END: some inits for calculate_the_maximal_upper_degree_error(). *****************************/
-
-	for(i = 0; i < maxnv; i++)
-		{
-			buffer[i] = 0;
-			ordered_degrees[i] = 0;
-		}
-
-	for (i = 0; i < nv; i++)
-		buffer[degree[i]]++;
-
-	j = 0;
-	for (i = maxnv-1; i > 0; i--)
-		if (buffer[i] != 0)
-			{
-				ordered_degrees[j++]=i;
-				buffer[i]--;
-				i++;
-			}
-	
-	for (k = 0; k < number_of_allowed_degrees; k++)
-	{
-		start 	= b[k];
-		end 	= MIN(b[k+1],nv-8);
-		
-		for (i = start; i < end; i++)
-		{
-			if (i < maxnv-8)
-				diff = ordered_degrees[i] - allowed_degrees[k];	
-			else
-				diff = ordered_degrees[i] - 3;
-		
-			if (diff > 0)
-				number_of_ops_for_down_correction += diff;	
-		}
-	}
-	
-	min_number_of_needed_operations = number_of_ops_for_down_correction;
-
-	return !(min_number_of_needed_operations > (maxnv - nv));
+    /******************** BEGIN: some inits for calculate_the_maximal_upper_degree_error(). *****************************/
+    
+    if (init){
+        for (i = 0; i < MAXN; i++)
+            b[i] = 0;
+        
+        if (special_case_for_mude)
+            b[1] = floor(((float)(maxnv-8-(smallest_even_allowed_degree-3)))/((float)(maxdeg-3)));
+        else
+            b[1] = floor(((float)(maxnv-8))/((float)(maxdeg-3)));
+        
+        for (k = 2; k < number_of_allowed_degrees; k++){
+            b[k] = MIN(maxnv, floor(((float)(maxnv-8))/((float)(allowed_degrees[k-1]-3))));
+        }
+        b[number_of_allowed_degrees] = maxnv;
+        
+        init = 0;
+    }
+    
+    /******************** END: some inits for calculate_the_maximal_upper_degree_error(). *****************************/
+    
+    for(i = 0; i < maxnv; i++){
+        buffer[i] = 0;
+        ordered_degrees[i] = 0;
+    }
+    
+    for (i = 0; i < nv; i++)
+        buffer[degree[i]]++;
+    
+    j = 0;
+    for (i = maxnv-1; i > 0; i--)
+        if (buffer[i] != 0){
+            ordered_degrees[j++]=i;
+            buffer[i]--;
+            i++;
+        }
+    
+    for (k = 0; k < number_of_allowed_degrees; k++){
+        start = b[k];
+        end = MIN(b[k+1],nv-8);
+        
+        for (i = start; i < end; i++){
+            if (i < maxnv-8)
+                diff = ordered_degrees[i] - allowed_degrees[k];
+            else
+                diff = ordered_degrees[i] - 3;
+            
+            if (diff > 0)
+                number_of_ops_for_down_correction += diff;
+        }
+    }
+    
+    min_number_of_needed_operations = number_of_ops_for_down_correction;
+    
+    return !(min_number_of_needed_operations > (maxnv - nv));
 }
 
-/********************************************************** FILTER FOR QUADRANGULATIONS WITH TWO ALLOWED DEGREES ***********************************/
+/************* FILTER FOR QUADRANGULATIONS WITH TWO ALLOWED DEGREES ************/
 
-static int a_x(int n)
-/*******************/
-{
-	if (maxdeg == 4)
-		return (n-8);
-	else
-		return (floor( ((float)(n-8)) / ((float)(maxdeg-3)) ));	
+static int a_x(int n){
+    if (maxdeg == 4)
+        return (n-8);
+    else
+        return (floor( ((float)(n-8)) / ((float)(maxdeg-3)) ));	
 }
 
-static int euler_test(void)
-/***************************/
-{
-	float test = (((float)(maxnv-8))/((float)(maxdeg-3)));
-
-	if ((test - (int)test) == 0)
-		return 1;
-	else
-		return 0;		
+static int euler_test(){
+    float test = (((float)(maxnv-8))/((float)(maxdeg-3)));
+    
+    if ((test - (int)test) == 0)
+        return 1;
+    else
+        return 0;		
 }
 
-static int calculate_number_of_needed_operations(void)
-/*****************************************************/
-{
-	int m;
-	int sum = 0;
-	int i = 0;
-	int j = 0;
-	int s_2 = 0;
-	int ordered_degrees[MAXN];						/* list of ordered degrees of the actual quadrangulation */
-	int can_use_better_cases = 1;
-	int diff = 0;
-
-	int min_number_of_needed_operations = 0;
-
-	m = a_x(maxnv);
-
-	for(i = 0; i < maxnv; i++)
-		{
-			buffer[i] = 0;
-			ordered_degrees[i] = 0;
-		}
-
-	for (i = 0; i < nv; i++)
-		buffer[degree[i]]++;
-
-	j = 0;
-	for (i = maxnv-1; i > 0; i--)
-		if (buffer[i] != 0)
-			{
-				ordered_degrees[j++]=i;
-				buffer[i]--;
-				i++;
-			}
-
-	for (i = 0; i < m; i++)
-	{
-		if (i < nv)
-			diff = maxdeg - ordered_degrees[i];
-		else
-			diff = maxdeg - 3;
-				
-		sum += fabs(diff);
-		if (diff < 0)
-			can_use_better_cases = 0;
-	}
-	
-	for (i = m; i < nv; i++)
-	{
-		s_2 += (ordered_degrees[i] - 3);
-	}
-	
-	if (2 * s_2 < sum)
-	{
-		if (can_use_better_cases)
-			min_number_of_needed_operations = ceil(0.5 * sum);
-		else	
-			min_number_of_needed_operations = ceil((1.0/3.0)*(sum + s_2));
-	}
-	else
-		min_number_of_needed_operations = s_2;
-	
-	return min_number_of_needed_operations;
+static int calculate_number_of_needed_operations(){
+    int m;
+    int sum = 0;
+    int i = 0;
+    int j = 0;
+    int s_2 = 0;
+    int ordered_degrees[MAXN]; /* list of ordered degrees of the actual quadrangulation */
+    int can_use_better_cases = 1;
+    int diff = 0;
+    
+    int min_number_of_needed_operations = 0;
+    
+    m = a_x(maxnv);
+    
+    for(i = 0; i < maxnv; i++){
+        buffer[i] = 0;
+        ordered_degrees[i] = 0;
+    }
+    
+    for (i = 0; i < nv; i++)
+        buffer[degree[i]]++;
+    
+    j = 0;
+    for (i = maxnv-1; i > 0; i--)
+        if (buffer[i] != 0){
+            ordered_degrees[j++]=i;
+            buffer[i]--;
+            i++;
+        }
+    
+    for (i = 0; i < m; i++){
+        if (i < nv)
+            diff = maxdeg - ordered_degrees[i];
+        else
+            diff = maxdeg - 3;
+        
+        sum += fabs(diff);
+        if (diff < 0)
+            can_use_better_cases = 0;
+    }
+    
+    for (i = m; i < nv; i++){
+        s_2 += (ordered_degrees[i] - 3);
+    }
+    
+    if (2 * s_2 < sum){
+        if (can_use_better_cases)
+            min_number_of_needed_operations = ceil(0.5 * sum);
+        else
+            min_number_of_needed_operations = ceil((1.0/3.0)*(sum + s_2));
+    } else
+        min_number_of_needed_operations = s_2;
+    
+    return min_number_of_needed_operations;
 }
 
-static int special_quads_pre_filter(void)
-/***************************************/
-{
-	int min_number_of_needed_operations;
-
-	if (euler_test())
-		min_number_of_needed_operations = calculate_number_of_needed_operations();
-	else
-		return 0;
-	
-	return !(min_number_of_needed_operations > (maxnv - nv));
+static int special_quads_pre_filter(){
+    int min_number_of_needed_operations;
+    
+    if (euler_test())
+        min_number_of_needed_operations = calculate_number_of_needed_operations();
+    else
+        return 0;
+    
+    return !(min_number_of_needed_operations > (maxnv - nv));
 }
 
 /*************************************************** ALL METHODS TOGETHER *****************************************/
 
-static int pre_filter_quad(void)
-/*******************************/
-{
-	no_quad_exist = ((!smallest_even_allowed_degree) && (maxnv%2));
-	
-	if (no_quad_exist)
-       	return 0;
-	else
-	{
-		if (maximal_distance_between_allowed_degrees == 1)
-			return calculate_the_upper_degree_error();
-		else
-		{
-			if (number_of_allowed_degrees == 2)
-			{
-				if (euler_test())
-				{
-					if (maxdeg == 5)
-						return calculate_the_degree_error();
-					else	
-						return calculate_the_maximal_upper_degree_error();
-				}
-				else
-					return 0;
-			}
-			else
-			{
-				if (use_maximal_upper_degree_error)
-					return calculate_the_maximal_upper_degree_error();
-				else	
-					return calculate_the_degree_error();
-			}
-		}
-	}
-
-	return 1;
+static int pre_filter_quad(){
+    no_quad_exist = ((!smallest_even_allowed_degree) && (maxnv%2));
+    
+    if (no_quad_exist)
+        return 0;
+    else {
+        if (maximal_distance_between_allowed_degrees == 1)
+            return calculate_the_upper_degree_error();
+        else {
+            if (number_of_allowed_degrees == 2) {
+                if (euler_test()) {
+                    if (maxdeg == 5)
+                        return calculate_the_degree_error();
+                    else
+                        return calculate_the_maximal_upper_degree_error();
+                } else
+                    return 0;
+            } else {
+                if (use_maximal_upper_degree_error)
+                    return calculate_the_maximal_upper_degree_error();
+                else
+                    return calculate_the_degree_error();
+            }
+        }
+    }
+    
+    return 1;
 }
