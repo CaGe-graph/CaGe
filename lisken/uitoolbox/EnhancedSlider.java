@@ -154,6 +154,11 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         }
         return null;
     }
+    
+    @Override
+    public Dimension getMinimumSize(){
+        return getPreferredSize();
+    }
 
     public JSlider slider() {
         return slider;
