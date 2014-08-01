@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
@@ -56,6 +57,7 @@ public class FullgenPanel extends GeneratorPanel {
     private JCheckBox spiralStats;
     private JCheckBox symmStats;
     private JCheckBox atlasOrder;
+    private JCheckBox useBuckygen;
     private JToggleButton symmetryFilterButton;
     
     private SymmetriesDialog symmetriesDialog = new SymmetriesDialog(null, "Fullerenes - symmetry filter", true);
@@ -233,6 +235,10 @@ public class FullgenPanel extends GeneratorPanel {
         atlasOrder = new JCheckBox("Atlas order");
         atlasOrder.setMnemonic(KeyEvent.VK_A);
         
+        //output graphs in atlas order
+        useBuckygen = new JCheckBox("Use buckygen when possible");
+        useBuckygen.setMnemonic(KeyEvent.VK_B);
+        
         //warning to show when atlas order is chosen
         JTextArea warningText = new JTextArea("Warning: when fullerenes need to be output in Atlas order, " +
                                             "the generator will first generate all fullerenes and then " +
@@ -299,6 +305,10 @@ public class FullgenPanel extends GeneratorPanel {
         fullerenesExtrasPanel.add(symmStats, gbc);
         gbc.gridy++;
         fullerenesExtrasPanel.add(atlasOrder, gbc);
+        if(CaGe.expertMode){
+            gbc.gridy++;
+            fullerenesExtrasPanel.add(useBuckygen, gbc);
+        }
         gbc.gridx = 3;
         gbc.gridheight = gbc.gridy + 1;
         gbc.gridy = 0;
@@ -338,7 +348,9 @@ public class FullgenPanel extends GeneratorPanel {
         int maxFacesize = dual.isSelected() ? 3 : 6;
 
         ElementRule rule = new ValencyElementRule("3:C Si N S I");
-        if(spiralStats.isSelected() ||
+        if(!CaGe.expertMode ||
+                !useBuckygen.isSelected() ||
+                spiralStats.isSelected() ||
                 symmStats.isSelected() ||
                 !symmetriesDialog.areAllSymmetriesSelected() ||
                 atlasOrder.isSelected()){
