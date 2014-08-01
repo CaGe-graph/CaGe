@@ -48,8 +48,8 @@ public class FullgenPanel extends GeneratorPanel {
     private static final int DEFAULT_ATOMS = 60;
     
     private boolean embedderIsConstant = false;
-    private EnhancedSlider minAtomsSlider = new EnhancedSlider();
-    private EnhancedSlider maxAtomsSlider = new EnhancedSlider();
+    private final EnhancedSlider minAtomsSlider = new EnhancedSlider();
+    private final EnhancedSlider maxAtomsSlider = new EnhancedSlider();
     private JCheckBox minEqMax;
     private JCheckBox ipr;
     private JCheckBox dual;
@@ -60,7 +60,7 @@ public class FullgenPanel extends GeneratorPanel {
     
     private SymmetriesDialog symmetriesDialog = new SymmetriesDialog(null, "Fullerenes - symmetry filter", true);
     
-    private ChangeListener sliderListener = new ChangeListener() {
+    private final ChangeListener sliderListener = new ChangeListener() {
         @Override
         public void stateChanged(ChangeEvent e) {
             getNextButton().setEnabled(isValidConfiguration());
