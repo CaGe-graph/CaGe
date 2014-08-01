@@ -144,7 +144,7 @@ static int ad_filter(int nbtot, int nbop, int doflip){
             if ((number_of_degree_x_in_G[allowed_degrees[j]]<minnumber[allowed_degrees[j]]) ||
                     (number_of_degree_x_in_G[allowed_degrees[j]]>maxnumber[allowed_degrees[j]]))
                 return(0);
-  	}
+    }
 
     /* If the quadrangulation goes through the tests above it is accepted. */
     return(1);
