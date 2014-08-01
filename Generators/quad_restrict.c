@@ -344,7 +344,7 @@ static void list_of_allowed_degrees(char arg[], int *pj ){
         check_for_bounding_arguments(arg, &j, &maxnumber[n]);
         
         if ((bounds != 3) && (bounds)){
-            fprintf(stderr,"You must define both bounds, i.e. either the upper and the lower bound!\n");
+            fprintf(stderr,"You must define both bounds, i.e. both the upper and the lower bound!\n");
             exit(0);
         }
         
