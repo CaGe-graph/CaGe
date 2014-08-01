@@ -183,8 +183,11 @@ do
      then choice=""
 	  echo ""
           echo "   Enter a list of directories to start searching from (space-separated)."
-	  echo "   An empty response cancels the search, '/System' is a good place to "
-          echo "   start on Mac. On Linux you may use '/' to start a full search."
+	  echo "   An empty response cancels the search. You may use '/' to start a full"
+	  echo "   search. Some good start points are:"
+	  echo ""
+	  echo "        /usr/lib/jvm        (Linux)"
+	  echo "        /System /Libraries  (Mac OS X)"
 	  echo ""
 	  echo $esc "   start points:  \c"
 	  read $with_completion points
