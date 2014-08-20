@@ -780,10 +780,7 @@ public class ResultPanel extends JPanel {
 
     void saveFoldnet() {
         String oldFilename = foldnetDialog.getFilename();
-        foldnetButton.getModel().setPressed(true);
         foldnetDialog.setVisible(true);
-        foldnetButton.getModel().setArmed(false);
-        foldnetButton.getModel().setPressed(false);
         if (foldnetDialog.getSuccess()) {
             FoldnetThread foldnetThread = CaGe.foldnetThread();
             synchronized (foldnetThread) {
