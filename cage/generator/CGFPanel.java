@@ -109,8 +109,8 @@ public class CGFPanel extends GeneratorPanel {
         MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
         final EnhancedSlider facesSlider = new EnhancedSlider();
         Hashtable<Integer, JLabel> facesLabels = facesSlider.createStandardLabels(5, 10);
-        facesLabels.put(new Integer(3), new JLabel("3"));
-        facesLabels.put(new Integer(6), new JLabel("6"));
+        facesLabels.put(3, new JLabel("3"));
+        facesLabels.put(6, new JLabel("6"));
         JLabel faceTypeLabel = new JLabel(dual ? "Degrees" : "Face Type");
         faceTypeLabel.setLabelFor(facesSlider.slider());
         faceTypeLabel.setDisplayedMnemonic(KeyEvent.VK_F);
