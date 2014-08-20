@@ -251,7 +251,7 @@ public class CGFPanel extends GeneratorPanel {
                     continue;
                 }
                 int size = sizeOption.getSize();
-                if (size <= 6 && !sizeOption.isLimited()) {
+                if (size <= 6) {
                     allowedFaces[size-3] = true;
                     limitedFaces[size-3] = sizeOption.isLimited();
                 }
