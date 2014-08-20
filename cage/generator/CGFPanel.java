@@ -221,6 +221,9 @@ public class CGFPanel extends GeneratorPanel {
             Iterator it = sizeOptionsMap.values().iterator();
             while (it.hasNext()) {
                 SizeOption sizeOption = (SizeOption) it.next();
+                if (!sizeOption.isActive()) {
+                    continue;
+                }
                 if (sizeOption.getSize()<10) {
                     nrOfFacesSmallerThan10++;
                 }
@@ -244,6 +247,9 @@ public class CGFPanel extends GeneratorPanel {
             Iterator it = sizeOptionsMap.values().iterator();
             while (it.hasNext()) {
                 SizeOption sizeOption = (SizeOption) it.next();
+                if (!sizeOption.isActive()) {
+                    continue;
+                }
                 int size = sizeOption.getSize();
                 if (size <= 6 && !sizeOption.isLimited()) {
                     allowedFaces[size-3] = true;
