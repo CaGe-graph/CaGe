@@ -218,9 +218,7 @@ public class CGFPanel extends GeneratorPanel {
 
         int nrOfFacesSmallerThan10 = 0;
         {
-            Iterator it = sizeOptionsMap.values().iterator();
-            while (it.hasNext()) {
-                SizeOption sizeOption = (SizeOption) it.next();
+            for (SizeOption sizeOption : sizeOptionsMap.values()) {
                 if (!sizeOption.isActive()) {
                     continue;
                 }
@@ -244,9 +242,7 @@ public class CGFPanel extends GeneratorPanel {
         if(usePlantri_md6){
             boolean allowedFaces[] = {false, false, false, false}; //3, 4, 5, 6
             boolean limitedFaces[] = {false, false, false, false}; //3, 4, 5, 6
-            Iterator it = sizeOptionsMap.values().iterator();
-            while (it.hasNext()) {
-                SizeOption sizeOption = (SizeOption) it.next();
+            for (SizeOption sizeOption : sizeOptionsMap.values()) {
                 if (!sizeOption.isActive()) {
                     continue;
                 }
@@ -326,9 +322,7 @@ public class CGFPanel extends GeneratorPanel {
                 fileV.add("s" + min);
             }
 
-            Iterator it = sizeOptionsMap.values().iterator();
-            while (it.hasNext()) {
-                SizeOption sizeOption = (SizeOption) it.next();
+            for (SizeOption sizeOption : sizeOptionsMap.values()) {
                 if (!sizeOption.isActive()) {
                     continue;
                 }
@@ -375,11 +369,9 @@ public class CGFPanel extends GeneratorPanel {
         } else {
             int vertices = dual ? minAtomsSlider.getValue() : minAtomsSlider.getValue()/2+2;
             generator = new String[1][dual ? 3 : 4];
-            Iterator it = sizeOptionsMap.values().iterator();
             genV.add("-");
             fileV.add("plantri_ad_");
-            while (it.hasNext()) {
-                SizeOption sizeOption = (SizeOption) it.next();
+            for (SizeOption sizeOption : sizeOptionsMap.values()) {
                 if (!sizeOption.isActive()) {
                     continue;
                 }
