@@ -55,6 +55,7 @@ fi
 # inconsistencies.
 
 LANG=POSIX; export LANG
+LC_NUMERIC=POSIX; export LC_NUMERIC
 
 
 # Construct a class path appropriate for the Java version
