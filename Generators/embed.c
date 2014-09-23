@@ -2388,6 +2388,66 @@ best_outer_face_tubular(GRAPH *G)
 }
 
 
+EDGE *
+best_outer_face_configured(GRAPH *G, int criteria[])
+{
+  EDGE **freps;
+  EDGE *res;
+  int i, j, best_i, better;
+  
+  int current[3];
+  int best[3];
+  
+  int factor[3];
+  int index[3];
+  
+  for (i = 0; i < 3; i++){
+      if(criteria[i] < 0){
+          factor[i] = -1;
+      } else {
+          factor[i] = 1;
+      }
+      index[i] = criteria[i]*factor[i] - 1;
+  }
+
+  freps = face_reps(G);
+  if (freps == NULL)
+    return NULL;
+
+  best_i = 0;
+  current[0] = degree_of_face(freps[0]);
+  current[1] = symmetry_at_face(G, freps[0]);
+  current[2] = maxdepth_breadth_first(G, freps[0], 1);
+  for (i = 0; i < 3; i++){
+      best[i] = factor[i]*current[index[i]];
+  }
+
+  for (i = 1; freps[i]; ++i) {
+    current[0] = degree_of_face(freps[i]);
+    current[1] = symmetry_at_face(G, freps[i]);
+    current[2] = maxdepth_breadth_first(G, freps[i], 1);
+    
+    j = 0;
+    while (j < 3 && factor[j]*current[index[j]] == best[j]){
+        j++;
+    }
+    
+    better = (j < 3) && (best[j] < factor[j]*current[index[j]]);
+
+    if (better) {
+        best_i = i;
+        for (j = 0; j < 3; j++){
+            best[j] = factor[j]*current[index[j]];
+        }
+    }
+  }
+
+  res = freps[best_i];
+  free(freps);
+  return res;
+}
+
+
 int
 init_positions(GRAPH *G, POSITIONING *P, EDGE *start, int at_face,
 	       int dim, int tubular, int winding)
@@ -2817,6 +2877,19 @@ usage(void)
     "              t     tubular",
     "  -f x,y,z    multiply default number of iteration steps",
     "              in phases 1,2,3 by factors x,y,z, respectively",
+    "  -o order    for dimension 2 only: use the order for the",
+    "              selection of the outer face. The order is a string",
+    "              of 3 characters specifying the criteria and the",
+    "              order of these criteria for the selection of the",
+    "              outer face. The possible characters are",
+    "              s     minimize the size of the face",
+    "              S     maximize the size of the face",
+    "              y     minimize the rotational symmetry through the face",
+    "              Y     maximize the rotational symmetry through the face",
+    "              d     minimize the breadth-first depth from the face",
+    "              D     maximize the breadth-first depth from the face",
+    "              This defaults to DSY if the initial embedding is",
+    "              tubular and SYd otherwise.",
     "  -p c        for dimension 2 only: use force model c in",
     "              second phase, where c is one of",
     "              a     triangle areas",
@@ -2905,7 +2978,7 @@ main(int argc, char *argv[])
   int *v_list_sub_1_0;
   int *v_list_aug_1_1;
   int *v_list_in_1_1;
-  int c, max_gap, n, steps;
+  int c, max_gap, n, steps, i;
 
   int     augment            = 1;
   int     dimension          = 2;
@@ -2925,13 +2998,15 @@ main(int argc, char *argv[])
   int     start              = 0;
   int     subdivide          = 1;
   int     verbose            = 0;
+  
+  int     outer_face_selection[3] = {0, 0, 0};
 
   double  c_x, c_y;
   int     contained_option   = 0;
 
   /* --- Parse the command line --- */
 
-  while ((c = getopt(argc, argv, "ASa:b:c:d:f:hi:p:rs:tvw:x:z")) != EOF) {
+  while ((c = getopt(argc, argv, "ASa:b:c:d:f:hi:o:p:rs:tvw:x:z")) != EOF) {
     switch (c) {
     case 'A':
       output_augmented = 1;
@@ -2982,13 +3057,46 @@ main(int argc, char *argv[])
       case 'k': /* keep original */
       case 'p':	/* planar */
       case 's':	/* spherical */
+        break;
       case 't':	/* tubular */
+        if(!outer_face_selection[0]){
+            outer_face_selection[0] = 3;
+            outer_face_selection[1] = 1;
+            outer_face_selection[2] = 2;
+        }
 	break;
       default:
 	usage();
 	return 1;
       }
       break;
+    case 'o':
+        for(i = 0; i < 3; i++){
+            switch (optarg[i]) {
+                case 's':
+                    outer_face_selection[i] = -1;
+                    break;
+                case 'S':
+                    outer_face_selection[i] = 1;
+                    break;
+                case 'y':
+                    outer_face_selection[i] = -2;
+                    break;
+                case 'Y':
+                    outer_face_selection[i] = 2;
+                    break;
+                case 'd':
+                    outer_face_selection[i] = -3;
+                    break;
+                case 'D':
+                    outer_face_selection[i] = 3;
+                    break;
+                default:
+                    usage();
+                    return 1;
+            }
+        }
+        break;
     case 'p':
       switch (optarg[0]) {
       case 'a':
@@ -3049,6 +3157,12 @@ main(int argc, char *argv[])
       return 1;
     }
   }
+  
+  if(!outer_face_selection[0]){
+      outer_face_selection[0] = 1;
+      outer_face_selection[1] = 2;
+      outer_face_selection[2] = -3;
+  }
 
   /* --- Read the input graph and positioning --- */
 
@@ -3072,11 +3186,8 @@ main(int argc, char *argv[])
       return 1;
     }
   }
-  else if (init_mode == 't') {
-    CHECK(f_in = best_outer_face_tubular(G_in));
-  }
   else {
-    CHECK(f_in = best_outer_face(G_in));
+    CHECK(f_in = best_outer_face_configured(G_in, outer_face_selection));
   }
 
   /* --- Determine an init mode if none was requested --- */
