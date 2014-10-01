@@ -238,6 +238,7 @@ public class FullgenPanel extends GeneratorPanel {
         //output graphs in atlas order
         useBuckygen = new JCheckBox("Use buckygen when possible");
         useBuckygen.setMnemonic(KeyEvent.VK_B);
+        useBuckygen.setToolTipText("The fastest generator will automatically be selected, but the order of the graphs might change depending on the selected options.");
         
         //warning to show when atlas order is chosen
         JTextArea warningText = new JTextArea("Warning: when fullerenes need to be output in Atlas order, " +
