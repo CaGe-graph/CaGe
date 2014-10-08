@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -305,11 +307,13 @@ public class TwoView implements ActionListener, CaGeViewer {
             model.setEdgeBrightness(Float.parseFloat(
                     CaGe.config.getProperty("TwoView.EdgeBrightness")));
         } catch (NumberFormatException numberFormatException) {
+            Logger.getLogger(CaGe.class.getName()).log(Level.WARNING, "Problem while setting edge brightness", numberFormatException);
         }
         try {
             model.setEdgeWidth(Integer.parseInt(
                     CaGe.config.getProperty("TwoView.EdgeWidth")));
         } catch (NumberFormatException numberFormatException) {
+            Logger.getLogger(CaGe.class.getName()).log(Level.WARNING, "Problem while setting edge width", numberFormatException);
         }
         titlePanel = new Box(BoxLayout.Y_AXIS);
         titlePanel.add(titlePanel1);
