@@ -10,8 +10,10 @@ import cage.ResultPanel;
 import cage.SavePSDialog;
 import cage.StaticGeneratorInfo;
 import cage.utility.Debug;
+import cage.utility.SaveActionListener;
 import cage.viewer.twoview.PostScriptTwoViewPainter;
 import cage.viewer.twoview.SvgTwoViewPainter;
+import cage.viewer.twoview.TikzTwoViewPainter;
 import cage.viewer.twoview.TwoViewAdapter;
 import cage.viewer.twoview.TwoViewModel;
 
@@ -58,8 +60,6 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
 import lisken.uitoolbox.PushButtonDecoration;
-import cage.utility.SaveActionListener;
-import cage.viewer.twoview.TikzTwoViewPainter;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
