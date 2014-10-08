@@ -304,7 +304,7 @@ public class TwoView implements ActionListener, CaGeViewer {
         try {
             model.setEdgeBrightness(Float.valueOf(
                     CaGe.config.getProperty("TwoView.EdgeBrightness")).floatValue());
-            edgeWidthButton.setValue(Integer.parseInt(
+            model.setEdgeWidth(Integer.parseInt(
                     CaGe.config.getProperty("TwoView.EdgeWidth")));
         } catch (Exception ex) {
         }
