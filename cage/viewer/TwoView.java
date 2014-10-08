@@ -172,7 +172,7 @@ public class TwoView implements ActionListener, CaGeViewer {
             }
         });
         titlePanel1.add(highlightedFacesSizeField);
-
+        
         edgeBrightnessSlider =
                 new JSlider(0, 15, (int) Math.round(20 * model.getEdgeBrightness()));
         edgeBrightnessSlider.setPreferredSize(new Dimension(20, edgeBrightnessSlider.getPreferredSize().height));
@@ -233,6 +233,16 @@ public class TwoView implements ActionListener, CaGeViewer {
                 highlightFacesButton.setSelected(model.highlightFaces());
                 highlightedFacesSizeField.setEnabled(model.highlightFaces());
                 highlightedFacesSizeField.setValue(model.getHighlightedFacesSize());
+            }
+
+            @Override
+            public void edgeWidthChanged() {
+                edgeWidthButton.setValue(model.getEdgeWidth());
+            }
+
+            @Override
+            public void edgeBrightnessChanged() {
+                edgeBrightnessSlider.setValue((int)(20*model.getEdgeBrightness()));
             }
 
             @Override
