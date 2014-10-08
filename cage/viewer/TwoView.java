@@ -67,14 +67,14 @@ public class TwoView implements ActionListener, CaGeViewer {
 
     private JFrame frame;
     private JLabel title;
-    private Box titlePanel;
-    private JPanel savePanel;
+    private final Box titlePanel;
+    private final JPanel savePanel;
     private TwoViewPanel twoViewPanel;
     private GeneratorInfo generatorInfo;
     private ResultPanel resultPanel;
     private CaGeResult result;
     private JSlider edgeBrightnessSlider;
-    private JToggleButton savePSButton;
+    private final JToggleButton savePSButton;
     private SavePSDialog savePSDialog;
     private Map<MutableInteger, String> psFilenames = new HashMap<>();
     private PostScriptTwoViewPainter psTwoViewPainter;
