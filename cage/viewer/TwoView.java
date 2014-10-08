@@ -63,7 +63,7 @@ import cage.viewer.twoview.TikzTwoViewPainter;
 import lisken.uitoolbox.SpinButton;
 import lisken.uitoolbox.UItoolbox;
 
-public class TwoView implements ActionListener, CaGeViewer {
+public class TwoView implements CaGeViewer {
 
     private JFrame frame;
     private JLabel title;
@@ -325,7 +325,12 @@ public class TwoView implements ActionListener, CaGeViewer {
         savePSButton.setMnemonic(KeyEvent.VK_P);
         savePSButton.setAlignmentY(0.5f);
         savePSButton.setActionCommand("s");
-        savePSButton.addActionListener(this);
+        savePSButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                savePSButtonPressed();
+            }
+        });
 
         saveButtons.add(savePSButton);
 
@@ -429,11 +434,6 @@ public class TwoView implements ActionListener, CaGeViewer {
         saveButton.setAlignmentY(0.5f);
         saveButton.addActionListener(listener);
         saveButtons.add(saveButton);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        savePSButtonPressed();
     }
 
     public void savePSButtonPressed() {
