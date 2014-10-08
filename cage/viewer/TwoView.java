@@ -71,7 +71,6 @@ public class TwoView implements CaGeViewer {
     private final JPanel savePanel;
     private TwoViewPanel twoViewPanel;
     private GeneratorInfo generatorInfo;
-    private ResultPanel resultPanel;
     private CaGeResult result;
     private JSlider edgeBrightnessSlider;
     private final JToggleButton savePSButton;
@@ -465,7 +464,6 @@ public class TwoView implements CaGeViewer {
 
     @Override
     public void setResultPanel(ResultPanel resultPanel) {
-        this.resultPanel = resultPanel;
         twoViewPanel.setResultPanel(resultPanel);
     }
 
