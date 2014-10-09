@@ -51,7 +51,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -70,12 +69,12 @@ public class TwoView implements CaGeViewer {
     private TwoViewPanel twoViewPanel;
     private GeneratorInfo generatorInfo;
     private CaGeResult result;
-    private final JToggleButton savePSButton;
+    private final JButton savePSButton;
     private SavePSDialog savePSDialog;
     private Map<MutableInteger, String> psFilenames = new HashMap<>();
     private PostScriptTwoViewPainter psTwoViewPainter;
     private TwoViewModel model;
-    private List<JToggleButton> saveButtons = new ArrayList<>();
+    private List<JButton> saveButtons = new ArrayList<>();
     private JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL, -180, 180, 0);
 
     public TwoView() {
@@ -302,10 +301,9 @@ public class TwoView implements CaGeViewer {
         titlePanel = new Box(BoxLayout.Y_AXIS);
         titlePanel.add(titlePanel1);
         titlePanel.add(titlePanel2);
-        savePSButton = new JToggleButton("save PS");
+        savePSButton = new JButton("save PS");
         savePSButton.setFont(titleFont);
         savePSButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        PushButtonDecoration.decorate(savePSButton);
         savePSButton.setMnemonic(KeyEvent.VK_P);
         savePSButton.setAlignmentY(0.5f);
         savePSButton.setActionCommand("s");
@@ -376,7 +374,7 @@ public class TwoView implements CaGeViewer {
 
         savePanel = new JPanel();
         savePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        for (JToggleButton button : saveButtons) {
+        for (JButton button : saveButtons) {
             savePanel.add(button);
         }
         
@@ -410,10 +408,9 @@ public class TwoView implements CaGeViewer {
     }
 
     private void addSaveButton(String caption, Font font, ActionListener listener, int mnemonic){
-        JToggleButton saveButton = new JToggleButton(caption);
+        JButton saveButton = new JButton(caption);
         saveButton.setFont(font);
         saveButton.setBorder(BorderFactory.createEmptyBorder(3, 7, 5, 7));
-        PushButtonDecoration.decorate(saveButton);
         saveButton.setMnemonic(mnemonic);
         saveButton.setAlignmentY(0.5f);
         saveButton.addActionListener(listener);
