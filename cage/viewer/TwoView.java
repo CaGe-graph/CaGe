@@ -417,7 +417,7 @@ public class TwoView implements CaGeViewer {
         saveButtons.add(saveButton);
     }
 
-    public void savePSButtonPressed() {
+    private void savePSButtonPressed() {
         savePSDialog.setVisible(true);
         if (savePSDialog.getSuccess()) {
             psTwoViewPainter.setRotation(twoViewPanel.getRotation());
