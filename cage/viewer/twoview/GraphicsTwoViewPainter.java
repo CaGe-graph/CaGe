@@ -30,10 +30,10 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
 
     private Color edgeColor;
     private Color specialEdgeColor;
-    private Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
+    private final Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
     private Font[] vertexFontArray;
 
-    private TwoViewListener listener = new TwoViewAdapter() {
+    private final TwoViewListener listener = new TwoViewAdapter() {
 
         @Override
         public void resultChanged() {
