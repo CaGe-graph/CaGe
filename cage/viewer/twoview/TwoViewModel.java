@@ -32,6 +32,8 @@ public class TwoViewModel {
     public static final int MAX_VERTEX_SIZE = 25;
     public static final int DEFAULT_VERTEX_SIZE = 11;
     
+    private static final float MIN_EDGE_BRIGHTNESS = 0.0f;
+    private static final float MAX_EDGE_BRIGHTNESS = 0.0f;
     private static final float DEFAULT_EDGE_BRIGHTNESS = 0.75f;
 
     private PropertyChangeListener listener = new PropertyChangeListener() {
@@ -81,6 +83,10 @@ public class TwoViewModel {
         try {
             edgeBrightness = Float.parseFloat(
                     CaGe.config.getProperty("TwoView.EdgeBrightness"));
+            if(edgeBrightness > MAX_EDGE_BRIGHTNESS 
+                    || edgeBrightness < MIN_EDGE_BRIGHTNESS){
+                edgeBrightness = DEFAULT_EDGE_BRIGHTNESS;
+            }
         } catch (NumberFormatException e) {
             Debug.reportException(e);
             edgeBrightness = DEFAULT_EDGE_BRIGHTNESS;
