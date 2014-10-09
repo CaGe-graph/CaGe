@@ -302,18 +302,6 @@ public class TwoView implements CaGeViewer {
         titlePanel2.add(Box.createHorizontalStrut(5));
         titlePanel2.add(edgeWidthButton);
         titlePanel2.add(Box.createHorizontalStrut(5));
-        try {
-            model.setEdgeBrightness(Float.parseFloat(
-                    CaGe.config.getProperty("TwoView.EdgeBrightness")));
-        } catch (NumberFormatException numberFormatException) {
-            Logger.getLogger(CaGe.class.getName()).log(Level.WARNING, "Problem while setting edge brightness", numberFormatException);
-        }
-        try {
-            model.setEdgeWidth(Integer.parseInt(
-                    CaGe.config.getProperty("TwoView.EdgeWidth")));
-        } catch (NumberFormatException numberFormatException) {
-            Logger.getLogger(CaGe.class.getName()).log(Level.WARNING, "Problem while setting edge width", numberFormatException);
-        }
         titlePanel = new Box(BoxLayout.Y_AXIS);
         titlePanel.add(titlePanel1);
         titlePanel.add(titlePanel2);

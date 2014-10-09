@@ -31,6 +31,8 @@ public class TwoViewModel {
     public static final int MIN_VERTEX_SIZE = 3;
     public static final int MAX_VERTEX_SIZE = 25;
     public static final int DEFAULT_VERTEX_SIZE = 11;
+    
+    private static final float DEFAULT_EDGE_BRIGHTNESS = 0.75f;
 
     private PropertyChangeListener listener = new PropertyChangeListener() {
         @Override
@@ -50,7 +52,7 @@ public class TwoViewModel {
     private boolean showNumbers;
     private int edgeWidth;
     private int vertexSize = DEFAULT_VERTEX_SIZE; //the size of the image
-    private float edgeBrightness = 0.75f;
+    private float edgeBrightness;
 
     private boolean highlightFaces = false;
     private int highlightedFaces = 5;
@@ -64,7 +66,22 @@ public class TwoViewModel {
 
     public TwoViewModel() {
         //initialize edge width
-        edgeWidth = DEFAULT_EDGE_WIDTH;
+        try {
+            edgeWidth = Integer.parseInt(
+                    CaGe.config.getProperty("TwoView.EdgeWidth"));
+        } catch (NumberFormatException e) {
+            Debug.reportException(e);
+            edgeWidth = DEFAULT_EDGE_WIDTH;
+        }
+        
+        //initialize edge brightness
+        try {
+            edgeBrightness = Float.parseFloat(
+                    CaGe.config.getProperty("TwoView.EdgeBrightness"));
+        } catch (NumberFormatException e) {
+            Debug.reportException(e);
+            edgeBrightness = DEFAULT_EDGE_BRIGHTNESS;
+        }
 
         //initialize show numbers
         try {
