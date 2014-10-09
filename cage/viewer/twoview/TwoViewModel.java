@@ -53,7 +53,7 @@ public class TwoViewModel {
 
     private boolean showNumbers;
     private int edgeWidth;
-    private int vertexSize = DEFAULT_VERTEX_SIZE; //the size of the image
+    private int vertexSize;
     private float edgeBrightness;
 
     private boolean highlightFaces = false;
@@ -100,6 +100,18 @@ public class TwoViewModel {
         } catch (Exception e) {
             Debug.reportException(e);
             showNumbers = false;
+        }
+        
+        //initialize vertex size
+        try {
+            vertexSize = Integer.parseInt(
+                    CaGe.config.getProperty("TwoView.VertexSize"));
+            if(vertexSize > MAX_VERTEX_SIZE || vertexSize < MIN_VERTEX_SIZE){
+                vertexSize = DEFAULT_VERTEX_SIZE;
+            }
+        } catch (NumberFormatException e) {
+            Debug.reportException(e);
+            vertexSize = DEFAULT_VERTEX_SIZE;
         }
     }
 
