@@ -72,9 +72,9 @@ public class TwoView implements CaGeViewer {
     private final JButton savePSButton;
     private SavePSDialog savePSDialog;
     private Map<MutableInteger, String> psFilenames = new HashMap<>();
-    private PostScriptTwoViewPainter psTwoViewPainter;
+    private final PostScriptTwoViewPainter psTwoViewPainter;
     private TwoViewModel model;
-    private List<JButton> saveButtons = new ArrayList<>();
+    private final List<JButton> saveButtons = new ArrayList<>();
     private JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL, -180, 180, 0);
 
     public TwoView() {
