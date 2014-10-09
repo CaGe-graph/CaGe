@@ -104,7 +104,7 @@ public class TwoView implements CaGeViewer {
         final JSlider vertexSizeSlider =
                 new JSlider(TwoViewModel.MIN_VERTEX_SIZE,
                         TwoViewModel.MAX_VERTEX_SIZE,
-                        (TwoViewModel.MIN_VERTEX_SIZE+TwoViewModel.MAX_VERTEX_SIZE)/2);
+                        model.getVertexSize());
         vertexSizeSlider.addChangeListener(new ChangeListener() {
 
             @Override
