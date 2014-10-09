@@ -418,8 +418,6 @@ public class TwoView implements CaGeViewer {
     }
 
     public void savePSButtonPressed() {
-        savePSButton.getModel().setArmed(false);
-        savePSButton.getModel().setPressed(true);
         savePSDialog.setVisible(true);
         if (savePSDialog.getSuccess()) {
             psTwoViewPainter.setRotation(twoViewPanel.getRotation());
@@ -428,8 +426,6 @@ public class TwoView implements CaGeViewer {
                     savePSDialog.includeInfo() ? savePSDialog.getInfo() : null);
             psFilenames.put(new MutableInteger(result.getGraphNo()), savePSDialog.getFilename());
         }
-        savePSButton.getModel().setPressed(false);
-        savePSButton.setSelected(result.getSaved2DPS() > 0);
     }
 
     @Override
