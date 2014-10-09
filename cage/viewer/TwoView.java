@@ -101,18 +101,18 @@ public class TwoView implements CaGeViewer {
         titlePanel1.add(sizeLabel);
         titlePanel1.add(Box.createHorizontalStrut(5));
         
-        final JSlider slider =
+        final JSlider vertexSizeSlider =
                 new JSlider(TwoViewModel.MIN_VERTEX_SIZE,
                         TwoViewModel.MAX_VERTEX_SIZE,
                         (TwoViewModel.MIN_VERTEX_SIZE+TwoViewModel.MAX_VERTEX_SIZE)/2);
-        slider.addChangeListener(new ChangeListener() {
+        vertexSizeSlider.addChangeListener(new ChangeListener() {
 
             @Override
             public void stateChanged(ChangeEvent e) {
-                model.setVertexSize(slider.getValue());
+                model.setVertexSize(vertexSizeSlider.getValue());
             }
         });
-        titlePanel1.add(slider);
+        titlePanel1.add(vertexSizeSlider);
         titlePanel1.add(Box.createHorizontalStrut(10));
 
         final JCheckBox showNumbersButton = new JCheckBox("Numbers", model.getShowNumbers());
@@ -223,7 +223,7 @@ public class TwoView implements CaGeViewer {
 
             @Override
             public void vertexSizeChanged() {
-                slider.setValue(model.getVertexSize());
+                vertexSizeSlider.setValue(model.getVertexSize());
             }
 
             @Override
