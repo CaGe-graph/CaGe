@@ -69,6 +69,8 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
 
         determineVertexFont();
         
+        handleShowNumbers();
+        
         this.model.addTwoViewListener(listener);
     }
 
