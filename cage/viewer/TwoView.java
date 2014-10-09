@@ -70,7 +70,6 @@ public class TwoView implements CaGeViewer {
     private TwoViewPanel twoViewPanel;
     private GeneratorInfo generatorInfo;
     private CaGeResult result;
-    private JSlider edgeBrightnessSlider;
     private final JToggleButton savePSButton;
     private SavePSDialog savePSDialog;
     private Map<MutableInteger, String> psFilenames = new HashMap<>();
@@ -172,7 +171,7 @@ public class TwoView implements CaGeViewer {
         });
         titlePanel1.add(highlightedFacesSizeField);
         
-        edgeBrightnessSlider =
+        final JSlider edgeBrightnessSlider =
                 new JSlider(0, 15, (int) Math.round(20 * model.getEdgeBrightness()));
         edgeBrightnessSlider.setPreferredSize(new Dimension(20, edgeBrightnessSlider.getPreferredSize().height));
         edgeBrightnessSlider.addChangeListener(new ChangeListener() {
