@@ -69,6 +69,9 @@ public class TwoViewModel {
         try {
             edgeWidth = Integer.parseInt(
                     CaGe.config.getProperty("TwoView.EdgeWidth"));
+            if(edgeWidth > MAX_EDGE_WIDTH || edgeWidth < MIN_EDGE_WIDTH){
+                edgeWidth = DEFAULT_EDGE_WIDTH;
+            }
         } catch (NumberFormatException e) {
             Debug.reportException(e);
             edgeWidth = DEFAULT_EDGE_WIDTH;
