@@ -16,7 +16,7 @@ generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
 	    kekule_all cone_all tube_all quad_restrict$(SUFFIX) \
-	    leapfrog$(SUFFIX) buckygen_all plantri_preg$(SUFFIX)
+	    leapfrog$(SUFFIX) buckygen_all plantri_preg$(SUFFIX) ngons$(SUFFIX)
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
@@ -124,3 +124,7 @@ buckygen_clean:
 
 buckygen_clear:
 	rm -f buckygen$(SUFFIX)
+
+ngons$(SUFFIX) : ngons.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -ansi
+	
