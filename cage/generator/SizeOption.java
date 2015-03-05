@@ -24,7 +24,7 @@ import lisken.uitoolbox.UItoolbox;
 public class SizeOption implements ChangeListener, ActionListener {
 
     private boolean isIncluded;
-    private int size;
+    private final int size;
     private int min;
     private int max;
     private JPanel panelToExtend;
@@ -33,7 +33,7 @@ public class SizeOption implements ChangeListener, ActionListener {
     private JCheckBox limitNrOfSize;
     private SpinButton minNrOfSizeButton;
     private SpinButton maxNrOfSizeButton;
-    private SizeOptionsMap optionsMap;
+    private final SizeOptionsMap optionsMap;
 
     public SizeOption(int size, SizeOptionsMap m) {
         this.size = size;
