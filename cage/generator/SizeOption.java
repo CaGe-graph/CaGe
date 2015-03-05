@@ -61,7 +61,14 @@ public class SizeOption implements ChangeListener, ActionListener {
             limitNrOfSize = new JCheckBox("limits");
             limitNrOfSize.setSelected(false);
             limitNrOfSize.addChangeListener(this);
-            limitNrOfSize.addActionListener(this);
+            limitNrOfSize.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (limitNrOfSize.isSelected()) {
+                        minNrOfSizeButton.requestFocus();
+                    }
+                }
+            });
         }
         sizeLabel = new JLabel(dual ? "degree " + size : size + "-gons");
         sizeLabel.setLabelFor(sizeIncludedButton);
@@ -160,12 +167,7 @@ public class SizeOption implements ChangeListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (source == (Object) limitNrOfSize) {
-            if (limitNrOfSize.isSelected()) {
-                minNrOfSizeButton.requestFocus();
-            }
-        } else if (source == (Object) sizeIncludedButton) {
+        if (e.getSource() == (Object) sizeIncludedButton) {
             optionsMap.actionPerformed(new ActionEvent(new MutableInteger(size), sizeIncludedButton.isSelected() ? 1 : 0, null));
         }
     }
