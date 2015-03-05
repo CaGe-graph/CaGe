@@ -22,7 +22,7 @@ import lisken.uitoolbox.UItoolbox;
  * This class represents the single configuration for one face type or vertex type
  * and is used in {@link SizeOptionsMap}.
  */
-public class SizeOption implements ChangeListener, ActionListener {
+public class SizeOption implements ActionListener {
 
     private boolean isIncluded;
     private final int size;
@@ -62,7 +62,14 @@ public class SizeOption implements ChangeListener, ActionListener {
         if(isLimitable){
             limitNrOfSize = new JCheckBox("limits");
             limitNrOfSize.setSelected(false);
-            limitNrOfSize.addChangeListener(this);
+            limitNrOfSize.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    minNrOfSizeButton.setVisible(isLimited());
+                    maxNrOfSizeButton.setVisible(isLimited());
+                    UItoolbox.pack(panelToExtend);
+                }
+            });
             limitNrOfSize.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -84,8 +91,18 @@ public class SizeOption implements ChangeListener, ActionListener {
             maxNrOfSizeButton.setVisible(limitNrOfSize.isSelected());
             DefaultButtonModel minNotEqMax = new DefaultButtonModel();
             minNotEqMax.setSelected(false);
-            minNrOfSizeButton.addChangeListener(this);
-            maxNrOfSizeButton.addChangeListener(this);
+            minNrOfSizeButton.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    min = minNrOfSizeButton.getValue();
+                }
+            });
+            maxNrOfSizeButton.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    max = maxNrOfSizeButton.getValue();
+                }
+            });
             MinMaxRestrictor.keepConsistentOrEqual(minNrOfSizeButton.getModel(), maxNrOfSizeButton.getModel(), minNotEqMax);
         }
         sizePanel = new JPanel(new GridBagLayout());
@@ -188,20 +205,6 @@ public class SizeOption implements ChangeListener, ActionListener {
      */
     public int getSize() {
         return size;
-    }
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        Object source = e.getSource();
-        if (source == (Object) limitNrOfSize) {
-            minNrOfSizeButton.setVisible(isLimited());
-            maxNrOfSizeButton.setVisible(isLimited());
-            UItoolbox.pack(panelToExtend);
-        } else if (source == (Object) minNrOfSizeButton) {
-            min = minNrOfSizeButton.getValue();
-        } else if (source == (Object) maxNrOfSizeButton) {
-            max = maxNrOfSizeButton.getValue();
-        }
     }
 
     @Override
