@@ -15,7 +15,7 @@ import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.MutableInteger;
 
-public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implements ChangeListener, ActionListener {
+public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implements ActionListener {
 
     //the panel on which the options for the allowed sizes are shown
     private JPanel optionsPanel;
@@ -113,7 +113,12 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
         this.sizesModel = sizesModel;
         this.includedButton = includedButton;
         this.singleValue = singleValue;
-        this.sizesModel.addChangeListener(this);
+        this.sizesModel.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                handleStateChanged();
+            }
+        });
         this.includedButton.addActionListener(this);
         this.optionsPanel.setLayout(new GridBagLayout());
         handleStateChanged();
@@ -150,7 +155,7 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
 
         }
         if (sizesModel.getValue() == size) {
-            stateChanged(new ChangeEvent(this));
+            handleStateChanged();
         }
     }
     
@@ -163,11 +168,6 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
             includedButton.setText((included ? "discard " : "include ") + faces + "-gons");
         else
             includedButton.setText((included ? "discard " : "include ") + "degree " + faces);
-    }
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        handleStateChanged();
     }
 
     @Override
