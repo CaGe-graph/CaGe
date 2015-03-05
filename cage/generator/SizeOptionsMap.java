@@ -56,7 +56,7 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
      * allowed face sizes or vertex degree (in case <tt>dual</tt> is <tt>true</tt>).
      * The panel <tt>optionsPanel</tt> is used to add controls to which allow the user
      * to easily remove an allowed face size (respectively vertex degree) or limit the number
-     * of those faces (respectively vertices) if <tt>limitable<tt> is <tt>true</tt>.
+     * of those faces (respectively vertices) if <tt>limitable</tt> is <tt>true</tt>.
      * For this to work correctly it is assumed that this panel has a
      * <code>GridBagLayout</code>. The constructor explicitly sets this layout and
      * you should not alter this at a later point. The component <tt>facesComponent</tt>
