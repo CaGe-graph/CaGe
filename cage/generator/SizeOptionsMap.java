@@ -218,8 +218,8 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
      * Notify all <code>ChangeListener</code>s of a change.
      */
     private void fireStateChanged(){
-        for (int i = 0; i < changeListenersList.size(); i++) {
-            changeListenersList.get(i).stateChanged(e);
+        for (ChangeListener l : changeListenersList) {
+            l.stateChanged(e);
         }
     }
 }
