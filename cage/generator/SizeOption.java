@@ -118,6 +118,50 @@ public class SizeOption implements ChangeListener, ActionListener {
         UItoolbox.pack(panelToExtend);
     }
 
+    public void addSingleSizeTo(JPanel p, boolean dual) {
+        panelToExtend = p;
+        isIncluded = true;
+        sizeIncludedButton = new JCheckBox("  ", true);
+        sizeIncludedButton.addActionListener(this);
+        sizeLabel = new JLabel(dual ? "degree " + size : size + "-gons");
+        sizeLabel.setLabelFor(sizeIncludedButton);
+        if (4 <= size && size <= 10) {
+            sizeLabel.setDisplayedMnemonic(KeyEvent.VK_0 + size % 10);
+        }
+        
+        final SpinButton sizeButton = new SpinButton(1, 1, max);
+        sizeButton.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                min = max = sizeButton.getValue();
+            }
+        });
+        min = max = 1; //set current value
+
+        sizePanel = new JPanel(new GridBagLayout());
+        GridBagConstraints lc = new GridBagConstraints();
+        lc.gridx = 0;
+        lc.gridy = size;
+        lc.anchor = GridBagConstraints.CENTER;
+        lc.insets = new Insets(10, 10, 0, 0);
+        sizePanel.add(sizeIncludedButton, lc);
+        lc.anchor = GridBagConstraints.EAST;
+        lc.insets = new Insets(10, 0, 0, 40);
+        lc.gridx = 1;
+        sizePanel.add(sizeLabel, lc);
+        lc.anchor = GridBagConstraints.CENTER;
+        lc.insets = new Insets(10, 10, 0, 10);
+        lc.gridx = 2;
+        sizePanel.add(sizeButton, lc);
+        
+        lc.gridx = 0;
+        lc.gridy = size;
+        lc.anchor = GridBagConstraints.LINE_START;
+        lc.insets = new Insets(10, 10, 0, 0);
+        panelToExtend.add(sizePanel, lc);
+        UItoolbox.pack(panelToExtend);
+    }
+
     public void deactivate() {
         isIncluded = false;
         sizeIncludedButton.setSelected(false);

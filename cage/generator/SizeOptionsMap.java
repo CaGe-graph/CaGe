@@ -29,6 +29,8 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
     private boolean dual;
     //if true the user can limit the number of faces of a certain size
     private boolean limitable;
+    //if true the user can only select a count for a certain size and not a range
+    private boolean singleValue;
 
     /**
      * Creates a new <code>SizeOptionsMap</code> that allows a user to add certain
@@ -75,12 +77,42 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
      *                  with a certain size (resp. degree).
      */
     public SizeOptionsMap(JPanel optionsPanel, Component sizesComponent, BoundedRangeModel sizesModel, JToggleButton includedButton, boolean dual, boolean limitable) {
+        this(optionsPanel, sizesComponent, sizesModel, includedButton, dual, limitable, false);
+    }
+    
+
+    /**
+     * Creates a new <code>SizeOptionsMap</code> that allows a user to add certain
+     * allowed face sizes or vertex degree (in case <tt>dual</tt> is <tt>true</tt>).
+     * The panel <tt>optionsPanel</tt> is used to add controls to which allow the user
+     * to easily remove an allowed face size (respectively vertex degree) or limit the number
+     * of those faces (respectively vertices) if <tt>limitable</tt> is <tt>true</tt>.
+     * For this to work correctly it is assumed that this panel has a
+     * <code>GridBagLayout</code>. The constructor explicitly sets this layout and
+     * you should not alter this at a later point. The component <tt>facesComponent</tt>
+     * is the component that is used for selecting the face size (respectively vertex
+     * degree )and will usually be a <code>JSlider</code> or a <code>JSpinner</code>.
+     * A reference to this component is only used to give it the focus. The
+     * <tt>facesModel</tt> is used to determine the face size (respectively vertex
+     * degree) that needs to be added or removed when <tt>includedButton</tt> is pressed.
+     *
+     * @param optionsPanel The panel on which the options for the allowed gons are shown
+     * @param sizesComponent The component that is used for the selection of the sizes (usually a slider)
+     * @param sizesModel The model that shows which size needs to be added or removed.
+     * @param includedButton The button used to add or remove sizes.
+     * @param dual If <tt>true</tt> this object is used for vertex degrees.
+     * @param limitable If <tt>true</tt> the user can limit the number of faces (resp. vertices)
+     *                  with a certain size (resp. degree).
+     * @param singleValue If <tt>true</tt> the user can only select a single value and not a range
+     */
+    public SizeOptionsMap(JPanel optionsPanel, Component sizesComponent, BoundedRangeModel sizesModel, JToggleButton includedButton, boolean dual, boolean limitable, boolean singleValue) {
         this.dual = dual;
         this.limitable = limitable;
         this.optionsPanel = optionsPanel;
         this.sizesComponent = sizesComponent;
         this.sizesModel = sizesModel;
         this.includedButton = includedButton;
+        this.singleValue = singleValue;
         this.sizesModel.addChangeListener(this);
         this.includedButton.addActionListener(this);
         this.optionsPanel.setLayout(new GridBagLayout());
@@ -94,7 +126,11 @@ public class SizeOptionsMap extends TreeMap<MutableInteger,SizeOption> implement
         if (included) {
             if (sizeOption == null) {
                 sizeOption = new SizeOption(size, this);
-                sizeOption.addTo(optionsPanel, dual, limitable);
+                if(singleValue){
+                    sizeOption.addSingleSizeTo(optionsPanel, dual);
+                } else {
+                    sizeOption.addTo(optionsPanel, dual, limitable);
+                }
             } else if (!sizeOption.isActive()) {
                 sizeOption.reactivate();
             } else {
