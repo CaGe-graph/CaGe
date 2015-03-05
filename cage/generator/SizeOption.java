@@ -31,10 +31,7 @@ public class SizeOption implements ActionListener {
     private JPanel panelToExtend;
     private JPanel sizePanel;
     private JCheckBox sizeIncludedButton;
-    private JLabel sizeLabel;
     private JCheckBox limitNrOfSize;
-    private SpinButton minNrOfSizeButton;
-    private SpinButton maxNrOfSizeButton;
     private final SizeOptionsMap optionsMap;
 
     public SizeOption(int size, SizeOptionsMap m) {
@@ -55,6 +52,9 @@ public class SizeOption implements ActionListener {
     }
 
     public void addTo(JPanel p, boolean dual, boolean isLimitable) {
+        final SpinButton minNrOfSizeButton = new SpinButton(min, 0, CGFPanel.MAX_ATOMS);
+        final SpinButton maxNrOfSizeButton = new SpinButton(max, 0, CGFPanel.MAX_ATOMS);
+        
         panelToExtend = p;
         isIncluded = true;
         sizeIncludedButton = new JCheckBox("  ", true);
@@ -79,15 +79,13 @@ public class SizeOption implements ActionListener {
                 }
             });
         }
-        sizeLabel = new JLabel(dual ? "degree " + size : size + "-gons");
+        JLabel sizeLabel = new JLabel(dual ? "degree " + size : size + "-gons");
         sizeLabel.setLabelFor(sizeIncludedButton);
         if (4 <= size && size <= 10) {
             sizeLabel.setDisplayedMnemonic(KeyEvent.VK_0 + size % 10);
         }
         if(isLimitable){
-            minNrOfSizeButton = new SpinButton(min, 0, CGFPanel.MAX_ATOMS);
             minNrOfSizeButton.setVisible(limitNrOfSize.isSelected());
-            maxNrOfSizeButton = new SpinButton(max, 0, CGFPanel.MAX_ATOMS);
             maxNrOfSizeButton.setVisible(limitNrOfSize.isSelected());
             DefaultButtonModel minNotEqMax = new DefaultButtonModel();
             minNotEqMax.setSelected(false);
@@ -140,7 +138,7 @@ public class SizeOption implements ActionListener {
         isIncluded = true;
         sizeIncludedButton = new JCheckBox("  ", true);
         sizeIncludedButton.addActionListener(this);
-        sizeLabel = new JLabel(dual ? "degree " + size : size + "-gons");
+        JLabel sizeLabel = new JLabel(dual ? "degree " + size : size + "-gons");
         sizeLabel.setLabelFor(sizeIncludedButton);
         if (4 <= size && size <= 10) {
             sizeLabel.setDisplayedMnemonic(KeyEvent.VK_0 + size % 10);
