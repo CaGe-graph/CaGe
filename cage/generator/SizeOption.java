@@ -1,6 +1,7 @@
 package cage.generator;
 
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ public class SizeOption implements ChangeListener, ActionListener {
     private int min;
     private int max;
     private JPanel panelToExtend;
+    private JPanel sizePanel;
     private JCheckBox sizeIncludedButton;
     private JLabel sizeLabel;
     private JCheckBox limitNrOfSize;
@@ -86,54 +88,47 @@ public class SizeOption implements ChangeListener, ActionListener {
             maxNrOfSizeButton.addChangeListener(this);
             MinMaxRestrictor.keepConsistentOrEqual(minNrOfSizeButton.getModel(), maxNrOfSizeButton.getModel(), minNotEqMax);
         }
+        sizePanel = new JPanel(new GridBagLayout());
         GridBagConstraints lc = new GridBagConstraints();
         lc.gridx = 0;
-        lc.gridy = size;
+        lc.gridy = 0;
         lc.anchor = GridBagConstraints.CENTER;
         lc.insets = new Insets(10, 10, 0, 0);
-        panelToExtend.add(sizeIncludedButton, lc);
+        sizePanel.add(sizeIncludedButton, lc);
         lc.anchor = GridBagConstraints.EAST;
         lc.insets = new Insets(10, 0, 0, 40);
         lc.gridx = 1;
-        panelToExtend.add(sizeLabel, lc);
+        sizePanel.add(sizeLabel, lc);
         if(isLimitable){
             lc.anchor = GridBagConstraints.CENTER;
             lc.insets = new Insets(10, 10, 0, 10);
             lc.gridx = 2;
-            panelToExtend.add(limitNrOfSize, lc);
+            sizePanel.add(limitNrOfSize, lc);
             lc.gridx = 3;
-            panelToExtend.add(minNrOfSizeButton, lc);
+            sizePanel.add(minNrOfSizeButton, lc);
             lc.gridx = 4;
-            panelToExtend.add(maxNrOfSizeButton, lc);
+            sizePanel.add(maxNrOfSizeButton, lc);
         }
+        
+        lc.gridx = 0;
+        lc.gridy = size;
+        lc.anchor = GridBagConstraints.LINE_START;
+        lc.insets = new Insets(10, 10, 0, 0);
+        panelToExtend.add(sizePanel, lc);
         UItoolbox.pack(panelToExtend);
     }
 
     public void deactivate() {
         isIncluded = false;
         sizeIncludedButton.setSelected(false);
-        sizeIncludedButton.setVisible(false);
-        sizeLabel.setVisible(false);
-        if(limitNrOfSize!=null)
-            limitNrOfSize.setVisible(false);
-        if(minNrOfSizeButton!=null)
-            minNrOfSizeButton.setVisible(false);
-        if(maxNrOfSizeButton!=null)
-            maxNrOfSizeButton.setVisible(false);
+        sizePanel.setVisible(false);
         UItoolbox.pack(panelToExtend);
     }
 
     public void reactivate() {
         isIncluded = true;
         sizeIncludedButton.setSelected(true);
-        sizeIncludedButton.setVisible(true);
-        sizeLabel.setVisible(true);
-        if(limitNrOfSize!=null)
-            limitNrOfSize.setVisible(true);
-        if(minNrOfSizeButton!=null)
-            minNrOfSizeButton.setVisible(isLimited());
-        if(maxNrOfSizeButton!=null)
-            maxNrOfSizeButton.setVisible(isLimited());
+        sizePanel.setVisible(true);
         UItoolbox.pack(panelToExtend);
     }
 
