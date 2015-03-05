@@ -36,12 +36,16 @@ public class SizeOption implements ChangeListener, ActionListener {
     private final SizeOptionsMap optionsMap;
 
     public SizeOption(int size, SizeOptionsMap m) {
+        this(size, m, CGFPanel.MAX_ATOMS);
+        //TODO: remove this dependency on CGFPanel since this now also used in other generators
+    }
+    
+    public SizeOption(int size, SizeOptionsMap m, int max) {
         this.size = size;
         optionsMap = m;
         isIncluded = false;
         min = 0;
-        max = CGFPanel.MAX_ATOMS;
-        //TODO: remove this dependency on CGFPanel since this now also used in other generators
+        this.max = max;
     }
 
     public void addTo(JPanel p) {
