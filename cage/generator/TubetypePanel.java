@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
@@ -198,7 +199,7 @@ public class TubetypePanel extends GeneratorPanel {
         generator[0] = command.toArray(new String[command.size()]);
 
         String[][] embed2D = {{"embed"}};
-        String[][] embed3D = {{"java", "-cp", "CaGe.jar", "cage.embedder.NanotubeEmbedder"}};
+        String[][] embed3D = {{"java", "-cp", CaGe.installDirectory() + "/CaGe.jar", "cage.embedder.NanotubeEmbedder"}};
 
         ElementRule rule = new SingleElementRule("C");
 

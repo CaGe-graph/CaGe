@@ -1,5 +1,6 @@
 package cage.generator;
 
+import cage.CaGe;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
@@ -112,7 +113,7 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
 
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
-                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"java", "-cp", "CaGe.jar", "cage.embedder.NanoconeEmbedder"}}),
+                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"java", "-cp", CaGe.installDirectory() + "/CaGe.jar", "cage.embedder.NanoconeEmbedder"}}),
                 "cone_" + pentagons + "_" + length + "_" + symmetric + iprFile + "_" + layers,
                 6, true, new SingleElementRule("C"), 0);
     }
