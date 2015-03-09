@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -67,7 +69,10 @@ public class CGFPanel extends GeneratorPanel {
         try {
             initGUI();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getLogger(CGFPanel.class.getName()).log(
+                    Level.SEVERE,
+                    "CGFPanel could not be initialised.",
+                    ex);
         }
     }
 
