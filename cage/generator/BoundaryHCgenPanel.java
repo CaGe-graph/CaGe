@@ -10,8 +10,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -26,8 +24,7 @@ import javax.swing.text.DocumentFilter.FilterBypass;
 
 import lisken.systoolbox.Systoolbox;
 
-public class BoundaryHCgenPanel extends GeneratorPanel
-        implements ActionListener {
+public class BoundaryHCgenPanel extends GeneratorPanel {
 
     JTextField boundaryList;
     JLabel numberOfPentagonsLabel;
@@ -92,16 +89,6 @@ public class BoundaryHCgenPanel extends GeneratorPanel
     @Override
     public void showing() {
         checkList();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        char actionCommand = e.getActionCommand().charAt(0);
-        switch (actionCommand) {
-            case 'd':
-                checkList();
-                break;
-        }
     }
 
     private void checkList() {
