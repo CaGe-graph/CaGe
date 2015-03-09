@@ -25,8 +25,26 @@ import lisken.uitoolbox.SpinButton;
 /**
  * Panel used for the configuration of the generator cone.
  */
-public class NanoConesPanel extends GeneratorPanel implements ActionListener {
+public class NanoConesPanel extends GeneratorPanel {
 
+    private final ActionListener typeButtonListener = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (symmetricButton.isSelected()) {
+                numberOfPentagonsSlider.setMinimum(1);
+                numberOfPentagonsSlider.setMaximum(5);
+                numberOfPentagonsSlider.setLabelTable(null);
+                numberOfPentagonsSlider.setMajorTickSpacing(4);
+            } else {
+                numberOfPentagonsSlider.setMinimum(2);
+                numberOfPentagonsSlider.setMaximum(4);
+                numberOfPentagonsSlider.setLabelTable(null);
+                numberOfPentagonsSlider.setMajorTickSpacing(2);
+            }
+        }
+    };
+    
     private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
     private SpinButton lengthOfSide = new SpinButton(new DefaultBoundedRangeModel(0, 0, 0, Integer.MAX_VALUE));
     private SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
@@ -50,8 +68,8 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
 
         symmetricButton = new JRadioButton("symmetric");
         nearSymmetricButton = new JRadioButton("nonsymmetric");
-        symmetricButton.addActionListener(this);
-        nearSymmetricButton.addActionListener(this);
+        symmetricButton.addActionListener(typeButtonListener);
+        nearSymmetricButton.addActionListener(typeButtonListener);
         symmetricGroup = new ButtonGroup();
         symmetricGroup.add(symmetricButton);
         symmetricGroup.add(nearSymmetricButton);
@@ -121,21 +139,6 @@ public class NanoConesPanel extends GeneratorPanel implements ActionListener {
     @Override
     public void showing() {
         //
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (symmetricButton.isSelected()) {
-            numberOfPentagonsSlider.setMinimum(1);
-            numberOfPentagonsSlider.setMaximum(5);
-            numberOfPentagonsSlider.setLabelTable(null);
-            numberOfPentagonsSlider.setMajorTickSpacing(4);
-        } else {
-            numberOfPentagonsSlider.setMinimum(2);
-            numberOfPentagonsSlider.setMaximum(4);
-            numberOfPentagonsSlider.setLabelTable(null);
-            numberOfPentagonsSlider.setMajorTickSpacing(2);
-        }
     }
 
     /**
