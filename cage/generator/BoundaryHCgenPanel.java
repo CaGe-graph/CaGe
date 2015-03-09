@@ -97,7 +97,6 @@ public class BoundaryHCgenPanel extends GeneratorPanel
     @Override
     public void actionPerformed(ActionEvent e) {
         char actionCommand = e.getActionCommand().charAt(0);
-        System.out.println(actionCommand);
         switch (actionCommand) {
             case 'd':
                 checkList();
