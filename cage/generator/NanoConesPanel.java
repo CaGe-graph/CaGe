@@ -45,14 +45,14 @@ public class NanoConesPanel extends GeneratorPanel {
         }
     };
     
-    private EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
-    private SpinButton lengthOfSide = new SpinButton(new DefaultBoundedRangeModel(0, 0, 0, Integer.MAX_VALUE));
-    private SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
-    private JRadioButton symmetricButton;
-    private JRadioButton nearSymmetricButton;
-    private ButtonGroup symmetricGroup;
-    private JCheckBox iprBox;
-    private JCheckBox hexagonLayersBox;
+    private final EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
+    private final SpinButton lengthOfSide = new SpinButton(new DefaultBoundedRangeModel(0, 0, 0, Integer.MAX_VALUE));
+    private final SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
+    private final JRadioButton symmetricButton;
+    private final JRadioButton nearSymmetricButton;
+    private final ButtonGroup symmetricGroup;
+    private final JCheckBox iprBox;
+    private final JCheckBox hexagonLayersBox;
 
     public NanoConesPanel() {
         setLayout(new GridBagLayout());
