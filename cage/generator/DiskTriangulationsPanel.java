@@ -29,8 +29,7 @@ import lisken.uitoolbox.MinMaxRestrictor;
  * Panel for the configuration of plantri to generate triangulations of the
  * disk.
  */
-public class DiskTriangulationsPanel extends GeneratorPanel
-        implements ActionListener {
+public class DiskTriangulationsPanel extends GeneratorPanel {
 
     //The minimum number of vertices allowed for this generator
     private static final int MIN_VERTICES = 4;
@@ -108,7 +107,18 @@ public class DiskTriangulationsPanel extends GeneratorPanel
         boundarySegmentsAll = new JCheckBox("any number", true);
         boundarySegmentsAll.setMnemonic(KeyEvent.VK_A);
         boundarySegmentsAll.setActionCommand("a");
-        boundarySegmentsAll.addActionListener(this);
+        boundarySegmentsAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean enabled = !boundarySegmentsAll.isSelected();
+                boundarySegmentsSlider.setEnabled(enabled);
+                boundarySegmentsSlider.getValueLabel().setForeground(
+                        enabled ? Color.black : getBackground());
+                if (enabled) {
+                    boundarySegmentsSlider.slider().requestFocus();
+                }
+            }
+        });
         add(boundarySegmentsAll,
                 new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -124,7 +134,14 @@ public class DiskTriangulationsPanel extends GeneratorPanel
             chordsButton[i] = new JRadioButton(permission[i], i == 0);
             chordsButton[i].setMnemonic(keys[0].charAt(i));
             chordsButton[i].setActionCommand("c" + i);
-            chordsButton[i].addActionListener(this);
+            chordsButton[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (e.getActionCommand().charAt(1) == '0') {
+                        vertices2Button[0].setSelected(true);
+                    }
+                }
+            });
             chordsGroup.add(chordsButton[i]);
             chordsPanel.add(chordsButton[i]);
         }
@@ -143,7 +160,16 @@ public class DiskTriangulationsPanel extends GeneratorPanel
             vertices2Button[i] = new JRadioButton(permission[i], i == 0);
             vertices2Button[i].setMnemonic(keys[1].charAt(i));
             vertices2Button[i].setActionCommand("v" + i);
-            vertices2Button[i].addActionListener(this);
+            vertices2Button[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (chordsGroup.getSelection()
+                            .getActionCommand().charAt(1) == '0' &&
+                            e.getActionCommand().charAt(1) != '0') {
+                        chordsButton[1].setSelected(true);
+                    }
+                }
+            });
             vertices2Group.add(vertices2Button[i]);
             vertices2Panel.add(vertices2Button[i]);
         }
@@ -194,36 +220,5 @@ public class DiskTriangulationsPanel extends GeneratorPanel
                 generator,
                 EmbedFactory.createEmbedder(true, embed2D, embed3D),
                 filename, 3, enableReembed2D);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String cmd = e.getActionCommand();
-        boolean forbidden;
-        switch (cmd.charAt(0)) {
-            case 'a':
-                boolean enabled = !boundarySegmentsAll.isSelected();
-                boundarySegmentsSlider.setEnabled(enabled);
-                boundarySegmentsSlider.getValueLabel().setForeground(
-                        enabled ? Color.black : getBackground());
-                if (enabled) {
-                    boundarySegmentsSlider.slider().requestFocus();
-                }
-                break;
-            case 'c':
-                forbidden = cmd.charAt(1) == '0';
-                if (forbidden) {
-                    vertices2Button[0].setSelected(true);
-                }
-                break;
-            case 'v':
-                forbidden = cmd.charAt(1) == '0';
-                char chords =
-                        chordsGroup.getSelection().getActionCommand().charAt(1);
-                if (chords == '0' && !forbidden) {
-                    chordsButton[1].setSelected(true);
-                }
-                break;
-        }
     }
 }
