@@ -388,11 +388,11 @@ public class ResultPanel extends JPanel {
         reviewLabel.setVisible(useViewers);
         reviewPanel.setVisible(useViewers);
 
-        saveAdjButton.setEnabled(false);
+        saveAdjButton.setEnabled(true);
         save2DButton.setVisible(doEmbed2D);
-        save2DButton.setEnabled(false);
+        save2DButton.setEnabled(true);
         save3DButton.setVisible(doEmbed3D);
-        save3DButton.setEnabled(false);
+        save3DButton.setEnabled(true);
         saveAdjWriter = save2DWriter = save3DWriter = null;
         foldnetButton.setVisible(doEmbed3D);
         foldnetButton.setEnabled(false);
@@ -616,9 +616,6 @@ public class ResultPanel extends JPanel {
         if (viewGraphNo.hasFocus()) {
             viewGraphNo.selectAll();
         }
-        saveAdjButton.setEnabled(!result.isSavedAdj());
-        save2DButton.setEnabled(!result.isSaved2D());
-        save3DButton.setEnabled(!result.isSaved3D());
         foldnetButton.setEnabled(!result.isFoldnetMade());
         reviewCurrLabel.setText(Integer.toString(graphNo));
         if (results.hasNext()) {
@@ -709,21 +706,18 @@ public class ResultPanel extends JPanel {
         CaGeResult result = results.getResult();
         saveAdjWriter = saveResult(result, saveAdjWriter, saveAdjButton,
                 "Adjacency", "save adjacency info");
-        result.setSavedAdj(!saveAdjButton.isEnabled());
     }
 
     void save2D() {
         CaGeResult result = results.getResult();
         save2DWriter = saveResult(result, save2DWriter, save2DButton,
                 "2D", "save 2D embedding");
-        result.setSaved2D(!save2DButton.isEnabled());
     }
 
     void save3D() {
         CaGeResult result = results.getResult();
         save3DWriter = saveResult(result, save3DWriter, save3DButton,
                 "3D", "save 3D embedding");
-        result.setSaved3D(!save3DButton.isEnabled());
     }
 
     CaGeWriter saveResult(CaGeResult result, CaGeWriter saveWriter,
@@ -1046,13 +1040,6 @@ public class ResultPanel extends JPanel {
         boolean modifiedOk = modifiedDimension == 2 ? graph.has2DCoordinates() : graph.has3DCoordinates();
         if (!modifiedOk) {
             return;
-        }
-        AbstractButton saveButton = modifiedDimension == 2 ? save2DButton : save3DButton;
-        saveButton.setEnabled(true);
-        if (modifiedDimension == 2) {
-            result.setSaved2D(false);
-        } else {
-            result.setSaved3D(false);
         }
         if (viewers == null) {
             return;
