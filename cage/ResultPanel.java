@@ -842,16 +842,16 @@ public class ResultPanel extends JPanel {
     private void handlePropertyChangeEDT(PropertyChangeEvent e) {
         switch (e.getPropertyName().charAt(0)) {
             case 'g':
-                graphNoChanged(((Integer) e.getNewValue()).intValue());
+                graphNoChanged(((Integer) e.getNewValue()));
                 break;
             case 'f':
-                flowingChanged(((Boolean) e.getNewValue()).booleanValue());
+                flowingChanged(((Boolean) e.getNewValue()));
                 break;
             case 'r':
-                runningChanged(((Boolean) e.getNewValue()).booleanValue());
+                runningChanged(((Boolean) e.getNewValue()));
                 break;
             case 'c':
-                boolean embeddingSuccess = ((Boolean) e.getOldValue()).booleanValue();
+                boolean embeddingSuccess = ((Boolean) e.getOldValue());
                 if (embeddingSuccess) {
                     embeddingMade((CaGeResult) e.getNewValue());
                 }
