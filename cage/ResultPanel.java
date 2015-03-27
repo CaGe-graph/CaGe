@@ -73,21 +73,21 @@ public class ResultPanel extends JPanel {
     private boolean stopping;
     private boolean running;
     private int highestGeneratedGraphNo;
-    private JTextField pipeGraphNo, viewGraphNo;
+    private final JTextField pipeGraphNo, viewGraphNo;
     private SpinButton advanceDist;
-    private JButton advance1Button, advanceButton;
-    private JButton reviewPrevButton, reviewNextButton;
-    private GraphNoLabel reviewPrevLabel, reviewCurrLabel, reviewNextLabel;
-    private JToggleButton flowButton;
+    private final JButton advance1Button, advanceButton;
+    private final JButton reviewPrevButton, reviewNextButton;
+    private final GraphNoLabel reviewPrevLabel, reviewCurrLabel, reviewNextLabel;
+    private final JToggleButton flowButton;
     private JComponent previousFocusOwner;
-    private JPanel statusPanel;
+    private final JPanel statusPanel;
     private Font statusFont;
-    private JLabel status;
+    private final JLabel status;
     private TreeMap<MutableInteger, String> statusMap;
     private ActionListener stopListener;
-    private AbstractButton saveAdjButton, save2DButton, save3DButton;
+    private final AbstractButton saveAdjButton, save2DButton, save3DButton;
     private CaGeWriter saveAdjWriter, save2DWriter, save3DWriter;
-    private AbstractButton foldnetButton;
+    private final AbstractButton foldnetButton;
     private SavePSDialog foldnetDialog;
     
     private ActionListener actionListener = new ActionListener() {
@@ -1087,7 +1087,7 @@ public class ResultPanel extends JPanel {
 
     private final class AdvanceListener implements ChangeListener {
 
-        private AbstractButton advanceButton;
+        private final AbstractButton advanceButton;
 
         public AdvanceListener(BoundedRangeModel m, AbstractButton b) {
             advanceButton = b;
@@ -1104,7 +1104,7 @@ public class ResultPanel extends JPanel {
 
     private class GraphNoLabel extends JLabel {
 
-        private Dimension minimumSize = new Dimension();
+        private final Dimension minimumSize = new Dimension();
 
         public GraphNoLabel(String text) {
             super(text);

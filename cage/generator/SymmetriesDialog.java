@@ -46,8 +46,8 @@ public class SymmetriesDialog extends JDialog{
     private static final int SYMMETRIES_COUNT = SYMMETRY.length;
     private static final int SYMMETRIES_ROWS = 4;
     
-    private SymmetriesModel selectedSymmetriesModel = new SymmetriesModel();
-    private Set<String> storedState = new HashSet<>();
+    private final SymmetriesModel selectedSymmetriesModel = new SymmetriesModel();
+    private final Set<String> storedState = new HashSet<>();
 
     public SymmetriesDialog(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
@@ -228,7 +228,7 @@ public class SymmetriesDialog extends JDialog{
         return selectedSymmetriesModel.getSelectedSymmetries();
     }
     
-    private List<ChangeListener> listeners = new ArrayList<>();
+    private final List<ChangeListener> listeners = new ArrayList<>();
     
     public void addChangeListener(ChangeListener l){
         listeners.add(l);
@@ -238,7 +238,7 @@ public class SymmetriesDialog extends JDialog{
         listeners.remove(l);
     }
     
-    private ChangeEvent changeEvent = new ChangeEvent(this);
+    private final ChangeEvent changeEvent = new ChangeEvent(this);
     
     private void fireStateChanged(){
         for (ChangeListener l : listeners) {
@@ -250,7 +250,7 @@ public class SymmetriesDialog extends JDialog{
      * Wrapper model around a Set to keep track of which symmetries are selected
      */
     private static class SymmetriesModel{
-        private Set<String> selectedSymmetries = new HashSet<>();
+        private final Set<String> selectedSymmetries = new HashSet<>();
         
         public void addSymmetry(String symmetry){
             if(symmetry != null && selectedSymmetries.add(symmetry)){
@@ -293,7 +293,7 @@ public class SymmetriesDialog extends JDialog{
             return new HashSet<>(selectedSymmetries);
         }
         
-        private List<SymmetriesModelListener> listeners = new ArrayList<>();
+        private final List<SymmetriesModelListener> listeners = new ArrayList<>();
         
         public void addSymmetriesModelListener(SymmetriesModelListener listener){
             listeners.add(listener);
