@@ -36,6 +36,7 @@ public class SaveDialog extends FlaggedJDialog {
         @Override
         public void actionPerformed(ActionEvent e) {
             setSuccess(true);
+            handleClosing();
             setVisible(false);
         }
     };

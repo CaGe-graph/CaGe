@@ -25,6 +25,7 @@ public class FlaggedJDialog extends JDialog {
         @Override
         public void actionPerformed(ActionEvent e) {
             success = false;
+            handleClosing();
             setVisible(false);
         }
     };
@@ -34,6 +35,7 @@ public class FlaggedJDialog extends JDialog {
         @Override
         public void actionPerformed(ActionEvent e) {
             success = true;
+            handleClosing();
             setVisible(false);
         }
     };
@@ -78,6 +80,15 @@ public class FlaggedJDialog extends JDialog {
             UItoolbox.moveComponentNearComponent(this, nearComponent);
         }
         super.setVisible(visible);
+    }
+    
+    /**
+     * When pressing the default button or cancel button, this method gets called
+     * after setting the success, but before hiding the dialog. By default nothing
+     * happens in this method.
+     */
+    public void handleClosing(){
+        //do nothing
     }
 }
 
