@@ -24,14 +24,14 @@ import lisken.uitoolbox.JTextComponentFocusSelector;
 
 public class SaveDialog extends FlaggedJDialog {
 
-    JPanel content;
-    JTextField saveFilenameField;
-    JLabel infoLabel;
-    JTextField saveInfoField;
-    JCheckBox includeInfoBox;
-    FileFormatBox fileFormatBox = null;
+    private JPanel content;
+    private JTextField saveFilenameField;
+    private JLabel infoLabel;
+    private JTextField saveInfoField;
+    private JCheckBox includeInfoBox;
+    private FileFormatBox fileFormatBox = null;
     
-    private ActionListener successListener = new ActionListener() {
+    private final ActionListener successListener = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
