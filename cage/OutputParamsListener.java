@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import lisken.uitoolbox.Wizard;
 
 /**
- *
+ * Wizard stage listener for the output configuration stage.
  */
 public class OutputParamsListener implements ActionListener {
 
