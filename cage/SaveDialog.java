@@ -1,6 +1,8 @@
 package cage;
 
 import cage.writer.CaGeWriter;
+import cage.writer.WriterConfigurationHandler;
+import java.awt.BorderLayout;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -11,10 +13,12 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -207,6 +211,34 @@ public class SaveDialog extends FlaggedJDialog {
             saveFilenameField.requestFocus();
         }
         super.setVisible(visible);
+    }
+
+    @Override
+    public void handleClosing() {
+        WriterConfigurationHandler handler = fileFormatBox.getConfigurationHandler();
+        if(handler!=null){
+            JPanel configurationPanel = handler.getConfigurationPanel();
+            if(configurationPanel != null){
+                //show dialog containing panel
+                final JDialog configurationDialog = new JDialog(this, "Options", true);
+                configurationDialog.setLayout(new BorderLayout(5, 5));
+                configurationDialog.add(configurationPanel, BorderLayout.NORTH);
+                configurationDialog.add(new JButton(new AbstractAction("OK") {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //just close the dialog
+                        configurationDialog.setVisible(false);
+                    }
+                }), BorderLayout.SOUTH);
+                configurationDialog.pack();
+                configurationDialog.setLocationRelativeTo(this);
+                configurationDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                configurationDialog.setVisible(true);
+                
+                //configure writer
+                handler.configureWriter(fileFormatBox.getCaGeWriter());
+            }
+        }
     }
 }
 
