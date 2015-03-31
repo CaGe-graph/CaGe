@@ -1,6 +1,7 @@
 package cage;
 
 import cage.writer.CaGeWriter;
+import cage.writer.WriterConfigurationHandler;
 import cage.writer.WriterFactory;
 
 import java.awt.event.ActionEvent;
@@ -98,6 +99,10 @@ public class TargetPanel extends JPanel {
 
     public CaGeWriter getCaGeWriter() {
         return fileFormat.getCaGeWriter();
+    }
+
+    public WriterConfigurationHandler getConfigurationHandler() {
+        return fileFormat.getConfigurationHandler();
     }
 
     /**
