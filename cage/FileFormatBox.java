@@ -1,6 +1,8 @@
 package cage;
 
 import cage.writer.CaGeWriter;
+import cage.writer.WriterConfigurationHandler;
+import cage.writer.WriterConfigurationHandlerFactory;
 import cage.writer.WriterFactory;
 
 import java.awt.event.ActionEvent;
@@ -21,7 +23,8 @@ import lisken.systoolbox.Systoolbox;
  */
 public class FileFormatBox extends JComboBox<String> implements ActionListener {
 
-    private List<CaGeWriter> writers = new ArrayList<>();
+    private final List<CaGeWriter> writers = new ArrayList<>();
+    private final List<WriterConfigurationHandler> handlers = new ArrayList<>();
     private int dimension = 0;
     private JTextComponent filenameField;
     private String oldExtension;
@@ -41,9 +44,11 @@ public class FileFormatBox extends JComboBox<String> implements ActionListener {
         for(String format : Systoolbox.stringToVector(
                 CaGe.config.getProperty("CaGe.Writers." + variety))){
             CaGeWriter writer = createCaGeWriter(format);
+            WriterConfigurationHandler handler = createConfigurationHandler(format);
             format = createCaGeWriter(format).getFormatName();
             addItem(format);
             writers.add(writer);
+            handlers.add(handler);
         }
         addActionListener(this);
         registerKeyboardAction(this, "",
@@ -61,9 +66,17 @@ public class FileFormatBox extends JComboBox<String> implements ActionListener {
         }
         return writer;
     }
+    
+    private WriterConfigurationHandler createConfigurationHandler(String format){
+        return WriterConfigurationHandlerFactory.createWriterConfigurationHandler(format);
+    }
 
     public CaGeWriter getCaGeWriter() {
         return writers.get(getSelectedIndex());
+    }
+
+    public WriterConfigurationHandler getConfigurationHandler() {
+        return handlers.get(getSelectedIndex());
     }
 
     /**
