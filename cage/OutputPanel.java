@@ -12,6 +12,7 @@ import cage.viewer.ViewerFactory;
 import cage.viewer.twoview.BatchTwoViewConfigurationPanel;
 import cage.viewer.twoview.BatchTwoViewModel;
 import cage.writer.CaGeWriter;
+import cage.writer.WriterConfigurationHandler;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -654,6 +655,30 @@ public class OutputPanel extends JPanel {
             addWriter(writers, out3DPipePanel, 3);
         }
         return writers;
+    }
+
+    public List<WriterConfigurationHandler> getConfigurationHandlers() {
+        ButtonModel dest;
+        List<WriterConfigurationHandler> handlers = new ArrayList<>();
+        dest = outAdjDestGroup.getSelection();
+        if (outAdjFile.getModel().equals(dest)) {
+            handlers.add(outAdjFilePanel.getConfigurationHandler());
+        } else if (outAdjPipe.getModel().equals(dest)){
+            handlers.add(outAdjPipePanel.getConfigurationHandler());
+        }
+        dest = out2DDestGroup.getSelection();
+        if (out2DFile.getModel().equals(dest)) {
+            handlers.add(out2DFilePanel.getConfigurationHandler());
+        } else if (out2DPipe.getModel().equals(dest)){
+            handlers.add(out2DPipePanel.getConfigurationHandler());
+        }
+        dest = out3DDestGroup.getSelection();
+        if (out3DFile.getModel().equals(dest)) {
+            handlers.add(out3DFilePanel.getConfigurationHandler());
+        } else if (out3DPipe.getModel().equals(dest)){
+            handlers.add(out3DPipePanel.getConfigurationHandler());
+        }
+        return handlers;
     }
 
     void addWriter(List<CaGeWriter> writers, FileFormatBox format, int dimension) {
