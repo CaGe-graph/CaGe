@@ -1,5 +1,6 @@
 package cage.writer;
 
+import cage.CaGe;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -54,11 +55,18 @@ public class SpinputWriterConfigurationHandler implements WriterConfigurationHan
     }
     
     private static class SpinputWriterConfigurationModel {
-        private boolean useSingleElementRule = false;
-        private int singleElementNumber = 6;
-        private String singleElementName = "C";
+        private boolean useSingleElementRule;
+        private int singleElementNumber;
+        private String singleElementName;
 
-        private float scalingFactor = 1.0f;
+        private float scalingFactor;
+
+        public SpinputWriterConfigurationModel() {
+            useSingleElementRule = CaGe.getCaGePropertyAsBoolean("Spinput.UseSingleElement", false);
+            singleElementNumber = CaGe.getCaGePropertyAsInt("Spinput.ElementNumber", 6);
+            singleElementName = CaGe.getCaGeProperty("Spinput.ElementName", "C");
+            scalingFactor = CaGe.getCaGePropertyAsFloat("Spinput.scaling", 1.0f);
+        }
         
         private final List<SpinputWriterConfigurationModelListener> listeners =
                 new ArrayList<>();

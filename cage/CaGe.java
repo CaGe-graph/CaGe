@@ -225,6 +225,10 @@ public class CaGe implements ActionListener {
         return config.getProperty(name);
     }
 
+    public static String getCaGeProperty(String name, String defaultValue) {
+        return config.getProperty(name, defaultValue);
+    }
+
     public static int getCaGePropertyAsInt(String name, int defaultValue) {
         int intValue = defaultValue;
         try {
@@ -236,6 +240,19 @@ public class CaGe implements ActionListener {
             System.err.println("Property '" + name + "' in .ini file is not a number");
         }
         return intValue;
+    }
+
+    public static float getCaGePropertyAsFloat(String name, float defaultValue) {
+        float floatValue = defaultValue;
+        try {
+            String stringValue = config.getProperty(name);
+            floatValue = Float.parseFloat(stringValue);
+        } catch (NullPointerException e) {
+            System.err.println("Property '" + name + "' not present in .ini file");
+        } catch (NumberFormatException e) {
+            System.err.println("Property '" + name + "' in .ini file is not a number");
+        }
+        return floatValue;
     }
 
     public static boolean getCaGePropertyAsBoolean(String name,
