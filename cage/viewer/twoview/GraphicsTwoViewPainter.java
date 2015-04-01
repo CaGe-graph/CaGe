@@ -66,10 +66,6 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         super(model);
         initializeVertexFonts();
         calculateColors();
-
-        determineVertexFont();
-        
-        handleShowNumbers();
         
         this.model.addTwoViewListener(listener);
     }
@@ -87,6 +83,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
     public void setGraphics(Graphics graphics) {
         this.graphics = graphics;
         determineVertexFont_impl();
+        handleShowNumbers();
     }
 
     public int getMaxVertexSize() {
