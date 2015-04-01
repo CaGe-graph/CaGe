@@ -21,7 +21,7 @@ import lisken.systoolbox.Systoolbox;
  * with a textfield of which the name is altered based on the selected
  * file format.
  */
-public class FileFormatBox extends JComboBox<String> implements ActionListener {
+public class FileFormatBox extends JComboBox<String> {
 
     private final List<CaGeWriter> writers = new ArrayList<>();
     private final List<WriterConfigurationHandler> handlers = new ArrayList<>();
@@ -29,6 +29,25 @@ public class FileFormatBox extends JComboBox<String> implements ActionListener {
     private JTextComponent filenameField;
     private String oldExtension;
     private boolean addExtension;
+    
+    private final ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentName = filenameField.getText();
+            if (currentName.trim().startsWith("|")) {
+                return;
+            }
+            int cut = currentName.length() - oldExtension.length() - 1;
+            if (cut >= 0 &&
+                    currentName.substring(cut).equalsIgnoreCase("." + oldExtension)) {
+                filenameField.setText(currentName.substring(0, cut));
+            }
+            addExtension();
+            if (e.getActionCommand().length() == 0) {
+                filenameField.requestFocus();
+            }
+        }
+    };
 
     public FileFormatBox(String variety, JTextComponent filenameField) {
         this(variety, filenameField, true);
@@ -50,8 +69,8 @@ public class FileFormatBox extends JComboBox<String> implements ActionListener {
             writers.add(writer);
             handlers.add(handler);
         }
-        addActionListener(this);
-        registerKeyboardAction(this, "",
+        addActionListener(actionListener);
+        registerKeyboardAction(actionListener, "",
                 KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
                 WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         // new onActionFocusSwitcher(filenameField, this);
@@ -91,22 +110,5 @@ public class FileFormatBox extends JComboBox<String> implements ActionListener {
         String extension = writer.getFileExtension();
         filenameField.setText(currentName + "." + extension);
         oldExtension = extension;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String currentName = filenameField.getText();
-        if (currentName.trim().startsWith("|")) {
-            return;
-        }
-        int cut = currentName.length() - oldExtension.length() - 1;
-        if (cut >= 0 &&
-                currentName.substring(cut).equalsIgnoreCase("." + oldExtension)) {
-            filenameField.setText(currentName.substring(0, cut));
-        }
-        addExtension();
-        if (e.getActionCommand().length() == 0) {
-            filenameField.requestFocus();
-        }
     }
 }
