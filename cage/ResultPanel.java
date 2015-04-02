@@ -746,8 +746,6 @@ public class ResultPanel extends JPanel {
             }
             saveDialog.dispose();
         }
-        saveButton.getModel().setArmed(false);
-        saveButton.getModel().setPressed(false);
         if (saveWriter == null) {
             return null;
         }
@@ -763,13 +761,22 @@ public class ResultPanel extends JPanel {
                     "exception while " + shortVariety + "-saving: flushing the buffer",
                     false, null);
             } else {
-                saveButton.setEnabled(false);
                 if (previousFocusOwner != null) {
                     previousFocusOwner.requestFocus();
                 }
             }
         }
-        return saveWriter;
+        saveWriter.stop();
+        return null;
+        /* TODO
+         * 
+         * This used to return the saveWriter. This was then reused
+         * for the next graph and the graphs could be re-used.
+         * This however means that the same graph can't be saved
+         * in different formats. Better would be to have a list of
+         * opened files and the option to append to them.
+         * Of course, the writer shouldn be closed in that case.
+         */
     }
 
     void saveFoldnet() {
