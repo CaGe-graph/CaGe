@@ -44,7 +44,7 @@ typedef struct {
 
 #define NUMBER(G, numberings, numb, i) numberings[numb * G->boundary_length + i]
 
-static int DUALS, KEKULE, OUTPUT, BIPARTITE;
+static int DUALS, KEKULE, FIX, OUTPUT, BIPARTITE;
 
 static unsigned long int MODULO, INDEX, dual_index;
 
@@ -114,7 +114,7 @@ static void compute_dual_code(GRAPH* G, unsigned char *code) {
   edge_code = code + 4 * G->faces + 1;
   *code = dual_size; code++;
 
-  temp = G->firstedge[0];
+  temp = G->firstedge[G->size - 1];
   number[temp->leftface] = 1;
   number[temp->rightface] = 2;
   last_number = 2;
@@ -212,12 +212,51 @@ static void write_planar_code(GRAPH *G) {
   fwrite(code, sizeof(unsigned char), size, OUTFILE);
 }
 
+#define RENUMBER(i) fputc((code[i] == 2) ? two : ((code[i] == two) ? 2 : code[i]), OUTFILE)
+
 static void write_dual_planar_code(GRAPH *G) {
-  int size = 3 * G->maxedges - 3 * (G->edges / 2) - G->maxsize + 2;
-  unsigned char code[size];
+  int i, twopos, size = 3 * G->maxedges - 3 * (G->edges / 2) - G->maxsize + 2;
+  unsigned char two, code[size];
 
   compute_dual_code(G, code);
-  fwrite(code, sizeof(unsigned char), size, OUTFILE);
+
+  if (FIX) {
+    two = code[2];
+
+    /* size */
+    fputc(code[0], OUTFILE);
+
+    /* 1 */
+    fputc(two, OUTFILE);
+    fputc(2, OUTFILE);
+    RENUMBER(3);
+    fputc(0, OUTFILE);
+
+    /* 2 */
+    if (two <= G->faces) {
+      /* two is vertex of degree 3 */
+      twopos = 4 * two - 3;
+      for (i = 0; i < 3; i++) RENUMBER(twopos + i);
+      fputc(0, OUTFILE);
+    } else {
+      /* two is vertex of degree 2 */
+      twopos = G->faces + 3 * two - 2;
+      for (i = 0; i < 2; i++) RENUMBER(twopos + i);
+      fputc(0, OUTFILE);
+    }
+
+    /* 2 to two */
+    for (i = 9; i < twopos; i++) RENUMBER(i);
+
+    /* two */
+    for (i = 5; i < 8; i++) RENUMBER(i);
+    fputc(0, OUTFILE);
+
+    /* remainder */
+    for (i = twopos + (two <= G->faces ? 4 : 3); i < size; i++) RENUMBER(i);
+  } else {
+    fwrite(code, sizeof(unsigned char), size, OUTFILE);
+  }
 }
 
 
@@ -1204,10 +1243,11 @@ static void construct_graphs(GRAPH *G, int *facecount, EDGE **numberings, int nb
 
 
 static void write_help() {
-  fprintf(stdout, "Usage: ngons [-p] [-d] [-o OUTFILE] [-m M] [-i I] SPECS\n\n");
+  fprintf(stdout, "Usage: ngons [-p] [-d] [-k] [-f] [-o OUTFILE] [-m M] [-i I] SPECS\n\n");
   fprintf(stdout, " -p,--planarcode write planar code to stdout or outfile\n");
   fprintf(stdout, " -d,--duals      generate inner duals\n");
   fprintf(stdout, " -k,--kekule     filter kekule structures\n");
+  fprintf(stdout, " -f,--fix        fix the outer face in clockwise direction of edge (1,2)\n");
   fprintf(stdout, " -o,--output     write to OUTFILE instead of stdout\n");
   fprintf(stdout, " -m,--modulo\n");
   fprintf(stdout, " -i,--index      only use inner dual with index I (modulo M)\n");
@@ -1223,6 +1263,7 @@ int main(int argc, char *argv[]) {
 
   DUALS = 0;
   KEKULE = 0;
+  FIX = 0;
   OUTPUT = 0;
   OUTFILE = stdout;
   BIPARTITE = 1;
@@ -1234,6 +1275,7 @@ int main(int argc, char *argv[]) {
     {"planarcode", no_argument,       0, 'p'},
     {"duals",       no_argument,       0, 'd'},
     {"kekule",      no_argument,       0, 'k'},
+    {"fix",         no_argument,       0, 'k'},
     {"output",      required_argument, 0, 'o'},
     {"modulo",      required_argument, 0, 'm'},
     {"index",       required_argument, 0, 'i'},
@@ -1241,7 +1283,7 @@ int main(int argc, char *argv[]) {
   };
 
   while (1) {
-    c = getopt_long(argc, argv, "pdko:m:i:h", long_options, &option_index);
+    c = getopt_long(argc, argv, "pdkfo:m:i:h", long_options, &option_index);
     if (c == -1) break;
     switch (c) {
       case 'p':
@@ -1252,6 +1294,9 @@ int main(int argc, char *argv[]) {
         break;
       case 'k':
         KEKULE = 1;
+        break;
+      case 'f':
+        FIX = 1;
         break;
       case 'o':
         OUTFILE = fopen(optarg, "w");
