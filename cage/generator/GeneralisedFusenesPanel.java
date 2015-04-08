@@ -128,6 +128,7 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
         List<String> genList = new ArrayList<>(), fileList = new ArrayList<>();
         
         genList.add("ngons");
+        genList.add("-f");
         genList.add("-p");
         fileList.add("ngons");
         
@@ -154,7 +155,7 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
                 fileList.toArray(new String[fileList.size()]), "_");
 
 
-        embed2D = new String[][]{{"embed"}};
+        embed2D = new String[][]{{"embed", "-b1,2"}};
         embed3D = new String[][]{{"embed", "-d3", "-f1,1,4"}};
 
         ElementRule rule = new ValencyElementRule("H C C");
