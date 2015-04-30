@@ -54,8 +54,8 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
 
     private void initGUI() throws Exception {
         setLayout(new GridBagLayout());
-        JPanel CGFExtrasPanel = new JPanel(new GridBagLayout());
-        JPanel CGFFaceOptionsPanel = new JPanel(new GridBagLayout());
+        JPanel extrasPanel = new JPanel(new GridBagLayout());
+        JPanel faceOptionsPanel = new JPanel(new GridBagLayout());
         
         final EnhancedSlider facesSlider = new EnhancedSlider();
         Dictionary<Integer, JLabel> facesLabels = facesSlider.createStandardLabels(5, 5);
@@ -92,7 +92,7 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
                 facesSlider.setValue(n);
             }
         });
-        sizeOptionsMap = new SizeOptionsMap(CGFFaceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton, false, true, true);
+        sizeOptionsMap = new SizeOptionsMap(faceOptionsPanel, facesSlider.slider(), facesSlider.getModel(), facesButton, false, true, true);
         sizeOptionsMap.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -106,17 +106,17 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
         kekulean.setActionCommand("k");
         kekulean.setSelected(false);
         
-        JPanel CGFFacesPanel = new JPanel(new GridBagLayout());
-        CGFFacesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
-        CGFFacesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-        CGFFacesPanel.add(facesButton, new GridBagConstraints(1, 1, 1, 1, 0.0010, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 30, 0, 5), 0, 5));
-        CGFExtrasPanel.add(new JLabel(), new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        CGFExtrasPanel.add(kekulean, new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        this.add(CGFFacesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        JPanel facesPanel = new JPanel(new GridBagLayout());
+        facesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
+        facesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+        facesPanel.add(facesButton, new GridBagConstraints(1, 1, 1, 1, 0.0010, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 30, 0, 5), 0, 5));
+        extrasPanel.add(new JLabel(), new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        extrasPanel.add(kekulean, new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        this.add(facesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(includedFacesLabel, new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 5, 0, 0), 0, 0));
-        this.add(CGFFaceOptionsPanel, new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
+        this.add(faceOptionsPanel, new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
         this.add(new JSeparator(SwingConstants.HORIZONTAL), new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 0, 10, 0), 0, 0));
-        this.add(CGFExtrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0), 0, 0));
+        this.add(extrasPanel, new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0), 0, 0));
     }
 
     @Override
