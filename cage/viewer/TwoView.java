@@ -325,7 +325,7 @@ public class TwoView implements CaGeViewer {
                 protected void save(File file) {
                     BufferedImage im =new BufferedImage(
                         twoViewPanel.getWidth(), twoViewPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                    twoViewPanel.paintComponent(im.getGraphics());
+                    twoViewPanel.paintGraph(im.getGraphics());
                     try {
                         ImageIO.write(im, "PNG", file);
                     } catch (IOException ex) {

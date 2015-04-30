@@ -168,6 +168,10 @@ public class TwoViewPanel extends JPanel {
         if (model.getResult().getGraph() == null) {
             return;
         }
+        paintGraph(g);
+    }
+    
+    public void paintGraph(Graphics g){
         g = g.create();
         g.setFont(getFont());
         twoViewPainter.setGraphics(g);
