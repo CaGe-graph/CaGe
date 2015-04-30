@@ -39,6 +39,7 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
     private static final int MAX_POLYGON_FACES = 40;
     
     private JCheckBox kekulean = new JCheckBox();
+    private JCheckBox regularEmbedded = new JCheckBox();
     private SizeOptionsMap sizeOptionsMap;
 
     public GeneralisedFusenesPanel() {
@@ -106,12 +107,18 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
         kekulean.setActionCommand("k");
         kekulean.setSelected(false);
         
+        regularEmbedded.setText("only graphs which can be embedded in a regular lattice");
+        regularEmbedded.setMnemonic(KeyEvent.VK_R);
+        regularEmbedded.setActionCommand("r");
+        regularEmbedded.setSelected(false);
+        
         JPanel facesPanel = new JPanel(new GridBagLayout());
         facesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
         facesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         facesPanel.add(facesButton, new GridBagConstraints(1, 1, 1, 1, 0.0010, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 30, 0, 5), 0, 5));
         extrasPanel.add(new JLabel(), new GridBagConstraints(0, 0, 1, 1, 0.01, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         extrasPanel.add(kekulean, new GridBagConstraints(3, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        extrasPanel.add(regularEmbedded, new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(facesPanel, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         this.add(includedFacesLabel, new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 5, 0, 0), 0, 0));
         this.add(faceOptionsPanel, new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 10, 0), 0, 0));
@@ -135,6 +142,11 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
         if(kekulean.isSelected()){
             genList.add("-k");
             fileList.add("k");
+        }
+        
+        if(regularEmbedded.isSelected()){
+            genList.add("-r");
+            fileList.add("r");
         }
         
         for (SizeOption sizeOption : sizeOptionsMap.values()) {
@@ -176,18 +188,27 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
      */
     private void verifyData(){
         //is at least one face type added
-        boolean faceAdded = false;
+        int faceTypeCount = 0;
 
         Iterator it = sizeOptionsMap.values().iterator();
         if(it.hasNext()){
-            SizeOption sizeOption = (SizeOption) it.next();
-            while (!sizeOption.isActive() && it.hasNext()) {
-                sizeOption = (SizeOption) it.next();
+            while (it.hasNext()) {
+                SizeOption sizeOption = (SizeOption) it.next();
+                if(sizeOption.isActive()){
+                    faceTypeCount++;
+                }
+                
             }
-            faceAdded = sizeOption.isActive();
         }
 
-        getNextButton().setEnabled(faceAdded);
+        getNextButton().setEnabled(faceTypeCount>0);
+        
+        if(faceTypeCount > 1){
+            regularEmbedded.setSelected(false);
+            regularEmbedded.setEnabled(false);
+        } else {
+            regularEmbedded.setEnabled(true);
+        }
     }
 }
 
