@@ -215,28 +215,30 @@ public class SaveDialog extends FlaggedJDialog {
 
     @Override
     public void handleClosing() {
-        WriterConfigurationHandler handler = fileFormatBox.getConfigurationHandler();
-        if(handler!=null){
-            JPanel configurationPanel = handler.getConfigurationPanel();
-            if(configurationPanel != null){
-                //show dialog containing panel
-                final JDialog configurationDialog = new JDialog(this, "Options", true);
-                configurationDialog.setLayout(new BorderLayout(5, 5));
-                configurationDialog.add(configurationPanel, BorderLayout.NORTH);
-                configurationDialog.add(new JButton(new AbstractAction("OK") {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        //just close the dialog
-                        configurationDialog.setVisible(false);
-                    }
-                }), BorderLayout.SOUTH);
-                configurationDialog.pack();
-                configurationDialog.setLocationRelativeTo(this);
-                configurationDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-                configurationDialog.setVisible(true);
-                
-                //configure writer
-                handler.configureWriter(fileFormatBox.getCaGeWriter());
+        if(fileFormatBox!=null){
+            WriterConfigurationHandler handler = fileFormatBox.getConfigurationHandler();
+            if(handler!=null){
+                JPanel configurationPanel = handler.getConfigurationPanel();
+                if(configurationPanel != null){
+                    //show dialog containing panel
+                    final JDialog configurationDialog = new JDialog(this, "Options", true);
+                    configurationDialog.setLayout(new BorderLayout(5, 5));
+                    configurationDialog.add(configurationPanel, BorderLayout.NORTH);
+                    configurationDialog.add(new JButton(new AbstractAction("OK") {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            //just close the dialog
+                            configurationDialog.setVisible(false);
+                        }
+                    }), BorderLayout.SOUTH);
+                    configurationDialog.pack();
+                    configurationDialog.setLocationRelativeTo(this);
+                    configurationDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                    configurationDialog.setVisible(true);
+
+                    //configure writer
+                    handler.configureWriter(fileFormatBox.getCaGeWriter());
+                }
             }
         }
     }
