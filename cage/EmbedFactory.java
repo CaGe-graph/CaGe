@@ -109,5 +109,22 @@ public class EmbedFactory {
                     "No non-native embedder object implemented yet");
         }
     }
+    
+    /**
+     * Returns an embedder that is identical to the given embedder.
+     * 
+     * @param embedder
+     * @return 
+     */
+    public static Embedder duplicateEmbedder(Embedder embedder){
+        if(embedder instanceof NativeEmbedEmbedder){
+            return new NativeEmbedEmbedder(embedder.isConstant(),
+                    embedder.getEmbed2DNew(), embedder.getEmbed3DNew(),
+                    embedder.getIntensityFactor(), embedder.getMode());
+        } else {
+            throw new RuntimeException(
+                    "No non-native embedder object implemented yet");
+        }
+    }
 }
 
