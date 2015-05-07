@@ -119,6 +119,11 @@ class NativeEmbedEmbedder extends Embedder {
     }
 
     @Override
+    public float getIntensityFactor() {
+        return intensityFactor;
+    }
+
+    @Override
     public void setMode(int mode) {
         Debug.print("{ setMode");
         this.embeddedMode = mode;

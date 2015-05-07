@@ -21,6 +21,8 @@ public abstract class Embedder {
 
     public abstract void setIntensityFactor(float factor);
 
+    public abstract float getIntensityFactor();
+
     public abstract void setMode(int mode);
 
     public abstract int getMode();
