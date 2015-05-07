@@ -159,10 +159,8 @@ public class OutputPanel extends JPanel {
             @Override
             public void update() {
                 if (generatorCmdLine.isVisible()) {
-                    Embedder embedder = generatorInfo.getEmbedder();
                     String cmdLineGenerator = generatorCmdLine.getText();
                     generatorInfo.setGenerator(Systoolbox.parseCmdLine(cmdLineGenerator));
-                    generatorInfo.setEmbedder(embedder);
                     fireGeneratorInfoChanged();
                 }
             }
