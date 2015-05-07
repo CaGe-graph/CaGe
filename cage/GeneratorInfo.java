@@ -27,6 +27,14 @@ public abstract class GeneratorInfo {
      * generator.
      */
     public abstract void setGenerator(String[][] generator);
+    
+    /**
+     * Returns the default embedder for this generator. This allows
+     * the embedder to be restored if it was altered.
+     * 
+     * @return An array of arrays of <code>String</code>s representing the embedder.
+     */
+    public abstract Embedder getDefaultEmbedder();
 
     /**
      * Returns the embedder to be used for this generator.

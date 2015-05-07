@@ -8,6 +8,7 @@ public class StaticGeneratorInfo extends GeneratorInfo {
 
     private String[][] generator;
     private Embedder embedder;
+    private final Embedder defaultEmbedder;
     private String filename;
     private int maxFacesize;
     private boolean reembed2DEnabled;
@@ -111,6 +112,7 @@ public class StaticGeneratorInfo extends GeneratorInfo {
             int expertMode) {
         this.generator = generator;
         this.embedder = embedder;
+        this.defaultEmbedder = embedder;
         this.filename = filename;
         this.maxFacesize = maxFacesize;
         this.reembed2DEnabled = reembed2DEnabled;
@@ -131,6 +133,11 @@ public class StaticGeneratorInfo extends GeneratorInfo {
     @Override
     public Embedder getEmbedder() {
         return embedder;
+    }
+
+    @Override
+    public Embedder getDefaultEmbedder() {
+        return defaultEmbedder;
     }
 
     @Override
