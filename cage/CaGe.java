@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -85,7 +87,8 @@ public class CaGe implements ActionListener {
                 }
                 config.load(configInput);
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE, 
+                        "Error while loading configuration file", e);
                 System.exit(1);
             }
 
@@ -150,7 +153,8 @@ public class CaGe implements ActionListener {
                     Integer.parseInt(config.getProperty("CaGe.GraphNoDigits"));
 
         } catch (Throwable t) {
-            t.printStackTrace();
+            Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE, 
+                    "Error while initialising CaGe", t);
             System.exit(1);
         }
         nativesAvailable = nativesAvailableValue;
@@ -166,7 +170,8 @@ public class CaGe implements ActionListener {
                 if(o instanceof EmbeddingTypeFactory)
                     embeddingTypeFactories.add((EmbeddingTypeFactory)o);
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE, 
+                        "Error while trying to load EmbeddingTypeFactory", ex);
             }
         }
 
