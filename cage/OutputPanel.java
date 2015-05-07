@@ -158,13 +158,13 @@ public class OutputPanel extends JPanel {
 
             @Override
             public void update() {
-                Embedder embedder = generatorInfo.getEmbedder();
                 if (generatorCmdLine.isVisible()) {
+                    Embedder embedder = generatorInfo.getEmbedder();
                     String cmdLineGenerator = generatorCmdLine.getText();
                     generatorInfo.setGenerator(Systoolbox.parseCmdLine(cmdLineGenerator));
+                    generatorInfo.setEmbedder(embedder);
+                    fireGeneratorInfoChanged();
                 }
-                generatorInfo.setEmbedder(embedder);
-                fireGeneratorInfoChanged();
             }
         });
         generatorControlsGroup.addComponent(generatorCmdLine);
@@ -184,13 +184,13 @@ public class OutputPanel extends JPanel {
 
             @Override
             public void update() {
-                Embedder embedder = generatorInfo.getEmbedder();
                 if (embed2DCmdLine.isVisible() && embed2DCmdLine.getText().trim().length() > 0) {
+                    Embedder embedder = generatorInfo.getEmbedder();
                     String cmdLine2D = embed2DCmdLine.getText();
                     embedder.setEmbed2D(Systoolbox.parseCmdLine(cmdLine2D));
+                    generatorInfo.setEmbedder(embedder);
+                    fireGeneratorInfoChanged();
                 }
-                generatorInfo.setEmbedder(embedder);
-                fireGeneratorInfoChanged();
             }
         });
         new JTextComponentFocusSelector(embed2DCmdLine);
@@ -210,13 +210,13 @@ public class OutputPanel extends JPanel {
 
             @Override
             public void update() {
-                Embedder embedder = generatorInfo.getEmbedder();
                 if (embed3DCmdLine.isVisible() && embed3DCmdLine.getText().trim().length() > 0) {
+                    Embedder embedder = generatorInfo.getEmbedder();
                     String cmdLine3D = embed3DCmdLine.getText();
                     embedder.setEmbed3D(Systoolbox.parseCmdLine(cmdLine3D));
+                    generatorInfo.setEmbedder(embedder);
+                    fireGeneratorInfoChanged();
                 }
-                generatorInfo.setEmbedder(embedder);
-                fireGeneratorInfoChanged();
             }
         });
         new JTextComponentFocusSelector(embed3DCmdLine);
