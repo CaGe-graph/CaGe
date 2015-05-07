@@ -80,9 +80,9 @@ if expr $sysname = 'Mac' 2>&- >&-
         -classpath "$cp1$cp2" \
         -Xdock:name="CaGe" \
         -Xdock:icon=img/logo.png \
-        cage.CaGe
+        cage.CaGe 2>"$CaGe_InstallDir"./cage.log
   else sh "$CaGe_InstallDir"./java \
         -D"CaGe.InstallDir=$CaGe_InstallDir_NoSlash" \
         -classpath "$cp1$cp2" \
-        cage.CaGe
+        cage.CaGe 2>"$CaGe_InstallDir"./cage.log
 fi
