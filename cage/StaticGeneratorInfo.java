@@ -112,7 +112,7 @@ public class StaticGeneratorInfo extends GeneratorInfo {
             int expertMode) {
         this.generator = generator;
         this.embedder = embedder;
-        this.defaultEmbedder = embedder;
+        this.defaultEmbedder = EmbedFactory.duplicateEmbedder(embedder);
         this.filename = filename;
         this.maxFacesize = maxFacesize;
         this.reembed2DEnabled = reembed2DEnabled;
