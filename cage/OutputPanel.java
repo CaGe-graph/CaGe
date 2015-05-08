@@ -467,7 +467,15 @@ public class OutputPanel extends JPanel {
         if (showEmbedControls) {
             if (embed2DCmdLine.getText().length() == 0 || !embedder.isConstant()) {
                 embed2DCmdLine.setText(Systoolbox.makeCmdLine(embedder.getEmbed2DNew()));
+            } else {
+                embedder.setEmbed2D(Systoolbox.parseCmdLine(embed2DCmdLine.getText()));
+                fireGeneratorInfoChanged();
+            }
+            if (embed3DCmdLine.getText().length() == 0 || !embedder.isConstant()) {
                 embed3DCmdLine.setText(Systoolbox.makeCmdLine(embedder.getEmbed3DNew()));
+            } else {
+                embedder.setEmbed3D(Systoolbox.parseCmdLine(embed3DCmdLine.getText()));
+                fireGeneratorInfoChanged();
             }
             expertLabelText += (expertLabelText.length() > 0 ? "/" : "") + "embedders";
         }
