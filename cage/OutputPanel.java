@@ -193,6 +193,19 @@ public class OutputPanel extends JPanel {
                 }
             }
         });
+        //highlight the text field if the command differs from the default command
+        addOutputSettingsListener(new OutputSettingsListener() {
+
+            @Override
+            public void generatorInfoChanged(GeneratorInfo generatorInfo) {
+                if(!embed2DCmdLine.getText().equals(Systoolbox.makeCmdLine(
+                        generatorInfo.getDefaultEmbedder().getEmbed2DNew()))){
+                    embed2DCmdLine.setBackground(Color.YELLOW);
+                } else {
+                    embed2DCmdLine.setBackground(Color.WHITE);
+                }
+            }
+        });
         new JTextComponentFocusSelector(embed2DCmdLine);
         embedControlsGroup.addComponent(embed2DCmdLine);
         expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
@@ -218,6 +231,19 @@ public class OutputPanel extends JPanel {
                     String cmdLine3D = embed3DCmdLine.getText();
                     generatorInfo.getEmbedder().setEmbed3D(Systoolbox.parseCmdLine(cmdLine3D));
                     fireGeneratorInfoChanged();
+                }
+            }
+        });
+        //highlight the text field if the command differs from the default command
+        addOutputSettingsListener(new OutputSettingsListener() {
+
+            @Override
+            public void generatorInfoChanged(GeneratorInfo generatorInfo) {
+                if(!embed3DCmdLine.getText().equals(Systoolbox.makeCmdLine(
+                        generatorInfo.getDefaultEmbedder().getEmbed3DNew()))){
+                    embed3DCmdLine.setBackground(Color.YELLOW);
+                } else {
+                    embed3DCmdLine.setBackground(Color.WHITE);
                 }
             }
         });
