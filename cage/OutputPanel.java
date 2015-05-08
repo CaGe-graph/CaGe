@@ -183,10 +183,8 @@ public class OutputPanel extends JPanel {
             @Override
             public void update() {
                 if (embed2DCmdLine.isVisible() && embed2DCmdLine.getText().trim().length() > 0) {
-                    Embedder embedder = generatorInfo.getEmbedder();
                     String cmdLine2D = embed2DCmdLine.getText();
-                    embedder.setEmbed2D(Systoolbox.parseCmdLine(cmdLine2D));
-                    generatorInfo.setEmbedder(embedder);
+                    generatorInfo.getEmbedder().setEmbed2D(Systoolbox.parseCmdLine(cmdLine2D));
                     fireGeneratorInfoChanged();
                 }
             }
@@ -209,10 +207,8 @@ public class OutputPanel extends JPanel {
             @Override
             public void update() {
                 if (embed3DCmdLine.isVisible() && embed3DCmdLine.getText().trim().length() > 0) {
-                    Embedder embedder = generatorInfo.getEmbedder();
                     String cmdLine3D = embed3DCmdLine.getText();
-                    embedder.setEmbed3D(Systoolbox.parseCmdLine(cmdLine3D));
-                    generatorInfo.setEmbedder(embedder);
+                    generatorInfo.getEmbedder().setEmbed3D(Systoolbox.parseCmdLine(cmdLine3D));
                     fireGeneratorInfoChanged();
                 }
             }
