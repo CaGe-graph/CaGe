@@ -1,5 +1,7 @@
 package cage;
 
+import java.util.Arrays;
+
 /**
  * Implementation of {@link GeneratorInfo} that sets all settings using
  * setters and doesn't calculate any of the values.
@@ -7,6 +9,7 @@ package cage;
 public class StaticGeneratorInfo extends GeneratorInfo {
 
     private String[][] generator;
+    private String[][] defaultGenerator;
     private Embedder embedder;
     private final Embedder defaultEmbedder;
     private String filename;
@@ -110,7 +113,8 @@ public class StaticGeneratorInfo extends GeneratorInfo {
             boolean reembed2DEnabled,
             ElementRule elementRule,
             int expertMode) {
-        this.generator = generator;
+        this.generator = stringArrayDeepCopy(generator);
+        this.defaultGenerator = stringArrayDeepCopy(generator);
         this.embedder = embedder;
         this.defaultEmbedder = EmbedFactory.duplicateEmbedder(embedder);
         this.filename = filename;
@@ -123,6 +127,11 @@ public class StaticGeneratorInfo extends GeneratorInfo {
     @Override
     public String[][] getGenerator() {
         return generator;
+    }
+
+    @Override
+    public String[][] getDefaultGenerator() {
+        return stringArrayDeepCopy(defaultGenerator);
     }
 
     @Override
@@ -173,5 +182,12 @@ public class StaticGeneratorInfo extends GeneratorInfo {
     @Override
     public int getExpertMode() {
         return expertMode;
+    }
+    
+    private static final String [][] stringArrayDeepCopy(String [][] orig){
+        String[][] copy = new String[orig.length][];
+        for (int i = 0; i < copy.length; i++)
+             copy[i] = Arrays.copyOf(orig[i], orig[i].length);
+        return copy;
     }
 }

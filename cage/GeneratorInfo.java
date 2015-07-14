@@ -29,6 +29,14 @@ public abstract class GeneratorInfo {
     public abstract void setGenerator(String[][] generator);
     
     /**
+     * Returns the default generator command for this generator. This allows
+     * the command to be restored if it was altered.
+     * 
+     * @return An array of arrays of <code>String</code>s representing the generator.
+     */
+    public abstract String[][] getDefaultGenerator();
+    
+    /**
      * Returns the default embedder for this generator. This allows
      * the embedder to be restored if it was altered.
      * 
