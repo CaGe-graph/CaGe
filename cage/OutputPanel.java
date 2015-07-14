@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
+import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -167,7 +168,7 @@ public class OutputPanel extends JPanel {
         });
         generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
-        expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+        expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
 
         //expert section: embed 2D
         JLabel embed2DLabel = new JLabel("2D embedder");
@@ -209,6 +210,18 @@ public class OutputPanel extends JPanel {
         new JTextComponentFocusSelector(embed2DCmdLine);
         embedControlsGroup.addComponent(embed2DCmdLine);
         expertPanel.add(embed2DCmdLine, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+        final JButton reset2DButton = new JButton(new AbstractAction("Reset") {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generatorInfo.getEmbedder().setEmbed2D(
+                        generatorInfo.getDefaultEmbedder().getEmbed2DNew());
+                embed2DCmdLine.setText(Systoolbox.makeCmdLine(
+                        generatorInfo.getDefaultEmbedder().getEmbed2DNew()));
+                fireGeneratorInfoChanged();
+            }
+        });
+        expertPanel.add(reset2DButton, new GridBagConstraints(2, 1, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
 
         //expert section: embed 3D
         JLabel embed3DLabel = new JLabel("3D embedder");
@@ -250,6 +263,19 @@ public class OutputPanel extends JPanel {
         new JTextComponentFocusSelector(embed3DCmdLine);
         embedControlsGroup.addComponent(embed3DCmdLine);
         expertPanel.add(embed3DCmdLine, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+        final JButton reset3DButton = new JButton(new AbstractAction("Reset") {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generatorInfo.getEmbedder().setEmbed3D(
+                        generatorInfo.getDefaultEmbedder().getEmbed3DNew());
+                embed3DCmdLine.setText(Systoolbox.makeCmdLine(
+                        generatorInfo.getDefaultEmbedder().getEmbed3DNew()));
+                fireGeneratorInfoChanged();
+            }
+        });
+        expertPanel.add(reset3DButton, new GridBagConstraints(2, 2, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+
         expertControlsGroup.addComponent(expertPanel);
 
         JSeparator expertControlsSeparator = new JSeparator(SwingConstants.HORIZONTAL);
