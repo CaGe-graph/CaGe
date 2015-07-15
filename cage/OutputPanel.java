@@ -181,7 +181,18 @@ public class OutputPanel extends JPanel {
         });
         generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
-        expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+        expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
+        final JButton resetGeneratorButton = new JButton(new AbstractAction("Reset") {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generatorInfo.setGenerator(generatorInfo.getDefaultGenerator());
+                generatorCmdLine.setText(Systoolbox.makeCmdLine(
+                        generatorInfo.getGenerator()));
+                fireGeneratorInfoChanged();
+            }
+        });
+        expertPanel.add(resetGeneratorButton, new GridBagConstraints(2, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
 
         //expert section: embed 2D
         JLabel embed2DLabel = new JLabel("2D embedder");
