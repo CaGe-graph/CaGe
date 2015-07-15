@@ -58,49 +58,49 @@ public class OutputPanel extends JPanel {
     private List<String> viewersXD;
     private StringBuffer viewerErrors;
     private JButton defaultButton;
-    private JLabel expertLabel = new JLabel();
-    private JTextField generatorCmdLine = new JTextField("");
-    private JTextField embed2DCmdLine = new JTextField("");
-    private JTextField embed3DCmdLine = new JTextField("");
+    private final JLabel expertLabel = new JLabel();
+    private final JTextField generatorCmdLine = new JTextField("");
+    private final JTextField embed2DCmdLine = new JTextField("");
+    private final JTextField embed3DCmdLine = new JTextField("");
 
     //button group that makes sure that text viewers are always all in the same selection state.
-    private SyncButtonGroup viewersXDGroup = new SyncButtonGroup();
+    private final SyncButtonGroup viewersXDGroup = new SyncButtonGroup();
 
-    private JCheckBox outPreFilterCheckBox = new JCheckBox();
-    private JTextField outPreFilterCommand = new JTextField();
+    private final JCheckBox outPreFilterCheckBox = new JCheckBox();
+    private final JTextField outPreFilterCommand = new JTextField();
 
-    private JCheckBox out3DCheckBox = new JCheckBox();
-    private ButtonGroup out3DDestGroup = new ButtonGroup();
-    private JRadioButton out3DViewer = new JRadioButton();
-    private JRadioButton out3DFile = new JRadioButton();
-    private JRadioButton out3DPipe = new JRadioButton();
-    private Min1ButtonGroup out3DViewerGroup = new Min1ButtonGroup("3D", false, out3DCheckBox);
-    private TargetPanel out3DFilePanel = TargetPanel.creatFilePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
-    private TargetPanel out3DPipePanel = TargetPanel.creatPipePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
+    private final JCheckBox out3DCheckBox = new JCheckBox();
+    private final ButtonGroup out3DDestGroup = new ButtonGroup();
+    private final JRadioButton out3DViewer = new JRadioButton();
+    private final JRadioButton out3DFile = new JRadioButton();
+    private final JRadioButton out3DPipe = new JRadioButton();
+    private final Min1ButtonGroup out3DViewerGroup = new Min1ButtonGroup("3D", false, out3DCheckBox);
+    private final TargetPanel out3DFilePanel = TargetPanel.creatFilePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
+    private final TargetPanel out3DPipePanel = TargetPanel.creatPipePanel("3D", KeyEvent.VK_N, KeyEvent.VK_O);
     
-    private JCheckBox out2DCheckBox = new JCheckBox();
-    private ButtonGroup out2DDestGroup = new ButtonGroup();
-    private JRadioButton out2DViewer = new JRadioButton();
-    private JRadioButton out2DFile = new JRadioButton();
-    private JRadioButton out2DPipe = new JRadioButton();
-    private JRadioButton out2DBatch = new JRadioButton();
-    private Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
-    private TargetPanel out2DFilePanel = TargetPanel.creatFilePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
-    private TargetPanel out2DPipePanel = TargetPanel.creatPipePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
+    private final JCheckBox out2DCheckBox = new JCheckBox();
+    private final ButtonGroup out2DDestGroup = new ButtonGroup();
+    private final JRadioButton out2DViewer = new JRadioButton();
+    private final JRadioButton out2DFile = new JRadioButton();
+    private final JRadioButton out2DPipe = new JRadioButton();
+    private final JRadioButton out2DBatch = new JRadioButton();
+    private final Min1ButtonGroup out2DViewerGroup = new Min1ButtonGroup("2D", false, out2DCheckBox);
+    private final TargetPanel out2DFilePanel = TargetPanel.creatFilePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
+    private final TargetPanel out2DPipePanel = TargetPanel.creatPipePanel("2D", KeyEvent.VK_M, KeyEvent.VK_R);
     
-    private ButtonGroup outAdjDestGroup = new ButtonGroup();
-    private JRadioButton outAdjFile = new JRadioButton();
-    private JRadioButton outAdjPipe = new JRadioButton();
-    private TargetPanel outAdjFilePanel = TargetPanel.creatFilePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
-    private TargetPanel outAdjPipePanel = TargetPanel.creatPipePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
+    private final ButtonGroup outAdjDestGroup = new ButtonGroup();
+    private final JRadioButton outAdjFile = new JRadioButton();
+    private final JRadioButton outAdjPipe = new JRadioButton();
+    private final TargetPanel outAdjFilePanel = TargetPanel.creatFilePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
+    private final TargetPanel outAdjPipePanel = TargetPanel.creatPipePanel("Adjacency", KeyEvent.VK_M, KeyEvent.VK_R);
 
-    private ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
-    private ComponentLogicalGroup embedControlsGroup = new ComponentLogicalGroup();
-    private ComponentLogicalGroup generatorControlsGroup = new ComponentLogicalGroup();
+    private final ComponentLogicalGroup expertControlsGroup = new ComponentLogicalGroup();
+    private final ComponentLogicalGroup embedControlsGroup = new ComponentLogicalGroup();
+    private final ComponentLogicalGroup generatorControlsGroup = new ComponentLogicalGroup();
     
     private final BatchTwoViewModel batchTwoViewModel = new BatchTwoViewModel();
     
-    private ActionListener uiActionListener = new ActionListener() {
+    private final ActionListener uiActionListener = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -110,7 +110,7 @@ public class OutputPanel extends JPanel {
         }
     };
     
-    private ActionListener outputOptionsListener = new ActionListener() {
+    private final ActionListener outputOptionsListener = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -800,7 +800,7 @@ public class OutputPanel extends JPanel {
         return batchTwoViewModel;
     }
     
-    private List<OutputSettingsListener> outputSettingsListeners = new ArrayList<>();
+    private final List<OutputSettingsListener> outputSettingsListeners = new ArrayList<>();
     
     public final void addOutputSettingsListener(OutputSettingsListener l){
         outputSettingsListeners.add(l);
