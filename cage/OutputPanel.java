@@ -166,6 +166,19 @@ public class OutputPanel extends JPanel {
                 }
             }
         });
+        //highlight the text field if the command differs from the default command
+        addOutputSettingsListener(new OutputSettingsListener() {
+
+            @Override
+            public void generatorInfoChanged(GeneratorInfo generatorInfo) {
+                if(!generatorCmdLine.getText().trim().equals(Systoolbox.makeCmdLine(
+                        generatorInfo.getDefaultGenerator()).trim())){
+                    generatorCmdLine.setBackground(Color.YELLOW);
+                } else {
+                    generatorCmdLine.setBackground(Color.WHITE);
+                }
+            }
+        });
         generatorControlsGroup.addComponent(generatorCmdLine);
         new JTextComponentFocusSelector(generatorCmdLine);
         expertPanel.add(generatorCmdLine, new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(3, 0, 3, 0), 0, 0));
