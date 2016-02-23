@@ -9,6 +9,8 @@
    gezaehlt... */
 /* 16.6. 2014: problem mit code 3 und mehreren knotenzahlen und gleichzeitig
    output auf stdout geloest. */
+/* 13.2.2016: Fehler bei Detektierung von Cs mit Fixkanten verbessert */
+/* 23.2.2016: Den Effekt desselben Fehlers bei anderen Gruppen entfernt. */
 
 #include<sys/types.h>
 #include<unistd.h>
@@ -4149,24 +4151,32 @@ if (code[1]!=1) {      /* keine Bauchbinde */
     k1 = map[1][0].invers;
     k2 = mini_spiegel[ms_laenge-1];     /* es wird immer der letzte Pfad in der Liste betrachtet */
     bilde_f_sp(&f[0],k1,k2,map[0][0].name);
-      /* Automorphismus, bei dem k1 auf k2 abgebildet wird, wird gebildet */
-    ord = 0;                  /* Ordnung des Automorphismus */
-    /* es reicht, den Funktionswert der Kante k1={e1,e2} zu verfolgen, da k1!=k2, 
-       also k1 keine Fixkante unter f, also f[e1]!=e1 oder f[e2]!=e2 */
-    e1 = k1->ursprung;
-    e2 = k1->name;  
-    do {
-      e1 = f[e1];
-      e2 = f[e2];
-      ord++;
-      if (ord>12) {fprintf(stderr,"Ordnung eines Automorphismus groesser als 12!\n"); exit(41);}
-    } while (((e1!=k1->ursprung) || (e2!=k1->name)) && ord<=2);   /* bis Identitaet erreicht oder
-                            bis klar ist, dass es sich um Drehspiegelung handelt (wegen ord>2) */   
-    /* Nun wird ueberprueft, ob es sich bei der Spiegelung um eine reine Ebenenspiegelung oder um eine
-       Drehspiegelung handelt. Bei einer Spiegelung mit der Ordnung >2  handelt es sich eindeutig um
-       eine Drehspiegelung. Bei einer Spiegelung mit der Ordnung 2 ist zu pruefen, ob der Automorphismus
-       Punkte auf sich selbst oder auf benachbarte Punkte abbildet (dann reine Ebenenspiegelung).
-       Der aktuelle Automorphismus ist noch im Array f vorhanden.     */
+    // Fehler bei Detektierung von Cs mit Fixkanten -- Aenderung: GB 13.2.2016
+    if (symm_ord==2) ord=2; // GB
+    else// GB
+      {//GB
+
+	/* Automorphismus, bei dem k1 auf k2 abgebildet wird, wird gebildet */
+	ord = 0;                  /* Ordnung des Automorphismus */
+	/* es reicht, den Funktionswert der Kante k1={e1,e2} zu verfolgen, da k1!=k2, 
+	   also k1 keine Fixkante unter f, also f[e1]!=e1 oder f[e2]!=e2 */
+	e1 = k1->ursprung;
+	e2 = k1->name;  
+	do {
+	  e1 = f[e1];
+	  e2 = f[e2];
+	  ord++;
+	  // commented out by GB: if (ord>12) {fprintf(stderr,"Ordnung eines Automorphismus groesser als 12!\n"); exit(41);}
+	} while (((e1!=k1->ursprung) || (e2!=k1->name)) && ord<=2);   /* bis Identitaet erreicht oder
+									 bis klar ist, dass es sich um Drehspiegelung handelt (wegen ord>2) */   
+	/* Nun wird ueberprueft, ob es sich bei der Spiegelung um eine reine Ebenenspiegelung oder um eine
+	   Drehspiegelung handelt. Bei einer Spiegelung mit der Ordnung >2  handelt es sich eindeutig um
+	   eine Drehspiegelung. Bei einer Spiegelung mit der Ordnung 2 ist zu pruefen, ob der Automorphismus
+	   Punkte auf sich selbst oder auf benachbarte Punkte abbildet (dann reine Ebenenspiegelung).
+	   Der aktuelle Automorphismus ist noch im Array f vorhanden.     */
+      } //GB
+    if (ord==1) ord=2; /* GB: wenn eine gerichtete Kante fix ist unter einem orientierungsumkehrenden Automorphismus
+			               ist die Ordnung 2 */
     dreh = 1;                /* falls keine andere Entdeckung:  Drehspiegelung */
     if (ord==2) {            /* Ebenenspiegelung oder Punktspiegelung ? */
       i=1;
