@@ -33,7 +33,7 @@ public class NanoConesPanel extends GeneratorPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (symmetricButton.isSelected()) {
+            if (faceCenteredButton.isSelected()) {
                 numberOfPentagonsSlider.setMinimum(1);
                 numberOfPentagonsSlider.setMaximum(5);
                 numberOfPentagonsSlider.setLabelTable(null);
@@ -41,7 +41,7 @@ public class NanoConesPanel extends GeneratorPanel {
                 numberOfPentagonsSlider.setMinorTickSpacing(1);
                 numberOfPentagonsSlider.setSnapWhileDragging(1);
                 numberOfPentagonsSlider.setEnabled(true);
-            } else if (nearSymmetricButton.isSelected()) {
+            } else if (vertexCenteredButton.isSelected()) {
                 numberOfPentagonsSlider.setMinimum(2);
                 numberOfPentagonsSlider.setMaximum(4);
                 numberOfPentagonsSlider.setLabelTable(null);
@@ -64,9 +64,9 @@ public class NanoConesPanel extends GeneratorPanel {
     private final EnhancedSlider numberOfPentagonsSlider = new EnhancedSlider();
     private final SpinButton lengthOfSide = new SpinButton(new DefaultBoundedRangeModel(0, 0, 0, Integer.MAX_VALUE));
     private final SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
-    private final JRadioButton symmetricButton;
-    private final JRadioButton nearSymmetricButton;
-    private final JRadioButton nearSymmetricButtonEdge;
+    private final JRadioButton faceCenteredButton;
+    private final JRadioButton vertexCenteredButton;
+    private final JRadioButton edgeCenteredButton;
     private final ButtonGroup symmetricGroup;
     private final JCheckBox iprBox;
     private final JCheckBox hexagonLayersBox;
@@ -83,17 +83,17 @@ public class NanoConesPanel extends GeneratorPanel {
         numberOfPentagonsSlider.setSnapToTicks(true);
         numberOfPentagonsSlider.setSnapWhileDragging(1);
 
-        symmetricButton = new JRadioButton("face-centered");
-        nearSymmetricButton = new JRadioButton("vertex-centered");
-        nearSymmetricButtonEdge = new JRadioButton("edge-centered");
-        symmetricButton.addActionListener(typeButtonListener);
-        nearSymmetricButton.addActionListener(typeButtonListener);
-        nearSymmetricButtonEdge.addActionListener(typeButtonListener);
+        faceCenteredButton = new JRadioButton("face-centered");
+        vertexCenteredButton = new JRadioButton("vertex-centered");
+        edgeCenteredButton = new JRadioButton("edge-centered");
+        faceCenteredButton.addActionListener(typeButtonListener);
+        vertexCenteredButton.addActionListener(typeButtonListener);
+        edgeCenteredButton.addActionListener(typeButtonListener);
         symmetricGroup = new ButtonGroup();
-        symmetricGroup.add(symmetricButton);
-        symmetricGroup.add(nearSymmetricButton);
-        symmetricGroup.add(nearSymmetricButtonEdge);
-        symmetricButton.setSelected(true);
+        symmetricGroup.add(faceCenteredButton);
+        symmetricGroup.add(vertexCenteredButton);
+        symmetricGroup.add(edgeCenteredButton);
+        faceCenteredButton.setSelected(true);
 
         iprBox = new JCheckBox("isolated pentagons (ipr)");
         hexagonLayersBox = new JCheckBox("Add a number of hexagon layers");
@@ -101,9 +101,9 @@ public class NanoConesPanel extends GeneratorPanel {
         hexagonLayersBox.addActionListener(new HexagonLayersBoxListener());
         
         JPanel typeSelectionPanel = new JPanel(new GridLayout(1, 3));
-        typeSelectionPanel.add(symmetricButton);
-        typeSelectionPanel.add(nearSymmetricButton);
-        typeSelectionPanel.add(nearSymmetricButtonEdge);
+        typeSelectionPanel.add(faceCenteredButton);
+        typeSelectionPanel.add(vertexCenteredButton);
+        typeSelectionPanel.add(edgeCenteredButton);
 
         add(typeSelectionPanel,
                 new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0,
@@ -141,9 +141,9 @@ public class NanoConesPanel extends GeneratorPanel {
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        String symmetric = symmetricButton.isSelected() ? "s" : "n";
+        String symmetric = faceCenteredButton.isSelected() ? "s" : "n";
         String pentagons = Integer.toString(numberOfPentagonsSlider.getValue());
-        String length = Integer.toString(lengthOfSide.getValue() - (symmetricButton.isSelected() ? 0 : 1));
+        String length = Integer.toString(lengthOfSide.getValue() - (faceCenteredButton.isSelected() ? 0 : 1));
 
         String ipr = iprBox.isSelected() ? " -i" : "";
         String iprFile = iprBox.isSelected() ? "_i" : "";
