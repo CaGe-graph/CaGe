@@ -1,0 +1,137 @@
+%!PS-Adobe-3.0
+
+%%BeginProlog
+
+
+% This file contains a number of 2D-embedded graphs, one per page,
+% saved by CaGe, the Chemical & abstract Graph Environment.
+% CaGe homepage: http://www.mathematik.uni-bielefeld.de/~CaGe/
+
+% /edge_width 5 def
+% /edge_gray 0.75 def
+
+% /vertex_linewidth 2 def
+% /vertex_radius 12 def
+% /vertex_color_1 { 1.0 0.650 0.395 } bind def
+% /vertex_color_2 { 1.0 0.775 0.620 } bind def
+% /vertex_number_color { 0.25 0.25 1.0 } bind def
+
+% The previous "def" lines are commented out because they are normally
+% uneffective and appear mostly for historical reasons. Also, the values
+% set here can not be changed through the CaGe.ini file.
+% There are more instances of these lines near the beginning of each
+% page, and those are the lines affected by the settings in CaGe.ini.
+% If you want to edit the appearance of any graph, go to the respective
+% page and edit the values there.
+% 
+% You could still uncomment the above lines and use them as file-wide
+% defaults: delete the equivalent lines in front of a graph and that
+% graph will use the settings here.
+
+
+/begin_edges
+{
+  edge_width setlinewidth
+  edge_gray setgray
+  1 setlinecap
+  2 setlinejoin
+  newpath
+}
+bind def
+
+/begin_colored_edges
+{
+  stroke
+  edge_width setlinewidth
+  edge_color setrgbcolor
+  1 setlinecap
+  2 setlinejoin
+  newpath
+}
+bind def
+
+
+/edge
+{
+  moveto lineto
+}
+bind def
+
+
+/begin_vertices
+{
+  vertex_color_1
+  [ vertex_color_2
+  4 index sub 3 1 roll
+  5 index sub 3 1 roll
+  6 index sub 3 1 roll
+  ] 
+  cvx bind
+  /vertex_color_diff exch def
+  3 { pop } repeat
+  stroke
+  vertex_linewidth setlinewidth
+}
+bind def
+
+
+/vertex
+{
+  /centery exch def
+  /centerx exch def
+  0 setgray
+  newpath
+  centerx centery vertex_radius vertex_linewidth 2 div sub 0 360 arc
+  closepath
+  gsave
+  vertex_color_1 setrgbcolor fill
+  grestore
+  stroke
+}
+bind def
+
+
+/set_size
+{
+  newpath 100 200 moveto
+  /Helvetica findfont
+  dup setfont
+  exch false charpath
+%  flattenpath
+  pathbbox
+  3 -1 roll sub dup mul 3 1 roll sub dup mul add sqrt
+  vertex_radius vertex_linewidth 2 div sub 1.7 mul
+  exch div
+  scalefont setfont
+}
+bind def
+
+
+/center_text
+{
+  gsave
+    newpath
+    0 0 moveto
+    dup false charpath
+%    flattenpath
+    pathbbox
+    3 -1 roll add 2 div 0 exch sub 3 1 roll add 2 div 0 exch sub exch
+    newpath
+    5 -2 roll moveto
+    rmoveto
+    show
+  grestore
+}
+bind def
+
+
+/vertex_number
+{
+  vertex_number_color setrgbcolor
+  center_text
+}
+bind def
+
+
+%%EndProlog
+
