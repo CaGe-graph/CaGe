@@ -57,8 +57,8 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
             try (InputStream prolog = new BufferedInputStream(
                     ClassLoader.getSystemResource(
                             CaGe.getCaGePropertyAsBoolean("TwoView.PostScript.VertexGradient", false) ?
-                                    "cage/viewer/TwoViewProlog.ps" :
-                                    "cage/viewer/TwoViewPrologSimpleVertex.ps"
+                                    "cage/viewer/twoview/TwoViewProlog.ps" :
+                                    "cage/viewer/twoview/TwoViewPrologSimpleVertex.ps"
                             ).openStream())) {
                 int c;
                 while ((c = prolog.read()) >= 0) {
