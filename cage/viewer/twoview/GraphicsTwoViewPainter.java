@@ -5,6 +5,7 @@
 
 package cage.viewer.twoview;
 
+import cage.CaGe;
 import cage.CaGeResult;
 
 import java.awt.Color;
@@ -32,6 +33,9 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
 
     private Color edgeColor;
     private Color specialEdgeColor;
+    private Color vertexColor1;
+    private Color vertexColor2;
+    private Color numberColor;
     private Font[] vertexFontArray;
 
     private final TwoViewListener listener = new TwoViewAdapter() {
@@ -67,6 +71,13 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         super(model);
         initializeVertexFonts();
         calculateColors();
+        
+        vertexColor1 = CaGe.getCaGePropertyAsColor("TwoView.VertexColor1", 
+                DEFAULT_VERTEX_COLOR1);
+        vertexColor2 = CaGe.getCaGePropertyAsColor("TwoView.VertexColor2", 
+                DEFAULT_VERTEX_COLOR2);
+        numberColor = CaGe.getCaGePropertyAsColor("TwoView.VertexNumberColor", 
+                DEFAULT_NUMBER_COLOR);
         
         this.model.addTwoViewListener(listener);
     }
@@ -261,20 +272,17 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         final int vertexCornerY = yp - vertexDiameter/2;
         
         //calculate the two endpoints of the gradient
-        Color colorA = DEFAULT_VERTEX_COLOR1;
-        Color colorB = DEFAULT_VERTEX_COLOR2;
-        
         ((Graphics2D)graphics).setPaint(
                 new GradientPaint(
-                        vertexCornerX, vertexCornerY, colorA, //from color A in upper left corner
-                        vertexCornerX + vertexDiameter, vertexCornerY+vertexDiameter, colorB)); //to color B in lower right corner
+                        vertexCornerX, vertexCornerY, vertexColor1, //from color 1 in upper left corner
+                        vertexCornerX + vertexDiameter, vertexCornerY+vertexDiameter, vertexColor2)); //to color 2 in lower right corner
         
         graphics.fillOval(vertexCornerX, vertexCornerY, vertexDiameter, vertexDiameter);
         graphics.setColor(Color.BLACK);
         graphics.drawOval(vertexCornerX, vertexCornerY, vertexDiameter, vertexDiameter);
         if (model.getShowNumbers() && vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE].getSize() > 0) {
             String numberString = Integer.toString(number);
-            graphics.setColor(DEFAULT_NUMBER_COLOR);
+            graphics.setColor(numberColor);
             int width = graphics.getFontMetrics().stringWidth(numberString);
             graphics.drawString(numberString,
                     xp - (int) Math.floor(width * 0.52),
