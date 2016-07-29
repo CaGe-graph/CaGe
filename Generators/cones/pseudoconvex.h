@@ -85,6 +85,7 @@ struct _patch {
 	FRAGMENT *firstFragment;
 	SHELL *outershell;
         int numberOfLayers;
+        boolean moreSymmetric; //TODO:quite hackish solution for passing this on
 };
 
 typedef struct _patch PATCH;
@@ -102,8 +103,8 @@ long getMaxVertices();
 long getMinVertices();
 void exportPlanarGraphCode(PATCH *patch, boolean includeHeader);
 void exportPlanarGraphTable(PATCH *patch);
-void exportInnerSpiral(PATCH *patch);
-void exportExtendedInnerSpiral(PATCH *patch);
+void exportOuterSpiral(PATCH *patch);
+void exportExtendedOuterSpiral(PATCH *patch);
 void exportShells(SHELL *shell);
 
 /*========== CANONICITY ============*/

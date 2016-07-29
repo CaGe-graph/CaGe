@@ -46,11 +46,11 @@ void processStructure(PATCH *patch, SHELL *shell) {
     structureCounter++;
     if (onlyCount) return;
     switch (outputType) {
-        case 'i':
-            exportInnerSpiral(patch);
+        case 'o':
+            exportOuterSpiral(patch);
             break;
         case 'x':
-            exportExtendedInnerSpiral(patch);
+            exportExtendedOuterSpiral(patch);
             break;
         case 's':
             exportShells(shell);
@@ -61,14 +61,30 @@ void processStructure(PATCH *patch, SHELL *shell) {
         case 't':
             exportPlanarGraphTable(patch);
             break;
-        case 'S':
+        case 'i':
             exportStatistics_impl(patch);
             break;
     }
 }
 
 boolean validateStructure(PATCH *patch) {
-    return TRUE;
+    int i;
+    int symmetric = TRUE;
+    if (symmetric) {
+        //first check all other break-edges in clockwise direction
+        for (i = 1; i < 6 - patch->numberOfPentagons; i++) {
+
+        }
+        if (!mirror) {
+            //check all break-edges in counterclockwise direction
+
+        }
+    } else if (!mirror) {
+        //only one other spiral needs to be investigated
+
+    } //there are no ther cases: a nearsymmetric patch is always canonical
+      //if mirror images are considered nonisomorphic
+    return 1;
 }
 
 void start5PentagonsCone(PATCH *patch, int sside, boolean mirror,
@@ -330,11 +346,13 @@ void help(char *name) {
     fprintf(stderr, "  -e c        : Specifies the export format where c is one of\n");
     fprintf(stderr, "                p    planar code (default)\n");
     fprintf(stderr, "                t    adjacency lists in tabular format\n");
-    fprintf(stderr, "                i    inner spirals\n");
-    fprintf(stderr, "                x    extended inner spirals\n");
+    fprintf(stderr, "                o    outer spirals\n");
+    fprintf(stderr, "                x    extended outer spirals\n");
     fprintf(stderr, "                s    shells\n");
-    fprintf(stderr, "                S    statistics only\n");
+    fprintf(stderr, "                i    statistics only\n");
     fprintf(stderr, "  -x          : Don't include a header in case the export format is planar code.\n");
+    fprintf(stderr, "  -s          : Use more symmetric patches for the case of two pentagons and \n");
+    fprintf(stderr, "                nearsymmetric patches.\n");
 }
 
 /**
@@ -380,8 +398,9 @@ int main(int argc, char *argv[]) {
 
     int pentagons, sside, hexagonLayers;
     boolean symmetric;
+    boolean moreSymmetricPatch = FALSE;
 
-    while ((c = getopt(argc, argv, "imche:x")) != -1) {
+    while ((c = getopt(argc, argv, "imche:xs")) != -1) {
         switch (c) {
             case 'i':
                 ipr = TRUE;
@@ -396,12 +415,12 @@ int main(int argc, char *argv[]) {
             case 'e':
                 outputType = optarg[0];
                 switch (outputType) {
-                    case 'i':
+                    case 'o':
                     case 'p':
                     case 's':
                     case 't':
                     case 'x':
-                    case 'S':
+                    case 'i':
                         break;
                     default:
                         usage(name);
@@ -410,6 +429,9 @@ int main(int argc, char *argv[]) {
                 break;
             case 'x':
                 includeHeader = FALSE;
+                break;
+            case 's':
+                moreSymmetricPatch = TRUE;
                 break;
             case 'h':
                 help(name);
@@ -514,19 +536,39 @@ int main(int argc, char *argv[]) {
     patch->numberOfPentagons = pentagons;
     patch->boundary = (int *) malloc((6 - pentagons) * sizeof (int));
     patch->boundary[0] = sside;
-    {
+    if(pentagons == 2 && !symmetric && moreSymmetricPatch){
+        patch->boundary[1] = sside + 1;
+        patch->boundary[2] = sside;
+        patch->boundary[3] = sside + 1;
+    } else {
         int i;
         for (i = 1; i < (6 - pentagons); i++) patch->boundary[i] = sside + 1 - symmetric;
     }
 
     patch->outershell = NULL;
+    patch->moreSymmetric = moreSymmetricPatch;
 
     //determine the amount of hexagons to add for the given number of layers
     int hexagonsToAdd = 0;
     FRAGMENT *currentFragment = NULL;
     SHELL *currentShell = NULL;
     if (onlyCount) hexagonLayers = 0;
-    {
+    if(pentagons==2 && !symmetric && moreSymmetricPatch){
+        int i;
+        for (i = 0; i < hexagonLayers; i++) {
+            int hexagonsInCurrentLayer = 6 + 4*(sside + hexagonLayers - i - 1);
+            hexagonsToAdd += hexagonsInCurrentLayer;
+            if (i == 0) {
+                patch->firstFragment = createLayersFragment(NULL, hexagonsInCurrentLayer);
+                currentFragment = patch->firstFragment;
+                patch->outershell = addNewShell(NULL, currentFragment->faces, currentFragment);
+                currentShell = patch->outershell;
+            } else {
+                currentFragment = createLayersFragment(currentFragment, hexagonsInCurrentLayer);
+                currentShell = addNewShell(currentShell, currentFragment->faces, currentFragment);
+            }
+        }        
+    } else {
         int i;
         for (i = 0; i < hexagonLayers; i++) {
             hexagonsToAdd += (sside + 1 - symmetric + hexagonLayers - i)*(6 - pentagons) - (1 - symmetric);
@@ -552,8 +594,12 @@ int main(int argc, char *argv[]) {
     patch->innerspiral = is;
 
     //allocate memory for the graph in case this is needed
-    if(outputType=='S' || outputType=='p' || outputType=='t'){
-        initEdges(sside, symmetric, pentagons, hexagonLayers);
+    if(outputType=='i' || outputType=='p' || outputType=='t'){
+        if(pentagons==2 && !symmetric && moreSymmetricPatch){
+            initEdges2PentagonsMoreSymmetric(sside, hexagonLayers);
+        } else {
+            initEdges(sside, symmetric, pentagons, hexagonLayers);
+        }
     }
 
     //start the algorithm
@@ -568,6 +614,8 @@ int main(int argc, char *argv[]) {
     } else if (pentagons == 2) {
         if (onlyCount)
             structureCounter = getTwoPentagonsConesCount(sside, symmetric, mirror);
+        else if (!symmetric && moreSymmetricPatch)
+            getTwoPentagonsConesMoreSymmetric(patch, sside, mirror, currentFragment, currentShell);
         else
             getTwoPentagonsCones(patch, sside, symmetric, mirror, currentFragment, currentShell);
     } else if (pentagons == 3) {
@@ -582,7 +630,7 @@ int main(int argc, char *argv[]) {
     //fprintf(stderr, "Found %d canonical cones satisfying the given parameters.\n", structureCounter);
     fprintf(stderr, "Found %ld cones satisfying the given parameters.\n", structureCounter);
 
-    if(outputType=='S' || outputType=='p' || outputType=='t'){
+    if(outputType=='i' || outputType=='p' || outputType=='t'){
         long maxHexagons;
         long minHexagons;
         if(symmetric){

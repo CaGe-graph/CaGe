@@ -254,6 +254,80 @@ void getTwoPentagonsConesNoMirrorNearSymmetricPatches(PATCH *patch, int shortest
     }
 }
 
+void getTwoPentagonsConesNoMirrorMoreSymmetricPatches(PATCH *patch, int shortestSide, FRAGMENT *currentFragment, SHELL *currentShell) {
+    //int longestSide = shortestSide + 1;
+    int i;
+    INNERSPIRAL *is = patch->innerspiral;
+    int startSpiral = is->code[0];
+
+    FRAGMENT *fragment1 = addNewFragment(currentFragment);
+    currentShell = addNewShell(currentShell, 4 * shortestSide + 2, fragment1);
+    FRAGMENT *fragment2 = addNewFragment(fragment1);
+    FRAGMENT *fragment3 = addNewFragment(fragment2);
+    FRAGMENT *fragment4 = addNewFragment(fragment3);
+    FRAGMENT *fragment5 = addNewFragment(fragment4);
+
+    //PART 1: pentagon on second side (now first side)
+
+    //first we handle the case with spiral code (shortestSide + 1, 3*shortestSide + 2)
+    fragment1->endsWithPentagon=1;
+    fragment1->faces=1;
+    fragment2->endsWithPentagon=0;
+    fragment2->faces=shortestSide;
+    fragment3->endsWithPentagon=1;
+    fragment3->faces=shortestSide+1;
+    fragment4->endsWithPentagon=0;
+    fragment4->faces=shortestSide;
+    fragment4->isEnd=1;
+    //the innerspiral stores the number of hexagons between the pentagons
+    //thus this gives:
+    //is->code[0] += 0;
+    is->code[1] = 2*shortestSide;
+    processStructure(patch, currentShell);
+    fragment4->isEnd=0;
+
+    //in the rest of this code the distance between the two pentagons doesn't change
+    //so we only need to adjust is->code[0]
+
+    //next we handle the cases with spiral code (shortestSide + 1 + i, 3*shortestSide + 2 + i)
+    //with 0 < i < shortestSide
+    fragment5->isEnd=1;
+    fragment3->endsWithPentagon=0;
+    fragment4->endsWithPentagon=1;
+    int upperbound = HALFFLOOR(shortestSide);
+    for(i=1;i<=upperbound;i++){
+        fragment1->faces=i+1;
+        fragment2->faces=shortestSide-i;
+        fragment4->faces=i;
+        fragment5->faces=shortestSide-i;
+        is->code[0]++;
+        processStructure(patch, currentShell);
+    }
+
+    //PART 2: pentagon on third side (now second side)
+    //outer shell
+    fragment1->endsWithPentagon=0;
+    fragment1->faces=shortestSide+1;
+    fragment2->endsWithPentagon=1;
+    fragment4->endsWithPentagon=0;
+    fragment4->faces=shortestSide;
+
+    //next shell
+    fragment5->endsWithPentagon=1;
+
+    is->code[0] = startSpiral;
+    is->code[0] += shortestSide;
+
+    upperbound = shortestSide - HALFFLOOR(shortestSide);
+    for(i=0; i<upperbound; i++){
+        fragment2->faces=i+1;
+        fragment3->faces=shortestSide-i;
+        fragment5->faces=i+1;
+        is->code[0]++;
+        processStructure(patch, currentShell);
+    }
+}
+
 void getTwoPentagonsConesMirrorsAllowedNearSymmetricPatches(PATCH *patch, int shortestSide, FRAGMENT *currentFragment, SHELL *currentShell) {
     //int longestSide = shortestSide + 1;
     int i;
@@ -340,6 +414,86 @@ void getTwoPentagonsConesMirrorsAllowedNearSymmetricPatches(PATCH *patch, int sh
     }
 }
 
+void getTwoPentagonsConesMirrorsAllowedMoreSymmetricPatches(PATCH *patch, int shortestSide, FRAGMENT *currentFragment, SHELL *currentShell) {
+    //int longestSide = shortestSide + 1;
+    int i;
+    INNERSPIRAL *is = patch->innerspiral;
+
+    FRAGMENT *fragment1 = addNewFragment(currentFragment);
+    currentShell = addNewShell(currentShell, 4 * shortestSide + 2, fragment1);
+    FRAGMENT *fragment2 = addNewFragment(fragment1);
+    FRAGMENT *fragment3 = addNewFragment(fragment2);
+    FRAGMENT *fragment4 = addNewFragment(fragment3);
+    FRAGMENT *fragment5 = addNewFragment(fragment4);
+
+    //PART 1: pentagon on second side (now first side)
+
+    //first we handle the case with spiral code (shortestSide + 1, 3*shortestSide + 2)
+    fragment1->endsWithPentagon=1;
+    fragment1->faces=1;
+    fragment2->endsWithPentagon=0;
+    fragment2->faces=shortestSide;
+    fragment3->endsWithPentagon=1;
+    fragment3->faces=shortestSide+1;
+    fragment4->endsWithPentagon=0;
+    fragment4->faces=shortestSide;
+    fragment4->isEnd=1;
+    //the innerspiral stores the number of hexagons between the pentagons
+    //thus this gives:
+    //is->code[0] += 0;
+    is->code[1] = 2*shortestSide;
+    processStructure(patch, currentShell);
+    fragment4->isEnd=0;
+
+    //in the rest of this code the distance between the two pentagons doesn't change
+    //so we only need to adjust is->code[0]
+
+    //next we handle the cases with spiral code (shortestSide + 1 + i, 3*shortestSide + 2 + i)
+    //with 0 < i < shortestSide
+    fragment5->isEnd=1;
+    fragment3->endsWithPentagon=0;
+    fragment4->endsWithPentagon=1;
+    for(i=1;i<shortestSide;i++){
+        fragment1->faces=i+1;
+        fragment2->faces=shortestSide-i;
+        fragment4->faces=i;
+        fragment5->faces=shortestSide-i;
+        is->code[0]++;
+        processStructure(patch, currentShell);
+    }
+    fragment5->isEnd=0;
+
+    //then we handle the case with spiral code (2*shortestSide + 1, 4*shortestSide + 2)
+    fragment4->isEnd=1;
+    fragment1->faces=shortestSide+1;
+    fragment2->faces=1;
+    fragment3->faces=shortestSide;
+    fragment4->faces=shortestSide;
+    is->code[0]++;
+    processStructure(patch, currentShell);
+    fragment4->isEnd=0;
+
+    //PART 2: pentagon on third side (now second side)
+    //outer shell
+    fragment1->endsWithPentagon=0;
+    fragment1->faces=shortestSide+1;
+    fragment2->endsWithPentagon=1;
+    fragment4->endsWithPentagon=0;
+    fragment4->faces=shortestSide;
+
+    //next shell
+    fragment5->endsWithPentagon=1;
+    fragment5->isEnd=1;
+
+    for(i=0; i<shortestSide; i++){
+        fragment2->faces=i+1;
+        fragment3->faces=shortestSide-i;
+        fragment5->faces=i+1;
+        is->code[0]++;
+        processStructure(patch, currentShell);
+    }
+}
+
 /* void getTwoPentagonsPatch(int sside, int symmetric, int mirror) */
 /*
         generates the canonical cone patches with two pentagons and the given boundary
@@ -364,6 +518,38 @@ void getTwoPentagonsCones(PATCH *patch, int sside, boolean symmetric, boolean mi
         } else {
             getTwoPentagonsConesNoMirrorNearSymmetricPatches(patch, sside, currentFragment, currentShell);
         }
+    }
+}
+
+void getTwoPentagonsConesMoreSymmetricSide0(PATCH *patch, FRAGMENT *currentFragment, SHELL *currentShell) {
+    INNERSPIRAL *is = patch->innerspiral;
+
+    FRAGMENT *frag;
+
+    frag = addNewFragment(currentFragment);
+    frag->endsWithPentagon=1;
+    frag->faces=1;
+    currentShell = addNewShell(currentShell, 2, frag);
+    frag = addNewFragment(frag);
+    frag->endsWithPentagon=1;
+    frag->faces=1;
+
+    //is->code[0]+=0;
+    is->code[1]=0;
+
+    processStructure(patch, currentShell);
+}
+
+void getTwoPentagonsConesMoreSymmetric(PATCH *patch, int sside, boolean mirror, FRAGMENT *currentFragment, SHELL *currentShell) {
+    INNERSPIRAL *is = patch->innerspiral;
+    if (is->length != 2) exit(1);
+    
+    if(sside==0){
+        getTwoPentagonsConesMoreSymmetricSide0(patch, currentFragment, currentShell);
+    } else if(mirror){
+        getTwoPentagonsConesMirrorsAllowedMoreSymmetricPatches(patch, sside, currentFragment, currentShell);
+    } else {
+        getTwoPentagonsConesNoMirrorMoreSymmetricPatches(patch, sside, currentFragment, currentShell);
     }
 }
 

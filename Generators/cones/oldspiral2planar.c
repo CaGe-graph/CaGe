@@ -55,7 +55,12 @@ void exportSpiralCode_impl(PATCH *patch, boolean humanReadable, boolean header) 
         symmetric = patch->boundary[0] - patch->boundary[1] + 1;
     }
     int vertexCounter = 0;
-    EDGE *start = createBoundary(patch->boundary[0] + patch->numberOfLayers, symmetric, pentagons, &vertexCounter);
+    EDGE *start;
+    if(pentagons == 2 && !symmetric && patch->moreSymmetric){
+        start = createBoundaryMoreSymmetric(patch->boundary[0] + patch->numberOfLayers, &vertexCounter);
+    } else {
+        start = createBoundary(patch->boundary[0] + patch->numberOfLayers, symmetric, pentagons, &vertexCounter);
+    }
     int code[pentagons];
     int i;
     code[0] = patch->innerspiral->code[0] + 1;
@@ -315,6 +320,8 @@ EDGE *getNewEdge() {
         edge->mark = 0;
         return edge;
     } else {
+        EDGE *p = NULL;
+        p->from = 1;
         fprintf(stderr, "Insufficient memory reserved for this amount of edges. Aborting.\n");
         fprintf(stderr, "Reserved number of edges: %d.\n", edgesArraySize);
         exit(1);
@@ -358,6 +365,43 @@ EDGE *createBoundary(int sside, boolean symmetric, int pentagons, int *vertexCou
         //fprintf(stderr, "end of %d\n", i);
     }
 
+    toConnect->right = boundaryStart;
+    boundaryStart->inverse->left = toConnect->inverse;
+    (*vertexCounter)--; //the last vertex is removed, because the last vertex of the boundary is the first
+    toConnect->to = boundaryStart->from;
+    toConnect->inverse->from = boundaryStart->from;
+
+    return boundaryStart;
+}
+
+EDGE *createBoundaryMoreSymmetric(int sside, int *vertexCounter) {
+    //first short side
+    EDGE *boundaryStart;
+    EDGE *toConnect = getStraightPath(&boundaryStart, sside, vertexCounter, UNSET, OUTSIDE);
+    
+    //first long side
+    EDGE *tempStart;
+    (*vertexCounter)--; //the first vertex of this path is the last of the previous
+    EDGE *tempConnect = getStraightPath(&tempStart, sside + 1, vertexCounter, UNSET, OUTSIDE);
+    toConnect->right = tempStart;
+    tempStart->inverse->left = toConnect->inverse;
+    toConnect = tempConnect;
+
+    //second short side
+    (*vertexCounter)--; //the first vertex of this path is the last of the previous
+    tempConnect = getStraightPath(&tempStart, sside, vertexCounter, UNSET, OUTSIDE);
+    toConnect->right = tempStart;
+    tempStart->inverse->left = toConnect->inverse;
+    toConnect = tempConnect;
+    
+    //second long side
+    (*vertexCounter)--; //the first vertex of this path is the last of the previous
+    tempConnect = getStraightPath(&tempStart, sside + 1, vertexCounter, UNSET, OUTSIDE);
+    toConnect->right = tempStart;
+    tempStart->inverse->left = toConnect->inverse;
+    toConnect = tempConnect;
+
+    //connect end with start
     toConnect->right = boundaryStart;
     boundaryStart->inverse->left = toConnect->inverse;
     (*vertexCounter)--; //the last vertex is removed, because the last vertex of the boundary is the first
@@ -784,6 +828,32 @@ void initEdges(int sside, boolean symmetric, int pentagons, int hexagonLayers){
     }
     //calculate the number of directed edges, i.e. twice the number of edges
     int maxNumberOfEdges = 6*hexagons + 5*pentagons + boundary;
+    edgesArray = (EDGE *) malloc(sizeof (EDGE)*maxNumberOfEdges);
+    if(edgesArray == NULL){
+        fprintf(stderr, "Insufficient memory available. Aborting.\n");
+        exit(1);
+    }
+    currentFreeEdge = 0;
+    edgesArraySize = maxNumberOfEdges;
+}
+
+/**
+ * Reserves the memory for the maximum possible number of needed edges
+ */
+void initEdges2PentagonsMoreSymmetric(int sside, int hexagonLayers){
+    int i;
+    //calculate the number of hexagons and the length of the boundary
+    int hexagons, boundary;
+    hexagons = (5*sside*sside+18*sside+5)/4 - sside - 1;
+    
+    //also add hexagons in extra layers
+    for(i=sside+1; i<sside+1+hexagonLayers; i++){
+        hexagons+=2 + 4*i;
+    }
+    boundary = 4*(2*(sside+hexagonLayers) + 2);
+    //calculate the number of directed edges, i.e. twice the number of edges
+    int maxNumberOfEdges = 6*hexagons + 5*2 + boundary;
+    fprintf(stderr, "%d,%d,%d\n", hexagons, 2, boundary);
     edgesArray = (EDGE *) malloc(sizeof (EDGE)*maxNumberOfEdges);
     if(edgesArray == NULL){
         fprintf(stderr, "Insufficient memory available. Aborting.\n");

@@ -46,6 +46,7 @@ EDGE *getNewEdge();
 void freeAllEdges();
 
 EDGE *createBoundary(int sside, boolean symmetric, int pentagons, int *vertexCounter);
+EDGE *createBoundaryMoreSymmetric(int sside, int *vertexCounter);
 EDGE *getStraightPath(EDGE **start, int length, int *vertexCounter, int rightFace, int leftFace);
 int constructFaceToRight(int size, EDGE *start, int *vertexCounter, EDGE **lastAdded);
 int constructFaceToRightNeighbourRestricted(int size, EDGE *start, int *vertexCounter, EDGE **lastAdded, int illegalNeighbour);
@@ -53,6 +54,7 @@ void setFaceSizeToRight(int size, EDGE *start);
 boolean patchFromSpiralCode(EDGE *boundaryStart, int *code, int pentagons, int *vertexCounter);
 
 void initEdges(int sside, boolean symmetric, int pentagons, int hexagonLayers);
+void initEdges2PentagonsMoreSymmetric(int sside, int hexagonLayers);
 
 #endif	/* _OLDSPIRAL2PLANAR_H */
 
