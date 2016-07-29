@@ -9,6 +9,8 @@ package cage;
  * @version
  */
 import cage.background.BackgroundWindow;
+import cage.utility.Debug;
+import java.awt.Color;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -282,6 +285,28 @@ public class CaGe implements ActionListener {
             System.err.println("Property '" + name + "' in .ini file is not a boolean");
         }
         return booleanValue;
+    }
+
+    public static Color getCaGePropertyAsColor(String name,
+            Color defaultValue) {
+        Color colorValue = defaultValue;
+        try {
+            String stringValue = config.getProperty(name);
+            String sArray[] = stringValue.split(" ");
+            if(sArray.length == 3){
+                colorValue = new Color(Float.parseFloat(sArray[0]),
+                        Float.parseFloat(sArray[1]),
+                        Float.parseFloat(sArray[2]));
+            } else {
+                Debug.print("Property '" + name + "' is not formatted as a color");
+            }
+        } catch (NullPointerException e) {
+            System.err.println("Property '" + name + "' not present in .ini file");
+        } catch (Exception e) {
+            Debug.print("Property '" + name + "' is not formatted as a color");
+            Debug.reportException(e);
+        }
+        return colorValue;
     }
 
     public static String getSystemProperty(String name) {
