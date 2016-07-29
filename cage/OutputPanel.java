@@ -624,7 +624,7 @@ public class OutputPanel extends JPanel {
     List<String> createViewerNames(String dimension, List<String> viewersDim) {
         if (viewersDim == null) {
             viewersDim = Systoolbox.stringToVector(
-                    CaGe.config.getProperty(generatorName + ".Viewers." + dimension));
+                    CaGe.getCaGeProperty(generatorName + ".Viewers." + dimension));
         }
         return viewersDim;
     }
@@ -644,7 +644,7 @@ public class OutputPanel extends JPanel {
                     continue;
                 }
                 AbstractButton viewerButton = new JCheckBox(
-                        CaGe.config.getProperty(viewerName + ".Title"), n++ == 0);
+                        CaGe.getCaGeProperty(viewerName + ".Title"), n++ == 0);
                 viewerButton.setActionCommand(viewerName);
                 buttonGroup.add(viewerButton);
                 component.add(viewerButton);

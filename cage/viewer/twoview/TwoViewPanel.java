@@ -41,8 +41,8 @@ public class TwoViewPanel extends JPanel {
 
         try {
             setPreferredSize(new Dimension(
-                    Integer.parseInt(CaGe.config.getProperty("TwoView.Width")),
-                    Integer.parseInt(CaGe.config.getProperty("TwoView.Height"))));
+                    CaGe.getCaGePropertyAsInt("TwoView.Width", 550),
+                    CaGe.getCaGePropertyAsInt("TwoView.Height", 400)));
         } catch (Exception ex) {
             Debug.reportException(ex);
         }

@@ -217,7 +217,7 @@ public class ExternalPanel extends GeneratorPanel implements ActionListener {
         embedExpertBox.setText("edit embed commands");
         embedExpertBox.setMnemonic(KeyEvent.VK_E);
         embedExpertBox.setSelected(Systoolbox.parseBoolean(
-                CaGe.config.getProperty("CaGe.ExpertMode"), false));
+                CaGe.getCaGeProperty("CaGe.ExpertMode"), false));
         embedExpertBox.setActionCommand("x");
         embedExpertBox.addActionListener(this);
         add(Box.createVerticalStrut(20));

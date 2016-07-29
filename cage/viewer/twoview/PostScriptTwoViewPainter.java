@@ -40,7 +40,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
 
         try {
             savePostScriptStream = Systoolbox.createOutputStream(
-                    fileName, CaGe.config.getProperty("CaGe.Generators.RunDir"), append);
+                    fileName, CaGe.getCaGeProperty("CaGe.Generators.RunDir"), append);
         } catch (Exception ex) {
             UItoolbox.showTextInfo(append ? "Error opening file" : "Error creating file",
                     Systoolbox.getStackTrace(ex));
@@ -106,9 +106,9 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
                 (brightness + 0.25f)/2 + " } bind def\n");
         savePS("/vertex_radius " + vertexRadius + " def\n");
         savePS("/vertex_linewidth " + (vertexRadius / 6) + " def\n");
-        savePS("/vertex_color_1 { " + CaGe.config.getProperty("TwoView.VertexColor1") + " } bind def\n");
-        savePS("/vertex_color_2 { " + CaGe.config.getProperty("TwoView.VertexColor2") + " } bind def\n");
-        savePS("/vertex_number_color { " + CaGe.config.getProperty("TwoView.VertexNumberColor") + " } bind def\n\n");
+        savePS("/vertex_color_1 { " + CaGe.getCaGeProperty("TwoView.VertexColor1") + " } bind def\n");
+        savePS("/vertex_color_2 { " + CaGe.getCaGeProperty("TwoView.VertexColor2") + " } bind def\n");
+        savePS("/vertex_number_color { " + CaGe.getCaGeProperty("TwoView.VertexNumberColor") + " } bind def\n\n");
 
         //output the graph
         paintGraph();
@@ -134,7 +134,7 @@ public class PostScriptTwoViewPainter extends TwoViewPainter {
         for (String fileName : pageNumbers.keySet()) {
             try {
                 savePostScriptStream = Systoolbox.createOutputStream(
-                        fileName, CaGe.config.getProperty("CaGe.Generators.RunDir"), true);
+                        fileName, CaGe.getCaGeProperty("CaGe.Generators.RunDir"), true);
                 savePS("\n\n%%Pages: " + pageNumbers.get(fileName) + "\n");
                 savePS("%%EOF\n\n");
                 savePostScriptStream.close();

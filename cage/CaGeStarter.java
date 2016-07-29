@@ -112,8 +112,8 @@ public class CaGeStarter implements ActionListener {
 
     private void prepareGeneratorAndEmbedder() {
         String runDir, path;
-        runDir = CaGe.config.getProperty("CaGe.Generators.RunDir");
-        path = CaGe.config.getProperty("CaGe.Generators.Path");
+        runDir = CaGe.getCaGeProperty("CaGe.Generators.RunDir");
+        path = CaGe.getCaGeProperty("CaGe.Generators.Path");
         String[][] generator, preFilter;
         Embedder embedder = generatorInfo.getEmbedder();
         embedder.setRunDir(runDir);
@@ -128,7 +128,7 @@ public class CaGeStarter implements ActionListener {
         }
         try {
             generatorPipe = new NativeCaGePipe(generator,
-                    CaGe.config.getProperty("CaGe.Generators.ErrFile"));
+                    CaGe.getCaGeProperty("CaGe.Generators.ErrFile"));
             generatorPipe.setRunDir(runDir);
             generatorPipe.setPath(path);
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public class CaGeStarter implements ActionListener {
     private void setWriterOutputStream(CaGeWriter writer, String dest, ExceptionGroup exceptionGroup) {
         try {
             writer.setOutputStream(Systoolbox.createOutputStream(dest,
-                    CaGe.config.getProperty("CaGe.Generators.RunDir")));
+                    CaGe.getCaGeProperty("CaGe.Generators.RunDir")));
         } catch (Exception ex) {
             exceptionGroup.add(ex);
         }

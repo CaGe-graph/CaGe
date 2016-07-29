@@ -28,8 +28,8 @@ public class PngTwoViewSaver implements TwoViewSaver{
     public PngTwoViewSaver(TwoViewModel model) {
         this.model = model;
         graphicsTwoViewPainter = new GraphicsTwoViewPainter(model);
-        width = Integer.parseInt(CaGe.config.getProperty("TwoView.Width"));
-        height = Integer.parseInt(CaGe.config.getProperty("TwoView.Height"));
+        width = CaGe.getCaGePropertyAsInt("TwoView.Width", 550);
+        height = CaGe.getCaGePropertyAsInt("TwoView.Height", 400);
         graphicsTwoViewPainter.setPaintArea(
                 5 + (graphicsTwoViewPainter.getMaxVertexSize() - 1) / 2,
                 width - 5 - graphicsTwoViewPainter.getMaxVertexSize() / 2,

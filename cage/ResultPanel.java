@@ -737,7 +737,7 @@ public class ResultPanel extends JPanel {
                     saveWriter.setOutputStream(
                             Systoolbox.createOutputStream(
                             saveDialog.getFilename(),
-                            CaGe.config.getProperty("CaGe.Generators.RunDir")));
+                            CaGe.getCaGeProperty("CaGe.Generators.RunDir")));
                 } catch (Exception ex) {
                     showException(ex, "exception at " + shortVariety + "-save setup",
                             false, null);
@@ -946,7 +946,7 @@ public class ResultPanel extends JPanel {
         String finishMsg = "Generation process finished.";
         setStatus(finishMsg, RUN_LEVEL);
         final String logText = Systoolbox.getFileContent(
-                CaGe.config.getProperty("CaGe.Generators.ErrFile"));
+                CaGe.getCaGeProperty("CaGe.Generators.ErrFile"));
         if (logText.length() == 0) {
             setStatus(finishMsg + " (No log output.)", RUN_LEVEL);
             return;

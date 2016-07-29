@@ -43,7 +43,7 @@ public class RasmolViewer implements CaGeViewer {
     static {
         pdbWriter = (AbstractChemicalWriter) WriterFactory.createCaGeWriter("PDB");
         pdbWriter.setDimension(3);
-        runDir = CaGe.config.getProperty("CaGe.Generators.RunDir");
+        runDir = CaGe.getCaGeProperty("CaGe.Generators.RunDir");
         initCmd = "source " + CaGe.installDirectory() + File.separator + ".rasmolrc" + "\n";
         rasmolFile = new File(runDir + File.separator + rasmolFilename);
     }

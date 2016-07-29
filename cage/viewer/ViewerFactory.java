@@ -122,7 +122,7 @@ public class ViewerFactory {
         Class viewerClass;
         viewerClass = viewerClasses.get(viewerName);
         if (viewerClass == null) {
-            String viewerClassName = CaGe.config.getProperty(viewerName + ".Class");
+            String viewerClassName = CaGe.getCaGeProperty(viewerName + ".Class");
             viewerClass = Class.forName(viewerClassName);
             viewerClasses.put(viewerName, viewerClass);
         }

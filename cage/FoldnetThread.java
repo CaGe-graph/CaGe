@@ -248,7 +248,7 @@ public class FoldnetThread extends Thread {
             } else if (filename.trim().startsWith("|")) {
                 prefix = "";
             } else {
-                prefix = CaGe.config.get("CaGe.Generators.RunDir") + File.separator;
+                prefix = CaGe.getCaGeProperty("CaGe.Generators.RunDir") + File.separator;
             }
             this.filename = prefix + filename;
             this.result = result;

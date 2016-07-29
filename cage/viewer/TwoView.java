@@ -319,7 +319,7 @@ public class TwoView implements CaGeViewer {
         //TODO:rework other buttons and components
 
         addSaveButton("Save PNG", titleFont,
-            new SaveActionListener(frame, new File(CaGe.config.getProperty("CaGe.Generators.RunDir")), ".png") {
+            new SaveActionListener(frame, new File(CaGe.getCaGeProperty("CaGe.Generators.RunDir")), ".png") {
 
                 @Override
                 protected void save(File file) {
@@ -335,7 +335,7 @@ public class TwoView implements CaGeViewer {
             }, KeyEvent.VK_G);
 
         addSaveButton("Save SVG", titleFont,
-            new SaveActionListener(frame, new File(CaGe.config.getProperty("CaGe.Generators.RunDir")), ".svg") {
+            new SaveActionListener(frame, new File(CaGe.getCaGeProperty("CaGe.Generators.RunDir")), ".svg") {
 
                 SvgTwoViewPainter svgTwoViewPainter = new SvgTwoViewPainter(model);
 
@@ -354,7 +354,7 @@ public class TwoView implements CaGeViewer {
             }, KeyEvent.VK_V);
 
         addSaveButton("Save TikZ", titleFont,
-            new SaveActionListener(frame, new File(CaGe.config.getProperty("CaGe.Generators.RunDir")), ".tikz") {
+            new SaveActionListener(frame, new File(CaGe.getCaGeProperty("CaGe.Generators.RunDir")), ".tikz") {
 
                 TikzTwoViewPainter tikzTwoViewPainter = new TikzTwoViewPainter(model);
 
@@ -518,8 +518,6 @@ public class TwoView implements CaGeViewer {
     }
 
     public static void main(String[] argv) throws Exception {
-        CaGe.config.clear();
-        CaGe.config.load(new FileInputStream("CaGe.ini"));
         TwoView t;
         t = new TwoView();
         GeneratorInfo info = new StaticGeneratorInfo(null, null, null, 0, null);

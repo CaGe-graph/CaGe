@@ -17,7 +17,7 @@ public class GeneratorChoiceListener implements ActionListener {
         CaGe.getWizardWindow().setVisible(false);
         CaGe.lastGeneratorChoice = Integer.parseInt(e.getActionCommand());
         String generator = CaGe.generator[CaGe.lastGeneratorChoice];
-        String configPanelName = CaGe.config.getProperty(generator + ".ConfigPanel");
+        String configPanelName = CaGe.getCaGeProperty(generator + ".ConfigPanel");
         try {
             GeneratorPanel configPanel;
             if (CaGe.rememberPanels) {

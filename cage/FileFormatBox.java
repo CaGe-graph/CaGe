@@ -61,7 +61,7 @@ public class FileFormatBox extends JComboBox<String> {
             dimension = firstChar - '0';
         }
         for(String format : Systoolbox.stringToVector(
-                CaGe.config.getProperty("CaGe.Writers." + variety))){
+                CaGe.getCaGeProperty("CaGe.Writers." + variety))){
             CaGeWriter writer = createCaGeWriter(format);
             WriterConfigurationHandler handler = createConfigurationHandler(format);
             format = createCaGeWriter(format).getFormatName();

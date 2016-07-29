@@ -27,8 +27,8 @@ public class SvgTwoViewSaver implements TwoViewSaver {
     public void saveFile(File file){
         svgTwoViewPainter.setGraph(model.getResult().getGraph());
         svgTwoViewPainter.setSvgDimension(new Dimension(
-                    Integer.parseInt(CaGe.config.getProperty("TwoView.Width")),
-                    Integer.parseInt(CaGe.config.getProperty("TwoView.Height"))));
+                    CaGe.getCaGePropertyAsInt("TwoView.Width", 550),
+                    CaGe.getCaGePropertyAsInt("TwoView.Height", 400)));
         svgTwoViewPainter.setRotation(0);
         svgTwoViewPainter.paintGraph();
         try (FileWriter writer = new FileWriter(file)) {

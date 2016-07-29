@@ -52,7 +52,7 @@ public class CaGe implements ActionListener {
     private static final String osName;
     public static int graphNoDigits = 6;
     private static final String installDirProperty = "CaGe.InstallDir";
-    public static final Properties config = new Properties();
+    private static final Properties config = new Properties();
     private static Map<String, String> substitutedNames;
     private static final Properties systemProperties = new Properties();
     private static Wizard wizard;

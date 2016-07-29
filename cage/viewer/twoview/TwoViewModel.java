@@ -69,8 +69,7 @@ public class TwoViewModel {
     public TwoViewModel() {
         //initialize edge width
         try {
-            edgeWidth = Integer.parseInt(
-                    CaGe.config.getProperty("TwoView.EdgeWidth"));
+            edgeWidth = CaGe.getCaGePropertyAsInt("TwoView.EdgeWidth", DEFAULT_EDGE_WIDTH);
             if(edgeWidth > MAX_EDGE_WIDTH || edgeWidth < MIN_EDGE_WIDTH){
                 edgeWidth = DEFAULT_EDGE_WIDTH;
             }
@@ -81,8 +80,8 @@ public class TwoViewModel {
         
         //initialize edge brightness
         try {
-            edgeBrightness = Float.parseFloat(
-                    CaGe.config.getProperty("TwoView.EdgeBrightness"));
+            edgeBrightness = CaGe.getCaGePropertyAsFloat("TwoView.EdgeBrightness", 
+                    DEFAULT_EDGE_BRIGHTNESS);
             if(edgeBrightness > MAX_EDGE_BRIGHTNESS 
                     || edgeBrightness < MIN_EDGE_BRIGHTNESS){
                 edgeBrightness = DEFAULT_EDGE_BRIGHTNESS;
@@ -94,9 +93,7 @@ public class TwoViewModel {
 
         //initialize show numbers
         try {
-            showNumbers = Systoolbox.parseBoolean(
-                                CaGe.config.getProperty("TwoView.ShowNumbers"),
-                                false);
+            showNumbers = CaGe.getCaGePropertyAsBoolean("TwoView.ShowNumbers", false);
         } catch (Exception e) {
             Debug.reportException(e);
             showNumbers = false;
@@ -104,8 +101,7 @@ public class TwoViewModel {
         
         //initialize vertex size
         try {
-            vertexSize = Integer.parseInt(
-                    CaGe.config.getProperty("TwoView.VertexSize"));
+            vertexSize = CaGe.getCaGePropertyAsInt("TwoView.VertexSize", DEFAULT_VERTEX_SIZE);
             if(vertexSize > MAX_VERTEX_SIZE || vertexSize < MIN_VERTEX_SIZE){
                 vertexSize = DEFAULT_VERTEX_SIZE;
             }

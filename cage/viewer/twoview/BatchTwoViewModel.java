@@ -17,7 +17,7 @@ public class BatchTwoViewModel {
     private TwoViewSavers saver;
 
     public BatchTwoViewModel() {
-        folder = new File(CaGe.config.getProperty("CaGe.Generators.RunDir"));
+        folder = new File(CaGe.getCaGeProperty("CaGe.Generators.RunDir"));
         saver = TwoViewSavers.SVG;
     }
 

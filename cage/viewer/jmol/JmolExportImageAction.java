@@ -34,7 +34,7 @@ public class JmolExportImageAction extends AbstractAction{
         panel.getViewer().renderScreenImage(g, panel.getSize(), g.getClipBounds());
         try {
             JFileChooser chooser;
-            String dir = CaGe.config.getProperty("CaGe.Generators.RunDir");
+            String dir = CaGe.getCaGeProperty("CaGe.Generators.RunDir");
             if(dir==null)
                 chooser = new JFileChooser();
             else
