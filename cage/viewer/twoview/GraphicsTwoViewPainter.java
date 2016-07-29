@@ -24,7 +24,8 @@ import javax.swing.SwingUtilities;
  */
 public class GraphicsTwoViewPainter extends TwoViewPainter {
     
-    private static final Color DEFAULT_VERTEX_COLOR = new Color(250, 178, 126);
+    private static final Color DEFAULT_VERTEX_COLOR1 = new Color(254, 164, 100);
+    private static final Color DEFAULT_VERTEX_COLOR2 = new Color(246, 192, 152);
     
     private Graphics graphics;
 
@@ -260,14 +261,8 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         final int vertexCornerY = yp - vertexDiameter/2;
         
         //calculate the two endpoints of the gradient
-        final Color colorA = new Color(
-                Math.min(DEFAULT_VERTEX_COLOR.getRed() + 4, 255),
-                Math.max(DEFAULT_VERTEX_COLOR.getGreen() - 14, 0),
-                Math.max(DEFAULT_VERTEX_COLOR.getBlue() - 26, 0));
-        final Color colorB = new Color(
-                Math.max(DEFAULT_VERTEX_COLOR.getRed() - 4, 0),
-                Math.min(DEFAULT_VERTEX_COLOR.getGreen() + 14, 255),
-                Math.min(DEFAULT_VERTEX_COLOR.getBlue() + 26, 255));
+        Color colorA = DEFAULT_VERTEX_COLOR1;
+        Color colorB = DEFAULT_VERTEX_COLOR2;
         
         ((Graphics2D)graphics).setPaint(
                 new GradientPaint(
