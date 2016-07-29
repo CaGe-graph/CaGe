@@ -26,12 +26,12 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
     
     private static final Color DEFAULT_VERTEX_COLOR1 = new Color(254, 164, 100);
     private static final Color DEFAULT_VERTEX_COLOR2 = new Color(246, 192, 152);
+    private static final Color DEFAULT_NUMBER_COLOR = new Color(0.25f, 0.25f, 1.0f);
     
     private Graphics graphics;
 
     private Color edgeColor;
     private Color specialEdgeColor;
-    private final Color numbersColor = new Color(0.25f, 0.25f, 1.0f);
     private Font[] vertexFontArray;
 
     private final TwoViewListener listener = new TwoViewAdapter() {
@@ -274,7 +274,7 @@ public class GraphicsTwoViewPainter extends TwoViewPainter {
         graphics.drawOval(vertexCornerX, vertexCornerY, vertexDiameter, vertexDiameter);
         if (model.getShowNumbers() && vertexFontArray[model.getVertexSize()-TwoViewModel.MIN_VERTEX_SIZE].getSize() > 0) {
             String numberString = Integer.toString(number);
-            graphics.setColor(numbersColor);
+            graphics.setColor(DEFAULT_NUMBER_COLOR);
             int width = graphics.getFontMetrics().stringWidth(numberString);
             graphics.drawString(numberString,
                     xp - (int) Math.floor(width * 0.52),
