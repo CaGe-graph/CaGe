@@ -130,7 +130,7 @@ public class NanoConesPanel extends GeneratorPanel {
         String layers = hexagonLayersBox.isSelected() ? Integer.toString(hexagonLayers.getValue()) : "";
 
         return new StaticGeneratorInfo(
-                Systoolbox.parseCmdLine("cone " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
+                Systoolbox.parseCmdLine("cone -s " + pentagons + " " + length + " " + symmetric + ipr + " " + layers),
                 EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"java", "-cp", CaGe.installDirectory() + "/CaGe.jar", "cage.embedder.NanoconeEmbedder"}, {"embed", "-d3", "-ik", "-f0,0,0.01"}}),
                 "cone_" + pentagons + "_" + length + "_" + symmetric + iprFile + "_" + layers,
                 6, true, new SingleElementRule("C"), 0);
