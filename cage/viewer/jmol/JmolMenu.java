@@ -53,8 +53,8 @@ public class JmolMenu {
         //----------------DISPLAY-----------------------
         JMenu display = new JMenu("Display");
         display.add(new JmolToggleMenuItem("Perspective depth", "set perspectiveDepth true", "set perspectiveDepth false", viewer, true));
-        display.add(new JmolToggleMenuItem("Bounding box", "boundbox ON", "boundbox OFF", viewer));
-        display.add(new JmolToggleMenuItem("Axes", "axes ON", "axes OFF", viewer));
+        display.add(new StoredJmolToggleMenuItem("Bounding box", "boundbox ON", "boundbox OFF", viewer, panel, "bbox"));
+        display.add(new StoredJmolToggleMenuItem("Axes", "axes ON", "axes OFF", viewer, panel, "axes"));
         //stereographic menu
         JMenu stereographicMenu = new JMenu("Stereographic");
         ButtonGroup stereographicGroup = new ButtonGroup();
@@ -79,7 +79,7 @@ public class JmolMenu {
                                   "backbone off;spacefill off;wireframe 0.3", "backbone off;spacefill off;wireframe on"};
         for (int i = 0; i < styleCommands.length; i++) {
             JRadioButtonMenuItem styleItem = new JRadioButtonMenuItem(
-                    new DefaultJmolAction(styleNames[i], viewer, styleCommands[i]));
+                    new StoredDefaultJmolAction(styleNames[i], viewer, panel, "display-style", styleCommands[i]));
             styleItem.setSelected(i==1);
             styleGroup.add(styleItem);
             styleMenu.add(styleItem);
@@ -93,7 +93,7 @@ public class JmolMenu {
         String[] labelCommands = {"label off", "label %e", "label %i", "label %a"};
         for (int i = 0; i < labelCommands.length; i++) {
             JRadioButtonMenuItem labelItem = new JRadioButtonMenuItem(
-                    new DefaultJmolAction(labelNames[i], viewer, labelCommands[i]));
+                    new StoredDefaultJmolAction(labelNames[i], viewer, panel, "display-label-type", labelCommands[i]));
             labelItem.setSelected(i==0);
             labelGroup.add(labelItem);
             labelsMenu.add(labelItem);
@@ -105,7 +105,7 @@ public class JmolMenu {
                "set labeloffset 4 -4", "set labeloffset -4 4", "set labeloffset -4 -4"};
         for (int i = 0; i < labelPositionCommands.length; i++) {
             JRadioButtonMenuItem labelPositionItem = new JRadioButtonMenuItem(
-                    new DefaultJmolAction(labelPositionNames[i], viewer, labelPositionCommands[i]));
+                    new StoredDefaultJmolAction(labelPositionNames[i], viewer, panel, "display-label-pos", labelPositionCommands[i]));
             labelPositionItem.setSelected(i==1);
             labelPositionGroup.add(labelPositionItem);
             labelsMenu.add(labelPositionItem);
@@ -120,7 +120,7 @@ public class JmolMenu {
         "cpk 75%", "cpk on"};
         for (int i = 0; i < atomstyleCommand.length; i++) {
             JRadioButtonMenuItem atomStyleItem = new JRadioButtonMenuItem(
-                    new DefaultJmolAction(atomStyleName[i], viewer, atomstyleCommand[i]));
+                    new StoredDefaultJmolAction(atomStyleName[i], viewer, panel, "display-atoms", atomstyleCommand[i]));
             atomStyleItem.setSelected(i==2);
             atomsGroup.add(atomStyleItem);
             atomsMenu.add(atomStyleItem);
@@ -133,7 +133,7 @@ public class JmolMenu {
         String[] bondsStyleCommands = {"wireframe off", "wireframe .1", "wireframe .15", "wireframe .2", "wireframe .25", "wireframe .3", "wireframe .5"};
         for (int i = 0; i < bondsStyleCommands.length; i++) {
             JRadioButtonMenuItem bondsStyleItem = new JRadioButtonMenuItem(
-                    new DefaultJmolAction(bondsStyleNames[i], viewer, bondsStyleCommands[i]));
+                    new StoredDefaultJmolAction(bondsStyleNames[i], viewer, panel, "display-bonds", bondsStyleCommands[i]));
             bondsStyleItem.setSelected(i==2);
             bondsStyleGroup.add(bondsStyleItem);
             bondsStyleMenu.add(bondsStyleItem);
@@ -146,7 +146,7 @@ public class JmolMenu {
         colors.add(previewColors);
         colors.addSeparator();
         JMenu atomColor = new JMenu("Atoms");
-        final JCheckBoxMenuItem atomsTranslucency = new JmolToggleMenuItem("Translucent atoms", "color ATOMS translucent", "color ATOMS opaque", viewer);
+        final JCheckBoxMenuItem atomsTranslucency = new StoredJmolToggleMenuItem("Translucent atoms", "color ATOMS translucent", "color ATOMS opaque", viewer, panel, "atoms-translucent");
         atomColor.add(atomsTranslucency);
         final JMenuItem atomsColorItem = new JMenuItem(new JmolTranslucentColorAction("Set color", previewColors.getModel(), "Atoms", Color.WHITE, viewer, atomsTranslucency.getModel()));
         atomsColorItem.setEnabled(false);
@@ -168,7 +168,7 @@ public class JmolMenu {
         atomColor.add(atomsColorItem);
         colors.add(atomColor);
         JMenu bondColor = new JMenu("Bonds");
-        final JCheckBoxMenuItem bondsTranslucency = new JmolToggleMenuItem("Translucent bonds", "color BONDS translucent", "color BONDS opaque", viewer);
+        final JCheckBoxMenuItem bondsTranslucency = new StoredJmolToggleMenuItem("Translucent bonds", "color BONDS translucent", "color BONDS opaque", viewer, panel, "bonds-translucent");
         bondColor.add(bondsTranslucency);
         final JMenuItem bondsColorItem = new JMenuItem(new JmolTranslucentColorAction("Set color", previewColors.getModel(), "Bonds", Color.WHITE, viewer, bondsTranslucency.getModel()));
         bondsColorItem.setEnabled(false);
@@ -219,7 +219,7 @@ public class JmolMenu {
         bar.add(colors);
         //----------------SPIN-----------------------
         JMenu spin = new JMenu("Spin");
-        spin.add(new JmolToggleMenuItem("Active", "spin on", "spin off", viewer));
+        spin.add(new StoredJmolToggleMenuItem("Active", "spin on", "spin off", viewer, panel, "spin"));
         spin.addSeparator();
         int[] spinFrequency = {0, 5, 10, 20, 30, 40, 50};
         //X rate
