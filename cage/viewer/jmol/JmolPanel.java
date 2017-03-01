@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JPanel;
 
 import org.jmol.api.JmolViewer;
@@ -20,6 +22,7 @@ public class JmolPanel extends JPanel {
 
     private JmolViewer viewer;
     private CaGeJmolAdapter adapter;
+    private final Map<String,String> storedCommands = new HashMap<>();
 
     public JmolPanel() {
         super();
@@ -40,6 +43,9 @@ public class JmolPanel extends JPanel {
          */
         adapter.setGraph(graph);
         viewer.openDOM(null);
+        for (String value : storedCommands.values()) {
+            viewer.evalString(value);
+        }
         viewer.evalString("delay;");
     }
 
@@ -72,5 +78,13 @@ public class JmolPanel extends JPanel {
     private String jmolColour(Color c) {
         String x = Integer.toHexString(c.getRGB() & 0x00ffffff), y = "#000000";
         return y.substring(0, 7 - x.length()) + x;
+    }
+    
+    //package private!
+    /*
+    This allows us to store commands that need to be run each time a new graph is loaded.
+    */
+    void storeCommand(String key, String command){
+        storedCommands.put(key, command);
     }
 }
