@@ -51,7 +51,7 @@ parent ()
 is_javadir ()
 {
   javadir="` parent \"$1\" `"
-  [ -x "$javadir/bin/$java_cmd" ] && [ ! -d "$javadir/bin/$java_cmd" ] && [ -r "$javadir/include/jni.h" ]
+  [ -x "$javadir/Commands/$java_cmd" ] && [ ! -d "$javadir/Commands/$java_cmd" ] && [ -r "$javadir/Headers/jni.h" ]
 }
 
 exec 0</dev/tty 1>/dev/tty 2>>/dev/tty
@@ -236,9 +236,9 @@ test -z "$sysname" && error_exit "-  Can't determine system name ('java -cp sysi
 
 include_other_dir=""
 other_include="jni_md.h"
-if [ ! -r "$javadir/include/$other_include" ]
-  then other_found=` echo "$javadir/include"/*/"$other_include" `
-       if [ "$other_found" != "$javadir/include/*/$other_include" ]
+if [ ! -r "$javadir/Headers/$other_include" ]
+  then other_found=` echo "$javadir/Headers"/*/"$other_include" `
+       if [ "$other_found" != "$javadir/Headers/*/$other_include" ]
          then include_other_dir=" -I` expr \"$other_found\" : \"^\([^ ]*\)/$other_include\" 2>&- `"
 	 else echo "   Warning: can't find include file '$other_include'."
 	      echo "   Making of native libraries might fail. Press Return."
@@ -281,7 +281,7 @@ echo ""
 (
 cd Native/src &&
 mkdir -p ../$sysname &&
-CPPFLAGS="$CPPFLAGS -I$javadir/include$include_other_dir -w" make "$sysname"
+CPPFLAGS="$CPPFLAGS -I$javadir/Headers$include_other_dir -w" make "$sysname"
 ) || error_exit "-  'make' failure, aborting."
 echo ""
 echo "   Ok."

@@ -1,0 +1,15 @@
+CaGe-dist.zip
+Cage-C.zip
+CaGe.jar
+javadir
+sysinfo.jar
+*.class
+
+Generators/*
+!Generators/*.*
+
+Native/Mac
+Native/src/*.jnilib
+PreCompute/bindata*
+PreCompute/makelist
+

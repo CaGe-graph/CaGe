@@ -1,4 +1,4 @@
 #! /bin/sh
 
-` sh "${CaGe_InstallDir}./javadir" `/bin/java ${1+"$@"}
+` sh "${CaGe_InstallDir}./javadir" `/Commands/java ${1+"$@"}
 
