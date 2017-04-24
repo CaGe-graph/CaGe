@@ -13,6 +13,7 @@ public class TubesConesPanel extends GeneratorPanel {
     public TubesConesPanel() {
         pane.addTab("nanotubes", new TubetypePanel());
         pane.addTab("nanocones", new NanoConesPanel());
+        pane.addTab("nanojoins", new NanoJoinsPanel());
         for (int i = 0; i < pane.getTabCount(); ++i) {
             ((GeneratorPanel) pane.getComponentAt(i)).setBorder(
                     BorderFactory.createEmptyBorder(20, 20, 20, 20));
