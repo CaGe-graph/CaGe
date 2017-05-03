@@ -5,7 +5,7 @@ import cage.ElementRule;
 import cage.EmbedFactory;
 import cage.GeneratorInfo;
 import cage.GeneratorPanel;
-import cage.SingleElementRule;
+import cage.ValencyElementRule;
 import cage.StaticGeneratorInfo;
 
 import javax.swing.JFrame;
@@ -262,9 +262,9 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine("join -r " + extraRings + " " + ioption + " -pent " + pentagons + " -hex " + hexagons + " -hept " + heptagons + " " + parameterString),
-                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"java", "-cp", CaGe.installDirectory() + "/CaGe.jar", "cage.embedder.NanoconeEmbedder"}, {"embed", "-d3", "-ik", "-f0,0,0.01"}}),
+                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3", "-ip"}}),
                 "test",
-                6, true, new SingleElementRule("C"), 0);
+                6, true, new ValencyElementRule("H O C Si N S I"), 0);
     }
 
     @Override
