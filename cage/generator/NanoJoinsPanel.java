@@ -8,54 +8,52 @@ import cage.GeneratorPanel;
 import cage.SingleElementRule;
 import cage.StaticGeneratorInfo;
 
-import java.awt.Dimension;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultBoundedRangeModel;
+
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import java.awt.Dimension;
 import java.awt.Insets;
-import javax.swing.ButtonGroup;
-import javax.swing.JRadioButton;
-import javax.swing.JPanel;
-
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.AbstractButton;
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import lisken.systoolbox.Systoolbox;
 import lisken.uitoolbox.EnhancedSlider;
-import lisken.uitoolbox.MinMaxRestrictor;
 import lisken.uitoolbox.UItoolbox;
+import lisken.uitoolbox.SpinButton;
 
 public class NanoJoinsPanel extends GeneratorPanel {
 
-    private JPanel parameterPanel;
-    private ButtonGroup nrofCapsGroup;
-    private EnhancedSlider[][] parameters;
+    private static final int MAXCAPS = 4;
 
-    private EnhancedSlider[] faceSliders;
+    private final JPanel parameterPanel;
 
     private int nrofCaps;
+    private EnhancedSlider[][] parameters;
+    private final EnhancedSlider[] faceSliders;
+    private final JCheckBox hexagonLayersBox;
+    private final SpinButton hexagonLayers = new SpinButton(new DefaultBoundedRangeModel(1, 0, 1, Integer.MAX_VALUE));
+    private final JCheckBox exactFacesBox;
 
     public NanoJoinsPanel() {
         setLayout(new GridBagLayout());
 
+        /* How many caps */
         JLabel nrofCapsLabel = new JLabel("Number of caps:");
         add(nrofCapsLabel,
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
@@ -64,8 +62,8 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         JPanel nrofCapsPanel = new JPanel();
         JRadioButton[] nrofCapsButtons = new JRadioButton[3];
-        nrofCapsGroup= new ButtonGroup();
-        for (int i=2; i <= 4; i++) {
+        ButtonGroup nrofCapsGroup= new ButtonGroup();
+        for (int i=2; i <= MAXCAPS; i++) {
             JRadioButton button = new JRadioButton(Integer.toString(i));
             nrofCapsButtons[i-2] = button;
             nrofCapsGroup.add(button);
@@ -74,10 +72,11 @@ public class NanoJoinsPanel extends GeneratorPanel {
         }
         nrofCapsButtons[0].setSelected(true);
         add(nrofCapsPanel,
-            new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
+            new GridBagConstraints(1, 0, 3, 1, 1.0, 1.0,
             GridBagConstraints.WEST, GridBagConstraints.WEST,
             new Insets(0, 0, 20, 10), 0, 0));
         
+        /* The cap parameters */
         JLabel parameterLabel = new JLabel("parameters:");
         add(parameterLabel,
             new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
@@ -85,13 +84,15 @@ public class NanoJoinsPanel extends GeneratorPanel {
                 new Insets(0, 0, 20, 10), 0, 0));
         parameterPanel = new JPanel();
         add(parameterPanel, 
-                new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
+                new GridBagConstraints(1, 1, 3, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.WEST,
                 new Insets(0, 0, 20, 10), 0, 0));
+        //initialisation will happen later
 
+        /* The number of faces */
         JLabel[] faceLabels = new JLabel[3];
         faceLabels[0] = new JLabel("number of pentagons:");
-        faceLabels[1] = new JLabel("number of hexagons:");
+        faceLabels[1] = new JLabel("max number of hexagons:");
         faceLabels[2] = new JLabel("number of heptagons:");
 
         faceSliders = new EnhancedSlider[3];
@@ -99,20 +100,49 @@ public class NanoJoinsPanel extends GeneratorPanel {
         faceSliders[1] = getEnhancedslider(0, 20, 0, 5);
         faceSliders[2] = getEnhancedslider(0, 5, 0, 20);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             add(faceLabels[i],
-                new GridBagConstraints(i, 2, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(2*i, 2, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 10, 5, 10), 0, 0));
+                new Insets(0, 0, 20, 10), 0, 0));
             add(faceSliders[i],
-                new GridBagConstraints(i, 3, 1, 1, 1.0, 1.0,
+                new GridBagConstraints(2*i, 3, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 10, 5, 10), 0, 0));
+                new Insets(0, 0, 20, 10), 0, 0));
         }
 
+        /* Add extra rings */
+        hexagonLayersBox = new JCheckBox("Add a number of hexagon layers");
+        hexagonLayers.setEnabled(hexagonLayersBox.isSelected());
+        hexagonLayersBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hexagonLayers.setEnabled(hexagonLayersBox.isSelected());
+            }
+        });
 
+        add(hexagonLayersBox,
+            new GridBagConstraints(0, 4, 2, 1, 1.0, 1.0,
+            GridBagConstraints.WEST, GridBagConstraints.NONE,
+            new Insets(20, 10, 0, 0), 0, 0));
+
+        add(hexagonLayers,
+            new GridBagConstraints(1, 4, 3, 1, 1.0, 1.0,
+            GridBagConstraints.WEST, GridBagConstraints.NONE,
+            new Insets(20, 10, 0, 0), 0, 0));
+
+        /* Only show joins with faces exactly equal to parameters */
+        exactFacesBox = new JCheckBox("Only generate joins with this exact number of pentagons");
+        add(exactFacesBox,
+            new GridBagConstraints(0, 5, 4, 1, 1.0, 1.0,
+            GridBagConstraints.WEST, GridBagConstraints.NONE,
+            new Insets(20, 10, 0, 0), 0, 0));
+
+        /* Initialise cap parameter panel */
         setParameterAmount(2);
+        parameterPanel.setPreferredSize(new Dimension(390, 292));
 
+        /* Adjust pentagons/heptagons when the other one changes*/
         faceSliders[0].addChangeListener(new ChangeListener() {
 
             @Override
@@ -135,7 +165,6 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
     private class nrOfCapsButtonListener implements ActionListener {
 
-
         private int amount;
 
         public nrOfCapsButtonListener(int amount) {
@@ -149,36 +178,54 @@ public class NanoJoinsPanel extends GeneratorPanel {
     }
 
     public void setParameterAmount(int amount) {
+        int oldnrofcaps = nrofCaps;
         nrofCaps = amount;
-        parameterPanel.removeAll();
-        parameterPanel.setLayout(new GridLayout(amount, 2));
-        parameters = new EnhancedSlider[amount][2];
-        for (int i = 0; i < amount; i++) {
-            JLabel lLabel = new JLabel("l");
-            lLabel.setHorizontalAlignment(JLabel.RIGHT);
-            JLabel mLabel = new JLabel("m");
-            mLabel.setHorizontalAlignment(JLabel.RIGHT);
+
+        EnhancedSlider[][] newparameters = new EnhancedSlider[amount][2];
+        int i = 0;
+        while (i < amount && i < oldnrofcaps) {
+            newparameters[i][0] = parameters[i][0];
+            newparameters[i][1] = parameters[i][1];
+            i++;
+        }
+
+        while (i < amount) {
             EnhancedSlider lslider = getEnhancedslider(2, 30, 5, 5);
             EnhancedSlider mslider = getEnhancedslider(0, 30, 0, 5);
+            newparameters[i][0] = lslider;
+            newparameters[i][1] = mslider;
+            i++;
+        }
 
+        parameters = newparameters;
+
+        parameterPanel.removeAll();
+        parameterPanel.setLayout(new GridLayout(amount, 2));
+
+        JLabel lLabel = new JLabel("l");
+        lLabel.setHorizontalAlignment(JLabel.RIGHT);
+        JLabel mLabel = new JLabel("m");
+        mLabel.setHorizontalAlignment(JLabel.RIGHT);
+        for (i = 0; i < nrofCaps; i++) {
             JPanel lPanel = new JPanel();
             lPanel.add(lLabel);
-            lPanel.add(lslider);
+            lPanel.add(parameters[i][0]);
 
             JPanel mPanel = new JPanel();
             mPanel.add(mLabel);
-            mPanel.add(mslider);
+            mPanel.add(parameters[i][1]);
 
             parameterPanel.add(lPanel);
             parameterPanel.add(mPanel);
         }
+
         parameterPanel.repaint();
         parameterPanel.revalidate();
 
-        faceSliders[0].setValue(0);
+        int pentagons = faceSliders[0].getValue();
         faceSliders[2].setMinimum((amount -2) * 6);
         faceSliders[2].setMaximum(faceSliders[2].getMinimum() + 5);
-        faceSliders[2].setValue(faceSliders[2].getMinimum());
+        faceSliders[2].setValue(faceSliders[2].getMinimum() + pentagons);
 
         repaint();
         revalidate();
@@ -202,8 +249,22 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        System.out.println("Not implemented yet");
-        return null;
+        int pentagons = faceSliders[0].getValue();
+        int hexagons = faceSliders[1].getValue();
+        int heptagons = faceSliders[2].getValue();
+        int extraRings = hexagonLayers.isEnabled() ? hexagonLayers.getValue() : 0;
+        String parameterString = "";
+
+        for (int i=0; i < nrofCaps; i++) {
+            parameterString += parameters[i][0].getValue() + " " + Integer.toString(parameters[i][1].getValue()) + " ";
+        }        
+        String ioption = exactFacesBox.isSelected() ? "-e" : "";
+
+        return new StaticGeneratorInfo(
+                Systoolbox.parseCmdLine("join -r " + extraRings + " " + ioption + " -pent " + pentagons + " -hex " + hexagons + " -hept " + heptagons + " " + parameterString),
+                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"java", "-cp", CaGe.installDirectory() + "/CaGe.jar", "cage.embedder.NanoconeEmbedder"}, {"embed", "-d3", "-ik", "-f0,0,0.01"}}),
+                "test",
+                6, true, new SingleElementRule("C"), 0);
     }
 
     @Override

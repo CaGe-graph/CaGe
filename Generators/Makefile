@@ -16,7 +16,7 @@ generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
 	    kekule_all cone_all tube_all quad_restrict$(SUFFIX) \
-	    leapfrog$(SUFFIX) buckygen_all plantri_preg$(SUFFIX) ngons$(SUFFIX)
+	    leapfrog$(SUFFIX) buckygen_all join_all plantri_preg$(SUFFIX) ngons$(SUFFIX)
 
 embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
 
@@ -24,10 +24,10 @@ others: mkfoldnet
 	
 tools: short_spiral_to_pl$(SUFFIX)
 
-clean: kekule_clean cone_clean tube_clean buckygen_clean
+clean: kekule_clean cone_clean tube_clean buckygen_clean join_clean
 	rm -f *.o
 
-clear: clean kekule_clear cone_clear tube_clear buckygen_clear
+clear: clean kekule_clear cone_clear tube_clear buckygen_clear join_clear
 	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen quad_restrict
 
 reset: clean
@@ -124,6 +124,16 @@ buckygen_clean:
 
 buckygen_clear:
 	rm -f buckygen$(SUFFIX)
+
+join_all:
+	SUFFIX=$(SUFFIX) $(MAKE) -C nanojoin
+	cp nanojoin/join$(SUFFIX) .
+
+join_clean:
+	SUFFIX=$(SUFFIX) $(MAKE) -C nanojoin clean
+
+join_clear:
+	rm -f join$(SUFFIX)
 
 ngons$(SUFFIX) : ngons.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -ansi

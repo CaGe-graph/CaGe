@@ -5,9 +5,6 @@ javadir
 sysinfo.jar
 *.class
 
-Generators/*
-!Generators/*.*
-
 Native/Mac
 Native/src/*.jnilib
 PreCompute/bindata*
