@@ -164,8 +164,18 @@ prepare_javadirlist_prompt ()
   echo "   Enter '?' for a full search, '-' to exit."
 }
 
+#Check if command exists
+if /usr/libexec/java_home &> /dev/null
+  then
+  #this is the correct javadir, add it to the PATH variable
+  homedir_mac=`/usr/libexec/java_home`/bin/:
+else
+  #add empty dir to PATH
+  homedir_mac=''
+fi
 
-add_to_javadirlist "$PATH" ":"
+add_to_javadirlist "$PATH:$homedir_mac" ":"
+
 prepare_javadirlist_prompt
 
 choice=""
