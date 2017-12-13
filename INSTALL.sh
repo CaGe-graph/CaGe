@@ -63,7 +63,6 @@ eval clear 2>&- || echo ""
 echo ""
 echo "C a G e  --  Chemical & abstract Graph environment"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "                                           version J1.0  *  install v1.1"
 echo ""
 
 
