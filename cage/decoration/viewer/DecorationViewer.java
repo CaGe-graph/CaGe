@@ -280,4 +280,176 @@ public class DecorationViewer extends JPanel {
         
         return new DecorationViewer(chambers, height, height);
     }
+    
+    /**
+     * Returns a <code>DecorationViewer</code> which shows decorations applied
+     * to the square tiling.
+     * 
+     * @param height
+     * @return 
+     */
+    public static DecorationViewer squareTilingViewer(int height){
+        GeometricChamberCoordinates[] chambers = new GeometricChamberCoordinates[72];
+        
+        double squareSideLength = (height-20)/3.0;
+        double halfSquareSideLength = (height-20)/6.0;
+        
+        int[][] shiftsV = new int[][]{{-1, 1}, {1,1}, {1, -1}, {-1, -1}};
+        int[][] shiftsE = new int[][]{{0, 1}, {1,0}, {0, -1}, {-1, 0}};
+        
+        //the chambers in the center square
+        {
+            double squareX = height/2.0;
+            double squareY = height/2.0;
+            for (int i = 0; i < 8; i++) {
+                if(i%2==0){
+                    chambers[i] = new GeometricChamberCoordinates(i,
+                            new double[]{squareX + shiftsV[i/2][0]*halfSquareSideLength, squareY + shiftsV[i/2][1]*halfSquareSideLength}, 
+                            new double[]{squareX + shiftsE[i/2][0]*halfSquareSideLength, squareY + shiftsE[i/2][1]*halfSquareSideLength},
+                            new double[]{squareX, squareY});
+                } else {
+                    int iV = (i+1)%8;
+                    chambers[i] = new GeometricChamberCoordinates(i,
+                            new double[]{squareX + shiftsV[iV/2][0]*halfSquareSideLength, squareY + shiftsV[iV/2][1]*halfSquareSideLength}, 
+                            new double[]{squareX + shiftsE[i/2][0]*halfSquareSideLength, squareY + shiftsE[i/2][1]*halfSquareSideLength},
+                            new double[]{squareX, squareY});
+                }
+            }
+        }
+        //the chambers in the side squares
+        for (int j = 0; j < 4; j++) {
+            double squareX = height/2.0 + shiftsE[j][0]*squareSideLength;
+            double squareY = height/2.0 + shiftsE[j][1]*squareSideLength;
+            for (int i = 0; i < 8; i++) {
+                if(i%2==0){
+                    chambers[8+j*8+i] = new GeometricChamberCoordinates(8+j*8+i,
+                            new double[]{squareX + shiftsV[i/2][0]*halfSquareSideLength, squareY + shiftsV[i/2][1]*halfSquareSideLength}, 
+                            new double[]{squareX + shiftsE[i/2][0]*halfSquareSideLength, squareY + shiftsE[i/2][1]*halfSquareSideLength},
+                            new double[]{squareX, squareY});
+                } else {
+                    int iV = (i+1)%8;
+                    chambers[8+j*8+i] = new GeometricChamberCoordinates(8+j*8+i,
+                            new double[]{squareX + shiftsV[iV/2][0]*halfSquareSideLength, squareY + shiftsV[iV/2][1]*halfSquareSideLength}, 
+                            new double[]{squareX + shiftsE[i/2][0]*halfSquareSideLength, squareY + shiftsE[i/2][1]*halfSquareSideLength},
+                            new double[]{squareX, squareY});
+                }
+            }
+        }
+        //the chambers in the corner squares
+        for (int j = 0; j < 4; j++) {
+            double squareX = height/2.0 + shiftsV[j][0]*squareSideLength;
+            double squareY = height/2.0 + shiftsV[j][1]*squareSideLength;
+            for (int i = 0; i < 8; i++) {
+                if(i%2==0){
+                    chambers[40+j*8+i] = new GeometricChamberCoordinates(40+j*8+i,
+                            new double[]{squareX + shiftsV[i/2][0]*halfSquareSideLength, squareY + shiftsV[i/2][1]*halfSquareSideLength}, 
+                            new double[]{squareX + shiftsE[i/2][0]*halfSquareSideLength, squareY + shiftsE[i/2][1]*halfSquareSideLength},
+                            new double[]{squareX, squareY});
+                } else {
+                    int iV = (i+1)%8;
+                    chambers[40+j*8+i] = new GeometricChamberCoordinates(40+j*8+i,
+                            new double[]{squareX + shiftsV[iV/2][0]*halfSquareSideLength, squareY + shiftsV[iV/2][1]*halfSquareSideLength}, 
+                            new double[]{squareX + shiftsE[i/2][0]*halfSquareSideLength, squareY + shiftsE[i/2][1]*halfSquareSideLength},
+                            new double[]{squareX, squareY});
+                }
+            }
+        }
+        
+        //set the VERTEX and EDGE neighbours for each chamber
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(j%2==0){
+                    int c = i*8 + j;
+                    int n1 = i*8 + (j+1)%8;
+                    int n2 = i*8 + (j+7)%8;
+                    chambers[c].setNeighbouringChamber(FacetType.VERTEX, chambers[n1]);
+                    chambers[c].setNeighbouringChamber(FacetType.EDGE, chambers[n2]);
+                } else {
+                    int c = i*8 + j;
+                    int n1 = i*8 + (j+1)%8;
+                    int n2 = i*8 + (j+7)%8;
+                    chambers[c].setNeighbouringChamber(FacetType.EDGE, chambers[n1]);
+                    chambers[c].setNeighbouringChamber(FacetType.VERTEX, chambers[n2]);
+                }
+            }
+        }
+        //set the FACE neighbours for each chamber
+        //the center square
+        for (int i = 0; i < 4; i++) {
+            int oppositeI = (i + 2)%4;
+            chambers[2*i].setNeighbouringChamber(FacetType.FACE, chambers[8+i*8+2*oppositeI+1]);
+            chambers[2*i+1].setNeighbouringChamber(FacetType.FACE, chambers[8+i*8+2*oppositeI]);
+            chambers[8+i*8+2*oppositeI].setNeighbouringChamber(FacetType.FACE, chambers[2*i+1]);
+            chambers[8+i*8+2*oppositeI+1].setNeighbouringChamber(FacetType.FACE, chambers[2*i]);
+        }
+        //the side squares forward
+        for (int i = 0; i < 4; i++) {
+            int j = (i + 1)%4;
+            int oppositeI = (i + 1)%4; //which square is neighbouring this square
+            int oppositeJ = (j+2)%4; //which quadrant is neighbouring j
+            chambers[8+i*8+2*j].setNeighbouringChamber(FacetType.FACE, chambers[40+oppositeI*8+2*oppositeJ+1]);
+            chambers[8+i*8+2*j+1].setNeighbouringChamber(FacetType.FACE, chambers[40+oppositeI*8+2*oppositeJ]);
+            chambers[40+oppositeI*8+2*oppositeJ].setNeighbouringChamber(FacetType.FACE, chambers[8+i*8+2*j+1]);
+            chambers[40+oppositeI*8+2*oppositeJ+1].setNeighbouringChamber(FacetType.FACE, chambers[8+i*8+2*j]);
+        }
+        //the side squares forward
+        for (int i = 0; i < 4; i++) {
+            int j = (i + 3)%4;
+            int oppositeI = i; //which square is neighbouring this square
+            int oppositeJ = (j+2)%4; //which quadrant is neighbouring j
+            chambers[8+i*8+2*j].setNeighbouringChamber(FacetType.FACE, chambers[40+oppositeI*8+2*oppositeJ+1]);
+            chambers[8+i*8+2*j+1].setNeighbouringChamber(FacetType.FACE, chambers[40+oppositeI*8+2*oppositeJ]);
+            chambers[40+oppositeI*8+2*oppositeJ].setNeighbouringChamber(FacetType.FACE, chambers[8+i*8+2*j+1]);
+            chambers[40+oppositeI*8+2*oppositeJ+1].setNeighbouringChamber(FacetType.FACE, chambers[8+i*8+2*j]);
+        }
+        //some extra chambers on the edge
+        int infinity = 72;
+        int[] top = new int[] {5, 1, 6};
+        int[] right = new int[] {6, 2, 7};
+        int[] bottom = new int[] {8, 3, 7};
+        int[] left = new int[] {5, 4, 8};
+
+        double topY = height/2.0 + 2*squareSideLength;
+        double bottomY = height/2.0 - 2*squareSideLength;
+        double leftX = height/2.0 - 2*squareSideLength;
+        double rightX = height/2.0 + 2*squareSideLength;
+        for (int i = 0; i < 3; i++) {
+            chambers[top[i]*8].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {height/2.0 + (i-1.5)*squareSideLength, topY - halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, topY - halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, topY}));
+            chambers[top[i]*8+1].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {height/2.0 + (i-.5)*squareSideLength, topY - halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, topY - halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, topY}));
+            chambers[bottom[i]*8+5].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {height/2.0 + (i-1.5)*squareSideLength, bottomY + halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, bottomY + halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, bottomY}));
+            chambers[bottom[i]*8+4].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {height/2.0 + (i-.5)*squareSideLength, bottomY + halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, bottomY + halfSquareSideLength}, 
+                    new double[] {height/2.0 + (i-1)*squareSideLength, bottomY}));
+            
+            
+            chambers[right[i]*8+2].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {rightX-halfSquareSideLength, height/2.0 - (i-1.5)*squareSideLength}, 
+                    new double[] {rightX-halfSquareSideLength, height/2.0 - (i-1)*squareSideLength}, 
+                    new double[] {rightX, height/2.0 - (i-1)*squareSideLength}));
+            chambers[right[i]*8+3].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {rightX-halfSquareSideLength, height/2.0 - (i-.5)*squareSideLength}, 
+                    new double[] {rightX-halfSquareSideLength, height/2.0 - (i-1)*squareSideLength}, 
+                    new double[] {rightX, height/2.0 - (i-1)*squareSideLength}));
+            chambers[left[i]*8+7].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {leftX+halfSquareSideLength, height/2.0 - (i-1.5)*squareSideLength}, 
+                    new double[] {leftX+halfSquareSideLength, height/2.0 - (i-1)*squareSideLength}, 
+                    new double[] {leftX, height/2.0 - (i-1)*squareSideLength}));
+            chambers[left[i]*8+6].setNeighbouringChamber(FacetType.FACE, new GeometricChamberCoordinates(infinity, 
+                    new double[] {leftX+halfSquareSideLength, height/2.0 - (i-.5)*squareSideLength}, 
+                    new double[] {leftX+halfSquareSideLength, height/2.0 - (i-1)*squareSideLength}, 
+                    new double[] {leftX, height/2.0 - (i-1)*squareSideLength}));
+
+        }
+        return new DecorationViewer(chambers, height, height);
+    }
 }
