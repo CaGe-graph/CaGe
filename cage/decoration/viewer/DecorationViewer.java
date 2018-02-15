@@ -22,6 +22,7 @@ public class DecorationViewer extends JPanel {
     
     private EmbeddedDecorationGraph edg;
     private boolean drawTiling = false;
+    private boolean drawChambers = false;
 
     DecorationViewer(GeometricChamberCoordinates[] chambers, int width, int height) {
         super(null);
@@ -38,6 +39,9 @@ public class DecorationViewer extends JPanel {
         super.paintComponent(g);
         if(drawTiling){
             paintUnderlyingTiling(g);
+        }
+        if(drawChambers){
+            paintChambers(g);
         }
         if(edg!=null){
             paintDecoration(g);
@@ -81,6 +85,14 @@ public class DecorationViewer extends JPanel {
         }
     }
     
+    private void paintChambers(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setStroke(new BasicStroke(1.5f));
+        for (GeometricChamberCoordinates chamber : chambers) {
+            paintChamber(g2, chamber);
+        }
+    }
+    
     private void paintChamber(Graphics g, GeometricChamberCoordinates chamber) {
         int x1 = (int)chamber.getV()[0];
         int y1 = (int)chamber.getV()[1];
@@ -88,9 +100,11 @@ public class DecorationViewer extends JPanel {
         int y2 = (int)chamber.getE()[1];
         int x3 = (int)chamber.getF()[0];
         int y3 = (int)chamber.getF()[1];
-        g.setColor(Color.BLACK);
+        g.setColor(Color.BLUE);
         g.drawLine(x1, y1, x2, y2);
+        g.setColor(Color.RED);
         g.drawLine(x1, y1, x3, y3);
+        g.setColor(Color.GREEN);
         g.drawLine(x3, y3, x2, y2);
     }
     
@@ -151,6 +165,25 @@ public class DecorationViewer extends JPanel {
      */
     public boolean getDrawTiling() {
         return drawTiling;
+    }
+
+    /**
+     * Should the chamber system be drawn.
+     * 
+     * @return 
+     */
+    public boolean getDrawChambers() {
+        return drawChambers;
+    }
+
+    /**
+     * Set whether the chamber system should be drawn.
+     * 
+     * @param drawChambers 
+     */
+    public void setDrawChambers(boolean drawChambers) {
+        this.drawChambers = drawChambers;
+        repaint();
     }
 
     public void setGraph(EmbeddedDecorationGraph edg) {
