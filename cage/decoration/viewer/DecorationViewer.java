@@ -1,8 +1,10 @@
 package cage.decoration.viewer;
 
+import cage.decoration.Decoration;
 import cage.decoration.EmbeddedDecorationGraph;
 import cage.decoration.FacetType;
 import cage.decoration.Neighbour;
+import cage.decoration.embedder.DecorationEmbedder;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -21,6 +23,7 @@ public class DecorationViewer extends JPanel {
     private final GeometricChamberCoordinates[] chambers;
     
     private EmbeddedDecorationGraph edg;
+    private DecorationEmbedder embedder = null;
     private boolean drawTiling = false;
     private boolean drawChambers = false;
 
@@ -189,6 +192,17 @@ public class DecorationViewer extends JPanel {
     public void setGraph(EmbeddedDecorationGraph edg) {
         this.edg = edg;
         repaint();
+    }
+
+    public void setDecoration(Decoration decoration) {
+        if(embedder==null){
+            throw new IllegalStateException("Decoration can only be set if an embedder is set.");
+        }
+        setGraph(embedder.setDecoration(decoration).run().export());
+    }
+
+    public void setEmbedder(DecorationEmbedder embedder) {
+        this.embedder = embedder;
     }
     
     /**
