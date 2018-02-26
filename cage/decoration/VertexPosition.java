@@ -6,7 +6,45 @@ package cage.decoration;
  */
 public enum VertexPosition {
     INTERNAL,
-    EDGE_VERTEX(FacetType.VERTEX), EDGE_EDGE(FacetType.EDGE), EDGE_FACE(FacetType.FACE),
+    EDGE_VERTEX(FacetType.VERTEX){
+
+        @Override
+        public boolean isEdge() {
+            return true;
+        }
+
+        @Override
+        public boolean isAdjacentCorner(VertexPosition p) {
+            return p!=null && p.isCorner() && !p.equals(CORNER_VERTEX);
+        }
+        
+    },
+    EDGE_EDGE(FacetType.EDGE){
+
+        @Override
+        public boolean isEdge() {
+            return true;
+        }
+
+        @Override
+        public boolean isAdjacentCorner(VertexPosition p) {
+            return p!=null && p.isCorner() && !p.equals(CORNER_EDGE);
+        }
+        
+    },
+    EDGE_FACE(FacetType.FACE){
+
+        @Override
+        public boolean isEdge() {
+            return true;
+        }
+
+        @Override
+        public boolean isAdjacentCorner(VertexPosition p) {
+            return p!=null && p.isCorner() && !p.equals(CORNER_FACE);
+        }
+        
+    },
     CORNER_VERTEX{
 
         @Override
@@ -64,6 +102,14 @@ public enum VertexPosition {
     }
     
     public boolean isCorner(){
+        return false;
+    }
+    
+    public boolean isEdge(){
+        return false;
+    }
+    
+    public boolean isAdjacentCorner(VertexPosition p){
         return false;
     }
 }
