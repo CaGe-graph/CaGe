@@ -158,12 +158,16 @@ public class SingleChamberDecorationEmbedder implements DecorationEmbedder{
         }
         Neighbour[][] neighbours = new Neighbour[realVertices.size()][];
         for (int i = 0; i < neighbours.length; i++) {
-            final int iFinal = i; 
-            neighbours[i] = decoration.getNeighboursAsStream(realVertices.get(i))
+            final int iFinal = i;
+            final DecorationVertex source = realVertices.get(i);
+            neighbours[i] = decoration.getNeighboursAsStream(source)
                     .filter(v -> !FacetType.FACE.equals(v.getType()))
                     .map(v -> {
                         if(FacetType.VERTEX.equals(v.getType())){
                             return new Neighbour(original2new[v.getId()], null);
+                        } else if(v.getPosition().isEdge() && FacetType.EDGE.equals(v.getType()) && (source.getPosition().equals(v.getPosition()) || v.getPosition().isAdjacentCorner(source.getPosition()))) {
+                            DecorationVertex target = decoration.getNeighboursAsStream(v).filter(u -> FacetType.VERTEX.equals(u.getType()) && !u.equals(source)).findAny().get();
+                            return new Neighbour(original2new[target.getId()], null);
                         } else {
                             return new Neighbour(
                                     iFinal,
