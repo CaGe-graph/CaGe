@@ -5,13 +5,14 @@
  *      Author: Dieter
  */
 
-#ifndef TD_ISOMORPHISMCHECK_H_
-#define TD_ISOMORPHISMCHECK_H_
+#ifndef ISOMORPHISMCHECK_H_
+#define ISOMORPHISMCHECK_H_
 
 
 #include "td_common.h"
 
 void prepareIsomorphism(int maxvertices);
+void finishUpIsomorphism();
 
 unsigned char checkJoin(struct td_patch* patch);
 

@@ -125,9 +125,7 @@ void processpatch(struct patcheslist_element* element, unsigned char dfs) {
 	if (!dfs && !savemergepath) {
 		//this is the beginning of the dfs algorithm => do not forget to free patch, element will be freed in removehead method
 		//after processdfs has been finished patch must be deleted (normally this happens by overwriting the variable new in the combine methods, this does not happen here)
-		//startdfs = clock();
 		processdfs(element->patch, element->pent, element->hex, element->hept);
-		//diffdfs += clock() - startdfs;
 		free(element->patch);
 	} else {
 		if (maxinternalvertices >= element->patch->internalvertices) {
@@ -143,13 +141,7 @@ void processpatch(struct patcheslist_element* element, unsigned char dfs) {
 						ismergepathright(element, i, dfs);
 					}
 				}
-			} /*else if (length == 2) {
-				for (i=0; i < partlength; i++) {
-					ismergepathleft(element, i, dfs);
-				}
-			} else {
-				ismergepathleft(element, 0, dfs);
-			}*/
+			}
 		}
 	}
 

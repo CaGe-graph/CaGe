@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -8,89 +7,14 @@
 #include "td_patchAdjacency.h"
 #include "td_graphutils.h"
 #include "td_operations.h"
+#include "td_isomorphismcheck.h"
 
-struct edge* searchDangling(struct td_patch *patch, int nr);
-
-void dfs(struct td_patch* patch) {
-	int i, temp, size;
-	struct ufaces* fini;
-	unsigned char *bordercode;
-	int pentres, hexres, heptres, ivres, faceres;
-	struct edge *mark;
-	if (patch->ufaces == NULL) {
-		if (!EXACTFACES || (patch->facesleft[1] == 0 && patch->facesleft[3] == 0)) {
-			newJoin(patch);
-		}
-	} else if (patch->facesleft[0] >= 0) {
-		get_bordercode(patch->ufaces->current, patch->nrofvertices, &bordercode);
-
-		/* COUNT NUMBER OF TWOS */
-		temp = 0;
-		for (i=1; i <= bordercode[0]; i++) {
-			if (bordercode[i] == 0) {
-				temp++;
-			}
-		}
-		size = bordercode[0];
-		free(bordercode);
-		/* FINISHED UFACE */
-		if (temp == 0) {
-			pentres = hexres = heptres = ivres = faceres = 0; //to avoid -Wmaybe-uninitialized
-			if (size >= 5 && size <= 7 && patch->facesleft[size - 4] > 0) {
-				if (0 == patch->ufaces->toborderbuiltnr) {
-					patch->facesleft[size - 4]--;
-					patch->facesused[size-5]++;
-					fini = patch->ufaces;
-					patch->ufaces = fini->next;
-					if (patch->ufaces != NULL) {
-						faceres = patch->ufaces->faceleftres;
-						pentres = patch->ufaces->pentres;
-						hexres = patch->ufaces->hexres;
-						heptres = patch->ufaces->heptres;
-						ivres = patch->ufaces->ivres;
-						patch->facesleft[0] += faceres;
-						patch->facesleft[1] += pentres;
-						patch->facesleft[2] += hexres;
-						patch->facesleft[3] += heptres;
-						patch->maxinternalvertices += ivres;
-						patch->ufaces->pentres = patch->ufaces->heptres = patch->ufaces->hexres = patch->ufaces->ivres = 0;
-					}
-					dfs(patch);
-					if (patch->ufaces != NULL) {
-						patch->facesleft[0] -= faceres;
-						patch->facesleft[1] -= pentres;
-						patch->facesleft[2] -= hexres;
-						patch->facesleft[3] -= heptres;
-						patch->maxinternalvertices -= ivres;
-						patch->ufaces->faceleftres = faceres;
-						patch->ufaces->pentres = pentres;
-						patch->ufaces->hexres = hexres;
-						patch->ufaces->heptres = heptres;
-						patch->ufaces->ivres = ivres;
-					}
-					patch->ufaces = fini;
-					patch->facesleft[size-4]++;
-					patch->facesused[size-5]--;
-				}
-			}
-		} else if (patch->facesleft[0] > 0) {
-			if (patch->ufaces->toborderbuiltnr != 0) {
-				/* We don't have all inner special faces */
-				mark = patch->ufaces->minedge;
-				split(patch, mark);
-				unfold(patch, mark);
-				unwrap(patch, mark);
-			} else {
-				/* Use filling algorithm | returns 1 if you have to split*/
-				if (fill(patch)) {
-					mark = patch->ufaces->minedge;
-					split(patch, mark);
-					unwrap(patch, mark);
-				}
-			}
-		}
-	}
-}
+unsigned char comparearrays(int *array1, int *array2, int length);
+void init_isovectors();
+void prepareWrite(int pent, int hex, int hept);
+void newJoin(struct td_patch* patch);
+void dfs(struct td_patch* patch);
+void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, unsigned char nrofnanocap, int iv, int rings, unsigned char exactfaces);
 
 unsigned char comparearrays(int *array1, int *array2, int length) {
 	int i, j, l, m;
@@ -210,55 +134,110 @@ void init_isovectors() {
 	}
 }
 
-struct edge* searchDangling(struct td_patch* patch, int nr) {
-	struct edge** firstarray;
-	int* stack;
-	int stackindex = 0;
-	int vertexnr, nextindex = 0;
-	struct edge *cedge, *start;
+void prepareWrite(int pent, int hex, int hept) {
+	int i;
+	int maxvertices;
 
-	firstarray = calloc((patch->nrofvertices + 1), sizeof(struct edge*));
-	firstarray[0] = patch->firstedge; //this can be any edge
-	stack = malloc((patch->nrofvertices+1)*sizeof(int));
-
-	stack[0] = patch->firstedge->start;
-	firstarray[stack[0]] = patch->firstedge;
-
-	cedge = patch->firstedge;
-	while (cedge->start != nr) {
-		start = firstarray[stack[stackindex]];
-		cedge = start;
-
-		do {
-			if (cedge->end != 0) {
-				vertexnr = cedge->inv->start;
-				if (firstarray[vertexnr] == NULL) {
-					firstarray[vertexnr] = cedge->inv;
-					nextindex++;
-					stack[nextindex] = vertexnr;
-					//printf("B%d\n", nextindex);
-
-				}
-			}
-			cedge = cedge->next;
-		} while (cedge != start);
-		stackindex++;
+	printf("%s", ">>planar_code le<<");
+	printf("%c", 0);
+	maxvertices = 5*pent+6*hex+7*hept + 3*(outsideparameters[0] + outsideparameters[1]);
+	for (i=0; i < nrofnanocaps-1; i++) {
+		maxvertices += 3*(insideparameters[2*i+1] + insideparameters[1*i+2]);
 	}
+	maxvertices /= 3;
+	maxvertices += 1;
+	prepareIsomorphism(maxvertices);
+}
 
-	while (cedge->end != 0) {
-		cedge = cedge->next;
+void newJoin(struct td_patch* patch) {
+	if (checkJoin(patch)) {
+		writePatchToFile(patch);
 	}
-	return cedge;
-
 }
 
 /*
 	MAIN METHODS
 */
 
-void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, int iv, int msec, int rings, unsigned char exactfaces) {
+void dfs(struct td_patch* patch) {
+	int i, temp, size;
+	struct ufaces* fini;
+	unsigned char *bordercode;
+	int pentres, hexres, heptres, ivres;
+	struct edge *mark;
+	if (patch->ufaces == NULL) {
+		if (!EXACTFACES || (patch->facesleft[1] == 0 && patch->facesleft[2] == 0 && patch->facesleft[3] == 0)) {
+			newJoin(patch);
+		}
+	} else if (patch->facesleft[0] >= 0) {
+		get_bordercode(patch->ufaces->current, patch->nrofvertices, &bordercode);
+
+		/* COUNT NUMBER OF TWOS */
+		temp = 0;
+		for (i=1; i <= bordercode[0]; i++) {
+			if (bordercode[i] == 0) {
+				temp++;
+			}
+		}
+		size = bordercode[0];
+		free(bordercode);
+		/* FINISHED UFACE */
+		if (temp == 0) {
+			if (size >= 5 && size <= 7 && patch->facesleft[size - 4] > 0) {
+				if (0 == patch->ufaces->toborderbuilt) {
+					patch->facesleft[size - 4]--;
+					patch->facesused[size-5]++;
+					fini = patch->ufaces;
+					patch->ufaces = fini->next;
+					if (patch->ufaces != NULL) {
+						pentres = patch->ufaces->pentres;
+						hexres = patch->ufaces->hexres;
+						heptres = patch->ufaces->heptres;
+						ivres = patch->ufaces->ivres;
+						patch->facesleft[1] += pentres;
+						patch->facesleft[2] += hexres;
+						patch->facesleft[3] += heptres;
+						patch->maxinternalvertices += ivres;
+						patch->ufaces->pentres = patch->ufaces->heptres = patch->ufaces->hexres = patch->ufaces->ivres = 0;
+					}
+					dfs(patch);
+					if (patch->ufaces != NULL) {
+						patch->facesleft[1] -= pentres;
+						patch->facesleft[2] -= hexres;
+						patch->facesleft[3] -= heptres;
+						patch->maxinternalvertices -= ivres;
+						patch->ufaces->pentres = pentres;
+						patch->ufaces->hexres = hexres;
+						patch->ufaces->heptres = heptres;
+						patch->ufaces->ivres = ivres;
+					}
+					patch->ufaces = fini;
+					patch->facesleft[size-4]++;
+					patch->facesused[size-5]--;
+				}
+			}
+		} else if (patch->facesleft[0] > 0) {
+			if (patch->ufaces->toborderbuilt != 0) {
+				/* We don't have all inner special faces */
+				mark = patch->ufaces->minedge;
+				split(patch, mark);
+				unfold(patch, mark);
+				unwrap(patch, mark);
+			} else {
+				/* Use filling algorithm | returns 1 if you have to split*/
+				if (fill(patch)) {
+					mark = patch->ufaces->minedge;
+					split(patch, mark);
+					unwrap(patch, mark);
+				}
+			}
+		}
+	}
+}
+
+void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, unsigned char nrofnanocap, int iv, int rings, unsigned char exactfaces) {
 	int i, j, k, counter, P;
-	int internalvertices, insideborderfinished;
+	int internalvertices;
 	struct td_patch *patch;
 	struct edge* previous;
 	struct edge* current;
@@ -275,13 +254,13 @@ void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, int 
 	init_isovectors();
 
 	insideborderfinished = 1;
-	for (i=1; i<= insidenanocaps;i++) {
+	for (i=1; i<= nrofnanocap-1;i++) {
 		insideborderfinished *= 2;
 	}
 	if (internalvertices < 0) {
 		free(outsideparameters);
 		free(insideparameters);
-		//printf("Found 0 Joins\n");
+		printf("Found 0 Joins\n");
 		exit(EXIT_SUCCESS);
 	}
 
@@ -314,7 +293,7 @@ void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, int 
 	patch->nrofvertices = 2;
 	patch->maxinternalvertices = internalvertices;
 	patch->facesleft = malloc(4*sizeof(int));
-	patch->facesleft[0] = pent + hex + hept;
+	patch->facesleft[0] = pent + hex + hept - 1;
 	patch->facesleft[1] = pent;
 	patch->facesleft[2] = hex;
 	patch->facesleft[3] = hept;
@@ -365,45 +344,27 @@ void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, int 
 	/* Initiate first uface */
 	patch->ufaces = malloc(sizeof(struct ufaces));
 	patch->ufaces->current = patch->firstedge;
-	patch->toborderbuilt = insideborderfinished;
-	patch->ufaces->toborderbuiltnr = insidenanocaps;
-	patch->ufaces->maxedge = cannonical_edge_old(patch, patch->ufaces->current, 0);
-	patch->ufaces->minedge = cannonical_edge_old(patch, patch->ufaces->current, 1);
+	patch->ufaces->toborderbuilt = insideborderfinished;
+	
+	cannonical_edge(patch->ufaces);
+	patch->ufaces->maxedge = cannonical_edge_simple(patch, patch->ufaces->current, 0);
+	patch->ufaces->minedge = cannonical_edge_simple(patch, patch->ufaces->current, 1);
+
 	patch->ufaces->next = NULL;
-	patch->ufaces->faceleftres = 0;
 	patch->ufaces->pentres = 0;
 	patch->ufaces->hexres = 0;
 	patch->ufaces->heptres = 0;
 	patch->ufaces->ivres = 0;
 	
 	/* Set mark - needed for isomorphism */
-	patch->mark = cannonical_edge_old(patch, patch->firstedge->inv, 0);
+	patch->mark = cannonical_edge_simple(patch, patch->firstedge->inv, 0);
 	
 	/* Start algorithm */
 	prepareWrite(pent, hex, hept);
-	clock_t start = clock(), diff;
-
+	
+	
 	dfs(patch);
 
-	diff = clock() - start;
-	msec += diff * 1000 / CLOCKS_PER_SEC;
-	
-
-	/* Print information */
-	/*
-	printf("Total %3d (%d)\t Joins IN %d s %d ms\n", FOUND_JOINS, ALL_JOINS, msec/1000, msec % 1000);
-	
-	printf("-----------------------------------\n");
-	for (i=0; i <= pent; i++) {
-		for (j=0; j<= hex; j++) {
-			for (k=0; k <= hept; k++) {
-				if (statistics[indextranslate[i][j][k]] != 0) {
-					fprintf(stdout, "Found %3d Joins with %2d pentagons, %2d hexagons, %2d heptagons\n", statistics[indextranslate[i][j][k]], i, j, k);
-				}
-			}
-		}
-	}
-	printf("-----------------------------------\n");*/
 	free(patch->ufaces);
 	free(patch->facesleft);
 	free(patch->facesused);
@@ -447,6 +408,6 @@ void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, int 
 	free(insideparameters);
 	free(outsideparameters);
 
-	finishUp(output);
+	finishUpIsomorphism();
 
 }

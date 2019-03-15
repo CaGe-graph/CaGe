@@ -2,14 +2,8 @@
 #include <stdio.h>
 
 #include "td_patchAdjacency.h"
-#include "td_graphutils.h"
-#include "td_common.h"
-#include "td_isomorphismcheck.h"
-#include "isomorphismcheck.h"
 
-void getPatchAdjacency2(struct edge* edge, vertextype*** result);
 void getPatchAdjacency(struct td_patch* patch, vertextype*** result);
-void writePatchToFile(struct td_patch* patch);
 void adjacencyToFile(vertextype*** result);
 void addRing(vertextype *** result);
 
@@ -20,6 +14,7 @@ void addRing(vertextype*** result) {
 
 	nrofvertices = (*result)[0][0];
 	for (numvertex=1; numvertex <= nrofvertices; numvertex++) {
+
 		if ((*result)[numvertex][2] == 0) {
 			/* found vertex of degree 2 */
 
@@ -135,98 +130,6 @@ void addRing(vertextype*** result) {
 	}
 }
 
-struct triple {
-	int x;
-	int y;
-	int z;
-};
-
-void markVertex(struct edge* edge) {
-	struct edge* current;
-
-	current = edge;
-	do {
-		current->start = -current->start;
-		if (current->end != 0) {
-			current->inv->end = current->start;
-		}
-		current = current->next;
-	} while (current != edge);
-}
-
-struct triple* getMinMax(struct edge* edge) {
-	struct triple* result;
-	struct triple* temp;
-	struct edge* current;
-	result = malloc(sizeof(struct triple));
-	result->x = result->y = edge->start;
-	result->z = 1;
-	markVertex(edge);
-	current = edge;
-	do {
-		if (current->end > 0) {
-			temp = getMinMax(current->inv);
-			if (result->x > temp->x) {
-				result->x = temp->x;
-			}
-			if (result->y < temp->y) {
-				result->y = temp->y;
-			}
-			result->z += temp->z;
-			free(temp);
-		}
-		current = current->next;
-	} while (current != edge);
-	return result;
-}
-
-void getPatchAdjacency2(struct edge* edge, vertextype*** result) {
-	int i, j;
-	int vertexnr = 1;
-	struct triple* t;
-	struct edge *current;
-	int minvertexnr, maxvertexnr, nrofvertices;
-	vertextype* vertexmap;
-	struct edge** firstedges;
-	/* find max and min vertexnumber */
-	t = getMinMax(edge);
-	minvertexnr = t->x;
-	maxvertexnr = t->y;
-	nrofvertices = t->z;
-
-	(*result) = malloc((nrofvertices+1)*sizeof(vertextype*));
-	(*result)[0] = malloc(3*sizeof(int));
-	(*result)[0][0] = nrofvertices;
-	(*result)[0][1] = edge->start;
-	(*result)[0][2] = edge->end;
-
-	vertexmap = calloc((maxvertexnr-minvertexnr+1), sizeof(vertextype));
-	firstedges = calloc(nrofvertices, sizeof(struct edge*));
-
-	firstedges[0] = edge;
-	markVertex(edge);
-	vertexmap[edge->start - minvertexnr] = vertexnr;
-	for (i=0; i < nrofvertices; i++) {
-		(*result)[i+1] = calloc(3, sizeof(vertextype*));
-		current = firstedges[i];
-		j = 0;
-		do {
-			if (current->end < 0) {
-				markVertex(current->inv);
-				firstedges[vertexnr] = current->inv;
-				vertexmap[current->end - minvertexnr] = ++vertexnr;
-			}
-			if (current->end != 0) {
-				(*result)[i+1][j] = vertexmap[current->end - minvertexnr];
-				j += 1;
-			}
-			current = current->next;
-		} while (current != firstedges[i]);
-	}
-	free(firstedges);
-	free(vertexmap);
-}
-
 void getPatchAdjacency(struct td_patch* patch, vertextype*** result) {
 	vertextype i, nrofvertices;
 	int j;
@@ -235,37 +138,50 @@ void getPatchAdjacency(struct td_patch* patch, vertextype*** result) {
 	struct edge* nextedge;
 	nrofvertices = patch->nrofvertices;
 	firstedges = malloc(nrofvertices*sizeof(struct edge*));
+
+	/* firstedges array */
 	if (firstedges == NULL) {
 		fprintf(stderr, "ERROR: malloc returned NULL\n");
+		exit(EXIT_FAILURE);
 	}
+
 	for (i=0; i < nrofvertices; i++) {
 		firstedges[i] = NULL;
 	}
+
+	/* result array */
 	(*result) = malloc((nrofvertices+1)*sizeof(vertextype*));
 	if (*result == NULL) {
 			fprintf(stderr, "ERROR: malloc returned NULL\n");
 			exit(EXIT_FAILURE);
 	}
+
 	(*result)[0] = malloc(3*sizeof(vertextype));
 	if (*result[0] == NULL) {
 		fprintf(stderr, "ERROR: malloc returned NULL\n");
+		exit(EXIT_FAILURE);
 	}
+
 	(*result)[0][0] = nrofvertices;
 	(*result)[0][1] = patch->mark->start;
 	(*result)[0][2] = patch->mark->end;
 
 	firstedges[0] = patch->firstedge;
+
 	for(i=0; i < *result[0][0]; i++) {
 		currentedge = firstedges[i];
 		(*result)[i+1] = malloc(3*sizeof(vertextype));
 		if ((*result)[i+1] == NULL) {
 			fprintf(stderr, "ERROR: malloc returned NULL\n");
+			exit(EXIT_FAILURE);
 		}
+
 		(*result)[i+1][0] = currentedge->end;
 		firstedges[currentedge->end-1] = currentedge->inv;
 		(*result)[i+1][1] = (*result)[i+1][2] = 0;
 		nextedge = currentedge->next;
 		j = 1;
+
 		while (nextedge != currentedge) {
 			if (nextedge->end != 0) {
 				firstedges[nextedge->end-1] = nextedge->inv;
@@ -275,38 +191,19 @@ void getPatchAdjacency(struct td_patch* patch, vertextype*** result) {
 			nextedge = nextedge->next;
 		}
 	}
+
 	free(firstedges);
-}
-
-void prepareWrite(int pent, int hex, int hept) {
-	int i;
-	int maxvertices;
-	printf("%s", ">>planar_code<<");
-	maxvertices = 5*pent+6*hex+7*hept + 3*(outsideparameters[0] + outsideparameters[1]);
-	for (i=0; i < insidenanocaps; i++) {
-		maxvertices += 3*(insideparameters[2*i+1] + insideparameters[1*i+2]);
-	}
-	maxvertices /= 3;
-	maxvertices += 1;
-	prepareIsomorphism(maxvertices);
-}
-
-void newJoin(struct td_patch* patch) {
-	if (checkJoin(patch)) {
-		writePatchToFile(patch);
-	}
 }
 
 void writePatchToFile(struct td_patch* patch) {
 	int i;
 	vertextype** result;
+
 	getPatchAdjacency(patch, &result);
-
-
-	ALL_JOINS++;
 	for (i=0; i < RINGSTOADD; i++) {
 		addRing(&result);
 	}
+
 	adjacencyToFile(&result);
 
 	for (i=result[0][0]; i >= 0; i--) {
@@ -319,13 +216,15 @@ void writePatchToFile(struct td_patch* patch) {
 void adjacencyToFile(vertextype*** result) {
 	int i, nrofvertices, j;
 	nrofvertices = (*result)[0][0];
-	printf("%c", nrofvertices);
+	printf("%c%c", nrofvertices % 256, nrofvertices/256);
 	for (i = 1; i <= nrofvertices; i++) {
 		j = 0;
 		while (j < 3 && (*result)[i][j] != 0) {
-			printf("%c", (*result)[i][j++]);
+			printf("%c%c", (*result)[i][j] % 256, (*result)[i][j]/256);
+			j++;
 		}
-		printf("%c", 0);
+		printf("%c%c", 0, 0);
 	}
+	printf("%c", 0);
 
 }

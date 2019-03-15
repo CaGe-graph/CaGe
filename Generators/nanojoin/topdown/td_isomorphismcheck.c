@@ -9,6 +9,8 @@
 #include <string.h>
 #include "td_isomorphismcheck.h"
 
+ /* PREFIX TREE */
+
 struct prefixelement {
     vertextype element;
     struct prefixelement *child;
@@ -16,9 +18,6 @@ struct prefixelement {
 };
 
 struct prefixelement* prefixroot;
-
-unsigned char findPrefix(vertextype* code, int length);
-void addPrefix(vertextype* code, int length);
 
 typedef struct {
     unsigned char firstparam;
@@ -29,30 +28,21 @@ typedef struct {
     struct edge** looseedges;
 } tube;
 
+
+unsigned char findPrefix(vertextype* code, int length);
+void addPrefix(vertextype* code, int length);
+
+/* TUBES */
 int maxtubelength;
 
 tube** tubes;
-
 tube *buildTubes(int firstparam, int secondparam, int length, int* currentvertexnum);
 
 void addTube(tube* t, tube* join);
 void removeTube(tube* tube);
 
-void prepareIsomorphism(int maxvertices) {
-	int i, currentvertex;
 
-	currentvertex = maxvertices;
-	tubes = malloc((insidenanocaps + 1) * sizeof(tube*));
-	tubes[0] = buildTubes(outsideparameters[0], outsideparameters[1], maxvertices, &currentvertex);
-	for (i=0; i < insidenanocaps; i++) {
-		tubes[i+1] = buildTubes(insideparameters[2*i+1], insideparameters[2*i+2], maxvertices, &currentvertex);
-	}
-
-	prefixroot = malloc(sizeof(struct prefixelement));
-	prefixroot->child = NULL;
-	prefixroot->next = NULL;
-}
-
+/* PREFIX TREE IMPLEMENTATION */
 struct edge* getNextWithSpecial(struct edge* edge) {
 	if (edge->inv) {
 		return edge->inv->next;
@@ -107,34 +97,6 @@ void freeNode(struct prefixelement *element) {
 		freeNode(element->child);
 		free(element);
 	}
-}
-
-void freeGraphEdge(struct edge* startedge) {
-	return;
-	struct edge* current;
-	startedge->start = 0;
-	current = startedge->next;
-	while (current != startedge) {
-		if (current->end != 0) {
-			freeGraphEdge(current->inv);
-		}
-		free(current);
-	}
-
-	if (current->start != 0) {
-		freeGraphEdge(startedge->inv);
-	}
-	free(current);
-}
-
-void finishUp() {
-	int i;
-	freeNode(prefixroot);
-	for (i=0; i < insidenanocaps + 1; i++) {
-		freeGraphEdge(tubes[i]->looseedges[0]);
-		free(tubes[i]);
-	}
-	free(tubes);
 }
 
 void addPrefix(vertextype* code, int length) {
@@ -194,6 +156,8 @@ void addPrefix(vertextype* code, int length) {
 	}
 }
 
+/* TUBES IMPLEMENTATION */
+
 void addTube(tube* mytube, tube* join) {
 	int i;
 	struct edge *t, *j;
@@ -242,6 +206,7 @@ tube* buildTubes(int firstparam, int secondparam, int length, int* currentvertex
 
 	templooseedges2 = NULL;
 	templooseedges = malloc((firstparam+secondparam)*sizeof(struct edge*));
+
 	for (j=0; j <= length; j++) {
 		prevrealinv = NULL;
 		/* build ring two edges at a time */
@@ -336,11 +301,6 @@ tube* buildTubes(int firstparam, int secondparam, int length, int* currentvertex
 		looseedges[0]->next = prevrealinv;
 		currentreal->prev = prevrealinv;
 
-
-		/*
-		for (i=0; i <= result[0][0]; i++) {
-			printf("%d %d %d %d\n", i, result[i][0], result[i][1], result[i][2]);
-		}*/
 		/* connect ring */
 		if (templooseedges2 != NULL) {
 			
@@ -364,6 +324,52 @@ tube* buildTubes(int firstparam, int secondparam, int length, int* currentvertex
 
 	mytube->maxvertexnum = *currentvertexnum - 1;
 	return mytube;
+}
+
+
+/* ISOMORPHISM IMPLEMENTATION */
+
+void prepareIsomorphism(int maxvertices) {
+	int i, currentvertex;
+
+	currentvertex = maxvertices;
+	tubes = malloc(nrofnanocaps*sizeof(tube*));
+	tubes[0] = buildTubes(outsideparameters[0], outsideparameters[1], maxvertices, &currentvertex);
+	for (i=0; i <nrofnanocaps-1; i++) {
+		tubes[i+1] = buildTubes(insideparameters[2*i+1], insideparameters[2*i+2], maxvertices, &currentvertex);
+	}
+
+	prefixroot = malloc(sizeof(struct prefixelement));
+	prefixroot->child = NULL;
+	prefixroot->next = NULL;
+}
+
+void freeGraphEdge(struct edge* startedge) {
+	return;
+	struct edge* current;
+	startedge->start = 0;
+	current = startedge->next;
+	while (current != startedge) {
+		if (current->end != 0) {
+			freeGraphEdge(current->inv);
+		}
+		free(current);
+	}
+
+	if (current->start != 0) {
+		freeGraphEdge(startedge->inv);
+	}
+	free(current);
+}
+
+void finishUpIsomorphism() {
+	int i;
+	freeNode(prefixroot);
+	for (i=0; i < nrofnanocaps; i++) {
+		freeGraphEdge(tubes[i]->looseedges[0]);
+		free(tubes[i]);
+	}
+	free(tubes);
 }
 
 void getSpecialEdges(struct td_patch* patch, struct edge*** edges, tube*** jointtubes, int size) {
@@ -391,7 +397,7 @@ void getSpecialEdges(struct td_patch* patch, struct edge*** edges, tube*** joint
 	}
 
 	if (jointtubes != NULL) {
-		(*jointtubes) = malloc((insidenanocaps + 1) * sizeof(tube*));
+		(*jointtubes) = malloc(nrofnanocaps*sizeof(tube*));
 	}
 
 	(*edges) = malloc(nrofedges*sizeof(struct edge*));
@@ -515,6 +521,7 @@ int getCode(struct td_patch* patch, struct edge* startedge, vertextype** code, i
 	int cindex;
 	int lastempty;
 	int nextnumber;
+
 	if (mirror) {
 		startedge = startedge->inv;
 	}
@@ -580,17 +587,17 @@ int getCode(struct td_patch* patch, struct edge* startedge, vertextype** code, i
 }
 
 unsigned char checkJoin(struct td_patch* patch) {
-	int i, j, maxvertices, minlength, length, nrofedges, size, *seen;
+	int i, j, maxvertices, minlength, length, nrofedges, size;
 	unsigned char iscopy;
 	struct edge** specialedges;
 	tube** jointtubes;
+
 	vertextype* code1;
 	vertextype* code2;
 	vertextype* code;
 	vertextype* min;
 	vertextype* temp;
-
-	maxvertices = tubes[insidenanocaps]->maxvertexnum;
+	maxvertices = tubes[nrofnanocaps-1]->maxvertexnum;
 	code1 = calloc(maxvertices*3, sizeof(vertextype));
 	code2 = calloc(maxvertices*3, sizeof(vertextype));
 
@@ -609,16 +616,14 @@ unsigned char checkJoin(struct td_patch* patch) {
 	/*search for pentagons and special face edges */
 	getSpecialEdges(patch, &specialedges, &jointtubes, size);
 	/* attach tubes */
-	seen = calloc(insidenanocaps+1, sizeof(int));
-	for (i=0; i < (insidenanocaps + 1); i++) {
+
+	for (i=0; i < nrofnanocaps; i++) {
 		j = 0;
-		while (seen[j] == 1 || jointtubes[j]->firstparam != tubes[i]->firstparam || jointtubes[j]->secondparam != tubes[i]->secondparam) {
+		while (jointtubes[j]->firstparam != tubes[i]->firstparam || jointtubes[j]->secondparam != tubes[i]->secondparam) {
 			j += 1;
 		}
 		addTube(tubes[i], jointtubes[j]);
-		seen[j] = 1;
 	}
-	free(seen);
 
 	/* build code */
 	nrofedges = patch->facesused[0]*5;
@@ -639,9 +644,9 @@ unsigned char checkJoin(struct td_patch* patch) {
 		}
 	}
 
-	/* remove tubes*/
+	/* remove tubes */
 	free(specialedges);
-	for (i=0; i < (insidenanocaps + 1); i++) {
+	for (i=0; i < nrofnanocaps; i++) {
 		free(jointtubes[i]->looseedges);
 		free(jointtubes[i]);
 		removeTube(tubes[i]);
@@ -661,6 +666,7 @@ unsigned char checkJoin(struct td_patch* patch) {
 
 	free(code1);
 	free(code2);
+
 	return !iscopy;
 }
 

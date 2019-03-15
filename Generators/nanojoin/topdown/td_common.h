@@ -22,7 +22,6 @@ struct td_patch {
 	vertextype nrofvertices;
 	struct edge* firstedge;
 	struct edge* mark;
-	unsigned char toborderbuilt;
 
 	struct ufaces* ufaces;
 	int maxinternalvertices;
@@ -33,8 +32,7 @@ struct td_patch {
 struct ufaces {
 	struct edge* current;
 	struct ufaces* next;
-	int toborderbuiltnr;
-	int faceleftres;
+	unsigned char toborderbuilt;
 	int pentres;
 	int hexres;
 	int heptres;
@@ -50,8 +48,8 @@ struct ufaces {
 /*
 	GLOBAL VARIABLES
 */
-//unsigned char insideborderfinished;
-unsigned char insidenanocaps;
+unsigned char insideborderfinished;
+int nrofnanocaps;
 int* outsideparameters;
 int* insideparameters;
 unsigned char *isovectors;
@@ -62,14 +60,11 @@ int* statistics;
 unsigned char checknormal;
 unsigned char checkinverse;
 
-FILE* output;
-FILE* test;
 //table that converts (k,l,m) to single index
 int*** indextranslate;
 
 int FOUND_JOINS;
 int ISO_JOINS;
-int ALL_JOINS;
 
 int RINGSTOADD;
 unsigned char EXACTFACES;

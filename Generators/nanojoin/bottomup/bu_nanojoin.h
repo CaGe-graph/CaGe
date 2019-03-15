@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-FILE* output;
 
 extern struct patcheslist_element* new_patches;
 extern struct patcheslist_element* current_patches;

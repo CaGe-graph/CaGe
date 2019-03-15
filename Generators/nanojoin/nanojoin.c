@@ -31,7 +31,9 @@ unsigned char bigger(int firstl, int firstm, int secondl, int secondm) {
 }
 
 void run_algorithm(unsigned char pent, unsigned char hex, unsigned char hept, unsigned char nrofnanocap, int** nanocapparameters, int rings, unsigned char exactfaces) {
-	int msec, i, internalvertices, l, m;
+
+	int i, internalvertices, l, m;
+
 
 	initialize_tree();
 
@@ -43,10 +45,9 @@ void run_algorithm(unsigned char pent, unsigned char hex, unsigned char hept, un
 	shex = hex ;
 	shept = hept;
 
-	//spent = shex = shept = 0;
-	/* Initiating gloal variables */
+	/* Initiating global variables for topdown */
 	internalvertices = (5*pent+6*hex+7*hept)/3;
-	insidenanocaps = nrofnanocap - 1;
+	nrofnanocaps = nrofnanocap;
 	outsideparameters = malloc(2*sizeof(int));
 	insideparameters = malloc((1+(nrofnanocap-1)*2)*sizeof(int));
 
@@ -76,15 +77,9 @@ void run_algorithm(unsigned char pent, unsigned char hex, unsigned char hept, un
 		internalvertices -= (*nanocapparameters)[i] + (*nanocapparameters)[i+1];
 
 	}
-	clock_t start = clock(), diff;
-	/* create amm patches with upto spent pentagons, shex hexagons and shept heptagons having an upper limit on the number of internal vertices */
-	run_bottomup(spent, shex, shept, internalvertices);
-	diff = clock() - start;
-	msec = diff * 1000 / CLOCKS_PER_SEC;
-	//printf("Bottom up: %d s %d ms\n", msec/1000, msec % 1000);
 
-	/* Run the topdown part */
-	run_topdown(pent, hex, hept, internalvertices, msec, rings, exactfaces);
+	run_bottomup(spent, shex, shept, internalvertices);
+	run_topdown(pent, hex, hept, nrofnanocap, internalvertices, rings, exactfaces);
 }
 
 int main(int argc, char const *argv[]){	
@@ -122,7 +117,7 @@ int main(int argc, char const *argv[]){
 		}
 		if (pent != -1 && hex != -1 && hept != -1) {
 			if ((argc - 7) / 2 > 9 || (rings != 0 && (argc-9)/2 > 9) ) {
-				fprintf(stderr, "There are maximum 9 nanocaps allowed, to change this, type of borderbuilt must be changed");
+				fprintf(stderr, "There are maximum 9 nanocaps allowed");
 				exit(EXIT_FAILURE);
 			} else {
 				run_algorithm(pent, hex, hept, counter / 2, &nanocapparameters, rings, exactfaces);

@@ -1,7 +1,7 @@
 CFLAGS=-w -O4
 OBJECTS = bottomup/bu_extra.o bottomup/bu_mergepaths.o bottomup/bu_nanojoin.o bottomup/bu_operations.o \
 	topdown/td_graphutils.o topdown/td_nanojoin.o topdown/td_operations.o topdown/td_patchAdjacency.o topdown/td_bitvector.o topdown/td_isomorphismcheck.o\
-	tree/tree.o topdown/isomorphismcheck.o\
+	tree/tree.o topdown/td_isomorphismcheck.o\
 	nanojoin.o
 
 bottomup/%.o: bottomup/%.c

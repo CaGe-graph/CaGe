@@ -2,28 +2,29 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "td_nanojoin.h"
 #include "td_common.h"
 #include "td_graphutils.h"
-#include "td_common.h"
-#include "td_nanojoin.h"
-#include "td_patchAdjacency.h"
 
-int newUface(struct td_patch* patch, struct edge* edge, int toborderbuilt1nr, int toborderbuilt2nr);
+
+int newUface(struct td_patch* patch, struct edge* edge, int toborderbuilt1, int toborderbuilt2);
 void mergeUface(struct td_patch* patch, struct edge *old);
+
+unsigned char check_isovectors(unsigned char tobuild, unsigned char willbuild);
+
 void createSpecialFace(struct td_patch *patch, struct edge *from, int nrofedges, int lparameter, int mparameter, int offset);
 void createPathCicle(struct td_patch* patch, struct edge *from, int pathlength, int cyclelength);
 void connect(struct td_patch* patch, struct edge* from, struct edge* to, int nrofedges, unsigned char filling);
 
-int newUface(struct td_patch* patch, struct edge* edge, int toborderbuiltnr1, int toborderbuiltnr2) {
+int newUface(struct td_patch* patch, struct edge* edge, int toborderbuilt1, int toborderbuilt2) {
 	struct ufaces* newuface;
 	int* arr;
-	int p, s, h, i, f;
+	int p, s, h, i;
 	unsigned char valid;
 	newuface = malloc(sizeof(struct ufaces));
 	newuface->current = edge->inv;
 	newuface->next = patch->ufaces;
-	newuface->toborderbuiltnr= toborderbuiltnr2;
-	newuface->faceleftres = 0;
+	newuface->toborderbuilt= toborderbuilt2;
 	newuface->pentres = 0;
 	newuface->hexres = 0;
 	newuface->heptres = 0;
@@ -31,62 +32,54 @@ int newUface(struct td_patch* patch, struct edge* edge, int toborderbuiltnr1, in
 	newuface->maxres = patch->ufaces->maxedge;
 	newuface->minres = patch->ufaces->minedge;
 	patch->ufaces->current = edge;
-	patch->ufaces->toborderbuiltnr = toborderbuiltnr1;
+	patch->ufaces->toborderbuilt = toborderbuilt1;
 	patch->ufaces = newuface;
-	//printf("%d %d: %d\n", newuface->current->start, newuface->current->end, newuface->toborderbuiltnr);
-	//printf("%d %d: %d\n", newuface->next->current->start, newuface->next->current->end, newuface->next->toborderbuiltnr);
-	/*
-		Check if both ufaces are valid ufaces
-	*/
+	patch->facesleft[0]--;
+
+	/* Check if both ufaces are valid ufaces */
 	valid = 0;
-	arr = malloc(5*sizeof(int));
-	//patch->ufaces->maxedge = cannonical_edge(patch, patch->ufaces, 0);
+	arr = malloc(4*sizeof(int));
+
 	cannonical_edge(patch->ufaces);
 	if (isValidUface(patch, patch->ufaces, &arr)) {
 		p = arr[0];
 		h = arr[1];
 		s = arr[2];
 		i = arr[3];
-		f = arr[4];
-		//patch->ufaces->next->maxedge = cannonical_edge(patch, patch->ufaces->next, 0);
+
 		cannonical_edge(patch->ufaces->next);
 		if (isValidUface(patch, patch->ufaces->next, &arr)) {
 			valid = 1;
-			if (patch->facesleft[1] < p + arr[0] 
-					|| patch->facesleft[2] < h + arr[1] 
-					|| patch->facesleft[3] < s + arr[2] 
-					|| patch->maxinternalvertices < i + arr[3] 
-					|| patch->facesleft[0] < f + arr[4])
-			{
+			if (patch->facesleft[1] < p + arr[0] || patch->facesleft[2] < h + arr[1] || patch->facesleft[3] < s + arr[2] || patch->maxinternalvertices < i + arr[3]) {
 				valid = 0;
 			} else {
 				patch->ufaces->next->pentres = arr[0];
 				patch->ufaces->next->hexres = arr[1];
 				patch->ufaces->next->heptres = arr[2];
 				patch->ufaces->next->ivres = arr[3];
-				patch->ufaces->next->faceleftres = arr[4];
-				patch->facesleft[0] -= arr[4];
 				patch->facesleft[1] -= arr[0];
 				patch->facesleft[2] -= arr[1];
 				patch->facesleft[3] -= arr[2];
 				patch->maxinternalvertices -= arr[3];
 			}
 		}
-	} 
+	}
 	free(arr);
 	return valid;
 }
 
 void mergeUface(struct td_patch* patch, struct edge *old) {
 	struct ufaces* temp;
-	patch->ufaces->next->toborderbuiltnr = patch->ufaces->next->toborderbuiltnr + patch->ufaces->toborderbuiltnr;
+
+	patch->ufaces->next->toborderbuilt = patch->ufaces->next->toborderbuilt | patch->ufaces->toborderbuilt;
 	temp = patch->ufaces->next;
 	temp->maxedge = patch->ufaces->maxres;
 	temp->minedge = patch->ufaces->minres;
 	free(patch->ufaces);
+
 	patch->ufaces = temp;
 	patch->ufaces->current = old;
-	patch->facesleft[0] += patch->ufaces->faceleftres;
+	patch->facesleft[0]++;
 	patch->facesleft[1] += patch->ufaces->pentres;
 	patch->facesleft[2] += patch->ufaces->hexres;
 	patch->facesleft[3] += patch->ufaces->heptres;
@@ -95,7 +88,6 @@ void mergeUface(struct td_patch* patch, struct edge *old) {
 	patch->ufaces->heptres = 0;
 	patch->ufaces->hexres = 0;
 	patch->ufaces->ivres = 0;
-	patch->ufaces->faceleftres = 0;
 }
 
 unsigned char check_isovectors(unsigned char tobuild, unsigned char willbuild) {
@@ -105,6 +97,7 @@ unsigned char check_isovectors(unsigned char tobuild, unsigned char willbuild) {
 	for (i=0; i < isovectors[0]; i++) {
 		first = isovectors[2*i+1];
 		second = isovectors[2*i+2];
+		
 		/* both not build yet */
 		if ((first & tobuild) != 0 && (second & tobuild) != 0) {
 			if ((willbuild & first) == 0 && (willbuild & second) != 0) {
@@ -118,7 +111,7 @@ unsigned char check_isovectors(unsigned char tobuild, unsigned char willbuild) {
 /* make sure inv lies in new uface */
 void connect(struct td_patch* patch, struct edge* from, struct edge* to, int nrofedges, unsigned char filling) {
 	struct edge *first, *last, *current, *next, *old;
-	int i;
+	int maxpower, i;
 
 	/* Special case since two dangling edges must be merged */
 	if (nrofedges == 1) {
@@ -178,8 +171,7 @@ void connect(struct td_patch* patch, struct edge* from, struct edge* to, int nro
 			current = getNextInFace(current);
 		}
 	}
-	/*
-	maxpower = 1 << insidenanocaps;
+	maxpower = 1 << (nrofnanocaps-1);
 	maxpower -= 1;
 	for (i=0; i <= maxpower; i++) {
 		if ((unsigned char) (patch->ufaces->toborderbuilt | ~i) == 255 && check_isovectors(patch->ufaces->toborderbuilt, i)) {
@@ -189,14 +181,6 @@ void connect(struct td_patch* patch, struct edge* from, struct edge* to, int nro
 			}
 			mergeUface(patch, old);
 		}
-	}*/
-
-	for (i=0; i <= patch->ufaces->toborderbuiltnr; i++) {
-		old = patch->ufaces->current;
-		if (newUface(patch, first->inv, i, patch->ufaces->toborderbuiltnr - i)) {
-			dfs(patch);
-		}
-		mergeUface(patch, old);
 	}
 	
 	if (nrofedges == 1) {
@@ -240,7 +224,7 @@ void connect(struct td_patch* patch, struct edge* from, struct edge* to, int nro
 
 void createPathCicle(struct td_patch* patch, struct edge *from, int pathlength, int cyclelength) {
 	struct edge *first, *current, *last, *old;
-	int i, r;
+	int i, r, maxpower;
 
 	first = malloc(sizeof(struct edge));
 	first->inv = malloc(sizeof(struct edge));
@@ -299,9 +283,7 @@ void createPathCicle(struct td_patch* patch, struct edge *from, int pathlength, 
 		current = getNextInFace(current);
 	}
 
-
-	/*
-	maxpower = 1 << insidenanocaps;
+	maxpower = 1 << (nrofnanocaps-1);
 	maxpower -= 1;
 	for (i=0; i <= maxpower; i++) {
 		if ((unsigned char) (patch->ufaces->toborderbuilt | ~i) == 255 && check_isovectors(patch->ufaces->toborderbuilt, i)) {
@@ -311,17 +293,8 @@ void createPathCicle(struct td_patch* patch, struct edge *from, int pathlength, 
 			}
 			mergeUface(patch, old);
 		}
-	}*/
-
-
-	for (i=0; i <= patch->ufaces->toborderbuiltnr; i++) {
-		old = patch->ufaces->current;
-		if (newUface(patch, last->inv->next, i, patch->ufaces->toborderbuiltnr - i)) {
-			dfs(patch);
-		} else {
-		}
-		mergeUface(patch, old);
 	}
+
 
 	/* Freeing edges */
 	/* Dangling */
@@ -358,8 +331,8 @@ void createPathCicle(struct td_patch* patch, struct edge *from, int pathlength, 
 void createSpecialFace(struct td_patch *patch, struct edge *from, int nrofedges, int lparameter, int mparameter, int offset) {
 	struct edge *first, *current, *last, *tempmax, *tempmin, *temp;
 	int i;
-	/* Adding internal edges */
 
+	/* Adding internal edges */
 	first = malloc(sizeof(struct edge));
 	first->inv = malloc(sizeof(struct edge));
 	first->inv->inv = first;
@@ -380,16 +353,12 @@ void createSpecialFace(struct td_patch *patch, struct edge *from, int nrofedges,
 
 	
 	/* Adding edges of special face */
-	
 	for (i=0; i < 2*(lparameter + mparameter) - 1; i++) {
 		current = addnewvertex(patch, current->inv);
 	}
 	current = addedge(current->inv, last->inv);
 
 	/* Adding dangling edges */
-
-
-
 	for (i=0; i < 2*offset; i++) {
 		current = getNextInFace(current);
 	}
@@ -425,7 +394,6 @@ void createSpecialFace(struct td_patch *patch, struct edge *from, int nrofedges,
 	
 	tempmax = patch->ufaces->maxedge;
 	tempmin = patch->ufaces->minedge;
-	//patch->ufaces->maxedge = cannonical_edge(patch, patch->ufaces, 0);
 	temp = patch->ufaces->current;
 	patch->ufaces->current = first;
 	cannonical_edge(patch->ufaces);
@@ -471,7 +439,7 @@ void createSpecialFace(struct td_patch *patch, struct edge *from, int nrofedges,
 void split(struct td_patch* patch, struct edge *mark) {
 	int i;
 	struct edge *startedge, *endedge;
-	//startedge = cannonical_edge(patch, patch->ufaces->current, 1);
+
 	startedge = mark;
 	endedge = getNextInFace(startedge);
 
@@ -494,18 +462,16 @@ void unfold(struct td_patch* patch, struct edge *mark) {
 	int i, j, k, lastl, lastm;
 	unsigned char temp, power;
 
-	//mark = cannonical_edge(patch, patch->ufaces->current, 1);
 	power = 1;
 	lastl = 0;
 	lastm = 0;
-	patch->ufaces->toborderbuiltnr -= 1;
 	for (i=1; i <= 2*insideparameters[0]; i+= 2) {
 		/* ADD EXTRA FOR TWO SPECIAL FACES WITH SAME PARAMETERS*/
-		if ((unsigned char) (patch->toborderbuilt | ~power) == 255 && (lastl != insideparameters[i] || lastm != insideparameters[i+1])) {
+		if ((unsigned char) (patch->ufaces->toborderbuilt | ~power) == 255 && (lastl != insideparameters[i] || lastm != insideparameters[i+1])) {
 			lastl = insideparameters[i];
 			lastm = insideparameters[i+1];
-			temp = patch->toborderbuilt;
-			patch->toborderbuilt = patch->toborderbuilt & ~power;
+			temp = patch->ufaces->toborderbuilt;
+			patch->ufaces->toborderbuilt = patch->ufaces->toborderbuilt & ~power;
 			/* Build face of length 2*(insidenanocapborders[i]+insidenanocapborders[i+1]) */
 			for (j=1; j <= patch->maxinternalvertices+1; j++) {
 				patch->maxinternalvertices -= (j-1);
@@ -519,18 +485,17 @@ void unfold(struct td_patch* patch, struct edge *mark) {
 
 				patch->maxinternalvertices += (j-1);
 			}
-			patch->toborderbuilt = temp;
+			patch->ufaces->toborderbuilt = temp;
 			
 		}
 		power *= 2;
+
 	}
-	patch->ufaces->toborderbuiltnr += 1;
 }
 
 void unwrap(struct td_patch* patch, struct edge *mark) {
 	int totallength, pathlength, cyclelength;
 
-	//mark = cannonical_edge(patch, patch->ufaces->current, 1);
 	for (totallength = 4; totallength <= patch->maxinternalvertices + 1; totallength += 1) {
 		for (pathlength = 1; pathlength < totallength - 3; pathlength += 1) {
 			patch->maxinternalvertices -= (totallength-1);

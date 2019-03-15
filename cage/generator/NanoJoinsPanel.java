@@ -262,7 +262,7 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine("join -r " + extraRings + " " + ioption + " -pent " + pentagons + " -hex " + hexagons + " -hept " + heptagons + " " + parameterString),
-                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"embed", "-d3", "-ip"}}),
+                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"nanojoin_embed"}}),
                 "test",
                 6, true, new ValencyElementRule("H O C Si N S I"), 0);
     }

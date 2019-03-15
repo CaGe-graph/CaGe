@@ -11,8 +11,8 @@ struct edge* getPreviousInFace(struct edge* sedge);
 
 unsigned char get_bordercode(struct edge *startedge, int nrofvertices, unsigned char **bordercode);
 void cannonical_edge(struct ufaces* face);
-struct edge* cannonical_edge_old(struct td_patch* patch, struct edge* startedge, unsigned char maxmin);
-struct edge* cannonical_edge_old_old(struct td_patch* patch, struct edge* startedge, unsigned char maxmin);
+struct edge* cannonical_edge_simple(struct td_patch* patch, struct edge* startedge, unsigned char maxmin);
+struct edge* cannonical_edge_simple_large(struct td_patch* patch, struct edge* startedge, unsigned char maxmin);
 void print_bordercode(struct edge *startedge, int nrofvertices);
 unsigned char isValidUface(struct td_patch* patch, struct ufaces *uface, int** arr);
 unsigned char areConnected(struct edge *first, struct edge *second);

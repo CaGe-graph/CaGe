@@ -158,14 +158,13 @@ unsigned char isValidUface(struct td_patch* patch, struct ufaces *uface, int **a
 	(*arr)[1] = 0;
 	(*arr)[2] = 0;
 	(*arr)[3] = 0;
-	(*arr)[4] = (size - 1) / 7 + 1;
 
 	if (nrtwo == 0 && (size < 5 || size > 7 || patch->facesleft[size - 4] == 0)) {
 		valid = 0;
 	}
-	if (simple && uface->toborderbuiltnr == 0 && (nrthree - nrtwo < 6 - patch->facesleft[1] || nrthree -nrtwo > 6 + patch->facesleft[3])) {
+	if (simple && uface->toborderbuilt == 0 && (nrthree - nrtwo < 6 - patch->facesleft[1] || nrthree -nrtwo > 6 + patch->facesleft[3])) {
 		valid = 0;
-	} else if (uface->toborderbuiltnr == 0) {
+	} else if (uface->toborderbuilt == 0) {
 		if (doubles == 0 && nrthree > nrtwo 
 				&& ((patch->facesleft[1] <= spent && patch->facesleft[2] <= shex && patch->facesleft[3] <= shept)
 					|| (patch->facesleft[0] + 1 <= spent && patch->facesleft[0] + 1 <= shex && patch->facesleft[0] + 1 <= shept))) {
@@ -215,9 +214,6 @@ void cannonical_edge(struct ufaces *face) {
 	struct edge *current, *result;
 	int length, i, indexmax, indexmin;
 	char cmax, cmin;
-	border = NULL; //to avoid -Wmaybe-uninitialized
-
-
 	current = face->current;
 
 	if (endvertex_degree(face->current) == 3) {
@@ -225,6 +221,7 @@ void cannonical_edge(struct ufaces *face) {
 	} else {
 		bordernumber = 0;
 	}
+
 	length = 1;
 	current = getNextInFace(current);
 	while (current != face->current) {
@@ -322,7 +319,7 @@ void cannonical_edge(struct ufaces *face) {
 /*
 	MAXMIN: 0 for max, 1 for min
 */
-struct edge* cannonical_edge_old(struct td_patch* patch, struct edge* startedge, unsigned char maxmin) {
+struct edge* cannonical_edge_simple(struct td_patch* patch, struct edge* startedge, unsigned char maxmin) {
 	unsigned long long maxbit, value, border;
 	int length, i, index;
 	struct edge *current, *result;
@@ -342,7 +339,7 @@ struct edge* cannonical_edge_old(struct td_patch* patch, struct edge* startedge,
 		current = getNextInFace(current);
 	}
 	if (length > 63) {
-		return cannonical_edge_old_old(patch, startedge, maxmin);
+		return cannonical_edge_simple_large(patch, startedge, maxmin);
 	}
 
 	result = startedge;
@@ -367,7 +364,7 @@ struct edge* cannonical_edge_old(struct td_patch* patch, struct edge* startedge,
 	return result;
 }
 
-struct edge* cannonical_edge_old_old(struct td_patch* patch, struct edge* startedge, unsigned char maxmin) {
+struct edge* cannonical_edge_simple_large(struct td_patch* patch, struct edge* startedge, unsigned char maxmin) {
 	struct edge *result;
 	int i, j, k, size;
 	unsigned char* bordercode;
