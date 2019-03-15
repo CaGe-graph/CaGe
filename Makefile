@@ -44,10 +44,10 @@ publish: distribution
 
 distribution: CaGe.jar CaGe-C.zip sysinfo.jar
 	zip -oqX9 CaGe-dist.zip INSTALL.sh cage.sh CaGe.ini img/logo.png java sysinfo.jar .rasmolrc Data CaGe-C.zip CaGe.jar Jmol.jar
-	#rm -f CaGe.jar CaGe-C.zip sysinfo.jar
+	rm -f CaGe.jar CaGe-C.zip sysinfo.jar
 
 clear_distribution:
-	#rm -f CaGe.jar CaGe-C.zip CaGe-dist.zip sysinfo.jar
+	rm -f CaGe.jar CaGe-C.zip CaGe-dist.zip sysinfo.jar
 
 javadoc:
 	javadoc -d ../javadoc/ -link ../jmol/ -link http://download.oracle.com/javase/1.5.0/docs/api/ -sourcepath .:../libraries/Jmol/src/ -subpackages cage:lisken:util -use -group "CaGe Core" "cage*" -group "Utility" "lisken*:util*"  -header "<b>CaGe</b>" -windowtitle CaGe -doctitle CaGe
