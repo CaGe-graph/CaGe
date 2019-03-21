@@ -1,5 +1,8 @@
 package cage.generator;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import cage.CaGe;
 import cage.ElementRule;
 import cage.EmbedFactory;
@@ -247,6 +250,10 @@ public class NanoJoinsPanel extends GeneratorPanel {
         return slider;
     }
 
+    private String getEmbedderDirectory() {
+       return System.getProperty("CaGe.InstallDir") + "/Generators/";
+    }
+
     @Override
     public GeneratorInfo getGeneratorInfo() {
         int pentagons = faceSliders[0].getValue();
@@ -262,7 +269,7 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         return new StaticGeneratorInfo(
                 Systoolbox.parseCmdLine("join -r " + extraRings + " " + ioption + " -pent " + pentagons + " -hex " + hexagons + " -hept " + heptagons + " " + parameterString),
-                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"nanojoin_embed"}}),
+                EmbedFactory.createEmbedder(new String[][]{{"embed"}}, new String[][]{{"nanojoin_embed", getEmbedderDirectory()}}),
                 "test",
                 6, true, new ValencyElementRule("H O C Si N S I"), 0);
     }

@@ -26,6 +26,7 @@ typedef struct {
     int maxvertexnum;
     int length;
     struct edge** looseedges;
+    unsigned char picked;
 } tube;
 
 
@@ -431,12 +432,12 @@ void getSpecialEdges(struct td_patch* patch, struct edge*** edges, tube*** joint
 				}
 
 				if (jointtubes && special) {
-
 					doubletwoedge = NULL;
 					tubelength = 0;
 					nospecial = 0;
 					(*jointtubes)[tubenr] = malloc(sizeof(tube));
 					(*jointtubes)[tubenr]->firstparam = (*jointtubes)[tubenr]->secondparam = 0;
+					(*jointtubes)[tubenr]->picked = 0;
 
 					/* find face length and double three edge (edge after second three) */
 					if (cedge->end != 0) {
@@ -526,6 +527,7 @@ int getCode(struct td_patch* patch, struct edge* startedge, vertextype** code, i
 		startedge = startedge->inv;
 	}
 
+
 	/* We will not use zero position for vertex map*/
 	seen = calloc((maxvertices+1), sizeof(unsigned char));
 	/* maps graph vertex number onto code vertex number */
@@ -579,7 +581,6 @@ int getCode(struct td_patch* patch, struct edge* startedge, vertextype** code, i
 
 		feindex++;
 	}
-
 	free(seen);
 	free(vertexmap); 
 	free(firstedges);
@@ -619,10 +620,11 @@ unsigned char checkJoin(struct td_patch* patch) {
 
 	for (i=0; i < nrofnanocaps; i++) {
 		j = 0;
-		while (jointtubes[j]->firstparam != tubes[i]->firstparam || jointtubes[j]->secondparam != tubes[i]->secondparam) {
+		while (jointtubes[j]->picked == 1 || jointtubes[j]->firstparam != tubes[i]->firstparam || jointtubes[j]->secondparam != tubes[i]->secondparam) {
 			j += 1;
 		}
 		addTube(tubes[i], jointtubes[j]);
+		jointtubes[j]->picked = 1; /* already picked */
 	}
 
 	/* build code */

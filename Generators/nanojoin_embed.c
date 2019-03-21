@@ -45,6 +45,7 @@ typedef struct tube {
 
 
 float UNITLENGTH = 1.42;
+const char* generatordirectory;
 
 /*
 GRAPH FUNCTIONS
@@ -375,6 +376,7 @@ void printPartialw3d(graph *g, int descriptor, int **vertexTranslation) {
 }
 
 void embedJoin(graph *g) {
+    char command[100];
     int stdinPipe[2];
     int stdoutPipe[2];
 
@@ -419,8 +421,9 @@ void embedJoin(graph *g) {
         close(stdinPipe[1]);
         close(stdoutPipe[0]);
         close(stdoutPipe[1]);
-
-        char *args[]={"Generators/embed", "-d3", "-is", NULL};
+        strcpy(command, generatordirectory);
+        strcat(command, "embed");
+        char *args[]={command, "-d3", "-is", NULL};
         nResult = execvp(args[0],args);
 
         exit(nResult);
@@ -1000,9 +1003,20 @@ int main( int argc, const char* argv[] )
     float (**vertices)[3];
     int r;
     char* string = malloc(128*sizeof(char));
+    FILE* output = fopen("outputaa.txt", "w");
+
+    if (argc == 1) {
+        generatordirectory = "./";
+    } else {
+        generatordirectory = argv[1];
+    }
+
+    fprintf(output, "%s", generatordirectory);
+
     char *fgetsr;
 
     fgetsr = fgets(string, 128, stdin);
+
 
     g = readNextGraphVega(stdin);
 
