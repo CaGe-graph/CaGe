@@ -61,7 +61,7 @@ public class NanoJoinsPanel extends GeneratorPanel {
         add(nrofCapsLabel,
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.WEST,
-                new Insets(0, 0, 20, 10), 0, 0));
+                new Insets(0, 0, 10, 10), 0, 0));
 
         JPanel nrofCapsPanel = new JPanel();
         JRadioButton[] nrofCapsButtons = new JRadioButton[3];
@@ -77,19 +77,16 @@ public class NanoJoinsPanel extends GeneratorPanel {
         add(nrofCapsPanel,
             new GridBagConstraints(1, 0, 3, 1, 1.0, 1.0,
             GridBagConstraints.WEST, GridBagConstraints.WEST,
-            new Insets(0, 0, 20, 10), 0, 0));
+            new Insets(0, 0, 10, 10), 0, 0));
+
+
         
         /* The cap parameters */
-        JLabel parameterLabel = new JLabel("parameters:");
-        add(parameterLabel,
-            new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.WEST, GridBagConstraints.WEST,
-                new Insets(0, 0, 20, 10), 0, 0));
         parameterPanel = new JPanel();
         add(parameterPanel, 
-                new GridBagConstraints(1, 1, 3, 1, 1.0, 1.0,
+                new GridBagConstraints(0, 1, 5, 1, 1.0, 1.0,
                 GridBagConstraints.WEST, GridBagConstraints.WEST,
-                new Insets(0, 0, 20, 10), 0, 0));
+                new Insets(0, 0, 10, 10), 0, 0));
         //initialisation will happen later
 
         /* The number of faces */
@@ -107,11 +104,11 @@ public class NanoJoinsPanel extends GeneratorPanel {
             add(faceLabels[i],
                 new GridBagConstraints(2*i, 2, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 20, 10), 0, 0));
+                new Insets(0, 0, 10, 10), 0, 0));
             add(faceSliders[i],
                 new GridBagConstraints(2*i, 3, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 20, 10), 0, 0));
+                new Insets(0, 0, 10, 10), 0, 0));
         }
 
         /* Add extra rings */
@@ -143,7 +140,7 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         /* Initialise cap parameter panel */
         setParameterAmount(2);
-        parameterPanel.setPreferredSize(new Dimension(390, 292));
+        parameterPanel.setPreferredSize(new Dimension(500, 150));
 
         /* Adjust pentagons/heptagons when the other one changes*/
         faceSliders[0].addChangeListener(new ChangeListener() {
@@ -193,8 +190,8 @@ public class NanoJoinsPanel extends GeneratorPanel {
         }
 
         while (i < amount) {
-            EnhancedSlider lslider = getEnhancedslider(2, 30, 5, 5);
-            EnhancedSlider mslider = getEnhancedslider(0, 30, 0, 5);
+            EnhancedSlider lslider = getEnhancedslider(1, 15, 5, 5);
+            EnhancedSlider mslider = getEnhancedslider(0, 15, 0, 5);
             newparameters[i][0] = lslider;
             newparameters[i][1] = mslider;
             i++;
@@ -203,22 +200,33 @@ public class NanoJoinsPanel extends GeneratorPanel {
         parameters = newparameters;
 
         parameterPanel.removeAll();
-        parameterPanel.setLayout(new GridLayout(amount, 2));
+        parameterPanel.setLayout(new GridLayout(3, amount));
 
-        JLabel lLabel = new JLabel("l");
-        lLabel.setHorizontalAlignment(JLabel.RIGHT);
-        JLabel mLabel = new JLabel("m");
-        mLabel.setHorizontalAlignment(JLabel.RIGHT);
         for (i = 0; i < nrofCaps; i++) {
+            JLabel parlabel = new JLabel("parameters " + (i + 1));
+            parlabel.setHorizontalAlignment(JLabel.CENTER);
+            parameterPanel.add(parlabel);
+        }
+
+        for (i = 0; i < nrofCaps; i++) {
+            JLabel lLabel = new JLabel("l");
+            lLabel.setHorizontalAlignment(JLabel.RIGHT);
+
             JPanel lPanel = new JPanel();
             lPanel.add(lLabel);
             lPanel.add(parameters[i][0]);
+
+            parameterPanel.add(lPanel);
+        }
+
+        for (i = 0; i < nrofCaps; i++) {
+            JLabel mLabel = new JLabel("m");
+            mLabel.setHorizontalAlignment(JLabel.RIGHT);
 
             JPanel mPanel = new JPanel();
             mPanel.add(mLabel);
             mPanel.add(parameters[i][1]);
 
-            parameterPanel.add(lPanel);
             parameterPanel.add(mPanel);
         }
 
