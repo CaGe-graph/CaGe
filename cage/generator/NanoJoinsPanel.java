@@ -91,7 +91,7 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         /* The number of faces */
         JLabel[] faceLabels = new JLabel[3];
-        faceLabels[0] = new JLabel("number of pentagons:");
+        faceLabels[0] = new JLabel("max number of pentagons:");
         faceLabels[1] = new JLabel("max number of hexagons:");
         faceLabels[2] = new JLabel("number of heptagons:");
 
