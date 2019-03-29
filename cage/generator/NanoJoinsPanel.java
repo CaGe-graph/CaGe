@@ -17,6 +17,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultBoundedRangeModel;
 
@@ -80,14 +81,27 @@ public class NanoJoinsPanel extends GeneratorPanel {
             new Insets(0, 0, 10, 10), 0, 0));
 
 
-        
+
         /* The cap parameters */
-        parameterPanel = new JPanel();
-        add(parameterPanel, 
+        add(new JSeparator(),
                 new GridBagConstraints(0, 1, 5, 1, 1.0, 1.0,
-                GridBagConstraints.WEST, GridBagConstraints.WEST,
+                GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 10, 10), 0, 0));
+        add(new JLabel("Parameters:"),
+                new GridBagConstraints(0, 2, 5, 1, 1.0, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 10, 10), 0, 0));
+        parameterPanel = new JPanel();
+        parameterPanel.setLayout(new GridLayout(3, 4));
+        add(parameterPanel,
+                new GridBagConstraints(0, 3, 5, 1, 1.0, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.BOTH,
                 new Insets(0, 0, 10, 10), 0, 0));
         //initialisation will happen later
+        add(new JSeparator(),
+                new GridBagConstraints(0, 4, 5, 1, 1.0, 1.0,
+                GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 10, 10), 0, 0));
 
         /* The number of faces */
         JLabel[] faceLabels = new JLabel[3];
@@ -102,11 +116,11 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         for (int i = 0; i < 2; i++) {
             add(faceLabels[i],
-                new GridBagConstraints(2*i, 2, 2, 1, 1.0, 1.0,
+                new GridBagConstraints(2*i, 5, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 10), 0, 0));
             add(faceSliders[i],
-                new GridBagConstraints(2*i, 3, 2, 1, 1.0, 1.0,
+                new GridBagConstraints(2*i, 6, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(0, 0, 10, 10), 0, 0));
         }
@@ -122,19 +136,19 @@ public class NanoJoinsPanel extends GeneratorPanel {
         });
 
         add(hexagonLayersBox,
-            new GridBagConstraints(0, 4, 2, 1, 1.0, 1.0,
+            new GridBagConstraints(0, 7, 2, 1, 1.0, 1.0,
             GridBagConstraints.WEST, GridBagConstraints.NONE,
             new Insets(20, 10, 0, 0), 0, 0));
 
         add(hexagonLayers,
-            new GridBagConstraints(1, 4, 3, 1, 1.0, 1.0,
+            new GridBagConstraints(1, 7, 3, 1, 1.0, 1.0,
             GridBagConstraints.WEST, GridBagConstraints.NONE,
             new Insets(20, 10, 0, 0), 0, 0));
 
         /* Only show joins with faces exactly equal to parameters */
         exactFacesBox = new JCheckBox("Only generate joins with this exact number of pentagons");
         add(exactFacesBox,
-            new GridBagConstraints(0, 5, 4, 1, 1.0, 1.0,
+            new GridBagConstraints(0, 8, 4, 1, 1.0, 1.0,
             GridBagConstraints.WEST, GridBagConstraints.NONE,
             new Insets(20, 10, 0, 0), 0, 0));
 
@@ -200,13 +214,6 @@ public class NanoJoinsPanel extends GeneratorPanel {
         parameters = newparameters;
 
         parameterPanel.removeAll();
-        parameterPanel.setLayout(new GridLayout(3, amount));
-
-        for (i = 0; i < nrofCaps; i++) {
-            JLabel parlabel = new JLabel("parameters " + (i + 1));
-            parlabel.setHorizontalAlignment(JLabel.CENTER);
-            parameterPanel.add(parlabel);
-        }
 
         for (i = 0; i < nrofCaps; i++) {
             JLabel lLabel = new JLabel("l");
@@ -218,6 +225,9 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
             parameterPanel.add(lPanel);
         }
+        for (i = nrofCaps; i < 4; i++) {
+            parameterPanel.add(new JLabel());
+        }
 
         for (i = 0; i < nrofCaps; i++) {
             JLabel mLabel = new JLabel("m");
@@ -228,6 +238,18 @@ public class NanoJoinsPanel extends GeneratorPanel {
             mPanel.add(parameters[i][1]);
 
             parameterPanel.add(mPanel);
+        }
+        for (i = nrofCaps; i < 4; i++) {
+            parameterPanel.add(new JLabel());
+        }
+
+        for (i = 0; i < nrofCaps; i++) {
+            JLabel parlabel = new JLabel("Cap " + (i + 1));
+            parlabel.setHorizontalAlignment(JLabel.CENTER);
+            parameterPanel.add(parlabel);
+        }
+        for (i = nrofCaps; i < 4; i++) {
+            parameterPanel.add(new JLabel());
         }
 
         parameterPanel.repaint();
@@ -272,7 +294,7 @@ public class NanoJoinsPanel extends GeneratorPanel {
 
         for (int i=0; i < nrofCaps; i++) {
             parameterString += parameters[i][0].getValue() + " " + Integer.toString(parameters[i][1].getValue()) + " ";
-        }        
+        }
         String ioption = exactFacesBox.isSelected() ? "-e" : "";
 
         return new StaticGeneratorInfo(
