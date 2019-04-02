@@ -16,22 +16,22 @@ generators: fullgen$(SUFFIX) cgf$(SUFFIX) hcgen$(SUFFIX) \
 	    plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) \
 	    cat$(SUFFIX) tee$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) \
 	    kekule_all cone_all tube_all quad_restrict$(SUFFIX) \
-	    leapfrog$(SUFFIX) buckygen_all plantri_preg$(SUFFIX) ngons$(SUFFIX)
+	    leapfrog$(SUFFIX) buckygen_all plantri_preg$(SUFFIX) ngons$(SUFFIX) nanojoin_all
 
-embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX)
+embedders: embed$(SUFFIX) cat$(SUFFIX) tee$(SUFFIX) nanojoin_embed$(SUFFIX)
 
 others: mkfoldnet
 	
 tools: short_spiral_to_pl$(SUFFIX)
 
-clean: kekule_clean cone_clean tube_clean buckygen_clean
+clean: kekule_clean cone_clean tube_clean buckygen_clean nanojoin_clean
 	rm -f *.o
 
-clear: clean kekule_clear cone_clear tube_clear buckygen_clear
-	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen quad_restrict
+clear: clean kekule_clear cone_clear tube_clear buckygen_clear nanojoin_clear
+	rm cat cgf embed fullgen hcgen plantri plantri_ad tee tubetype plantri_md6 vul_in catacondensed fusgen quad_restrict nanojoin_embed
 
 reset: clean
-	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) fusgen$(SUFFIX) quad_restrict$(SUFFIX)
+	rm -f fullgen$(SUFFIX) cgf$(SUFFIX) tubetype$(SUFFIX) hcgen$(SUFFIX) plantri$(SUFFIX) plantri_md6$(SUFFIX) plantri_ad$(SUFFIX) embed$(SUFFIX) cat$(SUFFIX) vul_in$(SUFFIX) catacondensed$(SUFFIX) fusgen$(SUFFIX) quad_restrict$(SUFFIX) nanojoin_embed$(SUFFIX)
 
 
 fullgen$(SUFFIX) : fullgen.c
@@ -60,6 +60,9 @@ plantri_preg$(SUFFIX) : plantri.c regfilt.c
 
 embed$(SUFFIX) : embed.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -lm
+
+nanojoin_embed$(SUFFIX) : nanojoin_embed.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -std=gnu11 -o $@ $^ -lm
 
 cat$(SUFFIX) : cat.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
@@ -127,4 +130,15 @@ buckygen_clear:
 
 ngons$(SUFFIX) : ngons.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -ansi
+
+nanojoin_all:
+	SUFFIX=$(SUFFIX) $(MAKE) -C nanojoin
+	cp nanojoin/join$(SUFFIX) .
+
+nanojoin_clean:
+	SUFFIX=$(SUFFIX) $(MAKE) -C nanojoin clean
+
+nanojoin_clear:
+	rm -f join$(SUFFIX)
+
 	
