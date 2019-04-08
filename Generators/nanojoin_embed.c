@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE  200809L
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -5,6 +7,10 @@
 
 #include <unistd.h>
 #include <errno.h>
+
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 
 /* DATA STRUCTURES */
 
@@ -82,6 +88,8 @@ graph* readNextGraphVega(FILE* file) {
     edge *previous;
     edge *inverse;
 
+    int i, j;
+
     int verticesarraysize = 10;
     graph *g;
 
@@ -95,18 +103,15 @@ graph* readNextGraphVega(FILE* file) {
     /* read vertex by vertex */
     while (!feof(stdin) && vertexnumber != 0) {
         degree = r - 4;
-        
         /* extend vertices array if necessary */
         while (vertexnumber - 1 >= verticesarraysize) {
-            //printf("Extending array to %d\n", verticesarraysize * 2);
             g->vertices = realloc(g->vertices, 2*verticesarraysize*sizeof(vertex));
-            for (int i=verticesarraysize; i < 2 * verticesarraysize; i++) {
+            for (i=verticesarraysize; i < 2 * verticesarraysize; i++) {
                 g->vertices[i] = NULL;
             }
             verticesarraysize *= 2;
             g->firstedges = realloc(g->firstedges, verticesarraysize*sizeof(edge));
         }
-
         if (g->vertices[vertexnumber - 1] == NULL) {
             g->vertices[vertexnumber - 1] = malloc(sizeof(vertex));
             init_vertex(vertexnumber - 1, &g->vertices[vertexnumber - 1]);
@@ -115,14 +120,13 @@ graph* readNextGraphVega(FILE* file) {
         g->vertices[vertexnumber-1]->degree = degree;
 
         previous = NULL;
-        for (int i=0; i < degree; i++) {
+        for (i=0; i < degree; i++) {
             neighbour = neighbours[i];
-
              /* extend vertices array if necessary */
             while (neighbour - 1 >= verticesarraysize) {
                 g->vertices = realloc(g->vertices, 2*verticesarraysize*sizeof(vertex));
-                for (int i=verticesarraysize; i < 2 * verticesarraysize; i++) {
-                    g->vertices[i] = NULL;
+                for (j=verticesarraysize; j < 2 * verticesarraysize; j++) {
+                    g->vertices[j] = NULL;
                 }
                 verticesarraysize *= 2;
                 g->firstedges = realloc(g->firstedges, verticesarraysize*sizeof(edge));
@@ -172,6 +176,7 @@ graph* readNextGraphPlanar(FILE* file) {
     unsigned char current;
     edge *inverse, *last;
     graph *g;
+    int i;
 
 
     numberofvertices = (int) fgetc(file);
@@ -182,14 +187,14 @@ graph* readNextGraphPlanar(FILE* file) {
     g->nrofvertices = numberofvertices;
 
     g->vertices = calloc(numberofvertices, sizeof(vertex));
-    for (int i=0; i < numberofvertices; i++) {
+    for (i=0; i < numberofvertices; i++) {
         g->vertices[i] = malloc(sizeof(vertex));
         init_vertex(i, &(g->vertices[i]));
     }
 
     g->firstedges = calloc(numberofvertices, sizeof(edge));
     
-    for (int i=0; i < numberofvertices; i++) {
+    for (i=0; i < numberofvertices; i++) {
         current = fgetc(file) - 1;
         g->firstedges[i] = malloc(sizeof(edge));
         g->firstedges[i]->startvertex = g->vertices[i];
@@ -233,9 +238,10 @@ graph* readNextGraphPlanar(FILE* file) {
 
 void free_graph(graph* g) {
     struct edge *e, *first;
+    int i;
 
 
-    for (int i=0; i < g->nrofvertices; i++) {
+    for (i=0; i < g->nrofvertices; i++) {
         first = g->firstedges[i];
         e = first->next;
         do {
@@ -245,11 +251,11 @@ void free_graph(graph* g) {
         free(first);
     }
     free(g->firstedges);
-    for (int i=0; i < g->nrofvertices; i++) {
+    for (i=0; i < g->nrofvertices; i++) {
         free(g->vertices[i]);
     }
     free(g->vertices);
-    for (int i=0; i < g->nrofrings; i++) {
+    for (i=0; i < g->nrofrings; i++) {
         free(g->tubes[i]);
     }
     free(g->tubes);
@@ -267,6 +273,7 @@ void fillw3d(graph *g, int inputDescriptor, int* vertexTranslation) {
     int *reverseTranslation;
     int rread;
     int vertexindex;
+    int i;
 
     int vertexnumber;
     float x, y, z;
@@ -274,8 +281,7 @@ void fillw3d(graph *g, int inputDescriptor, int* vertexTranslation) {
     char* string = malloc(128*sizeof(char));
 
     reverseTranslation = malloc((g->nrofvertices + 1) * sizeof(int));
-
-    for (int i=0; i < g->nrofvertices; i++) {
+    for (i=0; i < g->nrofvertices; i++) {
         reverseTranslation[vertexTranslation[i]] = i;
     }
 
@@ -312,20 +318,18 @@ void fillw3d(graph *g, int inputDescriptor, int* vertexTranslation) {
 void printw3d(graph *g) {
     edge *e;
     float* co;
-    for (int i=0; i < g->nrofvertices; i++) {
+    int i, j;
+
+    for (i=0; i < g->nrofvertices; i++) {
         printf("%3d", i + 1);
-        //printf("%d\t\t", i+1);
         if (g->vertices[i]->embedded == 1) {
             co = g->vertices[i]->co;
-            for (int j=0; j < 3; j++) {
+            for (j=0; j < 3; j++) {
                 printf(" %8.3f", co[j]);
-                //printf("%f\t", co[j]);
             }
         } else {
             printf(" %8.3f %8.3f %8.3f", NAN, NAN, NAN);
-            //printf("%f\t%f\t%f\t", NAN, NAN, NAN);
         }
-        //printf("\t");
         e = g->firstedges[i];
         printf(" %3d", e->endvertex->vertexnr + 1);
         e = e->next;
@@ -342,10 +346,11 @@ void printw3d(graph *g) {
 void printPartialw3d(graph *g, int descriptor, int **vertexTranslation) {
     int current;
     edge *e;
+    int i;
 
     dprintf(descriptor, ">>writegraph3d<<\n");
     current = 1;
-    for (int i=0; i < g->nrofvertices; i++) {
+    for (i=0; i < g->nrofvertices; i++) {
         if (g->vertices[i]->partoftube == 0) {
             (*vertexTranslation)[i] = current++;
             g->vertices[i]->embedded = 1;
@@ -353,7 +358,7 @@ void printPartialw3d(graph *g, int descriptor, int **vertexTranslation) {
             (*vertexTranslation)[i] = 0;
         }
     }
-    for (int i=0; i < g->nrofvertices; i++) {
+    for (i=0; i < g->nrofvertices; i++) {
         if ((*vertexTranslation)[i] != 0) {
             current = 0;
             dprintf(descriptor, "%*d\t\t %.3f\t %.3f\t %.3f\t\t", 4, (*vertexTranslation)[i], 0.0, 0.0, 0.0);
@@ -401,7 +406,7 @@ void embedJoin(graph *g) {
     nChild = fork();
 
     if (0 == nChild) {
-        //child process
+        /* child process */
 
         if (dup2(stdinPipe[0], STDIN_FILENO) == -1) {
           exit(errno);
@@ -411,12 +416,12 @@ void embedJoin(graph *g) {
           exit(errno);
         }
 
-        // redirect stderr
+        /* redirect stderr */
         if (dup2(stdoutPipe[1], STDERR_FILENO) == -1) {
           exit(errno);
         }
 
-        // all these are for use by parent only
+        /* all these are for use by parent only */
         close(stdinPipe[0]);
         close(stdinPipe[1]);
         close(stdoutPipe[0]);
@@ -428,23 +433,23 @@ void embedJoin(graph *g) {
 
         exit(nResult);
     } else if (nChild > 0) {
-         // parent continues here
+         /* parent continues here */
 
-        // close unused file descriptors, these are for child only
+        /* close unused file descriptors, these are for child only */
         close(stdinPipe[0]);
         close(stdoutPipe[1]); 
 
         printPartialw3d(g, stdinPipe[1], &vertexTranslation);
 
-        // Just a char by char read here, you can change it accordingly
+        /* Just a char by char read here, you can change it accordingly */
         fillw3d(g, stdoutPipe[0], vertexTranslation);
 
-        // done with these in this example program, you would normally keep these
-        // open of course as long as you want to talk to the child
+        /* done with these in this example program, you would normally keep these
+           open of course as long as you want to talk to the child */
         close(stdinPipe[1]);
         close(stdoutPipe[0]);
     }else {
-        // failed to create child
+        /* failed to create child */
         close(stdinPipe[0]);
         close(stdinPipe[1]);
         close(stdoutPipe[0]);
@@ -459,7 +464,7 @@ void embedJoin(graph *g) {
 TUBE FUNCTIONS
 */
 
-int markTube(edge* e, unsigned char **processed, tube **r) {
+void markTube(edge* e, unsigned char **processed, tube **r) {
     int cyclesize = 0, length = 0, parameterindex = 0;
     int parameters[2];
     int index1, index2;
@@ -468,6 +473,7 @@ int markTube(edge* e, unsigned char **processed, tube **r) {
     edge **startcycle, **previouscycle, **newcycle, **tmp;
     edge *current, *start, *reference;
     edge *doublethree = NULL;
+    int i;
 
     /* set e vertex so degree sequence is (3,2)^l (2,3)^m */
     current = e;
@@ -492,7 +498,7 @@ int markTube(edge* e, unsigned char **processed, tube **r) {
     parameters[0] = parameters[1] = 0;
     startcycle = malloc(cyclesize*sizeof(edge*));
     current = e;
-    for(int i=0; i < cyclesize; i++) {
+    for(i=0; i < cyclesize; i++) {
         startcycle[i] = current;
 
         parameters[parameterindex]++;
@@ -521,7 +527,7 @@ int markTube(edge* e, unsigned char **processed, tube **r) {
         start = current;
 
         /* check if cycle */
-        for (int i = 0; i < cyclesize; i++) {
+        for (i = 0; i < cyclesize; i++) {
             if (current->endvertex->degree == 2)
                 encounteredtwo = 1;
 
@@ -565,27 +571,25 @@ int markTube(edge* e, unsigned char **processed, tube **r) {
     (*r) = malloc(sizeof(tube));
     (*r)->firstedge = previouscycle[0];
     (*r)->length = length;
-    for (int i=0; i < 2; i++) {
+    for (i=0; i < 2; i++) {
         (*r)->parameters[i] = parameters[i] / 2;
     }
 
-    for (int i=0; i < cyclesize; i++)
+    for (i=0; i < cyclesize; i++)
         previouscycle[i]->startvertex->partoftube = 0;
 
     free(startcycle);
     free(previouscycle);
     free(newcycle);
-    return cyclesize;
 }
 
 void findSeparationVertices(graph *g) {
     vertex **degreetwo;
-    int cyclesize;
     int vertexnr;
     int nroftubes = 0;
     int nrofdegreetwo = 0;
-    int nextvertex;
     unsigned char* processed;
+    int i, j;
 
     g->tubes = malloc(4*sizeof(tube*));
 
@@ -595,19 +599,18 @@ void findSeparationVertices(graph *g) {
     degreetwo = malloc(g->nrofvertices * sizeof(vertex*));
 
     /* find degree 2 vertices */
-    for (int i=0; i < g->nrofvertices; i++) {
+    for (i=0; i < g->nrofvertices; i++) {
         if (g->vertices[i]->degree == 2)
             degreetwo[nrofdegreetwo++] = g->vertices[i];
     }
-    nextvertex = g->nrofvertices;
-    for(int i=0; i < nrofdegreetwo; i++) {
+    for(i=0; i < nrofdegreetwo; i++) {
         vertexnr = degreetwo[i]->vertexnr;
         if (processed[vertexnr] == 0) {
             try = g->firstedges[vertexnr];
-            for (int j=0; j < 2; j++) {
+            for (j=0; j < 2; j++) {
                 if (!processed[try->startvertex->vertexnr] && 
                     (try->inv->next->endvertex->degree == 2 || try->inv->next->inv->next->inv->next->endvertex->vertexnr == try->startvertex->vertexnr)) {
-                    cyclesize = markTube(try, &processed, &(g->tubes[nroftubes++]));
+                     markTube(try, &processed, &(g->tubes[nroftubes++]));
                 }
                 try = try->next;
             }
@@ -623,20 +626,21 @@ void idealTube(tube *t, float (***vertices)[3]) {
     float p, q;
     float sind, cosd, distance, multiplier, beta, radius;
     int l, m, count;
-    edge *e;
+    int ringnr;
+    int i;
 
     l = t->parameters[0];
     m = t->parameters[1];
 
     (*vertices) = malloc((t->length + 1)*sizeof(float (*)[3]));
 
-    for (int ringnr = 0; ringnr < t->length + 1; ringnr++) {
+    for (ringnr = 0; ringnr < t->length + 1; ringnr++) {
         x = ringnr * sqrt(3) * UNITLENGTH/2;
         y = ringnr * (1.5 * UNITLENGTH);
         (*vertices)[ringnr] = malloc(2*(l+m)*sizeof(float[3]));
 
         count = 0;
-        for (int i=0; i < 2 * l; i++) {
+        for (i=0; i < 2 * l; i++) {
             x += sqrt(3) * UNITLENGTH/2;
             if (count % 2 == 1)
                 y += 0.5 * UNITLENGTH;
@@ -647,7 +651,7 @@ void idealTube(tube *t, float (***vertices)[3]) {
             count++;
         }
 
-        for (int i=0; i < 2 * m; i++) {
+        for (i=0; i < 2 * m; i++) {
             if (count % 2 == 0) {
                 x += sqrt(3) * UNITLENGTH/2;
                 y -= UNITLENGTH/2;
@@ -671,8 +675,8 @@ void idealTube(tube *t, float (***vertices)[3]) {
     multiplier = (2 * M_PI) / (p*cosd - q * sind);
     radius = (p*cosd - q * sind)/(2 * M_PI);
 
-    for (int ringnr = 0; ringnr < t->length + 1; ringnr++) {
-        for (int i=0; i < 2*(l+m); i++) {
+    for (ringnr = 0; ringnr < t->length + 1; ringnr++) {
+        for (i=0; i < 2*(l+m); i++) {
             x = (*vertices)[ringnr][i][0];
             y = (*vertices)[ringnr][i][1];
 
@@ -698,9 +702,10 @@ ATTACH FUNCTIONS
 
 void applyRotation(float rotationmatrix[3][3], float source[3], float **dest) {
     float sum;
-    for (int j=0; j < 3; j++) {
+    int j, k;
+    for (j=0; j < 3; j++) {
         sum = 0;
-        for (int k=0; k < 3; k++) {
+        for (k=0; k < 3; k++) {
             sum += rotationmatrix[j][k] * source[k];
         }
         (*dest)[j] = sum;
@@ -708,10 +713,11 @@ void applyRotation(float rotationmatrix[3][3], float source[3], float **dest) {
 }
 
 void rotateAndTranslateTube(tube *t, float (***ideal)[3], float rotationmatrix[3][3], float *translationvector) {
-    int count;
     float *dest;
     int l, m, size;
-    edge *e;
+    int ringnr;
+    int i;
+    int co;
 
     l = t->parameters[0];
     m = t->parameters[1];
@@ -720,10 +726,10 @@ void rotateAndTranslateTube(tube *t, float (***ideal)[3], float rotationmatrix[3
 
     dest = malloc(3*sizeof(float));
 
-    for (int ringnr = 0; ringnr < t->length + 1; ringnr++) {
-        for (int i = 0; i < size; i++) {
+    for (ringnr = 0; ringnr < t->length + 1; ringnr++) {
+        for (i = 0; i < size; i++) {
             applyRotation(rotationmatrix, (*ideal)[ringnr][i], &dest);
-            for (int co=0; co < 3; co++) {
+            for (co=0; co < 3; co++) {
                 (*ideal)[ringnr][i][co] = dest[co] - translationvector[co];
             }
         }
@@ -731,17 +737,18 @@ void rotateAndTranslateTube(tube *t, float (***ideal)[3], float rotationmatrix[3
 }
 
 void matrixmultiplication(float (*first)[3][3], float second[3][3], float ***result) {
-    for (int i=0; i < 3; i++) {
-        for (int j=0; j < 3; j++) {
+    int i, j, k;
+    for (i=0; i < 3; i++) {
+        for (j=0; j < 3; j++) {
             (*result)[i][j] = 0;
-            for (int k=0; k < 3; k++) {
+            for (k=0; k < 3; k++) {
                 (*result)[i][j] += (*first)[i][k] * second[k][j];
             }
         }
     }
 
-    for (int i=0; i < 3; i++) {
-        for (int j=0; j < 3; j++) {
+    for (i=0; i < 3; i++) {
+        for (j=0; j < 3; j++) {
             (*first)[i][j] = (*result)[i][j];
         }
     }
@@ -751,12 +758,13 @@ float fitness(int length, float (*ideal)[3], float (*real)[3], float rotationmat
     float sum;
     float result;
     float totalsum[3];
+    int i, j, k;
 
     totalsum[0] = totalsum[1] = totalsum[2] = 0;
-    for (int i=0; i < length; i++) {
-        for (int j=0; j < 3; j++) {
+    for (i=0; i < length; i++) {
+        for (j=0; j < 3; j++) {
             sum = 0;
-            for (int k=0; k < 3; k++) {
+            for (k=0; k < 3; k++) {
                 sum += rotationmatrix[j][k] * ideal[i][k];
             }
             transformed[i][j] = sum;
@@ -764,18 +772,18 @@ float fitness(int length, float (*ideal)[3], float (*real)[3], float rotationmat
         }
     }
 
-    for (int i=0; i < 3; i++)
+    for (i=0; i < 3; i++)
         totalsum[i] /= length;
 
     result = 0;
-    for (int i=0; i < length; i++) {
-        for (int j=0; j < 3; j++) {
+    for (i=0; i < length; i++) {
+        for (j=0; j < 3; j++) {
             result += fabs(transformed[i][j] - real[i][j] - totalsum[j]);
         }
     }
 
     if (translatevector != NULL) {
-        for (int i=0; i < 3; i++) {
+        for (i=0; i < 3; i++) {
             (*translatevector)[i] = totalsum[i];
         }
     }
@@ -784,11 +792,13 @@ float fitness(int length, float (*ideal)[3], float (*real)[3], float rotationmat
 }
 
 void rotationmatrices(float angles[3], float (*rotationmatrix)[3][3][3]) {
-    for (int axis = 0; axis < 3; axis++) {
-        for (int i=0; i < 3; i++) {
+    int axis;
+    int i;
+    for (axis = 0; axis < 3; axis++) {
+        for (i=0; i < 3; i++) {
             (*rotationmatrix)[axis][i][i] = cos(angles[axis]);
         }
-        for (int i=0; i < 3; i++) {
+        for (i=0; i < 3; i++) {
             (*rotationmatrix)[axis][axis][i] = (*rotationmatrix)[axis][i][axis] = 0;
         }
         (*rotationmatrix)[axis][axis][axis] = 1;
@@ -819,7 +829,6 @@ void attachTube(graph *g, tube *t) {
 
     float **result;
     float angles[3];
-    float (*difvectors)[3];
 
     float bestfitness, f;
     int bestaxis, bestdirection;
@@ -827,12 +836,17 @@ void attachTube(graph *g, tube *t) {
     int l, m, count, length;
     edge *e, *start;
 
+    int i, j;
+    int reflection, xrot, yrot, zrot;
+    int iteration, axis;
+    int ringnr;
+
     l = t->parameters[0];
     m = t->parameters[1];
 
     transformed = malloc(2*(l+m)*sizeof(float[3]));
     result = malloc(3*sizeof(float*));
-    for (int i=0; i < 3; i++) {
+    for (i=0; i < 3; i++) {
         result[i] = malloc(3*sizeof(float));
     }
 
@@ -844,7 +858,7 @@ void attachTube(graph *g, tube *t) {
     count = 0;
     e = t->firstedge;
     do {
-        for (int i=0; i < 3; i++)
+        for (i=0; i < 3; i++)
             real[count][i] = e->startvertex->co[i];
         if ( (count + 1) % length < 2 * l && count % 2 == 1) {
             e = e->inv->next;
@@ -868,11 +882,11 @@ void attachTube(graph *g, tube *t) {
     rotationmatrices(angles, &rotationneg1);
 
     /* optimizing -> find approximation */
-    for (int reflection = 1; reflection >= -1; reflection -= 2) {
+    for (reflection = 1; reflection >= -1; reflection -= 2) {
                 
         /* initial currentrotationmatrix */
-        for (int i=0; i < 3; i++) {
-            for (int j=0; j < 3; j++) {
+        for (i=0; i < 3; i++) {
+            for (j=0; j < 3; j++) {
                 currentrotationmatrix[i][j] = 0;
             }
         }
@@ -883,17 +897,17 @@ void attachTube(graph *g, tube *t) {
 
         bestfitness = fitness(length, ideal[0], real, currentrotationmatrix, transformed, NULL);
 
-        for (int xrot=0; xrot < 360; xrot += 20) {
+        for (xrot=0; xrot < 360; xrot += 20) {
             matrixmultiplication(&currentrotationmatrix, rotation10[0], &result);
-            for (int yrot=0; yrot < 360; yrot += 20) {
+            for (yrot=0; yrot < 360; yrot += 20) {
                 matrixmultiplication(&currentrotationmatrix, rotation10[1], &result);
-                for (int zrot=0; zrot < 360; zrot += 20) {
+                for (zrot=0; zrot < 360; zrot += 20) {
                     matrixmultiplication(&currentrotationmatrix, rotation10[2], &result);
                     f = fitness(length, ideal[0], real, currentrotationmatrix, transformed, NULL);
                     if (f < bestfitness) {
                         bestfitness = f;
-                        for (int i=0; i < 3; i++) {
-                            for (int j=0; j < 3; j++) {
+                        for (i=0; i < 3; i++) {
+                            for (j=0; j < 3; j++) {
                                 bestrotationmatrix[i][j] = currentrotationmatrix[i][j];
                             }
                         }
@@ -904,9 +918,9 @@ void attachTube(graph *g, tube *t) {
     }
 
     /* improve approximation */   
-    for (int iteration=0; iteration < 50; iteration++) {
+    for (iteration=0; iteration < 50; iteration++) {
         bestdirection = 0;
-        for (int axis=0; axis < 3; axis++) {
+        for (axis=0; axis < 3; axis++) {
 
             matrixmultiplication(&bestrotationmatrix, rotation1[axis], &result);
             f = fitness(length, ideal[0], real, bestrotationmatrix, transformed, NULL);
@@ -946,32 +960,16 @@ void attachTube(graph *g, tube *t) {
     rotateAndTranslateTube(t, &ideal, bestrotationmatrix, translatevector);
 
     /* set coordinates of tube vertices */
-    
-    /*difvectors = malloc(length*sizeof(float[3]));
-    count = 0;
-    e = t->firstedge;
-    do {
-        for (int i=0; i < 3; i++)
-            difvectors[count][i] = e->startvertex->co[i] - ideal[0][count][i];
-        if ( (count + 1) % length < 2 * l && count % 2 == 1) {
-            e = e->inv->next;
-        } else if ((count + 1) % length > 2 * l && count % 2 == 0) {
-            e = e->inv->next;
-        } else {
-            e = e->inv->prev;
-        }
-        count++;
-    } while (e != t->firstedge);*/
 
     e = t->firstedge->inv->next->inv->prev;
-    for (int ringnr = 1; ringnr < t->length + 1; ringnr++) {
+    for (ringnr = 1; ringnr < t->length + 1; ringnr++) {
         count = 0;
         start = e;
         do {
             e->startvertex->embedded = 1;
 
-            for (int i=0; i < 3; i++)
-                e->startvertex->co[i] = ideal[ringnr][count][i];// + difvectors[count][i];
+            for (i=0; i < 3; i++)
+                e->startvertex->co[i] = ideal[ringnr][count][i];
 
             if ( (count + 1) % length < 2 * l && count % 2 == 1) {
                 e = e->inv->next;
@@ -1000,10 +998,8 @@ void read_stdin(FILE* output) {
 int main( int argc, const char* argv[] )
 {
     graph *g;
-    float (**vertices)[3];
-    int r;
     char* string = malloc(128*sizeof(char));
-    FILE* output = fopen("outputaa.txt", "w");
+    int i;
 
     if (argc == 1) {
         generatordirectory = "./";
@@ -1011,19 +1007,16 @@ int main( int argc, const char* argv[] )
         generatordirectory = argv[1];
     }
 
-    fprintf(output, "%s", generatordirectory);
-
     char *fgetsr;
 
     fgetsr = fgets(string, 128, stdin);
-
 
     g = readNextGraphVega(stdin);
 
     while (!feof(stdin)) {
         findSeparationVertices(g);
         embedJoin(g);
-        for (int i=0; i < g->nrofrings; i++) {
+        for (i=0; i < g->nrofrings; i++) {
             attachTube(g, g->tubes[i]);
         }
         printw3d(g);

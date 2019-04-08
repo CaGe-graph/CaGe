@@ -166,7 +166,7 @@ void dfs(struct td_patch* patch) {
 	int pentres, hexres, heptres, ivres;
 	struct edge *mark;
 	if (patch->ufaces == NULL) {
-		if (!EXACTFACES || (patch->facesleft[1] == 0 && patch->facesleft[2] == 0 && patch->facesleft[3] == 0)) {
+		if (!EXACTFACES || (patch->facesleft[1] == 0)) {
 			newJoin(patch);
 		}
 	} else if (patch->facesleft[0] >= 0) {
@@ -260,7 +260,6 @@ void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, unsi
 	if (internalvertices < 0) {
 		free(outsideparameters);
 		free(insideparameters);
-		printf("Found 0 Joins\n");
 		exit(EXIT_SUCCESS);
 	}
 

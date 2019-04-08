@@ -62,7 +62,7 @@ embed$(SUFFIX) : embed.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -lm
 
 nanojoin_embed$(SUFFIX) : nanojoin_embed.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -std=gnu11 -o $@ $^ -lm
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ -lm
 
 cat$(SUFFIX) : cat.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
