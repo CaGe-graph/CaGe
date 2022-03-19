@@ -23,6 +23,8 @@ struct Edge {
   struct Edge *prev;
   struct Edge *next;
   struct Edge *inverse;
+  //used to ignore edges while embedding the graph
+  int ignore;
 };
 typedef struct Edge EDGE;
 
@@ -677,6 +679,7 @@ readgraph_vega(FILE *fp, GRAPH *G_out, POSITIONING *P_out)
       edge->next    = NULL;
       edge->prev    = NULL;
       edge->inverse = NULL;
+      edge->ignore  = 0; //by default we ignore no edges
 
       if (G->map[nv] == NULL)
 	G->map[nv] = edge;
