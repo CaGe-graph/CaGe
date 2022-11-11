@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -37,7 +38,7 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
 
     private static final int MIN_POLYGON_FACES = 3;
     private static final int MAX_POLYGON_FACES = 40;
-    
+
     private JCheckBox kekulean = new JCheckBox();
     private JCheckBox regularEmbedded = new JCheckBox();
     private SizeOptionsMap sizeOptionsMap;
@@ -57,9 +58,9 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
         setLayout(new GridBagLayout());
         JPanel extrasPanel = new JPanel(new GridBagLayout());
         JPanel faceOptionsPanel = new JPanel(new GridBagLayout());
-        
+
         final EnhancedSlider facesSlider = new EnhancedSlider();
-        Dictionary<Integer, JLabel> facesLabels = facesSlider.createStandardLabels(5, 5);
+        Dictionary<Integer, JComponent> facesLabels = facesSlider.createStandardLabels(5, 5);
         JLabel faceTypeLabel = new JLabel("Face Type");
         faceTypeLabel.setLabelFor(facesSlider.slider());
         faceTypeLabel.setDisplayedMnemonic(KeyEvent.VK_F);
@@ -101,17 +102,17 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
             }
         });
         JLabel includedFacesLabel = new JLabel("included face types:");
-        
+
         kekulean.setText("kekulean");
         kekulean.setMnemonic(KeyEvent.VK_K);
         kekulean.setActionCommand("k");
         kekulean.setSelected(false);
-        
+
         regularEmbedded.setText("only graphs which can be embedded in a regular lattice");
         regularEmbedded.setMnemonic(KeyEvent.VK_R);
         regularEmbedded.setActionCommand("r");
         regularEmbedded.setSelected(false);
-        
+
         JPanel facesPanel = new JPanel(new GridBagLayout());
         facesPanel.add(faceTypeLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 0), 0, 0));
         facesPanel.add(facesSlider, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
@@ -133,34 +134,34 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
         int maxFacesize = 0;
 
         List<String> genList = new ArrayList<>(), fileList = new ArrayList<>();
-        
+
         genList.add("ngons");
         genList.add("-f");
         genList.add("-p");
         fileList.add("ngons");
-        
+
         if(kekulean.isSelected()){
             genList.add("-k");
             fileList.add("k");
         }
-        
+
         if(regularEmbedded.isSelected()){
             genList.add("-r");
             fileList.add("r");
         }
-        
+
         for (SizeOption sizeOption : sizeOptionsMap.values()) {
             if (!sizeOption.isActive()) {
                 continue;
             }
             genList.add(
-                    Integer.toString(sizeOption.getSize()) + ":" + 
+                    Integer.toString(sizeOption.getSize()) + ":" +
                             Integer.toString(sizeOption.getMin()));
             fileList.add(
-                    Integer.toString(sizeOption.getSize()) + "-" + 
+                    Integer.toString(sizeOption.getSize()) + "-" +
                             Integer.toString(sizeOption.getMin()));
         }
-        
+
         generator = new String[1][];
         generator[0] = genList.toArray(new String[genList.size()]);
         filename = Systoolbox.join(
@@ -197,12 +198,12 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
                 if(sizeOption.isActive()){
                     faceTypeCount++;
                 }
-                
+
             }
         }
 
         getNextButton().setEnabled(faceTypeCount>0);
-        
+
         if(faceTypeCount > 1){
             regularEmbedded.setSelected(false);
             regularEmbedded.setEnabled(false);
@@ -211,4 +212,3 @@ public class GeneralisedFusenesPanel extends GeneratorPanel {
         }
     }
 }
-

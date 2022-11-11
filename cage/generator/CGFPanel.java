@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -113,7 +114,7 @@ public class CGFPanel extends GeneratorPanel {
         minEqMax.setMnemonic(KeyEvent.VK_M);
         MinMaxRestrictor.keepConsistentOrEqual(minAtomsSlider.getModel(), maxAtomsSlider.getModel(), minEqMax.getModel());
         final EnhancedSlider facesSlider = new EnhancedSlider();
-        Hashtable<Integer, JLabel> facesLabels = facesSlider.createStandardLabels(5, 10);
+        Hashtable<Integer, JComponent> facesLabels = facesSlider.createStandardLabels(5, 10);
         facesLabels.put(3, new JLabel("3"));
         facesLabels.put(6, new JLabel("6"));
         JLabel faceTypeLabel = new JLabel(dual ? "Degrees" : "Face Type");
@@ -239,11 +240,11 @@ public class CGFPanel extends GeneratorPanel {
         boolean useCgf = (min != max) || faceStats.isSelected() ||
                 conn1.isSelected() || conn2.isSelected() ||
                 (nrOfFacesSmallerThan10 < 5);
-        
+
         boolean usePlantri_md6 = !((min != max) || faceStats.isSelected() ||
                 conn1.isSelected() || conn2.isSelected()) && maxFacesize <= 6;
         String plantri_md6Flag = "";
-        
+
         if(usePlantri_md6){
             boolean allowedFaces[] = {false, false, false, false}; //3, 4, 5, 6
             boolean limitedFaces[] = {false, false, false, false}; //3, 4, 5, 6
@@ -289,27 +290,27 @@ public class CGFPanel extends GeneratorPanel {
             generator = new String[1][length];
             String[] fileArray = new String[length];
             int j = 0;
-            
+
             //program name
             fileArray[j] = "plantri_md6";
             generator[0][j++] = "plantri_md6";
-            
+
             //additional flag
             if(!plantri_md6Flag.equals("")){
                 fileArray[j] = "_" + plantri_md6Flag;
                 generator[0][j++] = "-" + plantri_md6Flag;
             }
-            
+
             //dual or not
             if(!dual){
                 fileArray[j] = "_d";
                 generator[0][j++] = "-d";
             }
-            
+
             //number of vertices
             fileArray[j] = "_" + vertices;
             generator[0][j++] = Integer.toString(vertices);
-            
+
             filename = Systoolbox.join(fileArray, "");
         } else if(useCgf){
             genV.addAll(Arrays.asList(
@@ -471,4 +472,3 @@ public class CGFPanel extends GeneratorPanel {
         f.setVisible(true);
     }
 }
-

@@ -19,6 +19,7 @@ import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.BoundedRangeModel;
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -47,7 +48,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
     public EnhancedSlider(boolean debug) {
         this(SwingConstants.HORIZONTAL, 0, 100, 50, debug);
     }
-    
+
     public EnhancedSlider(int orientation, int min, int max, int value, boolean debug) {
         slider = new JSlider(orientation, min, max, value) {
 
@@ -154,7 +155,7 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         }
         return null;
     }
-    
+
     @Override
     public Dimension getMinimumSize(){
         return getPreferredSize();
@@ -241,12 +242,12 @@ public class EnhancedSlider extends JPanel implements FocusListener, Serializabl
         slider.setLabelTable(labels);
     }
 
-    public Hashtable<Integer, JLabel> createStandardLabels(int increment) {
-        return (Hashtable<Integer, JLabel>)slider.createStandardLabels(increment);
+    public Hashtable<Integer, JComponent> createStandardLabels(int increment) {
+        return (Hashtable<Integer, JComponent>)slider.createStandardLabels(increment);
     }
 
-    public Hashtable<Integer, JLabel> createStandardLabels(int increment, int start) {
-        return (Hashtable<Integer, JLabel>)slider.createStandardLabels(increment, start);
+    public Hashtable<Integer, JComponent> createStandardLabels(int increment, int start) {
+        return (Hashtable<Integer, JComponent>)slider.createStandardLabels(increment, start);
     }
 
     public boolean getInverted() {
