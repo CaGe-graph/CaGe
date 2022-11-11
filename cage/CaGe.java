@@ -77,7 +77,6 @@ public class CaGe implements ActionListener {
         boolean nativesAvailableValue = false, expertModeValue = false, debugModeValue = false;
         String osNameValue = null;
         try {
-            System.runFinalizersOnExit(true);
             osNameValue = SysInfo.get("os.name");
 
             // Get configuration
@@ -90,7 +89,7 @@ public class CaGe implements ActionListener {
                 }
                 config.load(configInput);
             } catch (Exception e) {
-                Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE, 
+                Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE,
                         "Error while loading configuration file", e);
                 System.exit(1);
             }
@@ -156,7 +155,7 @@ public class CaGe implements ActionListener {
                     Integer.parseInt(config.getProperty("CaGe.GraphNoDigits"));
 
         } catch (Throwable t) {
-            Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE, 
+            Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE,
                     "Error while initialising CaGe", t);
             System.exit(1);
         }
@@ -173,7 +172,7 @@ public class CaGe implements ActionListener {
                 if(o instanceof EmbeddingTypeFactory)
                     embeddingTypeFactories.add((EmbeddingTypeFactory)o);
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE, 
+                Logger.getLogger(CaGe.class.getName()).log(Level.SEVERE,
                         "Error while trying to load EmbeddingTypeFactory", ex);
             }
         }
@@ -468,4 +467,3 @@ public class CaGe implements ActionListener {
         new CaGe();
     }
 }
-
