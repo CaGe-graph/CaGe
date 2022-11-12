@@ -164,7 +164,7 @@ prepare_javadirlist_prompt ()
 }
 
 #Check if command exists
-if /usr/libexec/java_home &> /dev/null
+if [ -f /usr/libexec/java_home ] && `/usr/libexec/java_home &> /dev/null`
   then
   #this is the correct javadir, add it to the PATH variable
   homedir_mac=`/usr/libexec/java_home`/bin/:
