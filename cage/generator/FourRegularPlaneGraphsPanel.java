@@ -12,7 +12,7 @@ public class FourRegularPlaneGraphsPanel extends CombinedGeneratorPanel {
 
     public FourRegularPlaneGraphsPanel() {
         addTab("all face sizes allowed", new GeneralQuadrangulationsPanel(true));
-        addTab("quartic graphs with given faces", new QuadRestrictPanel(true));
+        addTab("3-conn. quartic graphs with given faces", new QuadRestrictPanel(true));
         add(pane);
     }
     
