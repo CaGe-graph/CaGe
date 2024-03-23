@@ -1,4 +1,4 @@
-CFLAGS=-O4 -w
+CFLAGS=-O4 -w -fcommon
 # Under Windows, set SUFFIX to .exe
 SUFFIX=
 
