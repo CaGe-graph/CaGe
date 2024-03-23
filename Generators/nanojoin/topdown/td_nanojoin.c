@@ -14,7 +14,6 @@ void init_isovectors();
 void prepareWrite(int pent, int hex, int hept);
 void newJoin(struct td_patch* patch);
 void dfs(struct td_patch* patch);
-void run_topdown(unsigned char pent, unsigned char hex, unsigned char hept, unsigned char nrofnanocap, int iv, int rings, unsigned char exactfaces);
 
 unsigned char comparearrays(int *array1, int *array2, int length) {
 	int i, j, l, m;
