@@ -1,4 +1,4 @@
-CFLAGS = -w -O4
+CFLAGS = -w -O4 -fcommon
 
 TARG = tube$(SUFFIX)
 OBJS = tube.o
