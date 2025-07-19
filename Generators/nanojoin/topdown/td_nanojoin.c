@@ -138,7 +138,6 @@ void prepareWrite(int pent, int hex, int hept) {
 	int maxvertices;
 
 	printf("%s", ">>planar_code le<<");
-	printf("%c", 0);
 	maxvertices = 5*pent+6*hex+7*hept + 3*(outsideparameters[0] + outsideparameters[1]);
 	for (i=0; i < nrofnanocaps-1; i++) {
 		maxvertices += 3*(insideparameters[2*i+1] + insideparameters[1*i+2]);

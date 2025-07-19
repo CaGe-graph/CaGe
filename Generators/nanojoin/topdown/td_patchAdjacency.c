@@ -215,6 +215,10 @@ void writePatchToFile(struct td_patch* patch) {
 
 void adjacencyToFile(vertextype*** result) {
 	int i, nrofvertices, j;
+
+	//we start with a zero byte to signal that all entries consist of two bytes
+	printf("%c", 0);
+
 	nrofvertices = (*result)[0][0];
 	printf("%c%c", nrofvertices % 256, nrofvertices/256);
 	for (i = 1; i <= nrofvertices; i++) {
@@ -225,6 +229,5 @@ void adjacencyToFile(vertextype*** result) {
 		}
 		printf("%c%c", 0, 0);
 	}
-	printf("%c", 0);
 
 }
