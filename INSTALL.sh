@@ -278,6 +278,7 @@ echo "*  Making generators and embedders ..."
 echo ""
 (
 cd Generators &&
+make clean &&
 make
 ) || error_exit "-  'make' failure, aborting."
 echo ""
