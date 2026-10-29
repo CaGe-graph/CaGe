@@ -21,7 +21,7 @@ MACLIBRARIES=	libCaGe.jnilib \
 
 DEMOS=		t_dstring t_graph t_pipe t_cmdv
 
-CFLAGS= -fPIC
+CFLAGS= -fPIC -Wno-implicit-function-declaration
 
 cage_library:	libCaGe.so clean
 
