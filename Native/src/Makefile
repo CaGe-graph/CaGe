@@ -145,18 +145,18 @@ libCaGe.jnilib:	NativeCaGePipe.c NativeEmbedEmbedder.c \
 		pipe_tools.c file_tools.c \
 		malloc.c jbytes.c j_debug.c j_error_exit.c \
 		Systoolbox.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libPipe.jnilib:	Pipe.c pipe_tools.c cmd_vector.c \
 		jbytes.c malloc.c j_debug.c j_error_exit.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libNativeCaGePipe.jnilib:	NativeCaGePipe.c jbytes.c read_graphs.c \
 			pipe_tools.c file_tools.c \
 			graph.c dstring.c malloc.c j_debug.c j_error_exit.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libNativeEmbedEmbedder.jnilib:	NativeEmbedEmbedder.c \
@@ -164,51 +164,51 @@ libNativeEmbedEmbedder.jnilib:	NativeEmbedEmbedder.c \
 				graph.c cmd_vector.c \
 				jbytes.c dstring.c malloc.c \
 				j_debug.c j_error_exit.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libNativeEmbeddableGraph.jnilib:	NativeEmbeddableGraph.c NativeEdgeIterator.c \
 				graph.c dstring.c malloc.c \
 				jbytes.c j_debug.c j_error_exit.c read_graphs.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libSystoolbox.jnilib: Systoolbox.c jbytes.c malloc.c j_error_exit.c j_debug.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libBufferedFDInputStream.jnilib:	BufferedFDInputStream.c file_tools.c \
 				jbytes.c j_debug.c j_error_exit.c malloc.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libBufferedFDOutputStream.jnilib:	BufferedFDOutputStream.c \
 				jbytes.c j_debug.c j_error_exit.c malloc.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libNativePlanarWriter.jnilib:	NativePlanarWriter.c \
 				dstring.c graph.c check_graph.c \
 				malloc.c jbytes.c j_debug.c j_error_exit.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libNativeWritegraphWriter.jnilib:	NativeWritegraphWriter.c \
 				dstring.c graph.c read_graphs.c check_graph.c \
 				malloc.c jbytes.c j_debug.c j_error_exit.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libNativeCMLWriter.jnilib:		NativeCMLWriter.c get_element.c \
 				dstring.c graph.c jbytes.c check_graph.c \
 				malloc.c j_debug.c j_error_exit.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 libNativePDBWriter.jnilib:		NativePDBWriter.c get_element.c \
 				dstring.c graph.c jbytes.c check_graph.c \
 				malloc.c j_debug.c j_error_exit.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@ -framework JavaVM -single_module
+	$(CC) $(CFLAGS) $(CPPFLAGS) -dynamiclib $^ -o $@
 	cp $@ ../` sh ./Sysdir `/$(patsubst lib%.jnilib,%,$@)
 
 lib%.so: %.c
