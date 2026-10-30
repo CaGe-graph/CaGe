@@ -1845,8 +1845,8 @@ limit_dist_positions(POSITIONING *P, int v, POSITIONING *Q, int w, double t)
   if (d > t) {
     f = 1.0 - t / d;
     dim = min(P->dim, Q->dim);
-    for (i = 0; i <= dim; i++)
-      PICK(P,v,i) += (PICK(Q,v,i) - PICK(P,v,i)) * f;
+    for (i = 0; i < dim; i++)
+      PICK(P,v,i) += (PICK(Q,w,i) - PICK(P,v,i)) * f;
   }
 }
 
