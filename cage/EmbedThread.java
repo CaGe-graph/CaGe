@@ -38,7 +38,7 @@ public class EmbedThread extends Thread {
                 task.unfinished = false;
                 task.notifyAll();
             }
-            yield();
+            Thread.yield();
         }
         embeddingFinished();
     }
