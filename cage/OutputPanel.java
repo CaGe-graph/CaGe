@@ -62,6 +62,9 @@ public class OutputPanel extends JPanel {
     private final JTextField generatorCmdLine = new JTextField("");
     private final JTextField embed2DCmdLine = new JTextField("");
     private final JTextField embed3DCmdLine = new JTextField("");
+    //default embed commands of the generator for which the fields were last filled
+    private String embed2DDefaultCmdLine = null;
+    private String embed3DDefaultCmdLine = null;
 
     //button group that makes sure that text viewers are always all in the same selection state.
     private final SyncButtonGroup viewersXDGroup = new SyncButtonGroup();
@@ -545,18 +548,28 @@ public class OutputPanel extends JPanel {
         }
         generatorControlsGroup.setVisible(showGeneratorControls);
         if (showEmbedControls) {
-            if (embed2DCmdLine.getText().length() == 0 || !embedder.isConstant()) {
+            //only keep an edited command if it was made for the same default command,
+            //otherwise a command of another generator in this panel would be reused
+            String default2D = Systoolbox.makeCmdLine(
+                    generatorInfo.getDefaultEmbedder().getEmbed2DNew());
+            String default3D = Systoolbox.makeCmdLine(
+                    generatorInfo.getDefaultEmbedder().getEmbed3DNew());
+            if (embed2DCmdLine.getText().length() == 0 || !embedder.isConstant()
+                    || !default2D.equals(embed2DDefaultCmdLine)) {
                 embed2DCmdLine.setText(Systoolbox.makeCmdLine(embedder.getEmbed2DNew()));
             } else {
                 embedder.setEmbed2D(Systoolbox.parseCmdLine(embed2DCmdLine.getText()));
                 fireGeneratorInfoChanged();
             }
-            if (embed3DCmdLine.getText().length() == 0 || !embedder.isConstant()) {
+            if (embed3DCmdLine.getText().length() == 0 || !embedder.isConstant()
+                    || !default3D.equals(embed3DDefaultCmdLine)) {
                 embed3DCmdLine.setText(Systoolbox.makeCmdLine(embedder.getEmbed3DNew()));
             } else {
                 embedder.setEmbed3D(Systoolbox.parseCmdLine(embed3DCmdLine.getText()));
                 fireGeneratorInfoChanged();
             }
+            embed2DDefaultCmdLine = default2D;
+            embed3DDefaultCmdLine = default3D;
             expertLabelText += (expertLabelText.length() > 0 ? "/" : "") + "embedders";
         }
         embedControlsGroup.setVisible(showEmbedControls);
